@@ -171,6 +171,36 @@ def ensure_trending_table():
     conn.close()
 
 
+def run_once(key, action):
+    """Run a one-time data migration, remembered in the meta table.
+
+    This is how deletions reach the live server: seeds only run on
+    empty tables, so removing rows from an already-seeded database
+    needs an explicit, once-only cleanup step.
+    """
+    conn = get_db()
+    conn.execute("CREATE TABLE IF NOT EXISTS meta (key TEXT PRIMARY KEY)")
+    done = conn.execute("SELECT 1 FROM meta WHERE key = ?", (key,)).fetchone()
+    if not done:
+        action(conn)
+        conn.execute("INSERT INTO meta (key) VALUES (?)", (key,))
+        conn.commit()
+        print(f"Applied one-time migration: {key}")
+    conn.close()
+
+
+def purge_thailand(conn):
+    """Remove all Thailand content (listings, trending picks, the
+    Bangkok coffee post). July 2026 editorial decision."""
+    conn.execute("DELETE FROM trending WHERE country = 'thailand'")
+    conn.execute(
+        "DELETE FROM trending WHERE listing_id IN"
+        " (SELECT id FROM listings WHERE country = 'thailand')"
+    )
+    conn.execute("DELETE FROM listings WHERE country = 'thailand'")
+    conn.execute("DELETE FROM posts WHERE title = \"Inside Bangkok's Booming Specialty Coffee Scene\"")
+
+
 def normalize_city(value):
     """Keep city values consistent: lowercase, hyphens for spaces.
 
@@ -604,7 +634,7 @@ def delete_listing(listing_id):
 
 # -------------------------- Trending --------------------------
 
-COUNTRY_ORDER = ["japan", "china", "thailand", "vietnam", "cambodia", "australia"]
+COUNTRY_ORDER = ["japan", "china", "vietnam", "cambodia", "australia"]
 
 
 def trending_items(conn, tab, country):
@@ -797,6 +827,7 @@ ensure_listings_table()
 ensure_trending_table()
 normalize_cities_once()
 backfill_listing_media()
+run_once("purge_thailand_2026_07", purge_thailand)
 
 if __name__ == "__main__":
     # Port 5001 because macOS AirPlay already listens on 5000.

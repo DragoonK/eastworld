@@ -50,10 +50,10 @@ await testPage('places.html', '.wonder-card', 'japan', 'kyoto', async (count) =>
   if (await count() === 0) fail('places: japan cultural empty');
 });
 
-// Thailand is newly enabled on places — sanity check it
-await page.click('.filter-btn[data-country="thailand"]');
+// China places sanity check
+await page.click('.filter-btn[data-country="china"]');
 await page.waitForTimeout(250);
-console.log(`thailand places: ${await page.locator('.wonder-card').count()} cards`);
+console.log(`china places: ${await page.locator('.wonder-card').count()} cards`);
 
 await testPage('products.html', '.product-card', 'japan', null, async (count) => {
   await page.click('.filter-btn[data-price="premium"]');

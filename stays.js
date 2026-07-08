@@ -34,14 +34,6 @@ const FEATURED_HOTELS = {
     price: '$800-1500/night',
     description: 'Prestigious waterfront luxury hotel with unparalleled Opera House views',
     image: 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1050&q=80'
-  },
-  thailand: {
-    name: 'Amanpuri',
-    city: 'phuket',
-    price: '$900-2000/night',
-    description: 'Elegant pavilions and villas on a secluded peninsula with a private beach',
-    image: 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=1050&q=80',
-    link: 'amanpuri.html'
   }
 };
 

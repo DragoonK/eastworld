@@ -45,13 +45,6 @@ const COUNTRY_HIGHLIGHT = {
     image: 'https://cdn.broadsheet.com.au/cache/58/80/5880547647c4b2ae6155b92748dee379.jpg',
     description: "One of Australia's most celebrated restaurants, Attica showcases native Australian ingredients in innovative ways. Chef Ben Shewry's tasting menu tells the story of the land through creative dishes that highlight indigenous flavors and sustainable practices.",
     price: '$300-350 per person'
-  },
-  thailand: {
-    city: 'bangkok',
-    name: 'Jay Fai',
-    image: 'https://asianinspirations.com.au/wp-content/uploads/2019/07/20190723-Jay-Fai.jpg',
-    description: 'A Michelin-starred street food stall run by the legendary chef Jay Fai, known for her signature crab omelette and wok-fired seafood dishes. Watch as this goggle-wearing culinary master prepares each dish herself over charcoal fires.',
-    price: '$10-15 per dish'
   }
 };
 

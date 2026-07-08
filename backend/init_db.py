@@ -127,22 +127,6 @@ POSTS = [
         ),
     },
     {
-        "title": "Inside Bangkok's Booming Specialty Coffee Scene",
-        "category": "FOOD",
-        "excerpt": "Thai-grown beans and third-wave cafes are turning Bangkok into Asia's next coffee capital.",
-        "image_url": "https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&w=1600&q=80",
-        "content": (
-            "Bangkok's coffee culture has exploded over the past five years. What was once a city of "
-            "instant coffee and condensed milk is now home to hundreds of specialty cafes, many roasting "
-            "beans grown in Thailand's own northern highlands.\n\n"
-            "Farms around Chiang Rai and Chiang Mai are producing arabica that competes with beans from "
-            "Ethiopia and Colombia, and Bangkok's baristas are winning international competitions with "
-            "them.\n\n"
-            "The scene's signature is its playfulness: espresso tonics with local citrus, coconut-based "
-            "flat whites, and cafes designed like art galleries."
-        ),
-    },
-    {
         "title": "The Quiet Luxury of Japanese Ryokan Stays",
         "category": "STAYS",
         "excerpt": "Traditional inns are winning over travelers who want calm instead of five-star flash.",

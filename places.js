@@ -21,13 +21,6 @@ const FEATURED_WONDERS = {
     image: 'https://images.unsplash.com/photo-1508804185872-d7badad00f7d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80',
     link: 'places/great-wall.html'
   },
-  thailand: {
-    name: 'Grand Palace',
-    city: 'bangkok',
-    category: 'historical',
-    description: 'Spectacular complex of buildings serving as the official residence of the Kings of Thailand',
-    image: 'https://images.unsplash.com/photo-1528181304800-259b08848526?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80'
-  },
   cambodia: {
     name: 'Angkor Wat',
     city: 'siem-reap',

@@ -91,51 +91,6 @@
   },
   {
     "tab": "food",
-    "country": "thailand",
-    "rank": 1,
-    "name": "Jay Fai",
-    "location": "Bangkok",
-    "image": "https://media.timeout.com/images/105761718/image.jpg",
-    "link": ""
-  },
-  {
-    "tab": "food",
-    "country": "thailand",
-    "rank": 2,
-    "name": "Gaggan Anand",
-    "location": "Bangkok",
-    "image": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=400&q=70",
-    "link": ""
-  },
-  {
-    "tab": "food",
-    "country": "thailand",
-    "rank": 3,
-    "name": "PRU",
-    "location": "Phuket",
-    "image": "https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=400&q=70",
-    "link": ""
-  },
-  {
-    "tab": "food",
-    "country": "thailand",
-    "rank": 4,
-    "name": "Supanniga Eating Room",
-    "location": "Bangkok",
-    "image": "https://images.unsplash.com/photo-1562565652-a0d8f0c59eb4?auto=format&fit=crop&w=400&q=70",
-    "link": ""
-  },
-  {
-    "tab": "food",
-    "country": "thailand",
-    "rank": 5,
-    "name": "Blue Elephant",
-    "location": "Phuket",
-    "image": "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=400&q=70",
-    "link": ""
-  },
-  {
-    "tab": "food",
     "country": "cambodia",
     "rank": 1,
     "name": "Cuisine Wat Damnak",
@@ -312,51 +267,6 @@
     "name": "The Peninsula Beijing",
     "location": "Beijing",
     "image": "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=400&q=70",
-    "link": ""
-  },
-  {
-    "tab": "stays",
-    "country": "thailand",
-    "rank": 1,
-    "name": "Amanpuri",
-    "location": "Phuket",
-    "image": "https://cf.bstatic.com/xdata/images/hotel/max1024x768/223648066.jpg?k=d58798afbae56c84df99129aee5a1dfc21c1d0f62ef06836a4adf20e2ef12a11&o=&hp=1",
-    "link": ""
-  },
-  {
-    "tab": "stays",
-    "country": "thailand",
-    "rank": 2,
-    "name": "Mandarin Oriental",
-    "location": "Bangkok",
-    "image": "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=400&q=70",
-    "link": ""
-  },
-  {
-    "tab": "stays",
-    "country": "thailand",
-    "rank": 3,
-    "name": "The Siam Hotel",
-    "location": "Bangkok",
-    "image": "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=400&q=70",
-    "link": ""
-  },
-  {
-    "tab": "stays",
-    "country": "thailand",
-    "rank": 4,
-    "name": "Sri Panwa",
-    "location": "Phuket",
-    "image": "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=400&q=70",
-    "link": ""
-  },
-  {
-    "tab": "stays",
-    "country": "thailand",
-    "rank": 5,
-    "name": "Lebua at State Tower",
-    "location": "Bangkok",
-    "image": "https://images.unsplash.com/photo-1445019980597-93fa8acb246c?auto=format&fit=crop&w=400&q=70",
     "link": ""
   },
   {
@@ -541,51 +451,6 @@
   },
   {
     "tab": "places",
-    "country": "thailand",
-    "rank": 1,
-    "name": "Songkran Festival",
-    "location": "Bangkok",
-    "image": "https://media.timeout.com/images/105879997/image.jpg",
-    "link": ""
-  },
-  {
-    "tab": "places",
-    "country": "thailand",
-    "rank": 2,
-    "name": "Grand Palace",
-    "location": "Bangkok",
-    "image": "https://images.unsplash.com/photo-1563492065599-3520f775eeed?auto=format&fit=crop&w=400&q=70",
-    "link": ""
-  },
-  {
-    "tab": "places",
-    "country": "thailand",
-    "rank": 3,
-    "name": "Phi Phi Islands",
-    "location": "Phuket",
-    "image": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=400&q=70",
-    "link": ""
-  },
-  {
-    "tab": "places",
-    "country": "thailand",
-    "rank": 4,
-    "name": "Wat Pho Temple",
-    "location": "Bangkok",
-    "image": "https://images.unsplash.com/photo-1528181304800-259b08848526?auto=format&fit=crop&w=400&q=70",
-    "link": ""
-  },
-  {
-    "tab": "places",
-    "country": "thailand",
-    "rank": 5,
-    "name": "Big Buddha",
-    "location": "Phuket",
-    "image": "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=400&q=70",
-    "link": ""
-  },
-  {
-    "tab": "places",
     "country": "cambodia",
     "rank": 1,
     "name": "Angkor Wat",
@@ -762,51 +627,6 @@
     "name": "Huawei MatePad",
     "location": "China",
     "image": "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&w=400&q=70",
-    "link": "products.html"
-  },
-  {
-    "tab": "products",
-    "country": "thailand",
-    "rank": 1,
-    "name": "Srichand Powder",
-    "location": "Thailand",
-    "image": "https://srichand.co.th/cdn/shop/files/SRICHANDBaretoPerfectTranslucentPowder10g..jpg?v=1699435229",
-    "link": "products.html#srichand-powder"
-  },
-  {
-    "tab": "products",
-    "country": "thailand",
-    "rank": 2,
-    "name": "Counterpain Balm",
-    "location": "Thailand",
-    "image": "https://images.unsplash.com/photo-1556228578-8c89e6adf883?auto=format&fit=crop&w=400&q=70",
-    "link": "products.html"
-  },
-  {
-    "tab": "products",
-    "country": "thailand",
-    "rank": 3,
-    "name": "Jim Thompson Silk",
-    "location": "Thailand",
-    "image": "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=400&q=70",
-    "link": "products.html"
-  },
-  {
-    "tab": "products",
-    "country": "thailand",
-    "rank": 4,
-    "name": "Tiger Balm",
-    "location": "Thailand",
-    "image": "https://images.unsplash.com/photo-1556228578-8c89e6adf883?auto=format&fit=crop&w=400&q=70",
-    "link": "products.html"
-  },
-  {
-    "tab": "products",
-    "country": "thailand",
-    "rank": 5,
-    "name": "Royal Chitralada",
-    "location": "Thailand",
-    "image": "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?auto=format&fit=crop&w=400&q=70",
     "link": "products.html"
   },
   {
