@@ -27,6 +27,7 @@ function showDashboard() {
   $('#logout-btn').hidden = false;
   loadPosts();
   loadListings();
+  loadTrending();
 }
 
 $('#login-form').addEventListener('submit', async (e) => {
@@ -265,4 +266,132 @@ document.querySelectorAll('[data-close]').forEach(btn => {
   btn.addEventListener('click', () => {
     $(`#${btn.dataset.close}-form`).hidden = true;
   });
+});
+
+// ============================================================
+// TRENDING (curated top 5 per tab + country)
+// ============================================================
+
+// The working copy of the list being edited. Nothing is saved to the
+// server until SAVE ORDER sends the whole ranked list in one request.
+let trendPicks = [];
+let trendDirty = false;
+
+const TAB_TO_TYPE = { food: 'food', stays: 'stay', places: 'place', products: 'product' };
+
+function trendKey() {
+  return { tab: $('#trend-tab-select').value, country: $('#trend-country-select').value };
+}
+
+async function loadTrending() {
+  const { tab, country } = trendKey();
+  const res = await fetch(`/api/trending?country=${country}`);
+  const data = await res.json();
+  trendPicks = data[tab] || [];
+  trendDirty = false;
+  $('#trend-search').value = '';
+  $('#trend-results').innerHTML = '';
+  renderTrendPicks();
+}
+
+function renderTrendPicks() {
+  $('#trend-save-btn').disabled = !trendDirty;
+  $('#trend-msg').textContent = trendDirty ? 'Unsaved changes — hit SAVE ORDER to publish.' : '';
+
+  if (trendPicks.length === 0) {
+    $('#trend-current').innerHTML = '<p class="posts-status">No picks yet — search below to add some.</p>';
+    return;
+  }
+
+  $('#trend-current').innerHTML = trendPicks.map((item, i) => `
+    <div class="trend-pick">
+      <span class="rank">${i + 1}</span>
+      <img src="${item.image_url}" alt="" onerror="this.style.visibility='hidden'">
+      <span class="trend-pick-name">${item.name}<small>${item.city || item.country}</small></span>
+      <span class="trend-pick-actions">
+        <button data-move="${i}" data-dir="-1" ${i === 0 ? 'disabled' : ''}>&uarr;</button>
+        <button data-move="${i}" data-dir="1" ${i === trendPicks.length - 1 ? 'disabled' : ''}>&darr;</button>
+        <button data-remove="${i}" class="danger">&times;</button>
+      </span>
+    </div>`).join('');
+}
+
+$('#trend-current').addEventListener('click', (e) => {
+  const moveIdx = e.target.dataset.move;
+  const removeIdx = e.target.dataset.remove;
+
+  if (moveIdx !== undefined) {
+    const i = Number(moveIdx), j = i + Number(e.target.dataset.dir);
+    [trendPicks[i], trendPicks[j]] = [trendPicks[j], trendPicks[i]];
+    trendDirty = true;
+    renderTrendPicks();
+  }
+  if (removeIdx !== undefined) {
+    trendPicks.splice(Number(removeIdx), 1);
+    trendDirty = true;
+    renderTrendPicks();
+  }
+});
+
+['trend-tab-select', 'trend-country-select'].forEach(id =>
+  document.getElementById(id).addEventListener('change', () => {
+    if (trendDirty && !confirm('Discard unsaved trending changes?')) return;
+    loadTrending();
+  }));
+
+// Search within the currently selected type + country
+let trendSearchTimer;
+$('#trend-search').addEventListener('input', () => {
+  clearTimeout(trendSearchTimer);
+  trendSearchTimer = setTimeout(async () => {
+    const q = $('#trend-search').value.trim();
+    if (!q) { $('#trend-results').innerHTML = ''; return; }
+
+    const { tab, country } = trendKey();
+    const params = new URLSearchParams({ type: TAB_TO_TYPE[tab], country, q, limit: 10 });
+    const listings = await (await fetch(`/api/listings?${params}`)).json();
+    const pickedIds = new Set(trendPicks.map(p => p.id));
+    const candidates = listings.filter(l => !pickedIds.has(l.id));
+
+    $('#trend-results').innerHTML = candidates.length
+      ? candidates.map(l => `
+          <button class="trend-result" data-add="${l.id}" data-name="${l.name}">
+            + ${l.name} <small>${l.city || l.country}</small>
+          </button>`).join('')
+      : '<p class="posts-status">No matches (already picked, or try the Listings tab to create it first).</p>';
+
+    // stash the listing objects so we can add them without refetching
+    $('#trend-results')._candidates = candidates;
+  }, 300);
+});
+
+$('#trend-results').addEventListener('click', (e) => {
+  const btn = e.target.closest('[data-add]');
+  if (!btn) return;
+  if (trendPicks.length >= 5) {
+    $('#trend-msg').textContent = 'Top 5 is full — remove one first.';
+    return;
+  }
+  const listing = $('#trend-results')._candidates.find(l => l.id === Number(btn.dataset.add));
+  trendPicks.push(listing);
+  trendDirty = true;
+  btn.remove();
+  renderTrendPicks();
+});
+
+$('#trend-save-btn').addEventListener('click', async () => {
+  const { tab, country } = trendKey();
+  const res = await fetch('/api/trending', {
+    method: 'PUT',
+    headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+    body: JSON.stringify({ tab, country, listing_ids: trendPicks.map(p => p.id) }),
+  });
+  const result = await res.json();
+  if (res.ok) {
+    trendDirty = false;
+    renderTrendPicks();
+    $('#trend-msg').textContent = 'Saved — the homepage sidebar is updated.';
+  } else {
+    $('#trend-msg').textContent = 'Error: ' + result.error;
+  }
 });

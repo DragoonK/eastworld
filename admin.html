@@ -40,7 +40,7 @@
     <div class="admin-tabs">
       <button class="admin-tab active" data-tab="posts">POSTS</button>
       <button class="admin-tab" data-tab="listings">LISTINGS</button>
-      <button class="admin-tab" data-tab="trending" disabled title="Coming in phase 3">TRENDING</button>
+      <button class="admin-tab" data-tab="trending">TRENDING</button>
     </div>
 
     <!-- ================= POSTS TAB ================= -->
@@ -132,6 +132,45 @@
       </form>
 
       <div id="listings-table" class="admin-table-wrap"><p class="posts-status">Loading&hellip;</p></div>
+    </section>
+
+    <!-- ================= TRENDING TAB ================= -->
+    <section id="trending-tab" class="tab-panel" hidden>
+      <div class="admin-toolbar">
+        <h2>Trending Top 5</h2>
+        <div class="toolbar-filters">
+          <select id="trend-tab-select">
+            <option value="food">Food</option>
+            <option value="stays">Stays</option>
+            <option value="places">Places</option>
+            <option value="products">Products</option>
+          </select>
+          <select id="trend-country-select">
+            <option value="japan">Japan</option>
+            <option value="china">China</option>
+            <option value="thailand">Thailand</option>
+            <option value="cambodia">Cambodia</option>
+            <option value="australia">Australia</option>
+          </select>
+        </div>
+        <button id="trend-save-btn" class="primary" disabled>SAVE ORDER</button>
+      </div>
+
+      <p class="admin-hint">
+        This is the list shown in the homepage sidebar. Reorder with the arrows,
+        remove with &times;, and add listings from the search below (max 5).
+        Changes only go live when you hit SAVE ORDER.
+      </p>
+
+      <div id="trend-current" class="trend-current"></div>
+
+      <div class="trend-add">
+        <h3>Add a listing</h3>
+        <input type="search" id="trend-search" placeholder="Search listings of this type and country...">
+        <div id="trend-results" class="trend-results"></div>
+      </div>
+
+      <p id="trend-msg" class="form-msg"></p>
     </section>
 
   </main>

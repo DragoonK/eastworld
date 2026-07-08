@@ -97,6 +97,73 @@ def ensure_listings_table():
     conn.close()
 
 
+TAB_TO_TYPE = {"food": "food", "stays": "stay", "places": "place", "products": "product"}
+
+
+def ensure_trending_table():
+    """Create and seed the curated top-5 table.
+
+    Each row points at a real listing, so editing a listing (name,
+    image, rating...) automatically updates the sidebar too. The seed
+    comes from trending_seed.json (the old hardcoded trending.js data);
+    entries that don't match an existing listing get one created.
+    """
+    conn = get_db()
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS trending (
+            id         INTEGER PRIMARY KEY AUTOINCREMENT,
+            tab        TEXT NOT NULL,       -- food | stays | places | products
+            country    TEXT NOT NULL,
+            rank       INTEGER NOT NULL,    -- 1 (top) to 5
+            listing_id INTEGER NOT NULL REFERENCES listings(id),
+            UNIQUE(tab, country, rank)
+        )
+    """)
+
+    count = conn.execute("SELECT COUNT(*) FROM trending").fetchone()[0]
+    seed_file = BASE_DIR / "trending_seed.json"
+    if count == 0 and seed_file.exists():
+        created = 0
+        for entry in json.loads(seed_file.read_text()):
+            listing_type = TAB_TO_TYPE[entry["tab"]]
+            row = conn.execute(
+                "SELECT id FROM listings WHERE lower(name) = lower(?)"
+                " AND country = ? AND type = ?",
+                (entry["name"], entry["country"], listing_type),
+            ).fetchone()
+
+            if row:
+                listing_id = row["id"]
+                # Backfill legacy detail-page links the old sidebar had
+                if entry["link"]:
+                    conn.execute(
+                        "UPDATE listings SET link = ? WHERE id = ? AND link = ''",
+                        (entry["link"], listing_id),
+                    )
+            else:
+                # Trending pick that wasn't in the old food/stays/places
+                # data files: create a listing for it so it can be edited.
+                city = "" if listing_type == "product" else entry["location"].lower()
+                cursor = conn.execute(
+                    "INSERT INTO listings (type, name, country, city, image_url, link)"
+                    " VALUES (?, ?, ?, ?, ?, ?)",
+                    (listing_type, entry["name"], entry["country"], city,
+                     entry["image"], entry["link"]),
+                )
+                listing_id = cursor.lastrowid
+                created += 1
+
+            conn.execute(
+                "INSERT INTO trending (tab, country, rank, listing_id)"
+                " VALUES (?, ?, ?, ?)",
+                (entry["tab"], entry["country"], entry["rank"], listing_id),
+            )
+        print(f"Seeded trending table ({created} listings created for unmatched picks).")
+
+    conn.commit()
+    conn.close()
+
+
 def is_authorized():
     """True if the request carries the admin password.
 
@@ -445,10 +512,90 @@ def delete_listing(listing_id):
         return jsonify({"error": "Listing not found"}), 404
 
     conn.execute("DELETE FROM listings WHERE id = ?", (listing_id,))
+    # Also drop it from any curated top-5 lists it appeared in
+    conn.execute("DELETE FROM trending WHERE listing_id = ?", (listing_id,))
     conn.commit()
     conn.close()
     delete_uploaded_image(existing["image_url"])
     return jsonify({"id": listing_id, "message": "Listing deleted"})
+
+
+# -------------------------- Trending --------------------------
+
+COUNTRY_ORDER = ["japan", "china", "thailand", "cambodia", "australia"]
+
+
+def trending_items(conn, tab, country):
+    """Ranked picks for one tab+country, joined with listing details."""
+    rows = conn.execute(
+        "SELECT t.rank, l.id, l.name, l.city, l.country, l.type,"
+        "       l.image_url, l.link, l.rating"
+        " FROM trending t JOIN listings l ON l.id = t.listing_id"
+        " WHERE t.tab = ? AND t.country = ? ORDER BY t.rank",
+        (tab, country),
+    ).fetchall()
+    return [dict(row) for row in rows]
+
+
+@app.route("/api/trending")
+def get_trending():
+    """The homepage sidebar data.
+
+        /api/trending?country=japan  -> top 5 per tab for Japan
+        /api/trending?country=all    -> each country's #1 pick per tab
+    """
+    country = (request.args.get("country") or "all").lower()
+
+    conn = get_db()
+    result = {}
+    for tab in TAB_TO_TYPE:
+        if country == "all":
+            result[tab] = [
+                items[0] for c in COUNTRY_ORDER
+                if (items := trending_items(conn, tab, c))
+            ]
+        else:
+            result[tab] = trending_items(conn, tab, country)
+    conn.close()
+    return jsonify(result)
+
+
+@app.route("/api/trending", methods=["PUT"])
+def set_trending():
+    """Replace the top 5 for one tab+country (admin).
+
+    Expects JSON: {"tab": "food", "country": "japan", "listing_ids": [5, 12, 3, 40, 7]}
+    The order of listing_ids is the ranking.
+    """
+    if not is_authorized():
+        return jsonify({"error": "Wrong password"}), 401
+
+    data = request.get_json(silent=True) or {}
+    tab = data.get("tab")
+    country = (data.get("country") or "").lower()
+    listing_ids = data.get("listing_ids")
+
+    if tab not in TAB_TO_TYPE:
+        return jsonify({"error": "Tab must be food, stays, places or products"}), 400
+    if not country:
+        return jsonify({"error": "Country is required"}), 400
+    if not isinstance(listing_ids, list) or not 1 <= len(listing_ids) <= 5:
+        return jsonify({"error": "Provide 1 to 5 listing_ids in ranked order"}), 400
+
+    conn = get_db()
+    for listing_id in listing_ids:
+        if conn.execute("SELECT 1 FROM listings WHERE id = ?", (listing_id,)).fetchone() is None:
+            conn.close()
+            return jsonify({"error": f"Listing {listing_id} does not exist"}), 400
+
+    conn.execute("DELETE FROM trending WHERE tab = ? AND country = ?", (tab, country))
+    conn.executemany(
+        "INSERT INTO trending (tab, country, rank, listing_id) VALUES (?, ?, ?, ?)",
+        [(tab, country, i + 1, lid) for i, lid in enumerate(listing_ids)],
+    )
+    conn.commit()
+    conn.close()
+    return jsonify({"message": f"Top {len(listing_ids)} saved for {tab}/{country}"})
 
 
 # ----------------------- Static frontend ----------------------
@@ -470,8 +617,9 @@ if not DB_PATH.exists():
     import init_db
     init_db.main()
 
-# Idempotent: creates/seeds the listings table only if it's missing/empty
+# Idempotent: creates/seeds these tables only if they're missing/empty
 ensure_listings_table()
+ensure_trending_table()
 
 if __name__ == "__main__":
     # Port 5001 because macOS AirPlay already listens on 5000.

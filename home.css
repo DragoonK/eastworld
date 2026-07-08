@@ -779,6 +779,104 @@ button.secondary {
 
 #login-status.error, .error { color: #b0342c; }
 
+/* ---------- Admin: trending curation ---------- */
+
+.trend-current {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 1.2rem 0 2rem;
+}
+
+.trend-pick {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  padding: 0.6rem 1rem;
+}
+
+.trend-pick .rank {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #b0342c;
+  width: 1.4rem;
+  text-align: center;
+}
+
+.trend-pick img {
+  width: 64px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 8px;
+  background: #eee;
+}
+
+.trend-pick-name {
+  display: flex;
+  flex-direction: column;
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-right: auto;
+}
+
+.trend-pick-name small {
+  font-weight: 400;
+  color: #888;
+  text-transform: capitalize;
+}
+
+.trend-pick-actions { display: flex; gap: 0.35rem; }
+
+.trend-pick-actions button {
+  font-size: 0.9rem;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.trend-pick-actions button:hover:not(:disabled) { background: #f2f2f2; }
+.trend-pick-actions button:disabled { opacity: 0.3; cursor: default; }
+.trend-pick-actions button.danger { color: #b0342c; border-color: #e5b6b2; }
+
+.trend-add h3 { font-size: 1rem; margin-bottom: 0.6rem; }
+
+.trend-add input {
+  font-family: inherit;
+  font-size: 0.95rem;
+  width: min(100%, 480px);
+  padding: 0.6rem 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.trend-results {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.8rem;
+}
+
+.trend-result {
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.5rem 0.9rem;
+  border: 1px solid #ccc;
+  border-radius: 999px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.trend-result:hover { background: #111; color: #fff; }
+.trend-result small { font-weight: 400; text-transform: capitalize; }
+
 /* ---------- Footer ---------- */
 
 footer {
