@@ -135,22 +135,21 @@ function initInfinitePosts() {
       sentinel.textContent = '';
     } finally {
       isLoading = false;
-      // The observer only fires when the sentinel ENTERS the trigger
-      // zone. If the newly added cards didn't push it back out of the
-      // zone, no new event will ever come — so re-check manually and
-      // keep loading until the sentinel is out of range (or we're done).
-      if (!reachedEnd && sentinel.getBoundingClientRect().top < window.innerHeight + 400) {
+      // The observer only fires when the sentinel ENTERS the viewport.
+      // If the newly added cards didn't push it below the fold, no new
+      // event will ever come — so re-check manually and keep loading
+      // until the sentinel is genuinely out of view (or we're done).
+      if (!reachedEnd && sentinel.getBoundingClientRect().top < window.innerHeight) {
         loadMore();
       }
     }
   }
 
-  // rootMargin makes the sentinel "visible" 400px before it enters
-  // the viewport, so the next page is usually ready by the time
-  // the reader gets there.
+  // No prefetch margin: the next page loads only when the reader
+  // actually reaches the bottom, so the loading step is visible.
   const observer = new IntersectionObserver(entries => {
     if (entries[0].isIntersecting) loadMore();
-  }, { rootMargin: '400px' });
+  });
 
   observer.observe(sentinel);
   loadMore(); // first page, immediately
