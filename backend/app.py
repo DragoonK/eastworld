@@ -662,10 +662,18 @@ def get_trending():
     result = {}
     for tab in TAB_TO_TYPE:
         if country == "all":
-            result[tab] = [
-                items[0] for c in COUNTRY_ORDER
-                if (items := trending_items(conn, tab, c))
-            ]
+            # Always a top FIVE, regardless of how many countries
+            # have picks: every country's #1 first, then #2s, and
+            # so on until five slots are filled.
+            per_country = [trending_items(conn, tab, c) for c in COUNTRY_ORDER]
+            picks = []
+            rank = 0
+            while len(picks) < 5 and any(len(items) > rank for items in per_country):
+                for items in per_country:
+                    if rank < len(items) and len(picks) < 5:
+                        picks.append(items[rank])
+                rank += 1
+            result[tab] = picks
         else:
             result[tab] = trending_items(conn, tab, country)
     conn.close()
