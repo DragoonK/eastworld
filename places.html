@@ -54,7 +54,6 @@
       color: #007bff;
       cursor: pointer;
       font-size: 0.9rem;
-      display: none;
     }
     
     .clear-filter:hover {
@@ -452,8 +451,8 @@
           <button class="filter-btn active" data-country="all">All</button>
           <button class="filter-btn" data-country="japan">Japan</button>
           <button class="filter-btn" data-country="china">China</button>
-          <!-- <button class="filter-btn" data-country="korea">Korea</button> -->
-          <!-- <button class="filter-btn" data-country="thailand">Thailand</button> -->
+          <button class="filter-btn" data-country="thailand">Thailand</button>
+          <button class="filter-btn" data-country="vietnam">Vietnam</button>
           <button class="filter-btn" data-country="cambodia">Cambodia</button>
           <button class="filter-btn" data-country="australia">Australia</button>
         </div>
@@ -483,23 +482,23 @@
       </div>
       
       <!-- Korea Cities -->
-      <!-- <div class="filter-section cities korea-cities" data-country="korea">
-        <div class="filter-section-title">Korea Cities</div>
-        <div class="filter-options">
-          <button class="filter-btn" data-city="busan">Busan</button>
-          <button class="filter-btn" data-city="seoul">Seoul</button>
-        </div>
-      </div> -->
       
       <!-- Thailand Cities -->
-      <!-- <div class="filter-section cities thailand-cities" data-country="thailand">
+      <div class="filter-section cities thailand-cities" data-country="thailand" style="display: none;">
         <div class="filter-section-title">Thailand Cities</div>
         <div class="filter-options">
           <button class="filter-btn" data-city="bangkok">Bangkok</button>
-          <button class="filter-btn" data-city="chiang-mai">Chiang Mai</button>
           <button class="filter-btn" data-city="phuket">Phuket</button>
         </div>
-      </div> -->
+      </div>
+
+      <!-- Vietnam Cities -->
+      <div class="filter-section cities vietnam-cities" data-country="vietnam" style="display: none;">
+        <div class="filter-section-title">Vietnam Cities</div>
+        <div class="filter-options">
+          <button class="filter-btn" data-city="ho-chi-minh">Ho Chi Minh (Saigon)</button>
+        </div>
+      </div>
       
       <!-- Cambodia Cities -->
       <div class="filter-section cities cambodia-cities" data-country="cambodia" style="display: none;">
@@ -551,72 +550,9 @@
     <section>
       <h2>ALL EXPERIENCES</h2>
       <div class="places-grid">
-        <a href="places/teamlab-borderless.html" class="wonder-card">
-          <div class="wonder-card-img">
-            <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/17/f6/39/f4/teamlab-borderless-is.jpg?w=1200&h=-1&s=1" alt="TeamLab Borderless">
-          </div>
-          <div class="wonder-card-content">
-            <div class="wonder-card-category">DIGITAL ART</div>
-            <h3 class="wonder-card-title">TeamLab Borderless: Interactive Art</h3>
-            <p class="wonder-card-description">Immerse yourself in a borderless world of digital art installations.</p>
-            <div class="wonder-card-location"><i class="fas fa-map-marker-alt"></i> Tokyo, Japan</div>
-          </div>
-        </a>
-        <a href="places/tokyo-skytree.html" class="wonder-card">
-          <div class="wonder-card-img">
-            <img src="https://media.timeout.com/images/105238138/750/422/image.jpg" alt="Tokyo Skytree">
-          </div>
-          <div class="wonder-card-content">
-            <div class="wonder-card-category">Landmark</div>
-            <h3 class="wonder-card-title">Tokyo Skytree: City Views</h3>
-            <p class="wonder-card-description">Enjoy breathtaking panoramic views of Tokyo from Japan's tallest structure.</p>
-            <div class="wonder-card-location"><i class="fas fa-map-marker-alt"></i> Tokyo, Japan</div>
-          </div>
-        </a>
-        <a href="places/shinjuku-gyoen.html" class="wonder-card">
-          <div class="wonder-card-img">
-            <img src="https://media.cntraveler.com/photos/5ea9ca482136a80a9e6cd034/16:9/w_2560,c_limit/Shinjuku-Gyoen-GettyImages-1141191450.jpg" alt="Shinjuku Gyoen">
-          </div>
-          <div class="wonder-card-content">
-            <div class="wonder-card-category">Nature</div>
-            <h3 class="wonder-card-title">Shinjuku Gyoen: Urban Oasis</h3>
-            <p class="wonder-card-description">Escape the city buzz in this spacious park featuring Japanese, French, and English gardens.</p>
-            <div class="wonder-card-location"><i class="fas fa-map-marker-alt"></i> Tokyo, Japan</div>
-          </div>
-        </a>
-        <a href="places/yoyogi-park.html" class="wonder-card">
-          <div class="wonder-card-img">
-            <img src="https://media.gettyimages.com/id/996789062/photo/yoyogi-park.jpg?s=612x612&w=gi&k=20&c=2O7XFyKYG8mhjGhIgMtOb3CvA-f05huLeFRyFjAQ5e4=" alt="Yoyogi Park">
-          </div>
-          <div class="wonder-card-content">
-            <div class="wonder-card-category">Nature</div>
-            <h3 class="wonder-card-title">Yoyogi Park: Urban Greenspace</h3>
-            <p class="wonder-card-description">Join locals for picnics, street performances and people-watching at this vibrant park.</p>
-            <div class="wonder-card-location"><i class="fas fa-map-marker-alt"></i> Tokyo, Japan</div>
-          </div>
-        </a>
-        <a href="places/senso-ji-temple.html" class="wonder-card">
-          <div class="wonder-card-img">
-            <img src="https://a.cdn-hotels.com/gdcs/production135/d294/8a0eeced-ac56-417d-8d07-35ac885dbfce.jpg" alt="Senso-ji Temple">
-          </div>
-          <div class="wonder-card-content">
-            <div class="wonder-card-category">Temple</div>
-            <h3 class="wonder-card-title">Senso-ji Temple: Tokyo's Oldest Temple</h3>
-            <p class="wonder-card-description">Visit Tokyo's oldest temple and stroll through the famous Nakamise shopping street.</p>
-            <div class="wonder-card-location"><i class="fas fa-map-marker-alt"></i> Tokyo, Japan</div>
-          </div>
-        </a>
-        <a href="places/akihabara.html" class="wonder-card">
-          <div class="wonder-card-img">
-            <img src="https://www.japan-guide.com/g18/3041_01.jpg" alt="Akihabara">
-          </div>
-          <div class="wonder-card-content">
-            <div class="wonder-card-category">Culture</div>
-            <h3 class="wonder-card-title">Akihabara: Electric Town</h3>
-            <p class="wonder-card-description">Explore the vibrant district known for electronics, manga, anime and gaming culture.</p>
-            <div class="wonder-card-location"><i class="fas fa-map-marker-alt"></i> Tokyo, Japan</div>
-          </div>
-        </a>
+        <div class="initial-message" style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: #666;">
+          Loading places&hellip;
+        </div>
       </div>
     </section>
     
@@ -651,6 +587,7 @@
   </footer>
 
   <script src="script.js"></script>
+  <script src="catalog.js"></script>
   <script src="places.js"></script>
 </body>
 </html> 

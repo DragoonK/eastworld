@@ -326,6 +326,7 @@
           <button class="filter-btn" data-country="japan">Japan</button>
           <button class="filter-btn" data-country="china">China</button>
           <button class="filter-btn" data-country="thailand">Thailand</button>
+          <button class="filter-btn" data-country="vietnam">Vietnam</button>
           <button class="filter-btn" data-country="cambodia">Cambodia</button>
           <button class="filter-btn" data-country="australia">Australia</button>
         </div>
@@ -354,16 +355,6 @@
         </div>
       </div>
       
-      <!-- Korea Cities -->
-      <!-- <div class="filter-section cities korea-cities" data-country="korea">
-        <div class="filter-section-title">Korea Cities</div>
-        <div class="filter-options">
-          <button class="filter-btn active" data-city="all">All Cities</button>
-          <button class="filter-btn" data-city="seoul">Seoul</button>
-          <button class="filter-btn" data-city="busan">Busan</button>
-        </div>
-      </div> -->
-      
       <!-- Thailand Cities -->
       <div class="filter-section cities thailand-cities" data-country="thailand">
         <div class="filter-section-title">Thailand Cities</div>
@@ -374,6 +365,14 @@
         </div>
       </div>
       
+      <!-- Vietnam Cities -->
+      <div class="filter-section cities vietnam-cities" data-country="vietnam">
+        <div class="filter-section-title">Vietnam Cities</div>
+        <div class="filter-options">
+          <button class="filter-btn" data-city="ho-chi-minh">Ho Chi Minh (Saigon)</button>
+        </div>
+      </div>
+
       <!-- Cambodia Cities -->
       <div class="filter-section cities cambodia-cities" data-country="cambodia">
         <div class="filter-section-title">Cambodia Cities</div>
@@ -397,7 +396,7 @@
         <div class="filter-section-title">By Price Range</div>
         <div class="filter-options">
           <button class="filter-btn" data-price="budget">Budget</button>
-          <button class="filter-btn" data-price="moderate">Moderate</button>
+          <button class="filter-btn" data-price="standard">Standard</button>
           <button class="filter-btn" data-price="premium">Premium</button>
         </div>
       </div>
@@ -408,7 +407,7 @@
       <div class="featured-grid">
         <!-- Thailand (Phuket) -->
         <a href="amanpuri.html" class="featured-card">
-          <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/223648066.jpg?k=d58798afbae56c84df99129aee5a1dfc21c1d0f62ef06836a4adf20e2ef12a11&o=&hp=1" alt="Amanpuri">
+          <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=1050&q=80" alt="Amanpuri">
           <div class="featured-content">
             <span class="featured-category">LUXURY</span>
             <h3 class="featured-title">Amanpuri: Phuket Paradise</h3>
@@ -418,7 +417,7 @@
         
         <!-- Japan (Kyoto) -->
         <a href="stays/kyoto-aman.html" class="featured-card">
-          <img src="https://www.amankyoto.com/wp-content/uploads/2019/03/Aman-Kyoto-Exterior.jpg" alt="Aman Kyoto">
+          <img src="https://images.unsplash.com/photo-1578469645742-46cae010e5d4?auto=format&fit=crop&w=1050&q=80" alt="Aman Kyoto">
           <div class="featured-content">
             <span class="featured-category">ULTRA-LUXURY</span>
             <h3 class="featured-title">Aman Kyoto: Forest Sanctuary</h3>
@@ -428,7 +427,7 @@
         
         <!-- Japan (Osaka) -->
         <a href="stays/osaka-conrad.html" class="featured-card">
-          <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1e/7b/72/15/conrad-osaka.jpg" alt="Conrad Osaka">
+          <img src="https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=1050&q=80" alt="Conrad Osaka">
           <div class="featured-content">
             <span class="featured-category">LUXURY</span>
             <h3 class="featured-title">Conrad Osaka: Sky-High Views</h3>
@@ -441,194 +440,9 @@
     <section>
       <h2>ALL ACCOMMODATIONS</h2>
       <div class="stays-grid">
-        <!-- Aman Kyoto -->
-        <a href="stays/kyoto-aman.html" class="stay-card" data-country="japan" data-city="kyoto">
-          <div class="stay-card-img">
-            <img src="https://www.amankyoto.com/wp-content/uploads/2019/03/Aman-Kyoto-Exterior.jpg" alt="Aman Kyoto">
-            <span class="stay-card-category">Ultra-Luxury</span>
-          </div>
-          <div class="stay-card-content">
-            <h3 class="stay-card-title">Aman Kyoto: Forest Sanctuary</h3>
-            <p class="stay-card-desc">A tranquil sanctuary set in a secret garden surrounded by forest and ancient temples with unparalleled luxury.</p>
-            <div class="stay-card-meta">
-              <div class="stay-card-location"><i class="fas fa-map-marker-alt"></i> Kyoto, Japan</div>
-              <div class="stay-card-stars">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-              </div>
-            </div>
-          </div>
-        </a>
-        
-        <!-- Cross Hotel Osaka -->
-        <a href="stays/osaka-cross-hotel.html" class="stay-card" data-country="japan" data-city="osaka">
-          <div class="stay-card-img">
-            <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1a/f6/e4/35/cross-hotel-osaka.jpg" alt="Cross Hotel Osaka">
-            <span class="stay-card-category">Design</span>
-          </div>
-          <div class="stay-card-content">
-            <h3 class="stay-card-title">Cross Hotel Osaka: Trendy Design</h3>
-            <p class="stay-card-desc">Contemporary design hotel in the heart of Dotonbori with bold aesthetics and modern amenities.</p>
-            <div class="stay-card-meta">
-              <div class="stay-card-location"><i class="fas fa-map-marker-alt"></i> Osaka, Japan</div>
-              <div class="stay-card-stars">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star-half-alt"></i>
-              </div>
-            </div>
-          </div>
-        </a>
-        
-        <!-- Conrad Osaka -->
-        <a href="stays/osaka-conrad.html" class="stay-card" data-country="japan" data-city="osaka">
-          <div class="stay-card-img">
-            <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1e/7b/72/15/conrad-osaka.jpg" alt="Conrad Osaka">
-            <span class="stay-card-category">Luxury</span>
-          </div>
-          <div class="stay-card-content">
-            <h3 class="stay-card-title">Conrad Osaka: Sky-High Luxury</h3>
-            <p class="stay-card-desc">Luxury high-rise hotel occupying floors 33-40 with panoramic city views and impeccable service.</p>
-            <div class="stay-card-meta">
-              <div class="stay-card-location"><i class="fas fa-map-marker-alt"></i> Osaka, Japan</div>
-              <div class="stay-card-stars">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-              </div>
-            </div>
-          </div>
-        </a>
-        
-        <!-- W Osaka -->
-        <a href="stays/osaka-w-hotel.html" class="stay-card" data-country="japan" data-city="osaka">
-          <div class="stay-card-img">
-            <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1f/8c/83/20/w-osaka.jpg" alt="W Osaka">
-            <span class="stay-card-category">Lifestyle Luxury</span>
-          </div>
-          <div class="stay-card-content">
-            <h3 class="stay-card-title">W Osaka: Vibrant Design-Forward</h3>
-            <p class="stay-card-desc">Bold, design-forward luxury hotel with Instagram-worthy spaces and cutting-edge amenities.</p>
-            <div class="stay-card-meta">
-              <div class="stay-card-location"><i class="fas fa-map-marker-alt"></i> Osaka, Japan</div>
-              <div class="stay-card-stars">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star-half-alt"></i>
-              </div>
-            </div>
-          </div>
-        </a>
-        
-        <a href="hoshinoya.html" class="stay-card" data-country="japan" data-city="tokyo">
-          <div class="stay-card-img">
-            <img src="https://www.hoshinoya.com/tokyo/images/index/slide01.jpg" alt="Hoshinoya Tokyo">
-            <span class="stay-card-category">Ryokan</span>
-          </div>
-          <div class="stay-card-content">
-            <h3 class="stay-card-title">Hoshinoya Tokyo: Urban Ryokan</h3>
-            <p class="stay-card-desc">Traditional Japanese inn experience reimagined for the heart of Tokyo's financial district.</p>
-            <div class="stay-card-meta">
-              <div class="stay-card-location"><i class="fas fa-map-marker-alt"></i> Tokyo, Japan</div>
-              <div class="stay-card-stars">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-              </div>
-            </div>
-          </div>
-        </a>
-        <a href="mandarin-oriental.html" class="stay-card" data-country="japan" data-city="tokyo">
-          <div class="stay-card-img">
-            <img src="https://www.mandarinoriental.com/media/photos/mom-tokyo-exterior-1680x720.jpg" alt="Mandarin Oriental">
-            <span class="stay-card-category">Luxury</span>
-          </div>
-          <div class="stay-card-content">
-            <h3 class="stay-card-title">Mandarin Oriental: Tokyo Luxury</h3>
-            <p class="stay-card-desc">Exceptional service and panoramic city views from this elegant luxury hotel in Nihonbashi.</p>
-            <div class="stay-card-meta">
-              <div class="stay-card-location"><i class="fas fa-map-marker-alt"></i> Tokyo, Japan</div>
-              <div class="stay-card-stars">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-              </div>
-            </div>
-          </div>
-        </a>
-        <a href="ritz-carlton-kyoto.html" class="stay-card" data-country="japan" data-city="kyoto">
-          <div class="stay-card-img">
-            <img src="https://www.ritzcarlton.com/content/dam/the-ritz-carlton/hotels/asia-pacific/japan/kyoto/exterior.jpg" alt="Ritz Carlton Kyoto">
-            <span class="stay-card-category">Riverside</span>
-          </div>
-          <div class="stay-card-content">
-            <h3 class="stay-card-title">Ritz Carlton: Kyoto Riverside</h3>
-            <p class="stay-card-desc">An urban sanctuary of luxury alongside the peaceful Kamogawa river in historic Kyoto.</p>
-            <div class="stay-card-meta">
-              <div class="stay-card-location"><i class="fas fa-map-marker-alt"></i> Kyoto, Japan</div>
-              <div class="stay-card-stars">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-              </div>
-            </div>
-          </div>
-        </a>
-        <a href="claska.html" class="stay-card" data-country="japan" data-city="tokyo">
-          <div class="stay-card-img">
-            <img src="https://cdn.tatlerasia.com/tatlerasia/i/2022/10/31115822-claska_cover_1200x900.jpg" alt="Claska">
-            <span class="stay-card-category">Boutique</span>
-          </div>
-          <div class="stay-card-content">
-            <h3 class="stay-card-title">Claska: Tokyo Design Hotel</h3>
-            <p class="stay-card-desc">A boutique hotel celebrating Japanese design with individually styled rooms in trendy Meguro.</p>
-            <div class="stay-card-meta">
-              <div class="stay-card-location"><i class="fas fa-map-marker-alt"></i> Tokyo, Japan</div>
-              <div class="stay-card-stars">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="far fa-star"></i>
-              </div>
-            </div>
-          </div>
-        </a>
-        <a href="ryokan-ryumeikan.html" class="stay-card" data-country="japan" data-city="tokyo">
-          <div class="stay-card-img">
-            <img src="https://www.resorttrust.co.jp/xiv/shizuoka/img/spa/facility_img001.jpg" alt="Ryokan Ryumeikan">
-            <span class="stay-card-category">Traditional</span>
-          </div>
-          <div class="stay-card-content">
-            <h3 class="stay-card-title">Ryokan Ryumeikan: Traditional Stay</h3>
-            <p class="stay-card-desc">Experience authentic Japanese hospitality with hot spring baths and traditional meals.</p>
-            <div class="stay-card-meta">
-              <div class="stay-card-location"><i class="fas fa-map-marker-alt"></i> Tokyo, Japan</div>
-              <div class="stay-card-stars">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star-half-alt"></i>
-              </div>
-            </div>
-          </div>
-        </a>
+        <div class="initial-message" style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: #666;">
+          Loading accommodations&hellip;
+        </div>
       </div>
     </section>
     
@@ -663,6 +477,7 @@
   </footer>
 
   <script src="script.js"></script>
+  <script src="catalog.js"></script>
   <script src="stays.js"></script>
 </body>
 </html> 

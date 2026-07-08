@@ -36,6 +36,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const items = data[activeTab] || [];
+    if (items.length === 0) {
+      list.innerHTML = '<p class="posts-status">No picks for this country yet.</p>';
+      return;
+    }
     list.innerHTML = items.map((item, i) => `
       <a class="trending-item" href="${item.link || `listing.html?id=${item.id}`}">
         <span class="rank">${i + 1}</span>

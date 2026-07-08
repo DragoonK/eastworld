@@ -171,6 +171,23 @@ def ensure_trending_table():
     conn.close()
 
 
+def normalize_city(value):
+    """Keep city values consistent: lowercase, hyphens for spaces.
+
+    Filter buttons across the site use slugs like 'phnom-penh', so
+    everything written to the database must match that format.
+    """
+    return value.strip().lower().replace(" ", "-")
+
+
+def normalize_cities_once():
+    """Repair any legacy multi-word city values on boot (idempotent)."""
+    conn = get_db()
+    conn.execute("UPDATE listings SET city = REPLACE(city, ' ', '-') WHERE city LIKE '% %'")
+    conn.commit()
+    conn.close()
+
+
 def backfill_listing_media():
     """Fill in images/links for listings that still lack them.
 
@@ -189,6 +206,24 @@ def backfill_listing_media():
                 " AND type = ? AND image_url = ''",
                 (e["image"], e["name"], e["type"]),
             )
+
+    # Products that only ever existed as hardcoded cards in
+    # products.html — import any that aren't in the table yet.
+    products_file = BASE_DIR / "products_seed.json"
+    if products_file.exists():
+        for p in json.loads(products_file.read_text()):
+            exists = conn.execute(
+                "SELECT 1 FROM listings WHERE lower(name) = lower(?) AND type = 'product'",
+                (p["name"],),
+            ).fetchone()
+            if not exists:
+                conn.execute(
+                    "INSERT INTO listings (type, name, country, city, price_range,"
+                    " budget_tier, category, description, image_url, link)"
+                    " VALUES (:type, :name, :country, :city, :price_range,"
+                    " :budget_tier, :category, :description, :image_url, :link)",
+                    p,
+                )
 
     trending_file = BASE_DIR / "trending_seed.json"
     if trending_file.exists():
@@ -485,7 +520,7 @@ def create_listing():
         " budget_tier, category, description, content, rating, image_url)"
         " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
         (fields["type"], fields["name"], fields["country"].lower(),
-         fields["city"].lower(), fields["price_range"], fields["budget_tier"],
+         normalize_city(fields["city"]), fields["price_range"], fields["budget_tier"],
          fields["category"], fields["description"], fields["content"],
          rating, image_url),
     )
@@ -536,7 +571,7 @@ def update_listing(listing_id):
         " budget_tier=?, category=?, description=?, content=?, rating=?, image_url=?"
         " WHERE id=?",
         (listing_type, field("name"), field("country", str.lower),
-         field("city", str.lower), field("price_range"), field("budget_tier"),
+         field("city", normalize_city), field("price_range"), field("budget_tier"),
          field("category"), field("description"), field("content"),
          rating, image_url, listing_id),
     )
@@ -569,7 +604,7 @@ def delete_listing(listing_id):
 
 # -------------------------- Trending --------------------------
 
-COUNTRY_ORDER = ["japan", "china", "thailand", "cambodia", "australia"]
+COUNTRY_ORDER = ["japan", "china", "thailand", "vietnam", "cambodia", "australia"]
 
 
 def trending_items(conn, tab, country):
@@ -760,6 +795,7 @@ if not DB_PATH.exists():
 # Idempotent: creates/seeds these tables only if they're missing/empty
 ensure_listings_table()
 ensure_trending_table()
+normalize_cities_once()
 backfill_listing_media()
 
 if __name__ == "__main__":
