@@ -171,6 +171,46 @@ def ensure_trending_table():
     conn.close()
 
 
+def backfill_listing_media():
+    """Fill in images/links for listings that still lack them.
+
+    Sources: images_seed.json (extracted from the legacy food.js /
+    places.js image maps) and trending_seed.json. Only touches empty
+    fields, so anything set through the admin is never overwritten.
+    Runs on every boot; a no-op once everything is filled.
+    """
+    conn = get_db()
+
+    images_file = BASE_DIR / "images_seed.json"
+    if images_file.exists():
+        for e in json.loads(images_file.read_text()):
+            conn.execute(
+                "UPDATE listings SET image_url = ? WHERE lower(name) = lower(?)"
+                " AND type = ? AND image_url = ''",
+                (e["image"], e["name"], e["type"]),
+            )
+
+    trending_file = BASE_DIR / "trending_seed.json"
+    if trending_file.exists():
+        for e in json.loads(trending_file.read_text()):
+            listing_type = TAB_TO_TYPE[e["tab"]]
+            if e["image"]:
+                conn.execute(
+                    "UPDATE listings SET image_url = ? WHERE lower(name) = lower(?)"
+                    " AND country = ? AND type = ? AND image_url = ''",
+                    (e["image"], e["name"], e["country"], listing_type),
+                )
+            if e["link"]:
+                conn.execute(
+                    "UPDATE listings SET link = ? WHERE lower(name) = lower(?)"
+                    " AND country = ? AND type = ? AND link = ''",
+                    (e["link"], e["name"], e["country"], listing_type),
+                )
+
+    conn.commit()
+    conn.close()
+
+
 def is_authorized():
     """True if the request carries the admin password.
 
@@ -720,6 +760,7 @@ if not DB_PATH.exists():
 # Idempotent: creates/seeds these tables only if they're missing/empty
 ensure_listings_table()
 ensure_trending_table()
+backfill_listing_media()
 
 if __name__ == "__main__":
     # Port 5001 because macOS AirPlay already listens on 5000.

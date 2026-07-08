@@ -10,3 +10,5 @@ backend/uploads/
 
 # macOS
 .DS_Store
+node_modules/
+*-test.png
