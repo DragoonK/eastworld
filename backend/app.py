@@ -97,7 +97,47 @@ def ensure_listings_table():
     conn.close()
 
 
+def is_authorized():
+    """True if the request carries the admin password.
+
+    The dashboard sends it as an X-Admin-Password header; plain
+    form posts can also send it as a 'password' field.
+    """
+    supplied = request.headers.get("X-Admin-Password") or request.form.get("password")
+    return supplied == ADMIN_PASSWORD
+
+
+def save_image_if_present():
+    """Store an uploaded image (if any) and return its URL.
+
+    Returns (image_url, error): image_url is '' when nothing was
+    uploaded, error is an error string or None.
+    """
+    file = request.files.get("image")
+    if not file or not file.filename:
+        return "", None
+    ext = file.filename.rsplit(".", 1)[-1].lower()
+    if ext not in ALLOWED_EXTENSIONS:
+        return "", f"Image type .{ext} not allowed"
+    filename = f"{int(time.time())}-{secure_filename(file.filename)}"
+    file.save(UPLOADS_DIR / filename)
+    return f"/uploads/{filename}", None
+
+
+def delete_uploaded_image(image_url):
+    """Remove an image file from disk if it was one of our uploads."""
+    if image_url and image_url.startswith("/uploads/"):
+        (UPLOADS_DIR / image_url.removeprefix("/uploads/")).unlink(missing_ok=True)
+
+
 # ---------------------------- API ----------------------------
+
+@app.route("/api/admin/check")
+def admin_check():
+    """Lets the dashboard verify the password before showing itself."""
+    if not is_authorized():
+        return jsonify({"error": "Wrong password"}), 401
+    return jsonify({"ok": True})
 
 @app.route("/api/posts")
 def list_posts():
@@ -134,7 +174,7 @@ def create_post():
       - image:     optional file upload (png/jpg/gif/webp)
       - image_url: optional URL, used when no file is uploaded
     """
-    if request.form.get("password") != ADMIN_PASSWORD:
+    if not is_authorized():
         return jsonify({"error": "Wrong password"}), 401
 
     title = (request.form.get("title") or "").strip()
@@ -149,17 +189,10 @@ def create_post():
         excerpt = content.split("\n")[0][:150]
 
     # Prefer an uploaded file; fall back to a pasted URL.
-    image_url = (request.form.get("image_url") or "").strip()
-    file = request.files.get("image")
-    if file and file.filename:
-        ext = file.filename.rsplit(".", 1)[-1].lower()
-        if ext not in ALLOWED_EXTENSIONS:
-            return jsonify({"error": f"Image type .{ext} not allowed"}), 400
-        # Timestamp prefix guarantees uniqueness; secure_filename strips
-        # anything dangerous like "../" from the user's filename.
-        filename = f"{int(time.time())}-{secure_filename(file.filename)}"
-        file.save(UPLOADS_DIR / filename)
-        image_url = f"/uploads/{filename}"
+    uploaded_url, error = save_image_if_present()
+    if error:
+        return jsonify({"error": error}), 400
+    image_url = uploaded_url or (request.form.get("image_url") or "").strip()
 
     if not image_url:
         return jsonify({"error": "Provide an image file or an image URL"}), 400
@@ -175,6 +208,61 @@ def create_post():
     conn.close()
 
     return jsonify({"id": new_id, "message": "Post created"}), 201
+
+
+@app.route("/api/posts/<int:post_id>", methods=["PUT"])
+def update_post(post_id):
+    """Update an existing post (admin). Same fields as create."""
+    if not is_authorized():
+        return jsonify({"error": "Wrong password"}), 401
+
+    conn = get_db()
+    existing = conn.execute("SELECT * FROM posts WHERE id = ?", (post_id,)).fetchone()
+    if existing is None:
+        conn.close()
+        return jsonify({"error": "Post not found"}), 404
+
+    title = (request.form.get("title") or "").strip() or existing["title"]
+    category = (request.form.get("category") or "").strip().upper() or existing["category"]
+    excerpt = (request.form.get("excerpt") or "").strip() or existing["excerpt"]
+    content = (request.form.get("content") or "").strip() or existing["content"]
+
+    uploaded_url, error = save_image_if_present()
+    if error:
+        conn.close()
+        return jsonify({"error": error}), 400
+    image_url = uploaded_url or (request.form.get("image_url") or "").strip() or existing["image_url"]
+
+    # A newly uploaded image replaces an old uploaded file on disk
+    if uploaded_url and uploaded_url != existing["image_url"]:
+        delete_uploaded_image(existing["image_url"])
+
+    conn.execute(
+        "UPDATE posts SET title=?, category=?, excerpt=?, content=?, image_url=?"
+        " WHERE id=?",
+        (title, category, excerpt, content, image_url, post_id),
+    )
+    conn.commit()
+    conn.close()
+    return jsonify({"id": post_id, "message": "Post updated"})
+
+
+@app.route("/api/posts/<int:post_id>", methods=["DELETE"])
+def delete_post(post_id):
+    if not is_authorized():
+        return jsonify({"error": "Wrong password"}), 401
+
+    conn = get_db()
+    existing = conn.execute("SELECT image_url FROM posts WHERE id = ?", (post_id,)).fetchone()
+    if existing is None:
+        conn.close()
+        return jsonify({"error": "Post not found"}), 404
+
+    conn.execute("DELETE FROM posts WHERE id = ?", (post_id,))
+    conn.commit()
+    conn.close()
+    delete_uploaded_image(existing["image_url"])
+    return jsonify({"id": post_id, "message": "Post deleted"})
 
 
 @app.route("/uploads/<path:filename>")
@@ -257,7 +345,7 @@ def get_listing(listing_id):
 @app.route("/api/listings", methods=["POST"])
 def create_listing():
     """Create a listing from the admin (multipart form, like posts)."""
-    if request.form.get("password") != ADMIN_PASSWORD:
+    if not is_authorized():
         return jsonify({"error": "Wrong password"}), 401
 
     fields = {
@@ -272,15 +360,10 @@ def create_listing():
 
     rating = request.form.get("rating", type=float)
 
-    image_url = (request.form.get("image_url") or "").strip()
-    file = request.files.get("image")
-    if file and file.filename:
-        ext = file.filename.rsplit(".", 1)[-1].lower()
-        if ext not in ALLOWED_EXTENSIONS:
-            return jsonify({"error": f"Image type .{ext} not allowed"}), 400
-        filename = f"{int(time.time())}-{secure_filename(file.filename)}"
-        file.save(UPLOADS_DIR / filename)
-        image_url = f"/uploads/{filename}"
+    uploaded_url, error = save_image_if_present()
+    if error:
+        return jsonify({"error": error}), 400
+    image_url = uploaded_url or (request.form.get("image_url") or "").strip()
 
     conn = get_db()
     cursor = conn.execute(
@@ -297,6 +380,75 @@ def create_listing():
     conn.close()
 
     return jsonify({"id": new_id, "message": "Listing created"}), 201
+
+
+@app.route("/api/listings/<int:listing_id>", methods=["PUT"])
+def update_listing(listing_id):
+    """Update an existing listing (admin)."""
+    if not is_authorized():
+        return jsonify({"error": "Wrong password"}), 401
+
+    conn = get_db()
+    existing = conn.execute(
+        "SELECT * FROM listings WHERE id = ?", (listing_id,)
+    ).fetchone()
+    if existing is None:
+        conn.close()
+        return jsonify({"error": "Listing not found"}), 404
+
+    def field(name, transform=lambda v: v):
+        value = (request.form.get(name) or "").strip()
+        return transform(value) if value else existing[name]
+
+    listing_type = field("type")
+    if listing_type not in {"food", "stay", "place", "product"}:
+        conn.close()
+        return jsonify({"error": "Type must be food, stay, place or product"}), 400
+
+    rating = request.form.get("rating", type=float)
+    if rating is None:
+        rating = existing["rating"]
+
+    uploaded_url, error = save_image_if_present()
+    if error:
+        conn.close()
+        return jsonify({"error": error}), 400
+    image_url = uploaded_url or (request.form.get("image_url") or "").strip() or existing["image_url"]
+    if uploaded_url and uploaded_url != existing["image_url"]:
+        delete_uploaded_image(existing["image_url"])
+
+    conn.execute(
+        "UPDATE listings SET type=?, name=?, country=?, city=?, price_range=?,"
+        " budget_tier=?, category=?, description=?, content=?, rating=?, image_url=?"
+        " WHERE id=?",
+        (listing_type, field("name"), field("country", str.lower),
+         field("city", str.lower), field("price_range"), field("budget_tier"),
+         field("category"), field("description"), field("content"),
+         rating, image_url, listing_id),
+    )
+    conn.commit()
+    conn.close()
+    return jsonify({"id": listing_id, "message": "Listing updated"})
+
+
+@app.route("/api/listings/<int:listing_id>", methods=["DELETE"])
+def delete_listing(listing_id):
+    if not is_authorized():
+        return jsonify({"error": "Wrong password"}), 401
+
+    conn = get_db()
+    existing = conn.execute(
+        "SELECT image_url FROM listings WHERE id = ?", (listing_id,)
+    ).fetchone()
+    if existing is None:
+        conn.close()
+        return jsonify({"error": "Listing not found"}), 404
+
+    conn.execute("DELETE FROM listings WHERE id = ?", (listing_id,))
+    conn.commit()
+    conn.close()
+    delete_uploaded_image(existing["image_url"])
+    return jsonify({"id": listing_id, "message": "Listing deleted"})
 
 
 # ----------------------- Static frontend ----------------------

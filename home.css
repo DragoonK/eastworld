@@ -584,6 +584,201 @@ a {
   text-decoration: underline;
 }
 
+/* ---------- Admin dashboard ---------- */
+
+.admin-wide {
+  width: min(94%, 1200px);
+  margin: 0 auto;
+  padding: 2rem 0 4rem;
+}
+
+.linklike {
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  border: none;
+  background: none;
+  color: #b0342c;
+  cursor: pointer;
+}
+
+.admin-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.6rem;
+  border-bottom: 2px solid #e5e5e5;
+  padding-bottom: 0.8rem;
+}
+
+.admin-tab {
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #888;
+  cursor: pointer;
+}
+
+.admin-tab.active { background: #111; color: #fff; }
+.admin-tab:disabled { opacity: 0.4; cursor: default; }
+
+.admin-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.2rem;
+}
+
+.admin-toolbar h2 { font-size: 1.3rem; margin-right: auto; }
+
+.toolbar-filters {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.toolbar-filters select,
+.toolbar-filters input {
+  font-family: inherit;
+  font-size: 0.85rem;
+  padding: 0.5rem 0.7rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fff;
+}
+
+button.primary {
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 0.6rem 1.1rem;
+  border: none;
+  border-radius: 8px;
+  background: #111;
+  color: #fff;
+  cursor: pointer;
+}
+
+button.primary:hover { background: #333; }
+
+button.secondary {
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.6rem 1.1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.admin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  padding: 1.8rem;
+  margin-bottom: 1.6rem;
+}
+
+.admin-form h3 { font-size: 1.05rem; }
+
+.admin-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #444;
+}
+
+.admin-form input,
+.admin-form textarea,
+.admin-form select {
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 400;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fafafa;
+}
+
+.admin-form textarea { resize: vertical; line-height: 1.6; }
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.form-actions { display: flex; gap: 0.6rem; }
+
+.form-msg { font-size: 0.85rem; color: #b0342c; min-height: 1.2em; }
+
+.table-count { font-size: 0.8rem; color: #888; margin-bottom: 0.5rem; }
+
+.admin-table-wrap { overflow-x: auto; }
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  font-size: 0.88rem;
+}
+
+.admin-table th {
+  text-align: left;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #888;
+  padding: 0.8rem 1rem;
+  border-bottom: 2px solid #eee;
+}
+
+.admin-table td {
+  padding: 0.65rem 1rem;
+  border-bottom: 1px solid #f2f2f2;
+}
+
+.admin-table tr:hover td { background: #fafafa; }
+
+.admin-table a { text-decoration: underline; }
+
+.row-actions { white-space: nowrap; text-align: right; }
+
+.row-actions button {
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.35rem 0.7rem;
+  margin-left: 0.35rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.row-actions button:hover { background: #f2f2f2; }
+
+.row-actions button.danger { color: #b0342c; border-color: #e5b6b2; }
+.row-actions button.danger:hover { background: #fdf1f0; }
+
+#login-status.error, .error { color: #b0342c; }
+
 /* ---------- Footer ---------- */
 
 footer {

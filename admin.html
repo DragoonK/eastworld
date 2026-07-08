@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Write a Post - Eastworld</title>
+  <title>Admin - Eastworld</title>
   <link rel="stylesheet" href="home.css">
 </head>
 <body>
@@ -15,105 +15,127 @@
       </div>
       <a href="index.html" class="logo">EASTWORLD</a>
       <div class="nav-links">
-        <span style="font-size:0.8rem;font-weight:600;color:#999;">ADMIN</span>
+        <button id="logout-btn" class="linklike" hidden>LOG OUT</button>
       </div>
     </nav>
   </header>
 
-  <main class="admin-page">
-    <h1>Write a New Post</h1>
-    <p class="admin-hint">Fields marked * are required. The post appears on the homepage the moment it's published.</p>
-
-    <form id="post-form">
+  <!-- Login gate: shown until the password is verified -->
+  <main id="login-view" class="admin-page">
+    <h1>Admin</h1>
+    <p class="admin-hint">Enter the admin password to manage posts and listings.</p>
+    <form id="login-form">
       <label>
-        Admin password *
-        <input type="password" name="password" required autocomplete="current-password">
+        Password
+        <input type="password" id="login-password" required autocomplete="current-password">
       </label>
-
-      <label>
-        Title *
-        <input type="text" name="title" required maxlength="120" placeholder="e.g. Tokyo's Best Standing Sushi Bars">
-      </label>
-
-      <label>
-        Category *
-        <input type="text" name="category" required maxlength="30" placeholder="e.g. FOOD, CULTURE, MUSIC" style="text-transform:uppercase">
-      </label>
-
-      <label>
-        Excerpt (the teaser on the homepage card; auto-generated if left empty)
-        <input type="text" name="excerpt" maxlength="200" placeholder="One sentence that makes people click.">
-      </label>
-
-      <label>
-        Content * (leave a blank line between paragraphs)
-        <textarea name="content" required rows="14" placeholder="Write your story here...&#10;&#10;A blank line starts a new paragraph."></textarea>
-      </label>
-
-      <label>
-        Cover image (upload a file...)
-        <input type="file" name="image" accept=".png,.jpg,.jpeg,.gif,.webp">
-      </label>
-      <img id="image-preview" alt="" hidden>
-
-      <label>
-        ...or paste an image URL
-        <input type="url" name="image_url" placeholder="https://...">
-      </label>
-
-      <button type="submit" id="publish-btn">PUBLISH POST</button>
-      <p id="form-status"></p>
+      <button type="submit" id="login-btn" class="primary">ENTER</button>
+      <p id="login-status" class="error"></p>
     </form>
   </main>
 
-  <script>
-    const form = document.getElementById('post-form');
-    const statusEl = document.getElementById('form-status');
-    const publishBtn = document.getElementById('publish-btn');
-    const preview = document.getElementById('image-preview');
+  <!-- Dashboard: hidden until logged in -->
+  <main id="dashboard" class="admin-wide" hidden>
 
-    // Show a preview of the chosen image before uploading
-    form.image.addEventListener('change', () => {
-      const file = form.image.files[0];
-      if (file) {
-        preview.src = URL.createObjectURL(file);
-        preview.hidden = false;
-      } else {
-        preview.hidden = true;
-      }
-    });
+    <div class="admin-tabs">
+      <button class="admin-tab active" data-tab="posts">POSTS</button>
+      <button class="admin-tab" data-tab="listings">LISTINGS</button>
+      <button class="admin-tab" data-tab="trending" disabled title="Coming in phase 3">TRENDING</button>
+    </div>
 
-    form.addEventListener('submit', async (event) => {
-      event.preventDefault();
-      publishBtn.disabled = true;
-      statusEl.textContent = 'Publishing…';
-      statusEl.className = '';
+    <!-- ================= POSTS TAB ================= -->
+    <section id="posts-tab" class="tab-panel">
+      <div class="admin-toolbar">
+        <h2>Blog Posts</h2>
+        <button id="new-post-btn" class="primary">+ NEW POST</button>
+      </div>
 
-      try {
-        // FormData packages all fields INCLUDING the file
-        const response = await fetch('/api/posts', {
-          method: 'POST',
-          body: new FormData(form),
-        });
-        const result = await response.json();
+      <form id="post-form" class="admin-form" hidden>
+        <h3 id="post-form-title">New Post</h3>
+        <label>Title * <input type="text" name="title" required maxlength="120"></label>
+        <label>Category * <input type="text" name="category" required maxlength="30" placeholder="FOOD, CULTURE, MUSIC..." style="text-transform:uppercase"></label>
+        <label>Excerpt (auto-generated if empty) <input type="text" name="excerpt" maxlength="200"></label>
+        <label>Content * (blank line = new paragraph) <textarea name="content" required rows="12"></textarea></label>
+        <label>Cover image (upload...) <input type="file" name="image" accept=".png,.jpg,.jpeg,.gif,.webp"></label>
+        <label>...or image URL <input type="url" name="image_url" placeholder="https://... (leave empty to keep current image when editing)"></label>
+        <div class="form-actions">
+          <button type="submit" class="primary">SAVE</button>
+          <button type="button" class="secondary" data-close="post">CANCEL</button>
+        </div>
+        <p class="form-msg"></p>
+      </form>
 
-        if (!response.ok) {
-          throw new Error(result.error || `Server returned ${response.status}`);
-        }
+      <div id="posts-table" class="admin-table-wrap"><p class="posts-status">Loading&hellip;</p></div>
+    </section>
 
-        statusEl.className = 'ok';
-        statusEl.innerHTML =
-          `Published! <a href="post.html?id=${result.id}">View your post</a> ` +
-          `or <a href="index.html">see it on the homepage</a>.`;
-        form.reset();
-        preview.hidden = true;
-      } catch (err) {
-        statusEl.className = 'error';
-        statusEl.textContent = `Couldn't publish: ${err.message}`;
-      } finally {
-        publishBtn.disabled = false;
-      }
-    });
-  </script>
+    <!-- ================= LISTINGS TAB ================= -->
+    <section id="listings-tab" class="tab-panel" hidden>
+      <div class="admin-toolbar">
+        <h2>Listings</h2>
+        <div class="toolbar-filters">
+          <select id="filter-type">
+            <option value="">All types</option>
+            <option value="food">Food</option>
+            <option value="stay">Stays</option>
+            <option value="place">Places</option>
+            <option value="product">Products</option>
+          </select>
+          <select id="filter-country">
+            <option value="">All countries</option>
+            <option value="japan">Japan</option>
+            <option value="china">China</option>
+            <option value="thailand">Thailand</option>
+            <option value="cambodia">Cambodia</option>
+            <option value="australia">Australia</option>
+            <option value="korea">Korea</option>
+          </select>
+          <input type="search" id="filter-search" placeholder="Search name/description...">
+        </div>
+        <button id="new-listing-btn" class="primary">+ NEW LISTING</button>
+      </div>
+
+      <form id="listing-form" class="admin-form" hidden>
+        <h3 id="listing-form-title">New Listing</h3>
+        <div class="form-grid">
+          <label>Type *
+            <select name="type" required>
+              <option value="food">Food</option>
+              <option value="stay">Stay</option>
+              <option value="place">Place</option>
+              <option value="product">Product</option>
+            </select>
+          </label>
+          <label>Name * <input type="text" name="name" required maxlength="120"></label>
+          <label>Country * <input type="text" name="country" required placeholder="japan"></label>
+          <label>City <input type="text" name="city" placeholder="tokyo"></label>
+          <label>Price range <input type="text" name="price_range" placeholder="$20-40 or $150-250/night"></label>
+          <label>Budget tier
+            <select name="budget_tier">
+              <option value="">—</option>
+              <option value="budget">Budget</option>
+              <option value="standard">Standard</option>
+              <option value="premium">Premium</option>
+            </select>
+          </label>
+          <label>Category (places: cultural, landmark...) <input type="text" name="category"></label>
+          <label>Your rating (0–5) <input type="number" name="rating" min="0" max="5" step="0.5"></label>
+        </div>
+        <label>Short description <input type="text" name="description" maxlength="250"></label>
+        <label>Full write-up (optional, blank line = new paragraph) <textarea name="content" rows="8"></textarea></label>
+        <label>Image (upload...) <input type="file" name="image" accept=".png,.jpg,.jpeg,.gif,.webp"></label>
+        <label>...or image URL <input type="url" name="image_url" placeholder="https://... (leave empty to keep current image when editing)"></label>
+        <div class="form-actions">
+          <button type="submit" class="primary">SAVE</button>
+          <button type="button" class="secondary" data-close="listing">CANCEL</button>
+        </div>
+        <p class="form-msg"></p>
+      </form>
+
+      <div id="listings-table" class="admin-table-wrap"><p class="posts-status">Loading&hellip;</p></div>
+    </section>
+
+  </main>
+
+  <script src="admin.js"></script>
 </body>
 </html>
