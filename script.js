@@ -215,8 +215,61 @@ async function initVideoRail() {
   rail.hidden = false;
 }
 
+// ------------------------------------------------------------
+// Dynamic carousels (homepage).
+//
+// Carousels marked with data-slides="top|bottom" get their
+// slides from /api/slides — curated in the admin's CAROUSELS
+// tab. Carousels without the attribute (on older pages) keep
+// their hardcoded slides and initialize immediately.
+// ------------------------------------------------------------
+
+function slideHTML(slide, isFirst) {
+  const caption = `
+    <div class="carousel-caption">
+      ${slide.category ? `<span class="category">${slide.category}</span>` : ''}
+      <h1>${slide.title}</h1>
+      <p>${slide.description}</p>
+    </div>`;
+  const cls = `carousel-item${isFirst ? ' active' : ''}`;
+  const img = `<img src="${slide.image_url}" alt="${slide.title}">`;
+
+  return slide.link
+    ? `<a class="${cls}" href="${slide.link}">${img}${caption}</a>`
+    : `<div class="${cls}">${img}${caption}</div>`;
+}
+
+async function initDynamicCarousels(carousels) {
+  let slides;
+  try {
+    const res = await fetch('/api/slides');
+    if (!res.ok) throw new Error(`API returned ${res.status}`);
+    slides = await res.json();
+  } catch {
+    carousels.forEach(el => el.style.display = 'none');
+    return;
+  }
+
+  carousels.forEach(el => {
+    const items = slides[el.dataset.slides] || [];
+    if (items.length === 0) {
+      el.style.display = 'none';   // an empty carousel shows nothing
+      return;
+    }
+    el.querySelector('.carousel-track').innerHTML =
+      items.map((s, i) => slideHTML(s, i === 0)).join('');
+    new Carousel(el);
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.carousel').forEach(el => new Carousel(el));
+  const dynamic = [];
+  document.querySelectorAll('.carousel').forEach(el => {
+    if (el.dataset.slides) dynamic.push(el);
+    else new Carousel(el);
+  });
+  if (dynamic.length) initDynamicCarousels(dynamic);
+
   initInfinitePosts();
   initVideoRail();
 });

@@ -848,6 +848,19 @@ button.secondary {
 
 .form-actions { display: flex; gap: 0.6rem; }
 
+/* Checkbox rows read horizontally, unlike the stacked text labels */
+.check-label {
+  flex-direction: row !important;
+  align-items: center;
+  gap: 0.6rem !important;
+}
+
+.check-label input {
+  width: 1.1rem;
+  height: 1.1rem;
+  accent-color: #111;
+}
+
 .form-msg { font-size: 0.85rem; color: #b0342c; min-height: 1.2em; }
 
 .table-count { font-size: 0.8rem; color: #888; margin-bottom: 0.5rem; }

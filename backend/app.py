@@ -205,6 +205,84 @@ def ensure_videos_table():
     conn.close()
 
 
+def ensure_events_table():
+    """Create the EW Events table and seed it once from events_seed.json."""
+    conn = get_db()
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS events (
+            id          INTEGER PRIMARY KEY AUTOINCREMENT,
+            title       TEXT NOT NULL,
+            city        TEXT NOT NULL,       -- slug, e.g. "phnom-penh"
+            country     TEXT DEFAULT '',
+            event_date  TEXT NOT NULL,       -- ISO date "2026-09-15"
+            end_date    TEXT DEFAULT '',     -- for multi-day events
+            time        TEXT DEFAULT '',     -- e.g. "5:00 PM - 9:00 PM"
+            venue       TEXT DEFAULT '',
+            price       TEXT DEFAULT '',     -- e.g. "$85 per person"
+            description TEXT DEFAULT '',
+            sponsor     TEXT DEFAULT '',
+            link        TEXT DEFAULT '',     -- registration / tickets URL
+            image_url   TEXT DEFAULT '',
+            featured    INTEGER DEFAULT 0,   -- 1 = shown in the hero slot
+            created_at  TEXT NOT NULL DEFAULT (datetime('now'))
+        )
+    """)
+
+    count = conn.execute("SELECT COUNT(*) FROM events").fetchone()[0]
+    seed_file = BASE_DIR / "events_seed.json"
+    if count == 0 and seed_file.exists():
+        events = json.loads(seed_file.read_text())
+        conn.executemany(
+            "INSERT INTO events (title, city, country, event_date, end_date, time,"
+            " venue, price, description, sponsor, link, image_url, featured)"
+            " VALUES (:title, :city, :country, :event_date, :end_date, :time,"
+            " :venue, :price, :description, :sponsor, :link, :image_url, :featured)",
+            events,
+        )
+        print(f"Seeded {len(events)} events.")
+
+    conn.commit()
+    conn.close()
+
+
+def ensure_slides_table():
+    """Create the homepage carousel slides table, seeded once.
+
+    Two carousels ('top' and 'bottom') share the table; position
+    orders the slides within each. This replaces the hardcoded
+    slides that used to live in index.html.
+    """
+    conn = get_db()
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS slides (
+            id          INTEGER PRIMARY KEY AUTOINCREMENT,
+            carousel    TEXT NOT NULL,       -- top | bottom
+            category    TEXT DEFAULT '',     -- small label, e.g. "ARTIST SPOTLIGHT"
+            title       TEXT NOT NULL,
+            description TEXT DEFAULT '',
+            image_url   TEXT NOT NULL,
+            link        TEXT DEFAULT '',     -- optional: slide becomes clickable
+            position    INTEGER NOT NULL DEFAULT 0,
+            created_at  TEXT NOT NULL DEFAULT (datetime('now'))
+        )
+    """)
+
+    count = conn.execute("SELECT COUNT(*) FROM slides").fetchone()[0]
+    seed_file = BASE_DIR / "slides_seed.json"
+    if count == 0 and seed_file.exists():
+        slides = json.loads(seed_file.read_text())
+        conn.executemany(
+            "INSERT INTO slides (carousel, category, title, description, image_url,"
+            " link, position) VALUES (:carousel, :category, :title, :description,"
+            " :image_url, :link, :position)",
+            slides,
+        )
+        print(f"Seeded {len(slides)} carousel slides.")
+
+    conn.commit()
+    conn.close()
+
+
 # Accepts full YouTube URLs in any common shape (watch, shorts,
 # youtu.be, embed, live) or a bare 11-character video id.
 YOUTUBE_URL_RE = re.compile(
@@ -898,6 +976,241 @@ def delete_video(video_id):
     return jsonify({"id": video_id, "message": "Video deleted"})
 
 
+# --------------------------- Events ---------------------------
+
+EVENT_FIELDS = ["title", "city", "country", "event_date", "end_date", "time",
+                "venue", "price", "description", "sponsor", "link"]
+
+
+@app.route("/api/events")
+def list_events():
+    """All events, soonest first. The page splits featured/past itself."""
+    conn = get_db()
+    rows = conn.execute("SELECT * FROM events ORDER BY event_date").fetchall()
+    conn.close()
+    return jsonify([dict(row) for row in rows])
+
+
+@app.route("/api/events", methods=["POST"])
+def create_event():
+    """Create an event (admin, multipart form so it can carry an image)."""
+    if not is_authorized():
+        return jsonify({"error": "Wrong password"}), 401
+
+    fields = {key: (request.form.get(key) or "").strip() for key in EVENT_FIELDS}
+    if not fields["title"] or not fields["city"] or not fields["event_date"]:
+        return jsonify({"error": "Title, city and date are required"}), 400
+    fields["city"] = normalize_city(fields["city"])
+    fields["country"] = fields["country"].lower()
+    featured = 1 if request.form.get("featured") else 0
+
+    uploaded_url, error = save_image_if_present()
+    if error:
+        return jsonify({"error": error}), 400
+    image_url = uploaded_url or (request.form.get("image_url") or "").strip()
+
+    conn = get_db()
+    if featured:  # only one hero at a time
+        conn.execute("UPDATE events SET featured = 0")
+    cursor = conn.execute(
+        f"INSERT INTO events ({', '.join(EVENT_FIELDS)}, image_url, featured)"
+        f" VALUES ({', '.join('?' * len(EVENT_FIELDS))}, ?, ?)",
+        [fields[k] for k in EVENT_FIELDS] + [image_url, featured],
+    )
+    conn.commit()
+    new_id = cursor.lastrowid
+    conn.close()
+    return jsonify({"id": new_id, "message": "Event created"}), 201
+
+
+@app.route("/api/events/<int:event_id>", methods=["PUT"])
+def update_event(event_id):
+    if not is_authorized():
+        return jsonify({"error": "Wrong password"}), 401
+
+    conn = get_db()
+    existing = conn.execute("SELECT * FROM events WHERE id = ?", (event_id,)).fetchone()
+    if existing is None:
+        conn.close()
+        return jsonify({"error": "Event not found"}), 404
+
+    # Text fields come through as-is (empty string clears a field);
+    # missing fields keep their current value.
+    values = {}
+    for key in EVENT_FIELDS:
+        sent = request.form.get(key)
+        values[key] = sent.strip() if sent is not None else existing[key]
+    values["city"] = normalize_city(values["city"])
+    values["country"] = values["country"].lower()
+    featured = 1 if request.form.get("featured") else 0
+
+    uploaded_url, error = save_image_if_present()
+    if error:
+        conn.close()
+        return jsonify({"error": error}), 400
+    image_url = uploaded_url or (request.form.get("image_url") or "").strip() or existing["image_url"]
+    if uploaded_url and uploaded_url != existing["image_url"]:
+        delete_uploaded_image(existing["image_url"])
+
+    if featured:
+        conn.execute("UPDATE events SET featured = 0")
+    conn.execute(
+        f"UPDATE events SET {', '.join(f'{k} = ?' for k in EVENT_FIELDS)},"
+        " image_url = ?, featured = ? WHERE id = ?",
+        [values[k] for k in EVENT_FIELDS] + [image_url, featured, event_id],
+    )
+    conn.commit()
+    conn.close()
+    return jsonify({"id": event_id, "message": "Event updated"})
+
+
+@app.route("/api/events/<int:event_id>", methods=["DELETE"])
+def delete_event(event_id):
+    if not is_authorized():
+        return jsonify({"error": "Wrong password"}), 401
+
+    conn = get_db()
+    existing = conn.execute("SELECT image_url FROM events WHERE id = ?", (event_id,)).fetchone()
+    if existing is None:
+        conn.close()
+        return jsonify({"error": "Event not found"}), 404
+    conn.execute("DELETE FROM events WHERE id = ?", (event_id,))
+    conn.commit()
+    conn.close()
+    delete_uploaded_image(existing["image_url"])
+    return jsonify({"id": event_id, "message": "Event deleted"})
+
+
+# ---------------------- Carousel slides -----------------------
+
+@app.route("/api/slides")
+def list_slides():
+    """Homepage carousels: {"top": [slides...], "bottom": [slides...]}"""
+    conn = get_db()
+    rows = conn.execute("SELECT * FROM slides ORDER BY position, id").fetchall()
+    conn.close()
+    result = {"top": [], "bottom": []}
+    for row in rows:
+        result.setdefault(row["carousel"], []).append(dict(row))
+    return jsonify(result)
+
+
+@app.route("/api/slides", methods=["POST"])
+def create_slide():
+    """Add a slide (admin, multipart form)."""
+    if not is_authorized():
+        return jsonify({"error": "Wrong password"}), 401
+
+    carousel = (request.form.get("carousel") or "").strip()
+    title = (request.form.get("title") or "").strip()
+    category = (request.form.get("category") or "").strip().upper()
+    description = (request.form.get("description") or "").strip()
+    link = (request.form.get("link") or "").strip()
+
+    if carousel not in {"top", "bottom"}:
+        return jsonify({"error": "Carousel must be top or bottom"}), 400
+    if not title:
+        return jsonify({"error": "Title is required"}), 400
+
+    uploaded_url, error = save_image_if_present()
+    if error:
+        return jsonify({"error": error}), 400
+    image_url = uploaded_url or (request.form.get("image_url") or "").strip()
+    if not image_url:
+        return jsonify({"error": "Provide an image file or an image URL"}), 400
+
+    conn = get_db()
+    next_pos = conn.execute(
+        "SELECT COALESCE(MAX(position), 0) + 1 FROM slides WHERE carousel = ?",
+        (carousel,),
+    ).fetchone()[0]
+    cursor = conn.execute(
+        "INSERT INTO slides (carousel, category, title, description, image_url,"
+        " link, position) VALUES (?, ?, ?, ?, ?, ?, ?)",
+        (carousel, category, title, description, image_url, link, next_pos),
+    )
+    conn.commit()
+    new_id = cursor.lastrowid
+    conn.close()
+    return jsonify({"id": new_id, "message": "Slide added"}), 201
+
+
+@app.route("/api/slides/order", methods=["PUT"])
+def reorder_slides():
+    """Set slide order within one carousel (admin). JSON: {"ids": [...]}"""
+    if not is_authorized():
+        return jsonify({"error": "Wrong password"}), 401
+
+    ids = (request.get_json(silent=True) or {}).get("ids")
+    if not isinstance(ids, list) or not all(isinstance(i, int) for i in ids):
+        return jsonify({"error": "Provide ids as a list of numbers"}), 400
+
+    conn = get_db()
+    conn.executemany(
+        "UPDATE slides SET position = ? WHERE id = ?",
+        [(pos + 1, sid) for pos, sid in enumerate(ids)],
+    )
+    conn.commit()
+    conn.close()
+    return jsonify({"message": "Order saved"})
+
+
+@app.route("/api/slides/<int:slide_id>", methods=["PUT"])
+def update_slide(slide_id):
+    if not is_authorized():
+        return jsonify({"error": "Wrong password"}), 401
+
+    conn = get_db()
+    existing = conn.execute("SELECT * FROM slides WHERE id = ?", (slide_id,)).fetchone()
+    if existing is None:
+        conn.close()
+        return jsonify({"error": "Slide not found"}), 404
+
+    values = {}
+    for key in ["category", "title", "description", "link"]:
+        sent = request.form.get(key)
+        values[key] = sent.strip() if sent is not None else existing[key]
+    values["category"] = values["category"].upper()
+    if not values["title"]:
+        conn.close()
+        return jsonify({"error": "Title is required"}), 400
+
+    uploaded_url, error = save_image_if_present()
+    if error:
+        conn.close()
+        return jsonify({"error": error}), 400
+    image_url = uploaded_url or (request.form.get("image_url") or "").strip() or existing["image_url"]
+    if uploaded_url and uploaded_url != existing["image_url"]:
+        delete_uploaded_image(existing["image_url"])
+
+    conn.execute(
+        "UPDATE slides SET category = ?, title = ?, description = ?, link = ?,"
+        " image_url = ? WHERE id = ?",
+        (values["category"], values["title"], values["description"],
+         values["link"], image_url, slide_id),
+    )
+    conn.commit()
+    conn.close()
+    return jsonify({"id": slide_id, "message": "Slide updated"})
+
+
+@app.route("/api/slides/<int:slide_id>", methods=["DELETE"])
+def delete_slide(slide_id):
+    if not is_authorized():
+        return jsonify({"error": "Wrong password"}), 401
+
+    conn = get_db()
+    existing = conn.execute("SELECT image_url FROM slides WHERE id = ?", (slide_id,)).fetchone()
+    if existing is None:
+        conn.close()
+        return jsonify({"error": "Slide not found"}), 404
+    conn.execute("DELETE FROM slides WHERE id = ?", (slide_id,))
+    conn.commit()
+    conn.close()
+    delete_uploaded_image(existing["image_url"])
+    return jsonify({"id": slide_id, "message": "Slide deleted"})
+
+
 # ----------------------- Static frontend ----------------------
 
 def render_with_seo(filename, title, description, image, path):
@@ -969,7 +1282,8 @@ def sitemap():
     base = request.url_root.rstrip("/")
     urls = [f"{base}/"] + [
         f"{base}/{page}" for page in
-        ["food.html", "stays.html", "places.html", "products.html", "cities.html"]
+        ["food.html", "stays.html", "places.html", "products.html", "cities.html",
+         "ew-events.html"]
     ]
 
     conn = get_db()
@@ -1014,6 +1328,8 @@ if not DB_PATH.exists():
 ensure_listings_table()
 ensure_trending_table()
 ensure_videos_table()
+ensure_events_table()
+ensure_slides_table()
 normalize_cities_once()
 backfill_listing_media()
 run_once("purge_thailand_2026_07", purge_thailand)

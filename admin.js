@@ -29,6 +29,8 @@ function showDashboard() {
   loadListings();
   loadTrending();
   loadVideos();
+  loadEvents();
+  loadSlides();
 }
 
 $('#login-form').addEventListener('submit', async (e) => {
@@ -507,6 +509,226 @@ $('#video-form').addEventListener('submit', async (e) => {
     form.hidden = true;
     form.reset();
     loadVideos();
+  } else {
+    msg.textContent = 'Error: ' + result.error;
+  }
+});
+
+// ============================================================
+// EVENTS (the EW EVENTS page)
+// ============================================================
+
+let eventsList = [];
+let editingEventId = null;
+
+async function loadEvents() {
+  eventsList = await (await fetch('/api/events')).json();
+  const today = new Date().toISOString().slice(0, 10);
+
+  if (eventsList.length === 0) {
+    $('#events-table').innerHTML = '<p class="posts-status">No events yet.</p>';
+    return;
+  }
+
+  $('#events-table').innerHTML = `
+    <table class="admin-table">
+      <thead><tr><th>Event</th><th>City</th><th>Date</th><th>Status</th><th></th></tr></thead>
+      <tbody>
+        ${eventsList.map(ev => {
+          const past = (ev.end_date || ev.event_date) < today;
+          return `
+          <tr>
+            <td>${ev.title}${ev.featured ? ' <small style="color:#b0342c;font-weight:700">FEATURED</small>' : ''}</td>
+            <td>${ev.city}</td>
+            <td>${ev.event_date}${ev.end_date ? ' → ' + ev.end_date : ''}</td>
+            <td>${past ? '<span style="color:#999">past (hidden)</span>' : 'upcoming'}</td>
+            <td class="row-actions">
+              <button data-edit-event="${ev.id}">Edit</button>
+              <button data-delete-event="${ev.id}" class="danger">Delete</button>
+            </td>
+          </tr>`;
+        }).join('')}
+      </tbody>
+    </table>`;
+}
+
+$('#new-event-btn').addEventListener('click', () => {
+  editingEventId = null;
+  $('#event-form').reset();
+  $('#event-form-title').textContent = 'New Event';
+  $('#event-form').hidden = false;
+  $('#event-form').scrollIntoView({ behavior: 'smooth' });
+});
+
+$('#events-table').addEventListener('click', async (e) => {
+  const editId = e.target.dataset.editEvent;
+  const deleteId = e.target.dataset.deleteEvent;
+
+  if (editId) {
+    const ev = eventsList.find(x => x.id === Number(editId));
+    const form = $('#event-form');
+    form.reset();
+    for (const key of ['title', 'city', 'country', 'event_date', 'end_date',
+                       'time', 'venue', 'price', 'description', 'sponsor', 'link']) {
+      if (form[key]) form[key].value = ev[key] ?? '';
+    }
+    form.featured.checked = Boolean(ev.featured);
+    editingEventId = ev.id;
+    $('#event-form-title').textContent = `Editing: ${ev.title}`;
+    form.hidden = false;
+    form.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  if (deleteId) {
+    if (!confirm('Delete this event permanently?')) return;
+    const res = await fetch(`/api/events/${deleteId}`, { method: 'DELETE', headers: authHeaders() });
+    if (res.ok) loadEvents();
+    else alert('Delete failed: ' + (await res.json()).error);
+  }
+});
+
+$('#event-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const form = e.target;
+  const msg = form.querySelector('.form-msg');
+  msg.textContent = 'Saving…';
+
+  const url = editingEventId ? `/api/events/${editingEventId}` : '/api/events';
+  const res = await fetch(url, {
+    method: editingEventId ? 'PUT' : 'POST',
+    headers: authHeaders(),
+    body: new FormData(form),
+  });
+  const result = await res.json();
+
+  if (res.ok) {
+    msg.textContent = '';
+    form.hidden = true;
+    form.reset();
+    loadEvents();
+  } else {
+    msg.textContent = 'Error: ' + result.error;
+  }
+});
+
+// ============================================================
+// CAROUSELS (homepage slides)
+// ============================================================
+
+let slidesByCarousel = { top: [], bottom: [] };
+let editingSlideId = null;
+
+const currentCarousel = () => $('#slide-carousel-select').value;
+
+async function loadSlides() {
+  slidesByCarousel = await (await fetch('/api/slides')).json();
+  renderSlides();
+}
+
+function renderSlides() {
+  const slides = slidesByCarousel[currentCarousel()] || [];
+
+  if (slides.length === 0) {
+    $('#slides-table').innerHTML =
+      '<p class="posts-status">No slides in this carousel — it\'s hidden on the homepage until you add one.</p>';
+    return;
+  }
+
+  $('#slides-table').innerHTML = `
+    <table class="admin-table">
+      <thead><tr><th></th><th></th><th>Title</th><th>Label</th><th>Link</th><th></th></tr></thead>
+      <tbody>
+        ${slides.map((s, i) => `
+          <tr>
+            <td class="row-actions" style="text-align:left">
+              <button data-move-slide="${i}" data-dir="-1" ${i === 0 ? 'disabled' : ''}>&uarr;</button>
+              <button data-move-slide="${i}" data-dir="1" ${i === slides.length - 1 ? 'disabled' : ''}>&darr;</button>
+            </td>
+            <td><img src="${s.image_url}" alt="" style="width:90px;height:50px;object-fit:cover;border-radius:6px;display:block"></td>
+            <td>${s.title}${i === 0 ? ' <small style="color:#b0342c;font-weight:700">FIRST</small>' : ''}</td>
+            <td>${s.category || '—'}</td>
+            <td>${s.link ? `<a href="${s.link}" target="_blank">link</a>` : '—'}</td>
+            <td class="row-actions">
+              <button data-edit-slide="${s.id}">Edit</button>
+              <button data-delete-slide="${s.id}" class="danger">Delete</button>
+            </td>
+          </tr>`).join('')}
+      </tbody>
+    </table>`;
+}
+
+$('#slide-carousel-select').addEventListener('change', renderSlides);
+
+$('#new-slide-btn').addEventListener('click', () => {
+  editingSlideId = null;
+  $('#slide-form').reset();
+  $('#slide-form-title').textContent =
+    `New Slide (${currentCarousel()} carousel)`;
+  $('#slide-form').hidden = false;
+  $('#slide-form').scrollIntoView({ behavior: 'smooth' });
+});
+
+$('#slides-table').addEventListener('click', async (e) => {
+  const moveIdx = e.target.dataset.moveSlide;
+  const editId = e.target.dataset.editSlide;
+  const deleteId = e.target.dataset.deleteSlide;
+  const slides = slidesByCarousel[currentCarousel()];
+
+  if (moveIdx !== undefined) {
+    const i = Number(moveIdx), j = i + Number(e.target.dataset.dir);
+    [slides[i], slides[j]] = [slides[j], slides[i]];
+    renderSlides();
+    await fetch('/api/slides/order', {
+      method: 'PUT',
+      headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ids: slides.map(s => s.id) }),
+    });
+  }
+
+  if (editId) {
+    const slide = slides.find(s => s.id === Number(editId));
+    const form = $('#slide-form');
+    form.reset();
+    form.title.value = slide.title;
+    form.category.value = slide.category || '';
+    form.description.value = slide.description || '';
+    form.link.value = slide.link || '';
+    editingSlideId = slide.id;
+    $('#slide-form-title').textContent = `Editing: ${slide.title}`;
+    form.hidden = false;
+    form.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  if (deleteId) {
+    if (!confirm('Delete this slide?')) return;
+    const res = await fetch(`/api/slides/${deleteId}`, { method: 'DELETE', headers: authHeaders() });
+    if (res.ok) loadSlides();
+    else alert('Delete failed: ' + (await res.json()).error);
+  }
+});
+
+$('#slide-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const form = e.target;
+  const msg = form.querySelector('.form-msg');
+  msg.textContent = 'Saving…';
+
+  const body = new FormData(form);
+  body.set('carousel', currentCarousel());   // new slides join the selected carousel
+
+  const url = editingSlideId ? `/api/slides/${editingSlideId}` : '/api/slides';
+  const res = await fetch(url, {
+    method: editingSlideId ? 'PUT' : 'POST',
+    headers: authHeaders(),
+    body,
+  });
+  const result = await res.json();
+
+  if (res.ok) {
+    msg.textContent = '';
+    form.hidden = true;
+    form.reset();
+    loadSlides();
   } else {
     msg.textContent = 'Error: ' + result.error;
   }

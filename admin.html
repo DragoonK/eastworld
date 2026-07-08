@@ -42,6 +42,8 @@
       <button class="admin-tab" data-tab="listings">LISTINGS</button>
       <button class="admin-tab" data-tab="trending">TRENDING</button>
       <button class="admin-tab" data-tab="videos">VIDEOS</button>
+      <button class="admin-tab" data-tab="events">EVENTS</button>
+      <button class="admin-tab" data-tab="carousels">CAROUSELS</button>
     </div>
 
     <!-- ================= POSTS TAB ================= -->
@@ -199,6 +201,89 @@
       </form>
 
       <div id="videos-table" class="admin-table-wrap"><p class="posts-status">Loading&hellip;</p></div>
+    </section>
+
+    <!-- ================= EVENTS TAB ================= -->
+    <section id="events-tab" class="tab-panel" hidden>
+      <div class="admin-toolbar">
+        <h2>EW Events</h2>
+        <button id="new-event-btn" class="primary">+ NEW EVENT</button>
+      </div>
+
+      <p class="admin-hint">
+        These appear on the EW EVENTS page. Events in the past disappear from the
+        page automatically (but stay here so you can reuse them). Tick
+        &ldquo;featured&rdquo; to put an event in the big hero at the top —
+        only one event can be featured at a time.
+      </p>
+
+      <form id="event-form" class="admin-form" hidden>
+        <h3 id="event-form-title">New Event</h3>
+        <div class="form-grid">
+          <label>Title * <input type="text" name="title" required maxlength="120"></label>
+          <label>City * <input type="text" name="city" required placeholder="osaka"></label>
+          <label>Country <input type="text" name="country" placeholder="japan"></label>
+          <label>Date * <input type="date" name="event_date" required></label>
+          <label>End date (multi-day) <input type="date" name="end_date"></label>
+          <label>Time <input type="text" name="time" placeholder="5:00 PM - 9:00 PM"></label>
+          <label>Venue <input type="text" name="venue" placeholder="Rosewood Phnom Penh"></label>
+          <label>Price <input type="text" name="price" placeholder="$85 per person"></label>
+        </div>
+        <label>Description <textarea name="description" rows="4"></textarea></label>
+        <div class="form-grid">
+          <label>Sponsor line <input type="text" name="sponsor" placeholder="Sponsored by..."></label>
+          <label>Registration link <input type="url" name="link" placeholder="https://..."></label>
+        </div>
+        <label>Image (upload...) <input type="file" name="image" accept=".png,.jpg,.jpeg,.gif,.webp"></label>
+        <label>...or image URL <input type="url" name="image_url" placeholder="https://... (leave empty to keep current image when editing)"></label>
+        <label class="check-label"><input type="checkbox" name="featured"> Featured (hero slot at the top of the events page)</label>
+        <div class="form-actions">
+          <button type="submit" class="primary">SAVE</button>
+          <button type="button" class="secondary" data-close="event">CANCEL</button>
+        </div>
+        <p class="form-msg"></p>
+      </form>
+
+      <div id="events-table" class="admin-table-wrap"><p class="posts-status">Loading&hellip;</p></div>
+    </section>
+
+    <!-- ================= CAROUSELS TAB ================= -->
+    <section id="carousels-tab" class="tab-panel" hidden>
+      <div class="admin-toolbar">
+        <h2>Homepage Carousels</h2>
+        <div class="toolbar-filters">
+          <select id="slide-carousel-select">
+            <option value="top">Top carousel (spotlights)</option>
+            <option value="bottom">Bottom carousel (city guides)</option>
+          </select>
+        </div>
+        <button id="new-slide-btn" class="primary">+ NEW SLIDE</button>
+      </div>
+
+      <p class="admin-hint">
+        The two big rotating banners on the homepage. Reorder with the arrows —
+        the first slide is what visitors see when the page loads. A slide with a
+        link is clickable; without one it's display-only.
+      </p>
+
+      <form id="slide-form" class="admin-form" hidden>
+        <h3 id="slide-form-title">New Slide</h3>
+        <div class="form-grid">
+          <label>Title * <input type="text" name="title" required maxlength="80" placeholder="TAKASHI MURAKAMI"></label>
+          <label>Small label above title <input type="text" name="category" maxlength="40" placeholder="ARTIST SPOTLIGHT" style="text-transform:uppercase"></label>
+        </div>
+        <label>Description <input type="text" name="description" maxlength="200"></label>
+        <label>Link (optional — makes the slide clickable) <input type="text" name="link" placeholder="guides/osaka-guide.html or https://..."></label>
+        <label>Image (upload...) <input type="file" name="image" accept=".png,.jpg,.jpeg,.gif,.webp"></label>
+        <label>...or image URL <input type="url" name="image_url" placeholder="https://... (leave empty to keep current image when editing)"></label>
+        <div class="form-actions">
+          <button type="submit" class="primary">SAVE</button>
+          <button type="button" class="secondary" data-close="slide">CANCEL</button>
+        </div>
+        <p class="form-msg"></p>
+      </form>
+
+      <div id="slides-table" class="admin-table-wrap"><p class="posts-status">Loading&hellip;</p></div>
     </section>
 
   </main>

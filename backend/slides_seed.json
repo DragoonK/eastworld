@@ -1,0 +1,83 @@
+[
+  {
+    "carousel": "top",
+    "category": "ARTIST SPOTLIGHT",
+    "title": "TAKASHI MURAKAMI",
+    "description": "Japan's contemporary art pioneer blending tradition with pop culture.",
+    "image_url": "https://imageio.forbes.com/specials-images/imageserve/676ed147c4730f6c6edca53b/Louis-Vuitton-x-Murakami---Campaign-images---Photo-by-Inez-Vinoodh---1-/0x0.jpg?format=jpg&crop=2590,1498,x76,y77,safe&width=1440",
+    "link": "",
+    "position": 1
+  },
+  {
+    "carousel": "top",
+    "category": "PRODUCTS",
+    "title": "XIAOMI SU7",
+    "description": "China's tech giant enters the premium EV market with a stunning sedan.",
+    "image_url": "https://image-cdn.hypb.st/https%3A%2F%2Fhypebeast.com%2Fimage%2F2023%2F12%2Fxiaomi-su7-ev-unveil-info-002.jpg?q=90&w=1400&cbr=1&fit=max",
+    "link": "",
+    "position": 2
+  },
+  {
+    "carousel": "top",
+    "category": "PLACES SPOTLIGHT",
+    "title": "OSAKA EXPO 2025",
+    "description": "A World's Fair in Osaka.",
+    "image_url": "https://www.expo2025.or.jp/wp/wp-content/themes/expo2025orjp_2022/assets/img/expo-map-index/main-facilities/grandring/facility-img-main.jpg",
+    "link": "",
+    "position": 3
+  },
+  {
+    "carousel": "top",
+    "category": "ARTIST SPOTLIGHT",
+    "title": "TIMELESZ",
+    "description": "The newest, hottest Japanese idol group.",
+    "image_url": "https://contents.oricon.co.jp/upimg/news/2371000/2370359/20250221_154226_p_o_83372072.jpg",
+    "link": "",
+    "position": 4
+  },
+  {
+    "carousel": "bottom",
+    "category": "",
+    "title": "KOBE",
+    "description": "Discover Japan's harbor city where premium beef meets modern culture.",
+    "image_url": "https://images.unsplash.com/photo-1590559899731-a382839e5549?auto=format&fit=crop&w=1600&q=80",
+    "link": "guides/kobe-guide.html",
+    "position": 1
+  },
+  {
+    "carousel": "bottom",
+    "category": "",
+    "title": "GUANGZHOU",
+    "description": "Experience the vibrant fusion of traditional Cantonese culture and modern innovation.",
+    "image_url": "https://content.r9cdn.net/rimg/dimg/87/07/2a86d6b1-city-17708-17ea24f8693.jpg?width=1200&height=630&xhint=1566&yhint=937&crop=true",
+    "link": "guides/guangzhou-guide.html",
+    "position": 2
+  },
+  {
+    "carousel": "bottom",
+    "category": "",
+    "title": "PHNOM PENH",
+    "description": "Discover Cambodia's capital where ancient temples meet contemporary art scenes.",
+    "image_url": "https://www.siemreap.net/wp-content/uploads/2016/08/phnom-penh-independence-monument.jpg",
+    "link": "guides/phnom-penh-guide.html",
+    "position": 3
+  },
+  {
+    "carousel": "bottom",
+    "category": "",
+    "title": "MELBOURNE",
+    "description": "Explore Australia's cultural capital, where street art and coffee culture thrive.",
+    "image_url": "https://media.gettyimages.com/id/1651918436/video/aerial-of-melbourne-city-at-dusk.jpg?s=640x640&k=20&c=r9bGZdnIEd_L1YkPCa8qLIamZtJJfl2vahnxPMotRiE=",
+    "link": "guides/melbourne-guide.html",
+    "position": 4
+  },
+  {
+    "carousel": "bottom",
+    "category": "",
+    "title": "OSAKA",
+    "description": "Japan's vibrant food capital where colorful neon meets historic castles and street cuisine.",
+    "image_url": "https://photos.smugmug.com/Osaka/Osaka-Categories/i-J9MFjBv/0/L/Osaka_Districts-L.jpg",
+    "link": "guides/osaka-guide.html",
+    "position": 5
+  }
+]
