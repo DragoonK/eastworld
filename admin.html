@@ -41,6 +41,7 @@
       <button class="admin-tab active" data-tab="posts">POSTS</button>
       <button class="admin-tab" data-tab="listings">LISTINGS</button>
       <button class="admin-tab" data-tab="trending">TRENDING</button>
+      <button class="admin-tab" data-tab="videos">VIDEOS</button>
     </div>
 
     <!-- ================= POSTS TAB ================= -->
@@ -171,6 +172,33 @@
       </div>
 
       <p id="trend-msg" class="form-msg"></p>
+    </section>
+
+    <!-- ================= VIDEOS TAB ================= -->
+    <section id="videos-tab" class="tab-panel" hidden>
+      <div class="admin-toolbar">
+        <h2>Videos</h2>
+        <button id="new-video-btn" class="primary">+ ADD VIDEO</button>
+      </div>
+
+      <p class="admin-hint">
+        These play in the WATCH rail on the homepage (top of the sidebar), in this
+        order — the first video is the big one. Paste any YouTube link: a normal
+        watch link, a Short, or a youtu.be share link all work.
+      </p>
+
+      <form id="video-form" class="admin-form" hidden>
+        <h3 id="video-form-title">Add Video</h3>
+        <label>Title * <input type="text" name="title" required maxlength="120"></label>
+        <label>YouTube link * <input type="text" name="url" required placeholder="https://www.youtube.com/watch?v=..."></label>
+        <div class="form-actions">
+          <button type="submit" class="primary">SAVE</button>
+          <button type="button" class="secondary" data-close="video">CANCEL</button>
+        </div>
+        <p class="form-msg"></p>
+      </form>
+
+      <div id="videos-table" class="admin-table-wrap"><p class="posts-status">Loading&hellip;</p></div>
     </section>
 
   </main>

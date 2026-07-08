@@ -28,6 +28,7 @@ function showDashboard() {
   loadPosts();
   loadListings();
   loadTrending();
+  loadVideos();
 }
 
 $('#login-form').addEventListener('submit', async (e) => {
@@ -398,5 +399,115 @@ $('#trend-save-btn').addEventListener('click', async () => {
     $('#trend-msg').textContent = 'Saved — the homepage sidebar is updated.';
   } else {
     $('#trend-msg').textContent = 'Error: ' + result.error;
+  }
+});
+
+// ============================================================
+// VIDEOS (homepage WATCH rail)
+// ============================================================
+
+let videosList = [];
+let editingVideoId = null;
+
+async function loadVideos() {
+  videosList = await (await fetch('/api/videos')).json();
+  renderVideos();
+}
+
+function renderVideos() {
+  if (videosList.length === 0) {
+    $('#videos-table').innerHTML =
+      '<p class="posts-status">No videos yet — add a YouTube link above and it appears on the homepage.</p>';
+    return;
+  }
+
+  $('#videos-table').innerHTML = `
+    <table class="admin-table">
+      <thead><tr><th></th><th></th><th>Title</th><th>Video</th><th></th></tr></thead>
+      <tbody>
+        ${videosList.map((v, i) => `
+          <tr>
+            <td class="row-actions" style="text-align:left">
+              <button data-move-video="${i}" data-dir="-1" ${i === 0 ? 'disabled' : ''}>&uarr;</button>
+              <button data-move-video="${i}" data-dir="1" ${i === videosList.length - 1 ? 'disabled' : ''}>&darr;</button>
+            </td>
+            <td><img src="${v.thumbnail}" alt="" style="width:90px;aspect-ratio:16/9;object-fit:cover;border-radius:6px;display:block"></td>
+            <td>${v.title}${i === 0 ? ' <small style="color:#b0342c;font-weight:700">MAIN</small>' : ''}</td>
+            <td><a href="${v.watch_url}" target="_blank">${v.youtube_id}</a></td>
+            <td class="row-actions">
+              <button data-edit-video="${v.id}">Edit</button>
+              <button data-delete-video="${v.id}" class="danger">Delete</button>
+            </td>
+          </tr>`).join('')}
+      </tbody>
+    </table>`;
+}
+
+$('#new-video-btn').addEventListener('click', () => {
+  editingVideoId = null;
+  $('#video-form').reset();
+  $('#video-form-title').textContent = 'Add Video';
+  $('#video-form').hidden = false;
+  $('#video-form').scrollIntoView({ behavior: 'smooth' });
+});
+
+$('#videos-table').addEventListener('click', async (e) => {
+  const moveIdx = e.target.dataset.moveVideo;
+  const editId = e.target.dataset.editVideo;
+  const deleteId = e.target.dataset.deleteVideo;
+
+  if (moveIdx !== undefined) {
+    const i = Number(moveIdx), j = i + Number(e.target.dataset.dir);
+    [videosList[i], videosList[j]] = [videosList[j], videosList[i]];
+    renderVideos();
+    // Order saves immediately (no separate save button needed here)
+    await fetch('/api/videos/order', {
+      method: 'PUT',
+      headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ids: videosList.map(v => v.id) }),
+    });
+  }
+
+  if (editId) {
+    const video = videosList.find(v => v.id === Number(editId));
+    const form = $('#video-form');
+    form.reset();
+    form.title.value = video.title;
+    form.url.value = video.watch_url;
+    editingVideoId = video.id;
+    $('#video-form-title').textContent = `Editing: ${video.title}`;
+    form.hidden = false;
+    form.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  if (deleteId) {
+    if (!confirm('Remove this video from the site?')) return;
+    const res = await fetch(`/api/videos/${deleteId}`, { method: 'DELETE', headers: authHeaders() });
+    if (res.ok) loadVideos();
+    else alert('Delete failed: ' + (await res.json()).error);
+  }
+});
+
+$('#video-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const form = e.target;
+  const msg = form.querySelector('.form-msg');
+  msg.textContent = 'Saving…';
+
+  const url = editingVideoId ? `/api/videos/${editingVideoId}` : '/api/videos';
+  const res = await fetch(url, {
+    method: editingVideoId ? 'PUT' : 'POST',
+    headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+    body: JSON.stringify({ title: form.title.value, url: form.url.value }),
+  });
+  const result = await res.json();
+
+  if (res.ok) {
+    msg.textContent = '';
+    form.hidden = true;
+    form.reset();
+    loadVideos();
+  } else {
+    msg.textContent = 'Error: ' + result.error;
   }
 });

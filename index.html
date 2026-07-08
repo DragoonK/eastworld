@@ -43,7 +43,58 @@
     <!-- LEFT COLUMN: top carousel, stories, bottom carousel -->
     <div class="main-col">
 
-    <!-- Top carousel: city guides -->
+    <!-- Top carousel: spotlights -->
+    <section class="carousel" aria-label="Spotlights">
+      <div class="carousel-track">
+        <div class="carousel-item active">
+          <img src="https://imageio.forbes.com/specials-images/imageserve/676ed147c4730f6c6edca53b/Louis-Vuitton-x-Murakami---Campaign-images---Photo-by-Inez-Vinoodh---1-/0x0.jpg?format=jpg&crop=2590,1498,x76,y77,safe&width=1440" alt="Takashi Murakami">
+          <div class="carousel-caption">
+            <span class="category">ARTIST SPOTLIGHT</span>
+            <h1>TAKASHI MURAKAMI</h1>
+            <p>Japan's contemporary art pioneer blending tradition with pop culture.</p>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <img src="https://image-cdn.hypb.st/https%3A%2F%2Fhypebeast.com%2Fimage%2F2023%2F12%2Fxiaomi-su7-ev-unveil-info-002.jpg?q=90&w=1400&cbr=1&fit=max" alt="Xiaomi SU7">
+          <div class="carousel-caption">
+            <span class="category">PRODUCTS</span>
+            <h1>XIAOMI SU7</h1>
+            <p>China's tech giant enters the premium EV market with a stunning sedan.</p>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <img src="https://www.expo2025.or.jp/wp/wp-content/themes/expo2025orjp_2022/assets/img/expo-map-index/main-facilities/grandring/facility-img-main.jpg" alt="Osaka Expo 2025">
+          <div class="carousel-caption">
+            <span class="category">PLACES SPOTLIGHT</span>
+            <h1>OSAKA EXPO 2025</h1>
+            <p>A World's Fair in Osaka.</p>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <img src="https://contents.oricon.co.jp/upimg/news/2371000/2370359/20250221_154226_p_o_83372072.jpg" alt="TIMELESZ">
+          <div class="carousel-caption">
+            <span class="category">ARTIST SPOTLIGHT</span>
+            <h1>TIMELESZ</h1>
+            <p>The newest, hottest Japanese idol group.</p>
+          </div>
+        </div>
+      </div>
+      <button class="carousel-button prev" aria-label="Previous slide">&#8249;</button>
+      <button class="carousel-button next" aria-label="Next slide">&#8250;</button>
+      <div class="carousel-indicators"></div>
+    </section>
+
+    <!-- Blog posts, loaded from the backend API (infinite scroll) -->
+    <section class="posts-section">
+      <h2>LATEST STORIES</h2>
+      <div id="posts-grid" class="posts-grid">
+        <p class="posts-status">Loading stories&hellip;</p>
+      </div>
+      <!-- Invisible marker: when it scrolls into view, 5 more posts load -->
+      <div id="posts-sentinel"></div>
+    </section>
+
+    <!-- Bottom carousel: city guides -->
     <section class="carousel" aria-label="City guides">
       <div class="carousel-track">
         <a class="carousel-item active" href="guides/kobe-guide.html">
@@ -87,60 +138,20 @@
       <div class="carousel-indicators"></div>
     </section>
 
-    <!-- Blog posts, loaded from the backend API (infinite scroll) -->
-    <section class="posts-section">
-      <h2>LATEST STORIES</h2>
-      <div id="posts-grid" class="posts-grid">
-        <p class="posts-status">Loading stories&hellip;</p>
-      </div>
-      <!-- Invisible marker: when it scrolls into view, 5 more posts load -->
-      <div id="posts-sentinel"></div>
-    </section>
-
-    <!-- Bottom carousel: spotlights -->
-    <section class="carousel" aria-label="Spotlights">
-      <div class="carousel-track">
-        <div class="carousel-item active">
-          <img src="https://imageio.forbes.com/specials-images/imageserve/676ed147c4730f6c6edca53b/Louis-Vuitton-x-Murakami---Campaign-images---Photo-by-Inez-Vinoodh---1-/0x0.jpg?format=jpg&crop=2590,1498,x76,y77,safe&width=1440" alt="Takashi Murakami">
-          <div class="carousel-caption">
-            <span class="category">ARTIST SPOTLIGHT</span>
-            <h1>TAKASHI MURAKAMI</h1>
-            <p>Japan's contemporary art pioneer blending tradition with pop culture.</p>
-          </div>
-        </div>
-        <div class="carousel-item">
-          <img src="https://image-cdn.hypb.st/https%3A%2F%2Fhypebeast.com%2Fimage%2F2023%2F12%2Fxiaomi-su7-ev-unveil-info-002.jpg?q=90&w=1400&cbr=1&fit=max" alt="Xiaomi SU7">
-          <div class="carousel-caption">
-            <span class="category">PRODUCTS</span>
-            <h1>XIAOMI SU7</h1>
-            <p>China's tech giant enters the premium EV market with a stunning sedan.</p>
-          </div>
-        </div>
-        <div class="carousel-item">
-          <img src="https://www.expo2025.or.jp/wp/wp-content/themes/expo2025orjp_2022/assets/img/expo-map-index/main-facilities/grandring/facility-img-main.jpg" alt="Osaka Expo 2025">
-          <div class="carousel-caption">
-            <span class="category">PLACES SPOTLIGHT</span>
-            <h1>OSAKA EXPO 2025</h1>
-            <p>A World's Fair in Osaka.</p>
-          </div>
-        </div>
-        <div class="carousel-item">
-          <img src="https://contents.oricon.co.jp/upimg/news/2371000/2370359/20250221_154226_p_o_83372072.jpg" alt="TIMELESZ">
-          <div class="carousel-caption">
-            <span class="category">ARTIST SPOTLIGHT</span>
-            <h1>TIMELESZ</h1>
-            <p>The newest, hottest Japanese idol group.</p>
-          </div>
-        </div>
-      </div>
-      <button class="carousel-button prev" aria-label="Previous slide">&#8249;</button>
-      <button class="carousel-button next" aria-label="Next slide">&#8250;</button>
-      <div class="carousel-indicators"></div>
-    </section>
-
     </div><!-- /main-col -->
 
-    <!-- RIGHT COLUMN: trending top five, filterable by country (data in trending.js) -->
+    <!-- RIGHT COLUMN: video rail + trending top five -->
+    <div class="side-col">
+
+    <!-- Video rail: managed in the admin's VIDEOS tab; hidden if empty -->
+    <aside class="video-rail" id="video-rail" hidden>
+      <div class="video-rail-header">
+        <h2>WATCH</h2>
+      </div>
+      <div id="video-main" class="video-main"></div>
+      <div id="video-thumbs" class="video-thumbs"></div>
+    </aside>
+
     <aside class="trending">
       <div class="trending-header">
         <h2>TRENDING</h2>
@@ -161,6 +172,8 @@
       </div>
       <div id="trending-list" class="trending-list"></div>
     </aside>
+
+    </div><!-- /side-col -->
 
    </div><!-- /layout -->
   </main>

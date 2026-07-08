@@ -13,6 +13,7 @@ Run it with:  python3 app.py   then open http://localhost:5001
 import html as html_lib
 import json
 import os
+import re
 import sqlite3
 import time
 from pathlib import Path
@@ -169,6 +170,56 @@ def ensure_trending_table():
 
     conn.commit()
     conn.close()
+
+
+def ensure_videos_table():
+    """Create the homepage video rail table and seed it once.
+
+    Videos are just YouTube references: we store the 11-character
+    video id and a title. Thumbnails come straight from YouTube's
+    CDN and playback happens in an embedded player, so the site
+    never hosts any video files itself.
+    """
+    conn = get_db()
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS videos (
+            id         INTEGER PRIMARY KEY AUTOINCREMENT,
+            title      TEXT NOT NULL,
+            youtube_id TEXT NOT NULL,
+            position   INTEGER NOT NULL DEFAULT 0,
+            created_at TEXT NOT NULL DEFAULT (datetime('now'))
+        )
+    """)
+
+    count = conn.execute("SELECT COUNT(*) FROM videos").fetchone()[0]
+    seed_file = BASE_DIR / "videos_seed.json"
+    if count == 0 and seed_file.exists():
+        videos = json.loads(seed_file.read_text())
+        conn.executemany(
+            "INSERT INTO videos (title, youtube_id, position) VALUES (?, ?, ?)",
+            [(v["title"], v["youtube_id"], i + 1) for i, v in enumerate(videos)],
+        )
+        print(f"Seeded {len(videos)} videos.")
+
+    conn.commit()
+    conn.close()
+
+
+# Accepts full YouTube URLs in any common shape (watch, shorts,
+# youtu.be, embed, live) or a bare 11-character video id.
+YOUTUBE_URL_RE = re.compile(
+    r"(?:youtube\.com/(?:watch\?(?:.*&)?v=|shorts/|embed/|live/)|youtu\.be/)"
+    r"([A-Za-z0-9_-]{11})"
+)
+
+
+def youtube_id_from(value):
+    """Extract the video id from a YouTube URL, or None."""
+    value = (value or "").strip()
+    if re.fullmatch(r"[A-Za-z0-9_-]{11}", value):
+        return value
+    match = YOUTUBE_URL_RE.search(value)
+    return match.group(1) if match else None
 
 
 def run_once(key, action):
@@ -725,6 +776,128 @@ def set_trending():
     return jsonify({"message": f"Top {len(listing_ids)} saved for {tab}/{country}"})
 
 
+# --------------------------- Videos ---------------------------
+
+@app.route("/api/videos")
+def list_videos():
+    """The homepage video rail, in curated order.
+
+    Each item carries thumbnail/embed URLs derived from the
+    YouTube id, so the frontend never builds URLs itself.
+    """
+    limit = min(request.args.get("limit", default=50, type=int), 100)
+    conn = get_db()
+    rows = conn.execute(
+        "SELECT id, title, youtube_id, position FROM videos"
+        " ORDER BY position, id LIMIT ?",
+        (limit,),
+    ).fetchall()
+    conn.close()
+    return jsonify([
+        {
+            **dict(row),
+            "thumbnail": f"https://i.ytimg.com/vi/{row['youtube_id']}/hqdefault.jpg",
+            "embed_url": f"https://www.youtube.com/embed/{row['youtube_id']}",
+            "watch_url": f"https://www.youtube.com/watch?v={row['youtube_id']}",
+        }
+        for row in rows
+    ])
+
+
+@app.route("/api/videos", methods=["POST"])
+def create_video():
+    """Add a video (admin). JSON: {"title": ..., "url": <YouTube URL or id>}"""
+    if not is_authorized():
+        return jsonify({"error": "Wrong password"}), 401
+
+    data = request.get_json(silent=True) or {}
+    title = (data.get("title") or "").strip()
+    youtube_id = youtube_id_from(data.get("url"))
+
+    if not title:
+        return jsonify({"error": "Title is required"}), 400
+    if not youtube_id:
+        return jsonify({"error": "That doesn't look like a YouTube link"}), 400
+
+    conn = get_db()
+    next_pos = conn.execute(
+        "SELECT COALESCE(MAX(position), 0) + 1 FROM videos"
+    ).fetchone()[0]
+    cursor = conn.execute(
+        "INSERT INTO videos (title, youtube_id, position) VALUES (?, ?, ?)",
+        (title, youtube_id, next_pos),
+    )
+    conn.commit()
+    new_id = cursor.lastrowid
+    conn.close()
+    return jsonify({"id": new_id, "message": "Video added"}), 201
+
+
+@app.route("/api/videos/order", methods=["PUT"])
+def reorder_videos():
+    """Set the rail order (admin). JSON: {"ids": [7, 2, 5, ...]}"""
+    if not is_authorized():
+        return jsonify({"error": "Wrong password"}), 401
+
+    ids = (request.get_json(silent=True) or {}).get("ids")
+    if not isinstance(ids, list) or not all(isinstance(i, int) for i in ids):
+        return jsonify({"error": "Provide ids as a list of numbers"}), 400
+
+    conn = get_db()
+    conn.executemany(
+        "UPDATE videos SET position = ? WHERE id = ?",
+        [(pos + 1, vid) for pos, vid in enumerate(ids)],
+    )
+    conn.commit()
+    conn.close()
+    return jsonify({"message": "Order saved"})
+
+
+@app.route("/api/videos/<int:video_id>", methods=["PUT"])
+def update_video(video_id):
+    """Edit a video's title and/or URL (admin)."""
+    if not is_authorized():
+        return jsonify({"error": "Wrong password"}), 401
+
+    conn = get_db()
+    existing = conn.execute("SELECT * FROM videos WHERE id = ?", (video_id,)).fetchone()
+    if existing is None:
+        conn.close()
+        return jsonify({"error": "Video not found"}), 404
+
+    data = request.get_json(silent=True) or {}
+    title = (data.get("title") or "").strip() or existing["title"]
+    youtube_id = existing["youtube_id"]
+    if (data.get("url") or "").strip():
+        youtube_id = youtube_id_from(data["url"])
+        if not youtube_id:
+            conn.close()
+            return jsonify({"error": "That doesn't look like a YouTube link"}), 400
+
+    conn.execute(
+        "UPDATE videos SET title = ?, youtube_id = ? WHERE id = ?",
+        (title, youtube_id, video_id),
+    )
+    conn.commit()
+    conn.close()
+    return jsonify({"id": video_id, "message": "Video updated"})
+
+
+@app.route("/api/videos/<int:video_id>", methods=["DELETE"])
+def delete_video(video_id):
+    if not is_authorized():
+        return jsonify({"error": "Wrong password"}), 401
+
+    conn = get_db()
+    if conn.execute("SELECT 1 FROM videos WHERE id = ?", (video_id,)).fetchone() is None:
+        conn.close()
+        return jsonify({"error": "Video not found"}), 404
+    conn.execute("DELETE FROM videos WHERE id = ?", (video_id,))
+    conn.commit()
+    conn.close()
+    return jsonify({"id": video_id, "message": "Video deleted"})
+
+
 # ----------------------- Static frontend ----------------------
 
 def render_with_seo(filename, title, description, image, path):
@@ -840,6 +1013,7 @@ if not DB_PATH.exists():
 # Idempotent: creates/seeds these tables only if they're missing/empty
 ensure_listings_table()
 ensure_trending_table()
+ensure_videos_table()
 normalize_cities_once()
 backfill_listing_media()
 run_once("purge_thailand_2026_07", purge_thailand)
