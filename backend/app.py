@@ -662,9 +662,14 @@ def get_trending():
     result = {}
     for tab in TAB_TO_TYPE:
         if country == "all":
-            # Always a top FIVE, regardless of how many countries
-            # have picks: every country's #1 first, then #2s, and
-            # so on until five slots are filled.
+            # A hand-curated "world" list (set in the admin) wins.
+            curated = trending_items(conn, tab, "world")
+            if curated:
+                result[tab] = curated
+                continue
+            # Fallback: always a top FIVE, regardless of how many
+            # countries have picks — every country's #1 first, then
+            # #2s, and so on until five slots are filled.
             per_country = [trending_items(conn, tab, c) for c in COUNTRY_ORDER]
             picks = []
             rank = 0
@@ -699,8 +704,10 @@ def set_trending():
         return jsonify({"error": "Tab must be food, stays, places or products"}), 400
     if not country:
         return jsonify({"error": "Country is required"}), 400
-    if not isinstance(listing_ids, list) or not 1 <= len(listing_ids) <= 5:
-        return jsonify({"error": "Provide 1 to 5 listing_ids in ranked order"}), 400
+    # An empty list is allowed: it clears the curation (for "world"
+    # that means falling back to the automatic top-5 mix).
+    if not isinstance(listing_ids, list) or len(listing_ids) > 5:
+        return jsonify({"error": "Provide up to 5 listing_ids in ranked order"}), 400
 
     conn = get_db()
     for listing_id in listing_ids:

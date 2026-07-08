@@ -299,7 +299,11 @@ function renderTrendPicks() {
   $('#trend-msg').textContent = trendDirty ? 'Unsaved changes — hit SAVE ORDER to publish.' : '';
 
   if (trendPicks.length === 0) {
-    $('#trend-current').innerHTML = '<p class="posts-status">No picks yet — search below to add some.</p>';
+    $('#trend-current').innerHTML = trendKey().country === 'world'
+      ? `<p class="posts-status">No hand-picked world list yet — the homepage's "All Countries"
+         view currently auto-mixes each country's top picks. Add up to 5 listings below
+         (from any country) to curate it yourself.</p>`
+      : '<p class="posts-status">No picks yet — search below to add some.</p>';
     return;
   }
 
@@ -348,7 +352,8 @@ $('#trend-search').addEventListener('input', () => {
     if (!q) { $('#trend-results').innerHTML = ''; return; }
 
     const { tab, country } = trendKey();
-    const params = new URLSearchParams({ type: TAB_TO_TYPE[tab], country, q, limit: 10 });
+    const params = new URLSearchParams({ type: TAB_TO_TYPE[tab], q, limit: 10 });
+    if (country !== 'world') params.set('country', country);  // world searches everywhere
     const listings = await (await fetch(`/api/listings?${params}`)).json();
     const pickedIds = new Set(trendPicks.map(p => p.id));
     const candidates = listings.filter(l => !pickedIds.has(l.id));
