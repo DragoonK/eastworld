@@ -152,22 +152,19 @@ function initInfinitePosts() {
 // ------------------------------------------------------------
 // Video rail (homepage sidebar, above trending).
 //
-// Videos are curated in the admin's VIDEOS tab and served by
-// /api/videos. Nothing is embedded until the user clicks play:
-// we show YouTube thumbnails, and only then swap in the iframe.
-// That keeps the homepage fast (a YouTube embed loads ~1MB of
-// scripts) and means zero video traffic on our server.
+// Shows the #1 video from the admin's VIDEOS tab, auto-playing.
+// Browsers only allow autoplay when muted, so it starts silent
+// and viewers unmute with one click on the player.
 // ------------------------------------------------------------
 
 async function initVideoRail() {
   const rail = document.getElementById('video-rail');
   const main = document.getElementById('video-main');
-  const thumbs = document.getElementById('video-thumbs');
-  if (!rail || !main || !thumbs) return;
+  if (!rail || !main) return;
 
   let videos;
   try {
-    const res = await fetch('/api/videos?limit=4');
+    const res = await fetch('/api/videos?limit=1');
     if (!res.ok) throw new Error(`API returned ${res.status}`);
     videos = await res.json();
   } catch {
@@ -175,43 +172,12 @@ async function initVideoRail() {
   }
   if (videos.length === 0) return;
 
-  function showMain(video, autoplay) {
-    main.innerHTML = autoplay
-      ? `<iframe src="${video.embed_url}?autoplay=1&rel=0" title="${video.title}"
-           allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-           allowfullscreen></iframe>
-         <p class="video-title">${video.title}</p>`
-      : `<button class="video-poster" aria-label="Play: ${video.title}">
-           <img src="${video.thumbnail}" alt="${video.title}" loading="lazy">
-           <span class="video-play">&#9654;</span>
-         </button>
-         <p class="video-title">${video.title}</p>`;
-
-    const poster = main.querySelector('.video-poster');
-    if (poster) poster.addEventListener('click', () => showMain(video, true));
-  }
-
-  function renderThumbs(mainVideo) {
-    thumbs.innerHTML = videos
-      .filter(v => v.id !== mainVideo.id)
-      .map(v => `
-        <button class="video-thumb" data-video="${v.id}">
-          <img src="${v.thumbnail}" alt="" loading="lazy">
-          <span>${v.title}</span>
-        </button>`)
-      .join('');
-
-    thumbs.querySelectorAll('.video-thumb').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const video = videos.find(v => v.id === Number(btn.dataset.video));
-        showMain(video, true);
-        renderThumbs(video);
-      });
-    });
-  }
-
-  showMain(videos[0], false);
-  renderThumbs(videos[0]);
+  const video = videos[0];
+  main.innerHTML = `
+    <iframe src="${video.embed_url}?autoplay=1&mute=1&rel=0&playsinline=1" title="${video.title}"
+      allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen></iframe>
+    <p class="video-title">${video.title}</p>`;
   rail.hidden = false;
 }
 
