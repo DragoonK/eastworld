@@ -10,6 +10,7 @@ A minimal Flask app that does two jobs:
 Run it with:  python3 app.py   then open http://localhost:5001
 """
 
+import html as html_lib
 import json
 import os
 import sqlite3
@@ -134,11 +135,17 @@ def ensure_trending_table():
 
             if row:
                 listing_id = row["id"]
-                # Backfill legacy detail-page links the old sidebar had
+                # Backfill links and images the old sidebar had but the
+                # legacy listing data files didn't include
                 if entry["link"]:
                     conn.execute(
                         "UPDATE listings SET link = ? WHERE id = ? AND link = ''",
                         (entry["link"], listing_id),
+                    )
+                if entry["image"]:
+                    conn.execute(
+                        "UPDATE listings SET image_url = ? WHERE id = ? AND image_url = ''",
+                        (entry["image"], listing_id),
                     )
             else:
                 # Trending pick that wasn't in the old food/stays/places
@@ -599,6 +606,99 @@ def set_trending():
 
 
 # ----------------------- Static frontend ----------------------
+
+def render_with_seo(filename, title, description, image, path):
+    """Serve a static page with real SEO/social tags injected.
+
+    post.html and listing.html render their content with JavaScript,
+    which Google handles but social-media crawlers (WhatsApp, X,
+    Instagram DMs...) do not. Injecting the tags server-side means
+    shared links show a proper title, description and image card.
+    """
+    page = (FRONTEND_DIR / filename).read_text()
+    title = html_lib.escape(title)
+    description = html_lib.escape(description[:200])
+    url = request.url_root.rstrip("/") + path
+    image_tag = f'\n  <meta property="og:image" content="{html_lib.escape(image)}">' if image else ""
+    tags = f"""<title>{title}</title>
+  <meta name="description" content="{description}">
+  <link rel="canonical" href="{url}">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Eastworld">
+  <meta property="og:title" content="{title}">
+  <meta property="og:description" content="{description}">{image_tag}
+  <meta property="og:url" content="{url}">
+  <meta name="twitter:card" content="summary_large_image">"""
+    return page.replace("<!-- SEO_TAGS -->", tags)
+
+
+@app.route("/post.html")
+def post_page():
+    post_id = request.args.get("id", type=int)
+    conn = get_db()
+    row = conn.execute("SELECT * FROM posts WHERE id = ?", (post_id,)).fetchone() if post_id else None
+    conn.close()
+
+    if row is None:
+        return render_with_seo("post.html", "Eastworld",
+                               "The latest in Asian culture, food, stays and travel.",
+                               "", "/post.html")
+    image = row["image_url"]
+    if image.startswith("/"):
+        image = request.url_root.rstrip("/") + image
+    return render_with_seo("post.html", f"{row['title']} - Eastworld",
+                           row["excerpt"], image, f"/post.html?id={post_id}")
+
+
+@app.route("/listing.html")
+def listing_page():
+    listing_id = request.args.get("id", type=int)
+    conn = get_db()
+    row = conn.execute("SELECT * FROM listings WHERE id = ?", (listing_id,)).fetchone() if listing_id else None
+    conn.close()
+
+    if row is None:
+        return render_with_seo("listing.html", "Eastworld",
+                               "The latest in Asian culture, food, stays and travel.",
+                               "", "/listing.html")
+    place = (row["city"] or row["country"]).title()
+    description = row["description"] or f"{row['name']} in {place} — on Eastworld."
+    image = row["image_url"]
+    if image.startswith("/"):
+        image = request.url_root.rstrip("/") + image
+    return render_with_seo("listing.html", f"{row['name']}, {place} - Eastworld",
+                           description, image, f"/listing.html?id={listing_id}")
+
+
+@app.route("/sitemap.xml")
+def sitemap():
+    """Every page on the site, for search engines."""
+    base = request.url_root.rstrip("/")
+    urls = [f"{base}/"] + [
+        f"{base}/{page}" for page in
+        ["food.html", "stays.html", "places.html", "products.html", "cities.html"]
+    ]
+
+    conn = get_db()
+    urls += [f"{base}/post.html?id={r['id']}"
+             for r in conn.execute("SELECT id FROM posts ORDER BY id")]
+    urls += [f"{base}/listing.html?id={r['id']}"
+             for r in conn.execute("SELECT id FROM listings ORDER BY id")]
+    conn.close()
+
+    entries = "\n".join(f"  <url><loc>{html_lib.escape(u)}</loc></url>" for u in urls)
+    xml = ('<?xml version="1.0" encoding="UTF-8"?>\n'
+           '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+           f"{entries}\n</urlset>")
+    return xml, 200, {"Content-Type": "application/xml"}
+
+
+@app.route("/robots.txt")
+def robots():
+    base = request.url_root.rstrip("/")
+    body = f"User-agent: *\nAllow: /\nDisallow: /admin.html\nSitemap: {base}/sitemap.xml\n"
+    return body, 200, {"Content-Type": "text/plain"}
+
 
 @app.route("/")
 def home():

@@ -176,7 +176,7 @@ async function loadListings() {
       <tbody>
         ${listings.map(l => `
           <tr>
-            <td>${l.name}</td>
+            <td><a href="listing.html?id=${l.id}" target="_blank">${l.name}</a></td>
             <td>${l.type}</td>
             <td>${l.country}</td>
             <td>${l.city || '—'}</td>

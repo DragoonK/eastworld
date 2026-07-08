@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const items = data[activeTab] || [];
     list.innerHTML = items.map((item, i) => `
-      <a class="trending-item" href="${item.link || '#'}">
+      <a class="trending-item" href="${item.link || `listing.html?id=${item.id}`}">
         <span class="rank">${i + 1}</span>
         <img src="${item.image_url}" alt="${item.name}" loading="lazy"
              onerror="this.style.visibility='hidden'">

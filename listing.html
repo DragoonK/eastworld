@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- SEO_TAGS -->
+  <link rel="stylesheet" href="home.css">
+</head>
+<body>
+
+  <header>
+    <nav class="main-nav">
+      <div class="nav-links">
+        <a href="food.html">FOOD</a>
+        <a href="stays.html">STAYS</a>
+        <a href="places.html">PLACES</a>
+        <a href="products.html">PRODUCTS</a>
+        <a href="cities.html">CITIES</a>
+      </div>
+      <a href="index.html" class="logo">EASTWORLD</a>
+      <div class="nav-links">
+        <a href="ew-events.html">EW EVENTS</a>
+        <a href="community.html">EW HUB</a>
+        <a href="login.html">LOGIN</a>
+        <a href="register.html">REGISTER</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="post-page">
+    <article id="listing-container">
+      <p class="posts-status">Loading&hellip;</p>
+    </article>
+
+    <section id="related-section" hidden>
+      <h2 id="related-title" class="related-title"></h2>
+      <div id="related-grid" class="related-grid"></div>
+    </section>
+
+    <a href="index.html" class="back-link">&#8592; Back to Homepage</a>
+  </main>
+
+  <footer>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    const TYPE_LABELS = { food: 'FOOD', stay: 'STAYS', place: 'PLACES', product: 'PRODUCTS' };
+    const titleCase = (s) => (s || '').replace(/\b\w/g, c => c.toUpperCase());
+
+    async function loadListing() {
+      const container = document.getElementById('listing-container');
+      const id = new URLSearchParams(window.location.search).get('id');
+
+      if (!id) {
+        container.innerHTML = '<p class="posts-status">No listing specified.</p>';
+        return;
+      }
+
+      try {
+        const response = await fetch(`/api/listings/${id}`);
+        if (response.status === 404) {
+          container.innerHTML = '<p class="posts-status">Listing not found.</p>';
+          return;
+        }
+        if (!response.ok) throw new Error(`API returned ${response.status}`);
+
+        const listing = await response.json();
+        document.title = `${listing.name} - Eastworld`;
+
+        // Facts row: only show what the listing actually has
+        const facts = [];
+        if (listing.city) facts.push(titleCase(listing.city));
+        facts.push(titleCase(listing.country));
+        if (listing.price_range) facts.push(listing.price_range);
+        if (listing.budget_tier) facts.push(titleCase(listing.budget_tier));
+        if (listing.rating != null) facts.push(`&#9733; ${listing.rating}`);
+
+        const paragraphs = (listing.content || '')
+          .split(/\n\s*\n/)
+          .filter(p => p.trim())
+          .map(p => `<p>${p.trim()}</p>`)
+          .join('');
+
+        container.innerHTML = `
+          <span class="category">${TYPE_LABELS[listing.type] || listing.type.toUpperCase()}</span>
+          <h1>${listing.name}</h1>
+          <p class="listing-facts">${facts.join(' &middot; ')}</p>
+          ${listing.image_url ? `<img class="post-hero" src="${listing.image_url}" alt="${listing.name}">` : ''}
+          ${listing.description ? `<p class="listing-description">${listing.description}</p>` : ''}
+          <div class="post-body">${paragraphs}</div>
+        `;
+
+        loadRelated(listing);
+      } catch (err) {
+        container.innerHTML = `
+          <p class="posts-status">
+            Couldn't load this listing. Is the backend running?<br>
+            Start it with: <code>cd backend &amp;&amp; python3 app.py</code>
+          </p>`;
+      }
+    }
+
+    // "More food in Japan" — up to 4 other listings of the same
+    // type and country, so visitors keep exploring.
+    async function loadRelated(listing) {
+      const params = new URLSearchParams({
+        type: listing.type, country: listing.country, limit: 12,
+      });
+      const listings = await (await fetch(`/api/listings?${params}`)).json();
+      const others = listings.filter(l => l.id !== listing.id).slice(0, 4);
+      if (others.length === 0) return;
+
+      document.getElementById('related-title').textContent =
+        `MORE ${TYPE_LABELS[listing.type] || ''} IN ${listing.country.toUpperCase()}`;
+      document.getElementById('related-grid').innerHTML = others.map(l => `
+        <a class="related-card" href="listing.html?id=${l.id}">
+          ${l.image_url
+            ? `<img src="${l.image_url}" alt="${l.name}" loading="lazy"
+                    onerror="this.style.visibility='hidden'">`
+            : '<span class="related-noimg"></span>'}
+          <span class="related-name">${l.name}</span>
+          <span class="related-location">${titleCase(l.city || l.country)}</span>
+        </a>`).join('');
+      document.getElementById('related-section').hidden = false;
+    }
+
+    loadListing();
+  </script>
+</body>
+</html>

@@ -877,6 +877,73 @@ button.secondary {
 .trend-result:hover { background: #111; color: #fff; }
 .trend-result small { font-weight: 400; text-transform: capitalize; }
 
+/* ---------- Listing detail page ---------- */
+
+.listing-facts {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #888;
+  letter-spacing: 0.03em;
+  margin: 0.6rem 0 1.4rem;
+}
+
+.listing-description {
+  font-size: 1.15rem;
+  line-height: 1.7;
+  font-weight: 500;
+  color: #333;
+  margin: 1.6rem 0 0.4rem;
+}
+
+.related-title {
+  font-size: 1rem;
+  letter-spacing: 0.12em;
+  border-top: 2px solid #111;
+  padding-top: 1.2rem;
+  margin: 3rem 0 1.2rem;
+}
+
+.related-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+.related-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: transform 0.15s ease;
+}
+
+.related-card:hover { transform: translateY(-3px); }
+
+.related-card img,
+.related-noimg {
+  display: block;
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  background: linear-gradient(135deg, #f0f0f0, #e0e0e0);
+}
+
+.related-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 0.5rem 0.8rem 0;
+}
+
+.related-location {
+  font-size: 0.78rem;
+  color: #888;
+  padding: 0 0.8rem 0.8rem;
+}
+
 /* ---------- Footer ---------- */
 
 footer {
