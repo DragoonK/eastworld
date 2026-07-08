@@ -10,6 +10,7 @@ A minimal Flask app that does two jobs:
 Run it with:  python3 app.py   then open http://localhost:5001
 """
 
+import json
 import os
 import sqlite3
 import time
@@ -49,6 +50,51 @@ def get_db():
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     return conn
+
+
+def ensure_listings_table():
+    """Create the listings table if needed and seed it once.
+
+    Runs on every startup but is a no-op after the first time,
+    so deploys never touch existing data. The seed comes from
+    listings_seed.json (extracted from the old food.js / stays.js /
+    places.js data with extract_listings.mjs).
+    """
+    conn = get_db()
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS listings (
+            id          INTEGER PRIMARY KEY AUTOINCREMENT,
+            type        TEXT NOT NULL,      -- food | stay | place | product
+            name        TEXT NOT NULL,
+            country     TEXT NOT NULL,
+            city        TEXT DEFAULT '',
+            price_range TEXT DEFAULT '',    -- e.g. "$10-15" or "$400-800/night"
+            budget_tier TEXT DEFAULT '',    -- budget | standard | premium
+            category    TEXT DEFAULT '',    -- e.g. cultural, landmark (places)
+            description TEXT DEFAULT '',
+            content     TEXT DEFAULT '',    -- long-form write-up (optional)
+            rating      REAL,               -- editorial score 0-5 (optional)
+            image_url   TEXT DEFAULT '',
+            link        TEXT DEFAULT '',    -- legacy detail page, if one exists
+            created_at  TEXT NOT NULL DEFAULT (datetime('now'))
+        )
+    """)
+
+    count = conn.execute("SELECT COUNT(*) FROM listings").fetchone()[0]
+    seed_file = BASE_DIR / "listings_seed.json"
+    if count == 0 and seed_file.exists():
+        listings = json.loads(seed_file.read_text())
+        conn.executemany(
+            "INSERT INTO listings (type, name, country, city, price_range,"
+            " budget_tier, category, description, image_url, link)"
+            " VALUES (:type, :name, :country, :city, :price_range,"
+            " :budget_tier, :category, :description, :image_url, :link)",
+            listings,
+        )
+        print(f"Seeded {len(listings)} listings.")
+
+    conn.commit()
+    conn.close()
 
 
 # ---------------------------- API ----------------------------
@@ -150,6 +196,109 @@ def get_post(post_id):
     return jsonify(dict(row))
 
 
+# -------------------------- Listings --------------------------
+
+@app.route("/api/listings")
+def list_listings():
+    """Return listings, filterable by any combination of:
+
+        /api/listings?type=food&country=japan&budget=premium
+        /api/listings?type=stay&city=osaka
+        /api/listings?q=ramen
+
+    This is the query that will eventually power the country/budget
+    filter system on the food, stays, places and products pages.
+    """
+    limit = min(request.args.get("limit", default=200, type=int), 500)
+    offset = max(request.args.get("offset", default=0, type=int), 0)
+
+    # Build the WHERE clause piece by piece, only for filters that
+    # were actually passed. Values always go through ? placeholders,
+    # never into the SQL string itself (that prevents SQL injection).
+    where, params = [], []
+    for param, column in [("type", "type"), ("country", "country"),
+                          ("city", "city"), ("budget", "budget_tier"),
+                          ("category", "category")]:
+        value = request.args.get(param)
+        if value:
+            where.append(f"{column} = ?")
+            params.append(value.lower())
+
+    search = request.args.get("q")
+    if search:
+        where.append("(name LIKE ? OR description LIKE ?)")
+        params.extend([f"%{search}%", f"%{search}%"])
+
+    sql = "SELECT * FROM listings"
+    if where:
+        sql += " WHERE " + " AND ".join(where)
+    sql += " ORDER BY name LIMIT ? OFFSET ?"
+    params.extend([limit, offset])
+
+    conn = get_db()
+    rows = conn.execute(sql, params).fetchall()
+    conn.close()
+    return jsonify([dict(row) for row in rows])
+
+
+@app.route("/api/listings/<int:listing_id>")
+def get_listing(listing_id):
+    conn = get_db()
+    row = conn.execute(
+        "SELECT * FROM listings WHERE id = ?", (listing_id,)
+    ).fetchone()
+    conn.close()
+
+    if row is None:
+        return jsonify({"error": "Listing not found"}), 404
+    return jsonify(dict(row))
+
+
+@app.route("/api/listings", methods=["POST"])
+def create_listing():
+    """Create a listing from the admin (multipart form, like posts)."""
+    if request.form.get("password") != ADMIN_PASSWORD:
+        return jsonify({"error": "Wrong password"}), 401
+
+    fields = {
+        key: (request.form.get(key) or "").strip()
+        for key in ["type", "name", "country", "city", "price_range",
+                    "budget_tier", "category", "description", "content"]
+    }
+    if not fields["type"] or not fields["name"] or not fields["country"]:
+        return jsonify({"error": "Type, name and country are required"}), 400
+    if fields["type"] not in {"food", "stay", "place", "product"}:
+        return jsonify({"error": "Type must be food, stay, place or product"}), 400
+
+    rating = request.form.get("rating", type=float)
+
+    image_url = (request.form.get("image_url") or "").strip()
+    file = request.files.get("image")
+    if file and file.filename:
+        ext = file.filename.rsplit(".", 1)[-1].lower()
+        if ext not in ALLOWED_EXTENSIONS:
+            return jsonify({"error": f"Image type .{ext} not allowed"}), 400
+        filename = f"{int(time.time())}-{secure_filename(file.filename)}"
+        file.save(UPLOADS_DIR / filename)
+        image_url = f"/uploads/{filename}"
+
+    conn = get_db()
+    cursor = conn.execute(
+        "INSERT INTO listings (type, name, country, city, price_range,"
+        " budget_tier, category, description, content, rating, image_url)"
+        " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        (fields["type"], fields["name"], fields["country"].lower(),
+         fields["city"].lower(), fields["price_range"], fields["budget_tier"],
+         fields["category"], fields["description"], fields["content"],
+         rating, image_url),
+    )
+    conn.commit()
+    new_id = cursor.lastrowid
+    conn.close()
+
+    return jsonify({"id": new_id, "message": "Listing created"}), 201
+
+
 # ----------------------- Static frontend ----------------------
 
 @app.route("/")
@@ -168,6 +317,9 @@ def static_files(filename):
 if not DB_PATH.exists():
     import init_db
     init_db.main()
+
+# Idempotent: creates/seeds the listings table only if it's missing/empty
+ensure_listings_table()
 
 if __name__ == "__main__":
     # Port 5001 because macOS AirPlay already listens on 5000.
