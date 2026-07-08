@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gonpachi Nishi-Azabu - Eastworld Restaurant Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Additional styles specific to restaurant reviews */
+    .restaurant-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+      .restaurant-info {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .restaurant-details {
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .detail-row {
+      display: flex;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+    }
+    
+    .detail-label {
+      font-weight: 600;
+      min-width: 120px;
+      color: #333;
+    }
+    
+    .detail-value {
+      flex: 1;
+      color: #555;
+    }
+    
+    .rating {
+      margin-bottom: 1rem;
+    }
+    
+    .star {
+      color: #ddd;
+      font-size: 1.5rem;
+    }
+    
+    .star.filled {
+      color: #FFD700;
+    }
+    
+    .half-star {
+      position: relative;
+    }
+    
+    .half-star .fas.fa-star-half {
+      color: #FFD700;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    
+    .score-label {
+      margin-left: 0.5rem;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .map-container {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .map-container iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+    }
+    
+    .photos-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .photo-item {
+      border-radius: 8px;
+      overflow: hidden;
+      height: 150px;
+    }
+    
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .photo-item img:hover {
+      transform: scale(1.05);
+    }
+    
+    .review-section {
+      margin: 2rem 0;
+      padding: 2rem;
+      background: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    /* Booking button styles */
+    .booking-button {
+      display: block;
+      background-color: #ff4d4d;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      margin: 1.5rem 0;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    
+    .booking-button:hover {
+      background-color: #e63939;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    /* Review carousel styles */
+    .review-carousel {
+      position: relative;
+      margin: 2rem 0;
+      overflow: hidden;
+      padding: 1rem 0;
+    }
+    
+    .review-slides {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    
+    .review-slide {
+      min-width: 100%;
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .reviewer-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #f0f0f0;
+      padding-bottom: 0.8rem;
+    }
+    
+    .reviewer-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 0.8rem;
+    }
+    
+    .reviewer-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding-top: 0.2rem;
+    }
+    
+    .review-date {
+      color: #888;
+      font-size: 0.75rem;
+      margin-top: 0.1rem;
+    }
+    
+    .review-rating {
+      display: flex;
+      margin-top: 0.2rem;
+    }
+    
+    .review-rating i {
+      font-size: 0.8rem;
+      margin-right: 2px;
+    }
+    
+    .carousel-nav {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+    
+    .carousel-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ddd;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .carousel-dot.active {
+      background: #ff4d4d;
+    }
+    
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.7);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+    
+    .carousel-prev {
+      left: 10px;
+    }
+    
+    .carousel-next {
+      right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../food.html" class="nav-item active">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="content-container">
+    <div class="content-header">
+      <span class="content-category">IZAKAYA</span>
+      <h1 class="content-title">Gonpachi Nishi-Azabu - Tokyo's Famous "Kill Bill Restaurant"</h1>
+      
+      <!-- Rating Section -->
+      <div class="rating">
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star half-star">
+          <i class="far fa-star"></i>
+          <i class="fas fa-star-half"></i>
+        </span>
+        <span class="star">
+          <i class="far fa-star"></i>
+        </span>
+        <span class="score-label">3.5/5.0</span>
+      </div>
+    </div>
+    
+    <div class="hero-container">
+      <img class="content-hero" src="https://gonpachi.jp/wp-content/uploads/2020/02/nishiazabu_restaurant_img05.jpg" alt="Gonpachi Nishi-Azabu Interior" 
+      onerror="this.onerror=null; 
+      this.parentElement.innerHTML = '<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#333;color:white;font-size:1.5rem;text-align:center;padding:2rem;\'>Gonpachi Nishi-Azabu Tokyo</div>';">
+    </div>
+    
+    <!-- Visitor Information Button -->
+    <a href="#visitor-info" class="booking-button">
+      <i class="fas fa-info-circle"></i> VISITOR INFORMATION
+    </a>
+    
+    <!-- Restaurant Information Section -->
+    <div class="restaurant-info">
+      <div class="restaurant-details">
+        <h2>Restaurant Details</h2>
+        
+        <div class="detail-row">
+          <div class="detail-label">Address:</div>
+          <div class="detail-value">1-13-11 Nishi-Azabu, Minato-ku, Tokyo 106-0031, Japan</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Hours:</div>
+          <div class="detail-value">Lunch: 11:30 AM - 3:30 PM<br>Dinner: 5:00 PM - Late (Last order 10:30 PM)<br>Open daily</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Phone:</div>
+          <div class="detail-value">+81 3-5771-0170</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Price Range:</div>
+          <div class="detail-value">Lunch sets: ¥1,500-3,000 ($10-20)<br>Dinner: ¥4,000-8,000 ($28-56) per person</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Cuisine:</div>
+          <div class="detail-value">Japanese, Izakaya, Sushi, Soba, Robata Grill</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Reservations:</div>
+          <div class="detail-value">Highly recommended, especially for dinner<br>Book online via their website or by phone</div>
+        </div>
+        
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">The "Kill Bill" Connection</h3>
+        <p>Gonpachi Nishi-Azabu is famously known as the inspiration for the "House of Blue Leaves" restaurant in Quentin Tarantino's film "Kill Bill: Volume 1" (2003). While the movie scenes were filmed on a set and not in the actual restaurant, the distinctive multi-level wooden interior with its balconies, lanterns, and central courtyard-style dining area clearly inspired the film's memorable fight sequence.</p>
+      </div>
+      
+      <div class="map-container">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3242.1728296120795!2d139.7236333!3d35.6577478!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60188b1f5a08f1c7%3A0xb4897f66c3c9b76!2sGonpachi%20Nishi-Azabu!5e0!3m2!1sen!2sus!4v1693230090086!5m2!1sen!2sus" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+    
+    <div class="content-text">
+      <h2>Hollywood Fame Meets Traditional Japanese Dining</h2>
+      
+      <p>Gonpachi Nishi-Azabu has achieved a unique status in Tokyo's dining scene as a place where pop culture meets traditional Japanese aesthetics. While its worldwide fame largely stems from being the inspiration for Quentin Tarantino's "Kill Bill: Volume 1" bloodbath scene, this izakaya (Japanese pub) offers far more than just movie trivia—it's a sprawling, multi-level dining space that creates a theatrical backdrop for sampling a range of Japanese cuisine.</p>
+      
+      <p>Nicknamed the "Kill Bill restaurant" by international visitors, Gonpachi has embraced its Hollywood connection while maintaining its identity as a high-end izakaya. The restaurant's striking two-story interior resembles a feudal-era manor house, with wooden beams, lanterns, and a central courtyard dining area surrounded by balconies. It's easy to see how this dramatic setting caught Tarantino's eye and inspired one of cinema's most memorable fight sequences.</p>
+      
+      <p>Beyond its cinematic claim to fame, Gonpachi has also hosted numerous political dignitaries and celebrities, most notably former U.S. President George W. Bush, who dined here with then-Prime Minister Junichiro Koizumi in 2002.</p>
+      
+      <div class="photos-container">
+        <div class="photo-item">
+          <img src="https://gonpachi.jp/wp-content/uploads/2020/02/nishiazabu_restaurant_img03.jpg" alt="Traditional Interior with Wooden Beams">
+        </div>
+        <div class="photo-item">
+          <img src="https://gonpachi.jp/wp-content/uploads/2020/02/nishiazabu_menu_img01.jpg" alt="Sushi and Sashimi Platter">
+        </div>
+        <div class="photo-item">
+          <img src="https://gonpachi.jp/wp-content/uploads/2020/02/nishiazabu_menu_img03.jpg" alt="Robata Grilled Skewers">
+        </div>
+        <div class="photo-item">
+          <img src="https://gonpachi.jp/wp-content/uploads/2020/02/nishiazabu_restaurant_img02.jpg" alt="Second Floor Dining Area">
+        </div>
+      </div>
+      
+      <h2>A Multi-Sensory Japanese Dining Experience</h2>
+      
+      <p>Gonpachi functions as a comprehensive introduction to Japanese cuisine, offering multiple cooking styles under one roof. The sprawling space houses several distinct dining areas, each with a slightly different focus:</p>
+      
+      <p>The first floor centers around a robata grill where chefs prepare skewered meats, seafood, and vegetables over charcoal. This theatrical cooking display allows diners to watch their food being prepared—a hallmark of traditional izakaya dining. Nearby, sushi chefs craft nigiri and rolls at a dedicated counter. The restaurant also features dedicated stations for tempura, soba noodles, and other Japanese specialties.</p>
+      
+      <p>The second-floor balcony offers a more intimate dining experience with views overlooking the main floor. This level also houses private dining rooms for special occasions or guests seeking a more secluded meal. Throughout the space, the sound of taiko drums occasionally punctuates the dining experience—a nod to traditional Japanese festivals that adds to the restaurant's immersive atmosphere.</p>
+      
+      <p>While Gonpachi offers a wide range of dishes, it's particularly known for its handmade soba noodles, yakitori skewers, and creative seafood preparations. The menu balances traditional Japanese preparations with subtle modern touches that make it accessible to international palates without sacrificing authenticity.</p>
+      
+      <div class="content-quote">
+        "Gonpachi brilliantly walks the line between tourist attraction and legitimate dining destination. Yes, it's theatrical and yes, it capitalizes on its film connection, but the restaurant also delivers quality cuisine in a setting that honors traditional Japanese architecture and dining customs. For many visitors, it provides the cinematic izakaya experience they're seeking in Tokyo." - Tokyo Food Journal
+      </div>
+      
+      <!-- User Reviews Carousel -->
+      <h2>Customer Reviews</h2>
+      
+      <div class="review-carousel">
+        <div class="carousel-arrow carousel-prev">
+          <i class="fas fa-chevron-left"></i>
+        </div>
+        
+        <div class="review-slides">
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Michelle S.</div>
+                <div class="review-date">Visited March 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="far fa-star" style="color: #ddd;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"As a huge 'Kill Bill' fan, Gonpachi was on my must-visit list for Tokyo, and it didn't disappoint in terms of atmosphere. The multi-level wooden interior with lanterns is exactly what I hoped for—you can easily see how it inspired Tarantino. We made a reservation about two weeks in advance for dinner, which was necessary as the place was packed. The food was good, though not exceptional for Tokyo standards. We tried the assorted sashimi, chicken karaage, wagyu skewers, and handmade soba. Everything was prepared well, but prices were definitely elevated for what you get—you're paying for the ambiance and the movie connection. Service was attentive and English menus are available. What made the experience special was the overall vibe—watching chefs prepare food at various stations, the occasional drum performances, and the buzzing energy of the place. I'd recommend going for lunch rather than dinner if you're budget-conscious, but want to experience the space. Worth it for the unique atmosphere and the chance to geek out over movie trivia, but don't expect the absolute best food in Tokyo at these prices."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Hiroshi T.</div>
+                <div class="review-date">Visited January 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="far fa-star" style="color: #ddd;"></i>
+                  <i class="far fa-star" style="color: #ddd;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"As a Tokyo resident, I've visited Gonpachi several times, mostly when hosting out-of-town guests who want to see the 'Kill Bill restaurant.' It's become something of a tourist pilgrimage site, and the restaurant certainly plays into this fame. From a local perspective, Gonpachi is decent but overpriced compared to less famous izakayas. The space itself is impressive—much larger than typical Tokyo restaurants with beautiful traditional architecture. The menu offers a good variety of Japanese classics that serve as an introduction to our cuisine. Their handmade soba is actually quite good, as are the grilled skewers. However, their sushi is just average, and you can find better quality at specialized places for similar or lower prices. The clientele is predominantly international tourists, with very few locals except for business entertainment. Service is efficient and accommodating to English speakers. If you're visiting Tokyo and want a guaranteed impressive-looking Japanese dining experience with photo opportunities, Gonpachi delivers. Just be aware that you're paying a premium for the setting and fame rather than exceptional cuisine."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Carlos M.</div>
+                <div class="review-date">Visited April 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star-half-alt" style="color: #FFD700;"></i>
+                  <i class="far fa-star" style="color: #ddd;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"We visited Gonpachi during our first trip to Tokyo, curious about the Kill Bill connection but also wanting to experience a proper izakaya. We came for a late lunch around 2 PM and had no trouble getting a table without a reservation. The interior is truly impressive—the massive wooden structure with its multiple levels and lanterns creates a unique atmosphere that feels both traditional and theatrical. The lunch set menu offered good value (around ¥1,800 for a multi-course meal) compared to their dinner prices. We tried their signature soba noodles, which were excellent and handmade on-site. The chicken karaage was crispy and well-seasoned, while the sashimi was fresh though not exceptional. Drinks were on the pricier side, with a small sake selection costing around ¥1,500. The service was efficient and friendly, with enough English to navigate the menu. During our lunch, there were mostly other tourists, which made it feel a bit like a themed restaurant. While I wouldn't call it the most authentic Japanese dining experience, it was certainly memorable and photogenic. Would recommend for lunch rather than dinner to get the experience without the peak prices."</p>
+          </div>
+        </div>
+        
+        <div class="carousel-arrow carousel-next">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+        
+        <div class="carousel-nav">
+          <div class="carousel-dot active"></div>
+          <div class="carousel-dot"></div>
+          <div class="carousel-dot"></div>
+        </div>
+      </div>
+      
+      <h2>Menu Highlights</h2>
+      
+      <p>Gonpachi offers an extensive menu spanning multiple Japanese cooking styles. Here are some of their signature dishes:</p>
+      
+      <ul>
+        <li><strong>Handmade Soba Noodles (¥1,200-1,800)</strong> - Made fresh daily in-house, available hot or cold with various dipping sauces</li>
+        <li><strong>Assorted Sashimi Platter (¥3,200-5,800)</strong> - Seasonal selections of raw fish presented with artistic flair</li>
+        <li><strong>Yakitori Skewers (¥350-680 each)</strong> - Charcoal-grilled skewers including classics like chicken with scallions (negima) and more unique options</li>
+        <li><strong>Wagyu Beef Skewers (¥1,500)</strong> - Premium Japanese beef grilled over binchōtan charcoal</li>
+        <li><strong>Tsunami Roll (¥1,800)</strong> - One of their signature sushi rolls featuring multiple types of fish</li>
+        <li><strong>Rock Shrimp Tempura (¥1,600)</strong> - Crispy tempura shrimp tossed in a spicy cream sauce</li>
+        <li><strong>Black Cod Saikyo Yaki (¥2,400)</strong> - Miso-marinated black cod, a traditional Japanese preparation</li>
+        <li><strong>Chicken Karaage (¥1,200)</strong> - Japanese-style fried chicken, a popular izakaya staple</li>
+        <li><strong>Lunch Sets (¥1,500-3,000)</strong> - Great value multi-course options available during daytime hours</li>
+      </ul>
+      
+      <p>The restaurant also offers an extensive drink menu featuring sake, shochu, Japanese whisky, beer, and creative cocktails with Japanese ingredients.</p>
+      
+      <div class="review-section">
+        <h2>Eastworld's Review</h2>
+        
+        <h3>Food Quality: <span style="color: #FFD700;">★★★½</span></h3>
+        <p>Gonpachi offers competent preparations across a wide range of Japanese cooking styles. While the dishes won't revolutionize your understanding of Japanese cuisine, they consistently deliver satisfying flavors with quality ingredients. Their handmade soba noodles and robata grill items are particularly noteworthy, while their sushi and tempura are good but not exceptional by Tokyo's high standards.</p>
+        
+        <h3>Value: <span style="color: #FFD700;">★★★</span></h3>
+        <p>There's no avoiding the fact that you pay a premium for the setting and fame. Dinner for two with drinks can easily exceed ¥12,000, which is steep for what is essentially upscale izakaya fare. Lunch offers much better value with set menus providing a taste of the experience at roughly half the price.</p>
+        
+        <h3>Atmosphere: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>This is undoubtedly Gonpachi's strongest feature. The massive wooden interior with its central courtyard, multiple levels, lantern lighting, and bustling open kitchens creates an immersive environment that feels like stepping into a movie set (which, in a sense, it is). Few Tokyo restaurants offer such dramatic architectural settings, making it a visually memorable experience regardless of the food.</p>
+        
+        <h3>Service: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>The staff are well-trained in handling international guests, with enough English proficiency to explain menu items and accommodate special requests. Service is efficient and professional, though during peak hours it can feel somewhat rushed as they manage the high volume of tourists.</p>
+        
+        <h3>Authenticity: <span style="color: #FFD700;">★★★</span></h3>
+        <p>Gonpachi presents a somewhat theatrical version of Japanese dining that straddles the line between authenticity and performance. The architecture and food preparation methods are genuinely Japanese, but the overall experience has been calibrated for international expectations. It's not inauthentic, but it's definitely a polished, tourist-friendly version of an izakaya.</p>
+        
+        <h3>Overall: <span style="color: #FFD700;">★★★½</span></h3>
+        <p>Gonpachi Nishi-Azabu delivers exactly what it promises: a cinematic Japanese dining experience in a stunning architectural setting. While the food won't rank among Tokyo's culinary revelations, it's consistently good and offers a broad introduction to Japanese cuisine. For visitors seeking a memorable, photogenic dining experience with a pop culture connection, Gonpachi is worth the splurge—particularly if you opt for the more affordable lunch service.</p>
+      </div>
+      
+      <h2>Tips for Visitors</h2>
+      
+      <ul>
+        <li><strong>Reservations:</strong> Essential for dinner, especially Thursday through Saturday. Book at least a week in advance</li>
+        <li><strong>Timing:</strong> Consider lunch instead of dinner for similar atmosphere but lower prices and easier reservations</li>
+        <li><strong>Seating Preferences:</strong> Request first floor seating near the robata grill for the most theatrical experience, or second floor for better overall views</li>
+        <li><strong>Photography:</strong> The restaurant allows and even encourages photos, but be respectful of other diners</li>
+        <li><strong>Menu Navigation:</strong> The handmade soba and items from the robata grill offer the best quality-to-price ratio</li>
+        <li><strong>Ordering Strategy:</strong> The portions are designed for sharing; order 2-3 dishes per person and share among your group</li>
+        <li><strong>Budget Considerations:</strong> Set a spending limit before you go—it's easy to accumulate a large bill with the tempting menu options</li>
+        <li><strong>Alternative Locations:</strong> If you can't get a reservation, Gonpachi has other branches in Tokyo, though they lack the famous Kill Bill interior</li>
+      </ul>
+      
+      <!-- Visitor Information -->
+      <div id="visitor-info" class="review-section">
+        <h2>Visitor Information</h2>
+        <p>Here's what you need to know when planning your visit to Gonpachi Nishi-Azabu:</p>
+        
+        <h3>Getting There:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>From Roppongi Station (Tokyo Metro Hibiya Line or Toei Oedo Line): 10-minute walk</li>
+          <li>From Hiroo Station (Tokyo Metro Hibiya Line): 10-minute walk</li>
+          <li>Taxi from Roppongi or nearby areas is recommended at night, as the restaurant is tucked away on a side street</li>
+        </ul>
+        
+        <h3>Reservation Information:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Online reservations available through their official website: <a href="https://gonpachi.jp/nishi-azabu/" target="_blank">gonpachi.jp/nishi-azabu/</a></li>
+          <li>Phone reservations: +81 3-5771-0170 (English-speaking staff available)</li>
+          <li>Many hotels can assist with making reservations for guests</li>
+          <li>Specify any seating preferences when booking (floor level, near grill, etc.)</li>
+        </ul>
+        
+        <h3>What to Expect:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>A predominantly tourist crowd, especially during dinner hours</li>
+          <li>Occasional taiko drum performances throughout the evening</li>
+          <li>English menus with photos are available</li>
+          <li>Smart casual dress code—no specific requirements, but most diners dress nicely</li>
+        </ul>
+        
+        <h3>Payment Information:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Major credit cards accepted (Visa, Mastercard, American Express, JCB)</li>
+          <li>Cash in Japanese yen also accepted</li>
+          <li>Service charge of 10% may be added to your bill</li>
+          <li>No additional tipping is expected, as is standard in Japan</li>
+        </ul>
+        
+        <p>As this is a popular tourist destination, the staff are accustomed to international visitors and can generally accommodate English speakers, making it one of the more accessible Japanese dining experiences in Tokyo.</p>
+      </div>
+      
+      <a href="../food.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Food Guide</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Review carousel functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const slides = document.querySelector('.review-slides');
+      const dots = document.querySelectorAll('.carousel-dot');
+      const prevBtn = document.querySelector('.carousel-prev');
+      const nextBtn = document.querySelector('.carousel-next');
+      let currentSlide = 0;
+      const totalSlides = document.querySelectorAll('.review-slide').length;
+      
+      // Function to update slide position
+      function showSlide(index) {
+        if (index < 0) index = totalSlides - 1;
+        if (index >= totalSlides) index = 0;
+        
+        currentSlide = index;
+        slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+        
+        // Update active dot
+        dots.forEach((dot, i) => {
+          dot.classList.toggle('active', i === currentSlide);
+        });
+      }
+      
+      // Set up event listeners for dots
+      dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => showSlide(i));
+      });
+      
+      // Set up event listeners for arrows
+      prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
+      nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
+      
+      // Auto-rotate slides every 5 seconds
+      setInterval(() => {
+        showSlide(currentSlide + 1);
+      }, 5000);
+    });
+  </script>
+  
+  <script src="../script.js"></script>
+</body>
+</html> 

@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>La Cime Osaka - Eastworld Restaurant Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Additional styles specific to restaurant reviews */
+    .restaurant-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+      .restaurant-info {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .restaurant-details {
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .detail-row {
+      display: flex;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+    }
+    
+    .detail-label {
+      font-weight: 600;
+      min-width: 120px;
+      color: #333;
+    }
+    
+    .detail-value {
+      flex: 1;
+      color: #555;
+    }
+    
+    .rating {
+      margin-bottom: 1rem;
+    }
+    
+    .star {
+      color: #ddd;
+      font-size: 1.5rem;
+    }
+    
+    .star.filled {
+      color: #FFD700;
+    }
+    
+    .half-star {
+      position: relative;
+    }
+    
+    .half-star .fas.fa-star-half {
+      color: #FFD700;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    
+    .score-label {
+      margin-left: 0.5rem;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .map-container {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .map-container iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+    }
+    
+    .photos-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .photo-item {
+      border-radius: 8px;
+      overflow: hidden;
+      height: 150px;
+    }
+    
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .photo-item img:hover {
+      transform: scale(1.05);
+    }
+    
+    .review-section {
+      margin: 2rem 0;
+      padding: 2rem;
+      background: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    /* Booking button styles */
+    .booking-button {
+      display: block;
+      background-color: #ff4d4d;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      margin: 1.5rem 0;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    
+    .booking-button:hover {
+      background-color: #e63939;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    /* Review carousel styles */
+    .review-carousel {
+      position: relative;
+      margin: 2rem 0;
+      overflow: hidden;
+      padding: 1rem 0;
+    }
+    
+    .review-slides {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    
+    .review-slide {
+      min-width: 100%;
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .reviewer-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #f0f0f0;
+      padding-bottom: 0.8rem;
+    }
+    
+    .reviewer-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 0.8rem;
+    }
+    
+    .reviewer-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding-top: 0.2rem;
+    }
+    
+    .review-date {
+      color: #888;
+      font-size: 0.75rem;
+      margin-top: 0.1rem;
+    }
+    
+    .review-rating {
+      display: flex;
+      margin-top: 0.2rem;
+    }
+    
+    .review-rating i {
+      font-size: 0.8rem;
+      margin-right: 2px;
+    }
+    
+    .carousel-nav {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+    
+    .carousel-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ddd;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .carousel-dot.active {
+      background: #ff4d4d;
+    }
+    
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.7);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+    
+    .carousel-prev {
+      left: 10px;
+    }
+    
+    .carousel-next {
+      right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../food.html" class="nav-item active">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="content-container">
+    <div class="content-header">
+      <span class="content-category">FRENCH-JAPANESE</span>
+      <h1 class="content-title">La Cime - Osaka's Two-Michelin-Star French-Japanese Fusion</h1>
+      
+      <!-- Rating Section -->
+      <div class="rating">
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star half-star">
+          <i class="far fa-star"></i>
+          <i class="fas fa-star-half"></i>
+        </span>
+        <span class="score-label">4.8/5.0</span>
+      </div>
+    </div>
+    
+    <div class="hero-container">
+      <img class="content-hero" src="https://www.lacime.jp/common/img/menu/3.jpg" alt="La Cime signature dish" 
+      onerror="this.onerror=null; 
+      this.parentElement.innerHTML = '<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#333;color:white;font-size:1.5rem;text-align:center;padding:2rem;\'>La Cime Restaurant</div>';">
+    </div>
+    
+    <!-- Booking Button -->
+    <a href="#visitor-info" class="booking-button">
+      <i class="fas fa-info-circle"></i> VISITOR INFORMATION
+    </a>
+    
+    <!-- Restaurant Information Section -->
+    <div class="restaurant-info">
+      <div class="restaurant-details">
+        <h2>Restaurant Details</h2>
+        
+        <div class="detail-row">
+          <div class="detail-label">Address:</div>
+          <div class="detail-value">3-2-15 Kawaramachi, Chuo-ku, Osaka 541-0048, Japan</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Hours:</div>
+          <div class="detail-value">
+            Lunch: 12:00 PM - 1:30 PM (last seating)<br>
+            Dinner: 6:00 PM - 8:00 PM (last seating)<br>
+            Closed on Sundays and Mondays
+          </div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Phone:</div>
+          <div class="detail-value">+81 6-6222-2010</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Price Range:</div>
+          <div class="detail-value">Lunch: ¥12,000+ ($80+)<br>Dinner: ¥22,000+ ($150+) per person</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Cuisine:</div>
+          <div class="detail-value">French-Japanese Fusion, Contemporary</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Reservations:</div>
+          <div class="detail-value">Essential - Book 1-2 months in advance</div>
+        </div>
+        
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">About La Cime</h3>
+        <p>La Cime (meaning "The Peak" in French) is a two-Michelin-starred restaurant where Chef Yusuke Takada masterfully blends French culinary techniques with Japanese ingredients and sensibilities. Since opening in 2010, the restaurant has garnered international acclaim for its innovative approach that bridges cultures through cuisine. With a focus on seasonal ingredients, artistic presentation, and unexpected flavor combinations, La Cime offers a refined dining experience that showcases the best of both Japanese and French culinary traditions.</p>
+      </div>
+      
+      <div class="map-container">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3280.956324979183!2d135.5024885761757!3d34.682736882129096!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6000e741e5f4a62d%3A0x8f8aa80e1c3ce047!2sLa%20Cime!5e0!3m2!1sen!2sus!4v1698211128064!5m2!1sen!2sus" 
+        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+    
+    <div class="content-text">
+      <h2>Chef Yusuke Takada: Bridging Culinary Worlds</h2>
+      
+      <p>Chef Yusuke Takada's culinary journey represents a thoughtful integration of diverse influences. After honing his skills in his native Japan, he trained extensively in France, working with renowned chefs and absorbing the principles of French haute cuisine. Returning to Japan, he opened La Cime in 2010 with a clear vision: to create a cuisine that honors both traditions while transcending rigid categorization.</p>
+      
+      <p>What sets Chef Takada apart is his deep understanding of both culinary worlds and his ability to find meaningful connections between them. Rather than simply incorporating Japanese ingredients into French dishes, or adding French techniques to Japanese cuisine, he creates a genuinely integrated style that feels both innovative and natural. His approach earned La Cime two Michelin stars in 2016, a distinction the restaurant has maintained ever since, along with a place on Asia's 50 Best Restaurants list.</p>
+      
+      <div class="photos-container">
+        <div class="photo-item">
+          <img src="https://www.lacime.jp/common/img/menu/2.jpg" alt="Chef Yusuke Takada">
+        </div>
+        <div class="photo-item">
+          <img src="https://www.lacime.jp/common/img/menu/4.jpg" alt="La Cime artistic dish">
+        </div>
+        <div class="photo-item">
+          <img src="https://www.lacime.jp/common/img/menu/5.jpg" alt="La Cime dining room">
+        </div>
+        <div class="photo-item">
+          <img src="https://www.lacime.jp/common/img/menu/7.jpg" alt="La Cime dessert creation">
+        </div>
+      </div>
+      
+      <h2>A Harmony of Culinary Traditions</h2>
+      
+      <p>The dining room at La Cime reflects the same balanced fusion as its cuisine - sleek contemporary design with subtle Japanese elements creating an atmosphere of refined tranquility. The understated elegance allows diners to focus on the true star: the meticulously crafted dishes that emerge from Chef Takada's kitchen.</p>
+      
+      <p>La Cime's menu changes with the seasons, reflecting the Japanese reverence for seasonality (shun) while employing French techniques to showcase each ingredient's potential. Chef Takada is particularly known for his creative use of citrus from his native Amami Oshima, a subtropical island in southern Japan with unique varieties not widely known outside the region. These distinctive citrus notes appear throughout the menu, providing a signature thread that connects diverse courses.</p>
+      
+      <p>One of Chef Takada's most celebrated creations is his "Boudin Dog" - a playful yet sophisticated take on street food that combines French boudin noir (blood sausage) with Japanese ingredients in a perfectly crafted bun. This dish exemplifies his approach: respecting traditional elements while reimagining them in unexpected contexts. Similarly, his desserts often incorporate uniquely Japanese ingredients like sudachi citrus or hojicha (roasted green tea) into structures built on classical French pastry foundations.</p>
+      
+      <div class="content-quote">
+        "My cuisine isn't about choosing between French and Japanese traditions but finding where they naturally meet. I believe there's a universal language of flavor that transcends cultural boundaries. When I create a dish, I'm looking for that moment of harmony when different culinary heritages enhance rather than compete with each other." - Chef Yusuke Takada
+      </div>
+      
+      <!-- User Reviews Carousel -->
+      <h2>Customer Reviews</h2>
+      
+      <div class="review-carousel">
+        <div class="carousel-arrow carousel-prev">
+          <i class="fas fa-chevron-left"></i>
+        </div>
+        
+        <div class="review-slides">
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Thomas K.</div>
+                <div class="review-date">Visited April 2024</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"La Cime provided one of the most memorable dining experiences of my life. We booked two months in advance for a dinner reservation, and it was absolutely worth the wait. The famous 'Boudin Dog' lived up to its reputation as a perfect bite that somehow captures both French and Japanese sensibilities. What truly impressed me was how Chef Takada created a cohesive flow throughout the menu - each dish felt connected to the next while still surprising us. His use of citrus from his home island added unique brightness to several courses. The service struck that perfect balance of being attentive without being intrusive, and the wine pairings were inspired. If you're seeking a dining experience that truly represents modern Japanese cuisine's innovative spirit, La Cime is essential."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Mei L.</div>
+                <div class="review-date">Visited March 2024</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star-half-alt" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"As someone who appreciates both French and Japanese cuisine, La Cime was a revelation. The lunch menu offered exceptional value compared to similar-caliber restaurants, though still a special occasion splurge. Chef Takada's ability to balance seemingly contrasting elements is remarkable - a dish combining sudachi citrus with foie gras somehow made perfect sense. The signature boudin noir 'hot dog' was both playful and sophisticated. The restaurant space is understated and serene, allowing full focus on the food. My only slight critique would be that the pace of service felt slightly rushed during our lunch visit. That said, the staff was knowledgeable and accommodating when we asked questions about ingredients and techniques. A truly special place that deserves its accolades."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Pierre C.</div>
+                <div class="review-date">Visited February 2024</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"Being French and living in Japan for many years, I've experienced both cuisines extensively, but La Cime offers something truly unique. Chef Takada doesn't simply mix French and Japanese elements; he creates something entirely new yet somehow familiar to both traditions. His technical precision is impeccable - a seemingly simple fish dish revealed extraordinary depth through multiple preparations of the same ingredient. The famous boudin dog is deservedly celebrated and a must-try. Wine pairings were thoughtful and included some surprising selections from lesser-known regions. The dining room is elegant without being pretentious, and the staff expertly explained each dish in both Japanese and English. This is fusion cuisine at its most genuine and inspired, representing not just a blend of techniques but a true cultural conversation on the plate."</p>
+          </div>
+        </div>
+        
+        <div class="carousel-arrow carousel-next">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+        
+        <div class="carousel-nav">
+          <div class="carousel-dot active"></div>
+          <div class="carousel-dot"></div>
+          <div class="carousel-dot"></div>
+        </div>
+      </div>
+      
+      <h2>Menu Highlights</h2>
+      
+      <p>La Cime offers a seasonal tasting menu that evolves throughout the year. While specific dishes change regularly, certain signature approaches and recurring elements define the La Cime experience:</p>
+      
+      <ul>
+        <li><strong>Boudin Dog</strong> - Chef Takada's signature amuse-bouche featuring French boudin noir (blood sausage) in a perfect bun with Japanese-inspired condiments</li>
+        <li><strong>Amami Citrus Expressions</strong> - Various dishes showcasing the unique citrus varieties from Chef Takada's native Amami Oshima island</li>
+        <li><strong>Seasonal Seafood</strong> - Precisely prepared fish and shellfish that often combine French techniques with Japanese sensibilities</li>
+        <li><strong>Reimagined Classics</strong> - French classics reinterpreted through a Japanese lens, such as a dashi-infused bouillabaisse or wagyu beef with red wine and miso</li>
+        <li><strong>Innovative Desserts</strong> - Sweet courses that often incorporate unexpected elements like vegetables or savory components</li>
+      </ul>
+      
+      <p>The full dining experience includes:</p>
+      <ul>
+        <li><strong>Seasonal Tasting Menu</strong> - 8-10 courses for lunch, 10-12 courses for dinner</li>
+        <li><strong>Wine Pairing</strong> - Expertly curated selection from both established and emerging wine regions</li>
+        <li><strong>Non-Alcoholic Pairing</strong> - Creative house-made juices and infusions</li>
+      </ul>
+      
+      <div class="review-section">
+        <h2>Eastworld's Review</h2>
+        
+        <h3>Food Quality: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Chef Takada's cuisine represents French-Japanese fusion at its most sophisticated and genuine. Each dish demonstrates impeccable technique while maintaining a clear focus on flavor and harmony. The kitchen shows remarkable consistency and creativity, with seasonal ingredients treated with profound respect. The progression of the menu creates a coherent narrative that builds throughout the meal, with each course complementing what came before and setting the stage for what follows.</p>
+        
+        <h3>Atmosphere: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>The dining room strikes a perfect balance between elegance and comfort. The minimalist design with subtle Japanese influences creates a serene backdrop that allows the food to remain the focus. Thoughtful lighting, well-spaced tables, and carefully considered acoustics contribute to an environment that feels both special and relaxed. The open kitchen provides glimpses of the culinary artistry without becoming distracting.</p>
+        
+        <h3>Service: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>Service at La Cime is polished and knowledgeable, with staff demonstrating a deep understanding of both the dishes and the philosophy behind them. Wine service is particularly strong, with thoughtful pairings and articulate explanations. Timing between courses is generally well-paced, though lunch service can occasionally feel slightly rushed. Staff are adept at reading the table's mood and adjusting their approach accordingly.</p>
+        
+        <h3>Value: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>While La Cime represents a significant investment, particularly for dinner service, the value proposition is strong given the quality of ingredients, technical execution, and overall experience. The lunch menu offers particularly good value for those seeking to experience the restaurant at a more accessible price point. The wine pairings, while not inexpensive, include several discoveries that justify the cost.</p>
+        
+        <h3>Location: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Situated in central Osaka, La Cime is conveniently located for both local and visiting diners. The restaurant is within walking distance of several major hotels and easily accessible via public transportation. The neighborhood offers plenty of options for pre- or post-dinner exploration, making it easy to build a full evening around the dining experience.</p>
+        
+        <h3>Overall: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>La Cime stands as one of Osaka's most essential fine dining experiences and a shining example of how culinary fusion can transcend gimmickry to create something genuinely innovative. Chef Takada has created a restaurant that honors both French and Japanese traditions while establishing a unique identity that belongs to neither exclusively. For visitors seeking to understand the exciting evolution of contemporary Japanese cuisine, La Cime offers profound insights alongside extraordinary pleasure.</p>
+      </div>
+      
+      <h2>Tips for Visitors</h2>
+      
+      <ul>
+        <li>Reservations are essential and should be made 1-2 months in advance</li>
+        <li>Consider the lunch service for a more accessible price point with a similar level of quality</li>
+        <li>The wine pairing is highly recommended, particularly for those interested in discovering unusual selections</li>
+        <li>Business casual attire is appropriate; the restaurant maintains an elegant but not stuffy atmosphere</li>
+        <li>Allow approximately 2.5 hours for lunch and 3 hours for dinner</li>
+        <li>Photography is permitted, but guests are encouraged to be discreet</li>
+        <li>If you have dietary restrictions, communicate them clearly when booking - the kitchen can accommodate most needs with advance notice</li>
+        <li>Don't hesitate to ask questions about unfamiliar ingredients or techniques - the staff are knowledgeable and happy to explain</li>
+      </ul>
+      
+      <!-- Visitor Information -->
+      <div id="visitor-info" class="review-section">
+        <h2>Visitor Information</h2>
+        <p>Here's what you need to know when planning your visit to La Cime:</p>
+        
+        <h3>Location & Access:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Address: 3-2-15 Kawaramachi, Chuo-ku, Osaka 541-0048, Japan</li>
+          <li>7-minute walk from Kitahama Station (Sakaisuji Line)</li>
+          <li>10-minute walk from Yodoyabashi Station (Midosuji Line)</li>
+          <li>Centrally located in Osaka's business district</li>
+        </ul>
+        
+        <h3>Reservations:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Reservations open two months in advance</li>
+          <li>Book via the official website, through your hotel concierge, or a restaurant booking service</li>
+          <li>A credit card is required to secure your reservation</li>
+          <li>Cancellation policy: Changes or cancellations should be made at least three days in advance</li>
+          <li>The restaurant seats approximately 20-24 guests</li>
+        </ul>
+        
+        <h3>Hours of Operation:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Lunch: 12:00 PM - 1:30 PM (last seating)</li>
+          <li>Dinner: 6:00 PM - 8:00 PM (last seating)</li>
+          <li>Closed on Sundays and Mondays</li>
+          <li>Occasional holiday closures - check the website for updates</li>
+        </ul>
+        
+        <h3>Additional Information:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Credit cards accepted: Visa, Mastercard, American Express, JCB</li>
+          <li>Business casual dress code</li>
+          <li>Japanese and English languages supported</li>
+          <li>Dining duration: Approximately 2.5 hours for lunch, 3 hours for dinner</li>
+          <li>Official website: <a href="https://www.lacime.jp/" target="_blank" style="color: #ff4d4d;">www.lacime.jp</a></li>
+        </ul>
+        
+        <p>After dining at La Cime, take a leisurely stroll along the nearby Nakanoshima River or explore the surrounding Kitahama area, known for its historic buildings and blend of old and new architecture. For an extended evening, the restaurant is close to several upscale bars where you can enjoy an after-dinner drink.</p>
+      </div>
+      
+      <a href="../food.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Food Guide</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Review carousel functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const slides = document.querySelector('.review-slides');
+      const dots = document.querySelectorAll('.carousel-dot');
+      const prevBtn = document.querySelector('.carousel-prev');
+      const nextBtn = document.querySelector('.carousel-next');
+      let currentSlide = 0;
+      const totalSlides = document.querySelectorAll('.review-slide').length;
+      
+      // Function to update slide position
+      function showSlide(index) {
+        if (index < 0) index = totalSlides - 1;
+        if (index >= totalSlides) index = 0;
+        
+        currentSlide = index;
+        slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+        
+        // Update active dot
+        dots.forEach((dot, i) => {
+          dot.classList.toggle('active', i === currentSlide);
+        });
+      }
+      
+      // Set up event listeners for dots
+      dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => showSlide(i));
+      });
+      
+      // Set up event listeners for arrows
+      prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
+      nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
+      
+      // Auto-rotate slides every 5 seconds
+      setInterval(() => {
+        showSlide(currentSlide + 1);
+      }, 5000);
+    });
+  </script>
+  
+  <script src="../script.js"></script>
+</body>
+</html> 

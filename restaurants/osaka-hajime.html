@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hajime - Eastworld Restaurant Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Additional styles specific to restaurant reviews */
+    .restaurant-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+      .restaurant-info {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .restaurant-details {
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .detail-row {
+      display: flex;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+    }
+    
+    .detail-label {
+      font-weight: 600;
+      min-width: 120px;
+      color: #333;
+    }
+    
+    .detail-value {
+      flex: 1;
+      color: #555;
+    }
+    
+    .rating {
+      margin-bottom: 1rem;
+    }
+    
+    .star {
+      color: #ddd;
+      font-size: 1.5rem;
+    }
+    
+    .star.filled {
+      color: #FFD700;
+    }
+    
+    .half-star {
+      position: relative;
+    }
+    
+    .half-star .fas.fa-star-half {
+      color: #FFD700;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    
+    .score-label {
+      margin-left: 0.5rem;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .map-container {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .map-container iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+    }
+    
+    .photos-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .photo-item {
+      border-radius: 8px;
+      overflow: hidden;
+      height: 150px;
+    }
+    
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .photo-item img:hover {
+      transform: scale(1.05);
+    }
+    
+    .review-section {
+      margin: 2rem 0;
+      padding: 2rem;
+      background: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    /* Booking button styles */
+    .booking-button {
+      display: block;
+      background-color: #ff4d4d;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      margin: 1.5rem 0;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    
+    .booking-button:hover {
+      background-color: #e63939;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    /* Review carousel styles */
+    .review-carousel {
+      position: relative;
+      margin: 2rem 0;
+      overflow: hidden;
+      padding: 1rem 0;
+    }
+    
+    .review-slides {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    
+    .review-slide {
+      min-width: 100%;
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .reviewer-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #f0f0f0;
+      padding-bottom: 0.8rem;
+    }
+    
+    .reviewer-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 0.8rem;
+    }
+    
+    .reviewer-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding-top: 0.2rem;
+    }
+    
+    .review-date {
+      color: #888;
+      font-size: 0.75rem;
+      margin-top: 0.1rem;
+    }
+    
+    .review-rating {
+      display: flex;
+      margin-top: 0.2rem;
+    }
+    
+    .review-rating i {
+      font-size: 0.8rem;
+      margin-right: 2px;
+    }
+    
+    .carousel-nav {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+    
+    .carousel-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ddd;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .carousel-dot.active {
+      background: #ff4d4d;
+    }
+    
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.7);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+    
+    .carousel-prev {
+      left: 10px;
+    }
+    
+    .carousel-next {
+      right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../food.html" class="nav-item active">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="content-container">
+    <div class="content-header">
+      <span class="content-category">FINE DINING</span>
+      <h1 class="content-title">Hajime - Chef Hajime Yoneda's Three-Michelin-Star Canvas</h1>
+      
+      <!-- Rating Section -->
+      <div class="rating">
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="score-label">5.0/5.0</span>
+      </div>
+    </div>
+    
+    <div class="hero-container">
+      <img class="content-hero" src="https://media.cntraveler.com/photos/5a2ea202398a9e28da42bd91/master/w_960%2Cc_limit/Hajime_2017_Soup-of-the-Soil.jpg" alt="Hajime signature dish" 
+      onerror="this.onerror=null; 
+      this.parentElement.innerHTML = '<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#333;color:white;font-size:1.5rem;text-align:center;padding:2rem;\'>Hajime Restaurant</div>';">
+    </div>
+    
+    <!-- Booking Button -->
+    <a href="#visitor-info" class="booking-button">
+      <i class="fas fa-info-circle"></i> VISITOR INFORMATION
+    </a>
+    
+    <!-- Restaurant Information Section -->
+    <div class="restaurant-info">
+      <div class="restaurant-details">
+        <h2>Restaurant Details</h2>
+        
+        <div class="detail-row">
+          <div class="detail-label">Address:</div>
+          <div class="detail-value">1-9-11 Edobori, Nishi-ku, Osaka 550-0002, Japan</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Hours:</div>
+          <div class="detail-value">
+            Lunch: 12:00 PM - 1:30 PM (last seating)<br>
+            Dinner: 6:00 PM - 8:00 PM (last seating)<br>
+            Closed on Sundays and holidays
+          </div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Phone:</div>
+          <div class="detail-value">+81 6-6447-6688</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Price Range:</div>
+          <div class="detail-value">Lunch: ¥30,000+ ($200+)<br>Dinner: ¥40,000+ ($270+) per person</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Cuisine:</div>
+          <div class="detail-value">Contemporary Japanese, Innovative, Artistic</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Reservations:</div>
+          <div class="detail-value">Essential - Book 2-3 months in advance</div>
+        </div>
+        
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">About Hajime</h3>
+        <p>Hajime is the three-Michelin-starred masterpiece of Chef Hajime Yoneda, a former computer engineer who turned to cuisine and rapidly ascended to the pinnacle of global gastronomy. The restaurant bridges art, science, and philosophy through meticulously crafted dishes that reflect Chef Yoneda's unique perspective on nature and humanity's relationship with food. Serving a visionary omakase menu that changes with the seasons, Hajime offers one of Japan's most profound dining experiences.</p>
+      </div>
+      
+      <div class="map-container">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3280.7681664962603!2d135.49274757617685!3d34.6883318808139!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6000e6e32d1e3db5%3A0x7a1baaff5cf0aca8!2sHajime!5e0!3m2!1sen!2sus!4v1698206858272!5m2!1sen!2sus" 
+        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+    
+    <div class="content-text">
+      <h2>The Visionary Mind of Chef Hajime Yoneda</h2>
+      
+      <p>Chef Hajime Yoneda's journey to culinary stardom is as unique as his cuisine. After working as a computer engineer, he had an epiphany about his true calling and, at age 27, embarked on a path that would lead him to become one of the world's most celebrated chefs. Opening his eponymous restaurant in 2008, Chef Yoneda quickly garnered international attention and earned three Michelin stars by 2016, maintaining this prestigious rating ever since.</p>
+      
+      <p>What distinguishes Chef Yoneda is his interdisciplinary approach to gastronomy. Drawing on his scientific background, philosophical interests, and artistic sensibilities, he creates dishes that transcend mere food to become thought-provoking expressions of his worldview. His signature philosophy, "to pursue the essence of natural flavors while exploring the possibilities of new tastes," guides every aspect of the dining experience at Hajime.</p>
+      
+      <div class="photos-container">
+        <div class="photo-item">
+          <img src="https://axwwgrkdco.cloudimg.io/v7/__gmpics__/1c1e65c0c1e94db29bbfbc5d9cc3ea96" alt="Chef Hajime Yoneda">
+        </div>
+        <div class="photo-item">
+          <img src="https://axwwgrkdco.cloudimg.io/v7/__gmpics__/aa3a27b4bd284b97889772f60ca10a34" alt="Artistic plating at Hajime">
+        </div>
+        <div class="photo-item">
+          <img src="https://axwwgrkdco.cloudimg.io/v7/__gmpics__/f8d1cc2fef2e46028df3a035a90f64e9" alt="Hajime dining room">
+        </div>
+        <div class="photo-item">
+          <img src="https://axwwgrkdco.cloudimg.io/v7/__gmpics__/1f3ac9b2d92847cdb9c5377b3ba10d86" alt="Seasonal dish at Hajime">
+        </div>
+      </div>
+      
+      <h2>Where Art, Philosophy, and Cuisine Converge</h2>
+      
+      <p>Dining at Hajime is less a meal and more a sensory journey through Chef Yoneda's artistic and philosophical universe. The minimalist dining room provides a contemplative backdrop for the true star of the experience: the meticulously crafted omakase menu that unfolds across approximately 12-14 courses.</p>
+      
+      <p>Each dish at Hajime tells a story, often inspired by profound concepts ranging from the cosmos to the microscopic world of soil microorganisms. His iconic "Chikyu" (Earth) dish visually represents our planet with precisely arranged vegetables of different colors and textures, while his "Soup of the Soil" celebrates the often-overlooked foundation of all terrestrial life. The technical precision in execution is matched only by the depth of thought behind each creation.</p>
+      
+      <p>The ingredients showcase both the finest seasonal Japanese produce and carefully selected global elements. Chef Yoneda works directly with farmers and producers who share his commitment to sustainability and quality, often incorporating plants grown in his own garden. While the cuisine defies simple categorization, it reflects Japanese sensibilities in its respect for ingredients and subtle flavor harmonies, even as it incorporates techniques and influences from around the world.</p>
+      
+      <div class="content-quote">
+        "A dish should satisfy not only the appetite but also the mind and heart. When I create, I'm considering how food connects humans to nature, to each other, and to our own consciousness. My aim is not just to feed, but to provoke thought and emotion." - Chef Hajime Yoneda
+      </div>
+      
+      <!-- User Reviews Carousel -->
+      <h2>Customer Reviews</h2>
+      
+      <div class="review-carousel">
+        <div class="carousel-arrow carousel-prev">
+          <i class="fas fa-chevron-left"></i>
+        </div>
+        
+        <div class="review-slides">
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Jonathan W.</div>
+                <div class="review-date">Visited March 2024</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"Dining at Hajime was a transformative experience that I'll remember for the rest of my life. We secured reservations three months in advance through our hotel concierge, and the anticipation was entirely justified. Chef Yoneda's 'Earth' dish brought tears to my eyes - not just for its beauty but for the profound message it conveyed. Each course was presented with a philosophical context that added layers of meaning to the already extraordinary flavors. The staff's knowledge was encyclopedic, and their service struck that perfect balance of attentiveness without intrusion. It's an investment financially, certainly, but one that delivers returns in the form of memories and perspectives that will stay with you long after."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Akiko M.</div>
+                <div class="review-date">Visited January 2024</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"As someone who has dined at most of Japan's three-star establishments, I can confidently say that Hajime offers something truly unique among Japanese haute cuisine. Chef Yoneda's scientific background is evident in the precision of his techniques, yet there's nothing cold or clinical about the experience. His winter menu incorporated ingredients I've never seen used in such creative ways - a particular dish using mountain vegetables made me reconsider everything I thought I knew about umami. The wine pairing was exceptional, with several surprising choices that complemented the food perfectly. While Tokyo gets most of the attention for fine dining in Japan, Chef Yoneda proves that Osaka is home to some of the country's most forward-thinking culinary minds."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Sophia L.</div>
+                <div class="review-date">Visited February 2024</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"Hajime exceeded my already high expectations. I've been fortunate to dine at many of the world's top restaurants, and this experience ranks among my most memorable. What struck me was the emotional quality of Chef Yoneda's food - many chefs aim for technical perfection, but few can evoke such profound feelings through their dishes. The famous 'Chikyu' (Earth) dish was visually stunning, but what I didn't expect was how moving it would be to eat - the flavors evolving like a symphony. The staff spoke excellent English and took time to explain the philosophy behind each course. The dining room is serenely minimal, keeping your focus on the extraordinary food and service. It's not an exaggeration to say the meal was life-affirming. Worth every yen and the effort to secure a reservation."</p>
+          </div>
+        </div>
+        
+        <div class="carousel-arrow carousel-next">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+        
+        <div class="carousel-nav">
+          <div class="carousel-dot active"></div>
+          <div class="carousel-dot"></div>
+          <div class="carousel-dot"></div>
+        </div>
+      </div>
+      
+      <h2>Menu Experience</h2>
+      
+      <p>Hajime offers a single omakase (chef's choice) menu that evolves with the seasons. While specific dishes change regularly based on seasonal ingredients and Chef Yoneda's inspiration, here are some signature concepts and approaches that define the Hajime experience:</p>
+      
+      <ul>
+        <li><strong>Chikyu (Earth)</strong> - The restaurant's iconic dish visually representing our planet with vegetables of various colors and textures in precise arrangement</li>
+        <li><strong>Soup of the Soil</strong> - A profound exploration of terroir through a clear consommé that captures the essence of soil itself</li>
+        <li><strong>Sustainable Seafood Expressions</strong> - Carefully selected fish and shellfish prepared with techniques that highlight their natural qualities while adding unexpected dimensions</li>
+        <li><strong>From the Garden</strong> - Vegetables from Chef Yoneda's own garden and trusted farmers, often presented in ways that elevate them to the status typically reserved for protein-centered dishes</li>
+        <li><strong>Philosophical Desserts</strong> - Sweet courses that continue the meal's narrative rather than serving as mere meal conclusions</li>
+      </ul>
+      
+      <p>The full dining experience includes:</p>
+      <ul>
+        <li><strong>Omakase Menu</strong> - Approximately 12-14 courses (¥40,000+ per person)</li>
+        <li><strong>Wine Pairing</strong> - Expertly curated selections that complement the menu (¥20,000+ per person)</li>
+        <li><strong>Non-Alcoholic Pairing</strong> - Creative house-made beverages for those who prefer not to consume alcohol (¥12,000+ per person)</li>
+      </ul>
+      
+      <div class="review-section">
+        <h2>Eastworld's Review</h2>
+        
+        <h3>Food Quality: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Chef Yoneda's cuisine represents the pinnacle of culinary artistry. Each dish demonstrates extraordinary technical mastery while transcending technique to deliver profound emotional and intellectual impact. The ingredient quality is beyond reproach, with an emphasis on sustainability and seasonality that enhances the dining experience. Flavors are pristine, nuanced, and often revelatory, showcasing both Japanese sensibilities and global influences.</p>
+        
+        <h3>Atmosphere: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>The minimalist elegance of Hajime's dining room creates the perfect canvas for Chef Yoneda's artistic expressions. The space is serene and contemplative, with careful attention to lighting, acoustics, and spatial arrangement. The subtle design elements reflect the same philosophical approach evident in the cuisine, resulting in a harmonious environment that enhances rather than distracts from the dining experience.</p>
+        
+        <h3>Service: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Service at Hajime achieves that elusive perfect balance: attentive without being intrusive, knowledgeable without being pedantic, formal without being stiff. The staff demonstrates exceptional knowledge of each dish's composition and significance, as well as the beverage pairings. Their ability to personalize the experience for each guest while maintaining the integrity of Chef Yoneda's vision is remarkable.</p>
+        
+        <h3>Value: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>While Hajime represents a significant financial investment, the value proposition lies in experiencing one of the world's most extraordinary culinary minds at work. This is dining as art, philosophy, and sensory experience—a once-in-a-lifetime occasion for many that delivers returns far beyond the monetary expense. The precision, creativity, and profound thought evident in every aspect justify the premium pricing.</p>
+        
+        <h3>Location: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>Located in a quiet area of Osaka's Nishi Ward, Hajime offers a refuge from the city's bustling commercial districts. The understated exterior gives little indication of the extraordinary experiences within—a deliberate choice that reinforces the sense of discovery. While not as convenient for tourists as restaurants in more central areas, the location contributes to the focused, contemplative atmosphere.</p>
+        
+        <h3>Overall: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Hajime represents the zenith of culinary artistry not just in Osaka but globally. Chef Yoneda has created a dining experience that transcends conventional gastronomy to become a profound exploration of humanity's relationship with nature, food, and ourselves. For those seeking not just exceptional food but a transformative experience that engages all the senses and intellect, Hajime stands as one of the world's essential restaurants.</p>
+      </div>
+      
+      <h2>Tips for Visitors</h2>
+      
+      <ul>
+        <li>Reservations are essential and should be made 2-3 months in advance through your hotel concierge or a specialized booking service</li>
+        <li>The full experience typically lasts about 3 hours; plan your schedule accordingly</li>
+        <li>Dress code is smart formal; business attire or its equivalent is appropriate</li>
+        <li>Consider booking the wine or non-alcoholic pairing for the complete experience</li>
+        <li>Photography is permitted but discretion is appreciated; avoid flash photography</li>
+        <li>Come with an open mind and willingness to engage with the philosophical aspects of the meal</li>
+        <li>If you have dietary restrictions, communicate them clearly when booking - Chef Yoneda can accommodate most needs with advance notice</li>
+        <li>Japanese language skills are helpful but not essential; staff speak sufficient English to guide international guests through the experience</li>
+      </ul>
+      
+      <!-- Visitor Information -->
+      <div id="visitor-info" class="review-section">
+        <h2>Visitor Information</h2>
+        <p>Here's what you need to know when planning your visit to Hajime:</p>
+        
+        <h3>Location & Access:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Address: 1-9-11 Edobori, Nishi-ku, Osaka 550-0002, Japan</li>
+          <li>10-minute walk from Higobashi Station (Yotsubashi Line)</li>
+          <li>15-minute walk from Hommachi Station (multiple lines)</li>
+          <li>Taxi is recommended, especially for evening visits</li>
+        </ul>
+        
+        <h3>Reservations:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Reservations open two months in advance and fill quickly</li>
+          <li>Book through your hotel concierge or a specialized restaurant booking service</li>
+          <li>A credit card is required to secure your reservation</li>
+          <li>Cancellation policy: Cancellations within 3 days of your reservation incur a 100% charge</li>
+          <li>The restaurant seats approximately 16 guests per service</li>
+        </ul>
+        
+        <h3>Hours of Operation:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Lunch: 12:00 PM - 1:30 PM (last seating)</li>
+          <li>Dinner: 6:00 PM - 8:00 PM (last seating)</li>
+          <li>Closed on Sundays and national holidays</li>
+          <li>Annual holiday closures typically occur during New Year and summer Obon festival</li>
+        </ul>
+        
+        <h3>Additional Information:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Full payment in advance may be required for international guests</li>
+          <li>Credit cards accepted: Visa, Mastercard, American Express, JCB</li>
+          <li>Smart formal dress code (business attire or equivalent)</li>
+          <li>Japanese and English languages supported</li>
+          <li>Dining duration: Approximately 3 hours</li>
+          <li>Official website: <a href="http://www.hajime-artistes.com/" target="_blank" style="color: #ff4d4d;">www.hajime-artistes.com</a></li>
+        </ul>
+        
+        <p>After your transformative meal at Hajime, consider a leisurely stroll along the nearby Dojimagawa river to reflect on the experience, or visit the Utsubo Park for a peaceful moment in one of Osaka's green spaces. The neighborhood offers a quieter side of Osaka that complements the contemplative nature of Chef Yoneda's cuisine.</p>
+      </div>
+      
+      <a href="../food.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Food Guide</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Review carousel functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const slides = document.querySelector('.review-slides');
+      const dots = document.querySelectorAll('.carousel-dot');
+      const prevBtn = document.querySelector('.carousel-prev');
+      const nextBtn = document.querySelector('.carousel-next');
+      let currentSlide = 0;
+      const totalSlides = document.querySelectorAll('.review-slide').length;
+      
+      // Function to update slide position
+      function showSlide(index) {
+        if (index < 0) index = totalSlides - 1;
+        if (index >= totalSlides) index = 0;
+        
+        currentSlide = index;
+        slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+        
+        // Update active dot
+        dots.forEach((dot, i) => {
+          dot.classList.toggle('active', i === currentSlide);
+        });
+      }
+      
+      // Set up event listeners for dots
+      dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => showSlide(i));
+      });
+      
+      // Set up event listeners for arrows
+      prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
+      nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
+      
+      // Auto-rotate slides every 5 seconds
+      setInterval(() => {
+        showSlide(currentSlide + 1);
+      }, 5000);
+    });
+  </script>
+  
+  <script src="../script.js"></script>
+</body>
+</html> 

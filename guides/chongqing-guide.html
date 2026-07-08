@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EASTWORLD - Chongqing City Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css' rel='stylesheet' />
+  <style>
+    /* City Guide specific styles */
+    .guide-hero {
+      height: 500px;
+      background-image: url('https://images.unsplash.com/photo-1565769570396-3e3c0a0fb36a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1771&q=80');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 3rem;
+    }
+    
+    .guide-hero-content {
+      text-align: center;
+      color: white;
+      position: relative;
+      z-index: 2;
+      padding: 2rem;
+      max-width: 800px;
+      background-color: rgba(0, 0, 0, 0.6);
+    }
+    
+    .guide-hero::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(0deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.2) 100%);
+    }
+    
+    .guide-hero h1 {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      letter-spacing: 3px;
+    }
+    
+    .guide-hero p {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    
+    .guide-intro {
+      max-width: 800px;
+      margin: 0 auto 3rem;
+      padding: 0 1rem;
+      line-height: 1.8;
+    }
+    
+    .guide-section {
+      margin-bottom: 4rem;
+    }
+    
+    .guide-section-title {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: 2.2rem;
+      letter-spacing: 1px;
+    }
+    
+    .guide-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+    
+    .guide-card {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+    
+    .guide-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .guide-card-img {
+      height: 200px;
+      overflow: hidden;
+    }
+    
+    .guide-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    
+    .guide-card:hover .guide-card-img img {
+      transform: scale(1.05);
+    }
+    
+    .guide-card-content {
+      padding: 1.5rem;
+    }
+    
+    .guide-card h3 {
+      margin-bottom: 0.5rem;
+      font-size: 1.2rem;
+    }
+    
+    .guide-card-meta {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      color: #666;
+    }
+    
+    .guide-card-meta i {
+      margin-right: 0.3rem;
+    }
+    
+    .guide-card-meta span {
+      margin-right: 1rem;
+    }
+    
+    .guide-card p {
+      color: #555;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    
+    .guide-map {
+      width: 100%;
+      height: 500px;
+      border: none;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+    }
+    
+    .guide-tips {
+      background-color: #f8f8f8;
+      padding: 2rem;
+      border-radius: 8px;
+      margin-bottom: 3rem;
+    }
+    
+    .guide-tips h3 {
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+    
+    .guide-tips-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+    
+    .guide-tip-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+    }
+    
+    .guide-tip-item i {
+      margin-right: 0.5rem;
+      color: #000;
+      margin-top: 0.25rem;
+    }
+    
+    .guide-download {
+      text-align: center;
+      margin: 3rem 0;
+      padding: 2rem;
+      background-color: #f0f0f0;
+      border-radius: 8px;
+    }
+    
+    .guide-download h3 {
+      margin-bottom: 1rem;
+      font-size: 1.8rem;
+    }
+    
+    .guide-download-btn {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 1rem 2rem;
+      background-color: #000;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+    
+    .guide-download-btn:hover {
+      background-color: #333;
+    }
+    
+    .guide-map {
+      width: 100%;
+      height: 500px;
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../food.html" class="nav-item">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+  
+  <main class="content-container">
+    <div class="guide-hero">
+      <div class="guide-hero-content">
+        <h1>CHONGQING</h1>
+        <p>Experience China's dramatic mountain metropolis, where ancient traditions and futuristic architecture collide in a stunning vertical cityscape.</p>
+      </div>
+    </div>
+    
+    <section class="guide-intro">
+      <p>Chongqing, often called the "Mountain City" and "Fog Capital," is one of China's most distinctive urban landscapes. Built at the confluence of the Yangtze and Jialing rivers, this sprawling metropolis of over 31 million people cascades dramatically across steep karst mountains, creating a three-dimensional cityscape unlike any other in the world.</p>
+      
+      <p>A former part of Sichuan province that became China's fourth directly-administered municipality in 1997, Chongqing serves as the economic center of the upper Yangtze basin and the gateway to the spectacular Three Gorges region. The city offers visitors a unique blend of experiences: breathtaking urban vistas where skyscrapers seem to sprout directly from mountainsides, ancient villages nestled within the urban sprawl, famously spicy Sichuan cuisine, and a fascinating historical legacy as China's wartime capital during the Second World War.</p>
+    </section>
+    
+    <section class="guide-section">
+      <h2 class="guide-section-title">TOP ATTRACTIONS</h2>
+      
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://images.unsplash.com/photo-1599753642084-f741d9cbf8b7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80" alt="Hongyadong">
+          </div>
+          <div class="guide-card-content">
+            <h3>Hongyadong (Red Cliff Village)</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Yuzhong District</span>
+              <i class="far fa-clock"></i><span>10:00-22:00</span>
+            </div>
+            <p>This iconic 11-story stilt house complex built into the side of a cliff has become the symbol of Chongqing. The traditional-style building houses restaurants, shops, and teahouses with spectacular views over the Jialing River and city skyline, especially when illuminated at night.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://images.unsplash.com/photo-1567931969784-be01dbbf6da3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1674&q=80" alt="Liziba Station">
+          </div>
+          <div class="guide-card-content">
+            <h3>Liziba Monorail Station</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Yuzhong District</span>
+              <i class="far fa-clock"></i><span>6:30-22:30</span>
+            </div>
+            <p>One of Chongqing's most famous urban engineering marvels, where Line 2 of the monorail passes directly through the middle of a residential building between floors 6 and 8. This unique integration of public transportation and residential architecture has become an iconic photo spot.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/0/01/Three_Gorges_Museum.jpg" alt="Three Gorges Museum">
+          </div>
+          <div class="guide-card-content">
+            <h3>Three Gorges Museum</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Yuzhong District</span>
+              <i class="far fa-clock"></i><span>9:00-17:00 (Closed Mondays)</span>
+            </div>
+            <p>This extensive museum documents the region's rich history and the massive Three Gorges Dam project. With over 170,000 cultural relics, the exhibits cover Chongqing's role in World War II, Ba-Yu culture, and the impact of the dam on communities and archaeological sites.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://images.unsplash.com/photo-1549644049-33c3a5280d8e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1780&q=80" alt="Ciqikou Ancient Town">
+          </div>
+          <div class="guide-card-content">
+            <h3>Ciqikou Ancient Town</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Shapingba District</span>
+              <i class="far fa-clock"></i><span>9:00-21:00</span>
+            </div>
+            <p>A well-preserved Ming and Qing dynasty port town on the Jialing River that offers a glimpse into old Chongqing. Wander the narrow stone streets lined with traditional wooden buildings, sample local snacks, visit ancient temples, and experience traditional teahouse culture.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://www.thatsmags.com/image/view/201807/chaotianmen-1.jpg" alt="Chaotianmen Square">
+          </div>
+          <div class="guide-card-content">
+            <h3>Chaotianmen Square</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Yuzhong District</span>
+              <i class="far fa-clock"></i><span>Open 24 hours</span>
+            </div>
+            <p>Located at the dramatic confluence of the Yangtze and Jialing rivers, this massive square offers spectacular views of the merging waters and surrounding mountains. It's home to the massive Chongqing Chaotianmen Raffles City complex with its horizontal skyscraper "sky corridor."</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://images.unsplash.com/photo-1506158669146-619067262a00?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80" alt="Wulong Karst">
+          </div>
+          <div class="guide-card-content">
+            <h3>Wulong Karst Landscape</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Wulong District</span>
+              <i class="far fa-clock"></i><span>8:00-17:00</span>
+            </div>
+            <p>A UNESCO World Heritage site located about 2 hours from downtown Chongqing, featuring spectacular karst formations including the Three Natural Bridges, Furong Cave, and Houping Tiankeng (sinkhole). The dramatic landscape served as a filming location for "Transformers: Age of Extinction."</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="guide-section">
+      <h2 class="guide-section-title">WHERE TO EAT</h2>
+      
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://i.ytimg.com/vi/wuOVaS5KK8Q/maxresdefault.jpg" alt="Chongqing Hotpot">
+          </div>
+          <div class="guide-card-content">
+            <h3>Cygnet Hotpot (Xiaotianshi)</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Multiple locations</span>
+              <i class="fas fa-yen-sign"></i><span>¥¥</span>
+            </div>
+            <p>One of Chongqing's most beloved hotpot chains serving authentic local-style hotpot, characterized by its vibrant red broth, numbing Sichuan peppercorns, and intense spiciness. A must-try culinary experience that showcases the city's fiery culinary tradition.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://www.chinauniquetour.com/images/blogpic/1/20180523093944.jpg" alt="Noodles">
+          </div>
+          <div class="guide-card-content">
+            <h3>Chen Mapo Doufu</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Jiefangbei</span>
+              <i class="fas fa-yen-sign"></i><span>¥¥</span>
+            </div>
+            <p>A branch of the famous Chengdu restaurant that serves the definitive version of mapo tofu, the iconic Sichuan dish of soft tofu in spicy bean sauce with minced pork. The restaurant also serves other Sichuan classics in an upscale setting.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://img.kouhigh.top/i/2022/08/10/62f37c175eab2.jpg" alt="Xiaomian">
+          </div>
+          <div class="guide-card-content">
+            <h3>Zhang Liang Fen</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Jiefangbei</span>
+              <i class="fas fa-yen-sign"></i><span>¥</span>
+            </div>
+            <p>A local institution serving Chongqing's famous xiaomian (small noodles) with various spicy toppings. This humble noodle shop has been operating for decades and offers an authentic taste of local street food at incredibly affordable prices.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://images.chinahighlights.com/allpicture/2019/11/5dd9058e78684de5af36d4c8_cut_750x400_39.jpg" alt="Rooftop Restaurant">
+          </div>
+          <div class="guide-card-content">
+            <h3>Rafale French Restaurant</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>InterContinental Chongqing</span>
+              <i class="fas fa-yen-sign"></i><span>¥¥¥¥</span>
+            </div>
+            <p>Upscale dining with spectacular views of the city's skyline and rivers. Located at the top of the InterContinental hotel, this fine dining establishment offers French cuisine with Asian influences and an extensive wine collection in an elegant atmosphere.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="guide-section">
+      <h2 class="guide-section-title">WHERE TO STAY</h2>
+      
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/239634468.jpg?k=5bc5b8dbc54c7806ba439ce57cb3c164db1a07e6d4ffe0aa1bdf7d6b9a4f7fb7&o=&hp=1" alt="InterContinental Chongqing">
+          </div>
+          <div class="guide-card-content">
+            <h3>InterContinental Chongqing</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Jiangbei District</span>
+              <i class="fas fa-star"></i><span>5-star luxury</span>
+            </div>
+            <p>Situated at the confluence of the Yangtze and Jialing Rivers, this luxury hotel offers spectacular panoramic views of Chongqing's dramatic cityscape. Features elegant rooms, multiple dining options including the panoramic Rafale Restaurant, and an indoor pool.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/178744656.jpg?k=dffffee2e3bfe9b3c99741bc72ca69e4585dfdfdc5f6650537f9e91bcde7a492&o=&hp=1" alt="The Westin Chongqing">
+          </div>
+          <div class="guide-card-content">
+            <h3>The Westin Chongqing Liberation Square</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Yuzhong District</span>
+              <i class="fas fa-star"></i><span>5-star luxury</span>
+            </div>
+            <p>Located in the heart of downtown Chongqing near Jiefangbei CBD, this upscale hotel offers the brand's signature Heavenly Beds, a rejuvenating spa, indoor pool, and multiple dining options. The convenient location provides easy access to shopping, dining, and major attractions.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/190177385.jpg?k=03f1c11ab24b0ee9b18e95d05a5b28e7bfe0ddce5de771bcf4e5d8b0ce84b3e5&o=&hp=1" alt="JW Marriott Chongqing">
+          </div>
+          <div class="guide-card-content">
+            <h3>JW Marriott Chongqing</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Yuzhong District</span>
+              <i class="fas fa-star"></i><span>5-star luxury</span>
+            </div>
+            <p>Set in Chongqing's central business district, this luxury hotel features spacious rooms with floor-to-ceiling windows offering city or river views. Amenities include an indoor pool, fitness center, spa, and multiple dining options including Man Ho Chinese Restaurant.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/306963050.jpg?k=8be454de6e88d6fc3e14877ac40f8744a0dc5cd0e77d60bbe5f9c9e8edff3c4f&o=&hp=1" alt="Niccolo Chongqing">
+          </div>
+          <div class="guide-card-content">
+            <h3>Niccolo Chongqing</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Jiangbei District</span>
+              <i class="fas fa-star"></i><span>5-star luxury</span>
+            </div>
+            <p>Occupying the top floors of Chongqing IFS Tower, this ultra-luxury hotel offers stunning views through floor-to-ceiling windows, contemporary design, and exclusive amenities. The property features a sky garden, infinity pool, and multiple dining venues at heights that showcase the city's dramatic topography.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="guide-section">
+      <h2 class="guide-section-title">GETTING AROUND</h2>
+      
+      <div class="guide-map" id="chongqingMap"></div>
+      
+      <div class="guide-tips">
+        <h3>Local Transportation Tips</h3>
+        <div class="guide-tips-list">
+          <div class="guide-tip-item">
+            <i class="fas fa-subway"></i>
+            <p>Chongqing's metro system is uniquely adapted to the city's mountainous terrain, with some stations buried deep underground and others elevated high above street level. The system has 9 lines covering major attractions, with fares ranging from ¥2-8.</p>
+          </div>
+          
+          <div class="guide-tip-item">
+            <i class="fas fa-train"></i>
+            <p>The Chongqing Rail Transit Line 2 monorail offers some of the city's most spectacular views as it winds through buildings and along the Jialing River. Don't miss the famous section passing through a residential building at Liziba Station.</p>
+          </div>
+          
+          <div class="guide-tip-item">
+            <i class="fas fa-bus"></i>
+            <p>City buses are inexpensive (¥1-3) but can be challenging to navigate without Chinese language skills. Bus routes 461, 462, and 463 cover major tourist attractions in the central districts. Use the "Chongqing Metro" app for real-time information.</p>
+          </div>
+          
+          <div class="guide-tip-item">
+            <i class="fas fa-taxi"></i>
+            <p>Taxis are abundant and relatively affordable, with starting fares of ¥10 for the first 3km. Note that Chongqing's complex road network and traffic can make taxi journeys time-consuming. Having your destination written in Chinese is essential.</p>
+          </div>
+          
+          <div class="guide-tip-item">
+            <i class="fas fa-ship"></i>
+            <p>River cruises along the Yangtze and Jialing rivers offer a unique perspective of Chongqing's dramatic cityscape, especially at night when the city is illuminated. Short cruises around the peninsula area cost approximately ¥50-100.</p>
+          </div>
+          
+          <div class="guide-tip-item">
+            <i class="fas fa-walking"></i>
+            <p>Chongqing's steep topography makes walking challenging but rewarding. The city features numerous pedestrian overpasses, sky bridges, escalators, and elevators connecting different levels of the city, creating a three-dimensional transportation network.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="guide-download">
+      <h3>Download the Complete Chongqing City Guide</h3>
+      <p>Get our comprehensive 50-page guide to China's Mountain City with detailed itineraries, cultural insights, language essentials, and recommendations for exploring beyond the city.</p>
+      <p>Available as a PDF for your convenience - take it with you offline!</p>
+      <a href="#" class="guide-download-btn">Download Guide (PDF) - $11.99</a>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+  
+  <script src='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js'></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize Mapbox for Chongqing
+      mapboxgl.accessToken = 'pk.eyJ1IjoiZWFzdHdvcmxkIiwiYSI6ImNscDg5c3dsaDBrN3YyanBsZzV1dmg0OG0ifQ.9h-PyeATCU2zO9L43WHBEw';
+      const map = new mapboxgl.Map({
+        container: 'chongqingMap',
+        style: 'mapbox://styles/mapbox/streets-v12',
+        center: [106.5516, 29.5630], // Chongqing coordinates
+        zoom: 12,
+        pitch: 65, // Add 3D perspective to showcase the mountainous terrain
+        bearing: 40
+      });
+      
+      // Add 3D buildings and terrain layer
+      map.on('load', function() {
+        // Add terrain
+        map.addSource('mapbox-dem', {
+          'type': 'raster-dem',
+          'url': 'mapbox://mapbox.mapbox-terrain-dem-v1',
+          'tileSize': 512,
+          'maxzoom': 14
+        });
+        
+        map.setTerrain({ 'source': 'mapbox-dem', 'exaggeration': 1.5 });
+        
+        // Add 3D buildings layer
+        const layers = map.getStyle().layers;
+        
+        // Find the index of the first symbol layer
+        let firstSymbolId;
+        for (const layer of layers) {
+          if (layer.type === 'symbol') {
+            firstSymbolId = layer.id;
+            break;
+          }
+        }
+        
+        // Add 3D buildings
+        map.addLayer({
+          'id': '3d-buildings',
+          'source': 'composite',
+          'source-layer': 'building',
+          'filter': ['==', 'extrude', 'true'],
+          'type': 'fill-extrusion',
+          'minzoom': 15,
+          'paint': {
+            'fill-extrusion-color': '#aaa',
+            'fill-extrusion-height': [
+              'interpolate', ['linear'], ['zoom'],
+              15, 0,
+              15.05, ['get', 'height']
+            ],
+            'fill-extrusion-base': [
+              'interpolate', ['linear'], ['zoom'],
+              15, 0,
+              15.05, ['get', 'min_height']
+            ],
+            'fill-extrusion-opacity': 0.6
+          }
+        }, firstSymbolId);
+        
+        // Add navigation controls
+        map.addControl(new mapboxgl.NavigationControl());
+        
+        // Add key attraction markers
+        const attractions = [
+          { name: 'Hongyadong', coordinates: [106.5860, 29.5636], description: 'Iconic stilt house complex' },
+          { name: 'Liziba Monorail Station', coordinates: [106.5372, 29.5517], description: 'Train through building' },
+          { name: 'Three Gorges Museum', coordinates: [106.5445, 29.5569], description: 'Cultural museum' },
+          { name: 'Ciqikou Ancient Town', coordinates: [106.4552, 29.5724], description: 'Historic port town' },
+          { name: 'Chaotianmen Square', coordinates: [106.5920, 29.5671], description: 'Rivers confluence viewpoint' },
+          { name: 'Liberation Monument', coordinates: [106.5801, 29.5563], description: 'Central shopping district' }
+        ];
+        
+        attractions.forEach(spot => {
+          // Create popup content
+          const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(
+            `<strong>${spot.name}</strong><br>${spot.description}`
+          );
+          
+          // Add marker
+          new mapboxgl.Marker({ color: '#ff4d4d' })
+            .setLngLat(spot.coordinates)
+            .setPopup(popup)
+            .addTo(map);
+        });
+        
+        // Start with a fly-to animation
+        map.flyTo({
+          center: [106.5860, 29.5636], // Hongyadong
+          zoom: 15.5,
+          pitch: 75,
+          bearing: -30,
+          duration: 5000
+        });
+      });
+    });
+  </script>
+  <script src="../script.js"></script>
+</body>
+</html> 

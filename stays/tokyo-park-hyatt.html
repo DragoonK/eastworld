@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Park Hyatt Tokyo - Eastworld Hotel Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Additional styles specific to hotel reviews */
+    .review-categories {
+      display: flex;
+      margin: 2rem 0;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .review-category {
+      flex: 1;
+      padding: 1rem;
+      background: #f9f9f9;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 1rem;
+      font-weight: 500;
+    }
+    
+    .review-category.active {
+      background: #000;
+      color: white;
+    }
+    
+    .review-content {
+      display: none;
+      margin: 2rem 0;
+    }
+    
+    .review-content.active {
+      display: block;
+    }
+    
+    .review-carousel {
+      position: relative;
+      margin: 2rem 0;
+    }
+    
+    .review-slides {
+      display: flex;
+      overflow: hidden;
+      scroll-behavior: smooth;
+    }
+    
+    .review-slide {
+      min-width: 100%;
+      padding: 1.5rem;
+      background: #f9f9f9;
+      border-radius: 8px;
+      margin-right: 1rem;
+    }
+    
+    .reviewer-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    
+    .reviewer-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: #ddd;
+      margin-right: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: #666;
+    }
+    
+    .reviewer-details {
+      flex: 1;
+    }
+    
+    .reviewer-name {
+      font-weight: bold;
+      margin-bottom: 0.25rem;
+    }
+    
+    .reviewer-location {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 0.25rem;
+    }
+    
+    .review-rating {
+      color: #FFD700;
+    }
+    
+    .carousel-nav {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 1rem 0;
+      gap: 0.5rem;
+    }
+    
+    .carousel-arrow {
+      background: #000;
+      color: white;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.3s ease;
+    }
+    
+    .carousel-arrow:hover {
+      background: #333;
+    }
+    
+    .carousel-dots {
+      display: flex;
+      gap: 0.5rem;
+      margin: 0 1rem;
+    }
+    
+    .carousel-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #ddd;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .carousel-dot.active {
+      background: #000;
+    }
+    
+    .hotel-amenities {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .amenity-item {
+      display: flex;
+      align-items: center;
+      padding: 0.5rem;
+      background: #f9f9f9;
+      border-radius: 4px;
+    }
+    
+    .amenity-item i {
+      margin-right: 0.5rem;
+      color: #666;
+    }
+    
+    .booking-section {
+      background: #f0f8ff;
+      padding: 2rem;
+      border-radius: 8px;
+      margin: 2rem 0;
+      text-align: center;
+    }
+    
+    .booking-button {
+      display: inline-block;
+      background: #000;
+      color: white;
+      padding: 1rem 2rem;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: bold;
+      transition: background 0.3s ease;
+      margin: 1rem 0.5rem;
+    }
+    
+    .booking-button:hover {
+      background: #333;
+    }
+    
+    .hotel-info-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+    
+    .hotel-details {
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 8px;
+    }
+    
+    .detail-row {
+      display: flex;
+      margin: 0.75rem 0;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+    }
+    
+    .detail-label {
+      font-weight: bold;
+      min-width: 120px;
+      margin-right: 1rem;
+    }
+    
+    .detail-value {
+      flex: 1;
+    }
+    
+    @media (max-width: 768px) {
+      .hotel-info-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .review-categories {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../food.html" class="nav-item">FOOD</a>
+        <a href="../stays.html" class="nav-item active">STAYS</a>
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="content-container">
+    <div class="content-header">
+      <span class="content-category">CINEMATIC LUXURY</span>
+      <h1 class="content-title">Park Hyatt Tokyo - Lost in Translation Icon with Spectacular Views</h1>
+      
+      <!-- Rating Section -->
+      <div class="rating">
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="score-label">4.7/5.0</span>
+      </div>
+    </div>
+    
+    <div class="hero-container">
+      <img class="content-hero" src="https://www.hyatt.com/content/dam/hyatt/hyattdam/images/2022/03/21/0748/TYOPH-P044-Exterior-Twilight.jpg" alt="Park Hyatt Tokyo" 
+      onerror="this.onerror=null; 
+      this.parentElement.innerHTML = '<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#333;color:white;font-size:1.5rem;text-align:center;padding:2rem;\'>Park Hyatt Tokyo</div>';">
+    </div>
+    
+    <!-- Booking Buttons -->
+    <div class="booking-section">
+      <h3>Book Your Stay at Park Hyatt Tokyo</h3>
+      <a href="#" class="booking-button">
+        <i class="fas fa-calendar-alt"></i> Book Direct - World of Hyatt Benefits
+      </a>
+      <a href="#" class="booking-button">
+        <i class="fas fa-phone"></i> Call Concierge: +81 3 5322 1234
+      </a>
+    </div>
+    
+    <!-- Hotel Information Section -->
+    <div class="hotel-info-grid">
+      <div class="hotel-details">
+        <h2>Hotel Details</h2>
+        
+        <div class="detail-row">
+          <div class="detail-label">Address:</div>
+          <div class="detail-value">3-7-1-2 Nishi-Shinjuku, Shinjuku-ku, Tokyo 163-1055, Japan</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Check-in:</div>
+          <div class="detail-value">3:00 PM</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Check-out:</div>
+          <div class="detail-value">12:00 PM</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Phone:</div>
+          <div class="detail-value">+81 3 5322 1234</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Price Range:</div>
+          <div class="detail-value">$400-800 USD per night</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Category:</div>
+          <div class="detail-value">Luxury Hotel</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Floors:</div>
+          <div class="detail-value">39th-52nd floors of Shinjuku Park Tower</div>
+        </div>
+      </div>
+      
+      <div>
+        <h3>Key Amenities</h3>
+        <div class="hotel-amenities">
+          <div class="amenity-item">
+            <i class="fas fa-wifi"></i>
+            <span>Complimentary WiFi</span>
+          </div>
+          <div class="amenity-item">
+            <i class="fas fa-swimming-pool"></i>
+            <span>47th Floor Pool</span>
+          </div>
+          <div class="amenity-item">
+            <i class="fas fa-spa"></i>
+            <span>Club on the Park Spa</span>
+          </div>
+          <div class="amenity-item">
+            <i class="fas fa-dumbbell"></i>
+            <span>Fitness Center</span>
+          </div>
+          <div class="amenity-item">
+            <i class="fas fa-utensils"></i>
+            <span>New York Grill & Bar</span>
+          </div>
+          <div class="amenity-item">
+            <i class="fas fa-wine-glass"></i>
+            <span>Peak Lounge & Bar</span>
+          </div>
+          <div class="amenity-item">
+            <i class="fas fa-concierge-bell"></i>
+            <span>24/7 Concierge</span>
+          </div>
+          <div class="amenity-item">
+            <i class="fas fa-film"></i>
+            <span>Lost in Translation Fame</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="content-text">
+      <h2>Tokyo's Cinematic Luxury Legend</h2>
+      
+      <p>Park Hyatt Tokyo has achieved legendary status as one of the world's most recognizable luxury hotels, thanks in part to its starring role in Sofia Coppola's "Lost in Translation." Occupying floors 39 through 52 of the Shinjuku Park Tower, this architectural masterpiece offers guests an unparalleled luxury experience suspended high above one of the world's most dynamic cities.</p>
+      
+      <p>The hotel's design philosophy centers on creating an oasis of tranquility amidst Tokyo's kinetic energy. With its minimalist aesthetic, natural materials, and floor-to-ceiling windows offering panoramic views of Mount Fuji, Tokyo Bay, and the sprawling urban landscape, Park Hyatt Tokyo perfectly embodies the sophisticated restraint of Japanese luxury hospitality.</p>
+      
+      <div class="photos-container">
+        <div class="photo-item">
+          <img src="https://www.hyatt.com/content/dam/hyatt/hyattdam/images/2022/03/21/0748/TYOPH-P044-Guest-Room-King.jpg" alt="Park Hyatt Tokyo luxury room">
+        </div>
+        <div class="photo-item">
+          <img src="https://www.hyatt.com/content/dam/hyatt/hyattdam/images/2022/03/21/0748/TYOPH-P044-New-York-Grill.jpg" alt="New York Grill restaurant">
+        </div>
+        <div class="photo-item">
+          <img src="https://www.hyatt.com/content/dam/hyatt/hyattdam/images/2022/03/21/0748/TYOPH-P044-Pool.jpg" alt="47th floor swimming pool">
+        </div>
+        <div class="photo-item">
+          <img src="https://www.hyatt.com/content/dam/hyatt/hyattdam/images/2022/03/21/0748/TYOPH-P044-Peak-Lounge.jpg" alt="Peak Lounge with city views">
+        </div>
+      </div>
+      
+      <h2>Elevated Accommodations with Tokyo Views</h2>
+      
+      <p>Each of the 177 guest rooms and suites features expansive windows showcasing Tokyo's magnificent skyline, with many offering glimpses of Mount Fuji on clear days. The rooms blend contemporary comfort with Japanese design sensibilities, featuring custom furnishings, marble bathrooms with deep soaking tubs, and technology seamlessly integrated into the minimalist aesthetic.</p>
+      
+      <p>The Park Suite and Presidential Suite provide the ultimate Tokyo accommodation experience, with wraparound views, separate living and dining areas, and marble bathrooms featuring rainfall showers and panoramic city vistas. The attention to detail reflects the highest standards of Japanese hospitality, creating spaces that feel both luxurious and serene.</p>
+
+      <!-- Local vs Tourist Reviews Section -->
+      <div class="review-section">
+        <h2>What Our Community Says</h2>
+        <p style="margin-bottom: 2rem; color: #666; font-style: italic;">Experience Park Hyatt Tokyo through the eyes of locals who appreciate refined luxury and tourists captivated by its cinematic fame and spectacular views.</p>
+        
+        <!-- Review Category Tabs -->
+        <div class="review-categories">
+          <button class="review-category active" data-category="local">
+            <i class="fas fa-map-marked-alt"></i>
+            <div>Local Reviews</div>
+            <small>Tokyo professionals & luxury connoisseurs</small>
+          </button>
+          <button class="review-category" data-category="tourist">
+            <i class="fas fa-camera-retro"></i>
+            <div>Tourist Reviews</div>
+            <small>International visitors & Lost in Translation fans</small>
+          </button>
+        </div>
+        
+        <!-- Local Reviews -->
+        <div class="review-content active" id="local-reviews">
+          <div class="review-carousel">
+            <div class="review-slides" id="local-slides">
+              <div class="review-slide">
+                <div class="reviewer-info">
+                  <div class="reviewer-avatar">HT</div>
+                  <div class="reviewer-details">
+                    <div class="reviewer-name">Hiroshi Tanaka</div>
+                    <div class="reviewer-location">Tokyo Business Executive, Shinjuku Office Worker</div>
+                    <div class="review-rating">
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                    </div>
+                  </div>
+                </div>
+                <p>"As someone who works in Shinjuku, I regularly use Park Hyatt for client entertainment and special occasions. The New York Grill is exceptional for business dinners - the atmosphere and views create the perfect environment for important meetings. The service exemplifies the best of Japanese omotenashi while maintaining international luxury standards. The location above Shinjuku provides convenient access to everything while feeling like a serene escape from the city's intensity. The concierge team understands Tokyo thoroughly and can arrange exclusive experiences that most hotels cannot. For Tokyo residents, it represents the pinnacle of luxury hospitality in our city."</p>
+              </div>
+              
+              <div class="review-slide">
+                <div class="reviewer-info">
+                  <div class="reviewer-avatar">AK</div>
+                  <div class="reviewer-details">
+                    <div class="reviewer-name">Akiko Kimura</div>
+                    <div class="reviewer-location">Tokyo Hospitality Professional, Luxury Hotel Consultant</div>
+                    <div class="review-rating">
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                    </div>
+                  </div>
+                </div>
+                <p>"Working in Tokyo's luxury hospitality industry, I can say Park Hyatt sets the standard for international hotels in Japan. The balance between global luxury expectations and Japanese cultural sensitivity is masterful. The spa treatments incorporate traditional Japanese techniques while maintaining world-class standards. The Peak Lounge afternoon tea showcases the best of both Japanese and international pastry traditions. What locals appreciate most is how the hotel respects Japanese customs while providing familiar luxury for international guests. The staff training is exceptional - they anticipate needs without being intrusive, embodying true Japanese service philosophy."</p>
+              </div>
+              
+              <div class="review-slide">
+                <div class="reviewer-info">
+                  <div class="reviewer-avatar">MS</div>
+                  <div class="reviewer-details">
+                    <div class="reviewer-name">Makoto Sato</div>
+                    <div class="reviewer-location">Tokyo Food & Beverage Industry Professional</div>
+                    <div class="review-rating">
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="far fa-star"></i>
+                    </div>
+                  </div>
+                </div>
+                <p>"From a F&B perspective, Park Hyatt excels in both cuisine and atmosphere. The New York Grill's steaks are consistently excellent, and the wine program features impressive selections from both international and Japanese producers. The Peak Lounge serves some of the city's best cocktails with unmatched views. For locals, it's become a destination for special celebrations and business entertainment. The only minor criticism is pricing during peak seasons, but the quality justifies the cost. The Lost in Translation connection brings constant tourist traffic, which can affect the typically serene atmosphere, but the management handles this well by maintaining service standards."</p>
+              </div>
+            </div>
+            
+            <div class="carousel-nav">
+              <button class="carousel-arrow carousel-prev" data-carousel="local">
+                <i class="fas fa-chevron-left"></i>
+              </button>
+              <div class="carousel-dots">
+                <div class="carousel-dot active" data-slide="0"></div>
+                <div class="carousel-dot" data-slide="1"></div>
+                <div class="carousel-dot" data-slide="2"></div>
+              </div>
+              <button class="carousel-arrow carousel-next" data-carousel="local">
+                <i class="fas fa-chevron-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Tourist Reviews -->
+        <div class="review-content" id="tourist-reviews">
+          <div class="review-carousel">
+            <div class="review-slides" id="tourist-slides">
+              <div class="review-slide">
+                <div class="reviewer-info">
+                  <div class="reviewer-avatar">SC</div>
+                  <div class="reviewer-details">
+                    <div class="reviewer-name">Sarah Chen</div>
+                    <div class="reviewer-location">Los Angeles, Lost in Translation Fan</div>
+                    <div class="review-rating">
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                    </div>
+                  </div>
+                </div>
+                <p>"Staying at Park Hyatt Tokyo was a dream come true as a huge Lost in Translation fan! The New York Bar where Bill Murray's character performed is exactly as magical as in the movie - those views of Tokyo at night are absolutely breathtaking. Our room felt like being in a luxury cloud above the city, and seeing Mount Fuji from our window was incredible. The staff were extraordinarily helpful in arranging tours and restaurant reservations throughout Tokyo. The hotel perfectly captures that feeling of sophisticated isolation that made the movie so compelling. Every detail exceeded expectations, from the spa treatments to the impeccable dining. An absolutely unforgettable Tokyo experience that lived up to its cinematic reputation."</p>
+              </div>
+              
+              <div class="review-slide">
+                <div class="reviewer-info">
+                  <div class="reviewer-avatar">JM</div>
+                  <div class="reviewer-details">
+                    <div class="reviewer-name">James Miller</div>
+                    <div class="reviewer-location">London, First-time Tokyo Visitor</div>
+                    <div class="review-rating">
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                    </div>
+                  </div>
+                </div>
+                <p>"Our first trip to Tokyo and Park Hyatt provided the perfect introduction to the city's sophisticated side. The location in Shinjuku meant easy access to everything while feeling like a serene retreat above the chaos. The concierge arranged a private sushi experience and tickets to a traditional theater performance. Our room's views changed dramatically throughout the day - from busy city life below to the glittering neon spectacle at night. The spa offered traditional Japanese treatments that were deeply relaxing after long days exploring. The combination of Western luxury standards with authentic Japanese hospitality created an experience we'll never forget. Worth every yen for this once-in-a-lifetime Tokyo adventure."</p>
+              </div>
+              
+              <div class="review-slide">
+                <div class="reviewer-info">
+                  <div class="reviewer-avatar">ER</div>
+                  <div class="reviewer-details">
+                    <div class="reviewer-name">Emma Rodriguez</div>
+                    <div class="reviewer-location">Barcelona, Luxury Travel Enthusiast</div>
+                    <div class="review-rating">
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                    </div>
+                  </div>
+                </div>
+                <p>"Having stayed at luxury hotels worldwide, Park Hyatt Tokyo stands out for its unique combination of international sophistication and authentic Japanese culture. The design is minimalist perfection - every detail feels intentional and serene. The 47th floor pool with Tokyo views was surreal, especially at sunset. Dining at New York Grill felt like floating above the city while enjoying world-class cuisine. The staff anticipated every need while respecting personal space - true Japanese hospitality. The location above Shinjuku provided access to both traditional temples and modern shopping districts. For travelers seeking authentic luxury that reflects Japanese aesthetics and service, Park Hyatt Tokyo is unmatched. An extraordinary experience that defines what luxury travel should be."</p>
+              </div>
+            </div>
+            
+            <div class="carousel-nav">
+              <button class="carousel-arrow carousel-prev" data-carousel="tourist">
+                <i class="fas fa-chevron-left"></i>
+              </button>
+              <div class="carousel-dots">
+                <div class="carousel-dot active" data-slide="0"></div>
+                <div class="carousel-dot" data-slide="1"></div>
+                <div class="carousel-dot" data-slide="2"></div>
+              </div>
+              <button class="carousel-arrow carousel-next" data-carousel="tourist">
+                <i class="fas fa-chevron-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <h2>Iconic Dining Above Tokyo</h2>
+      
+      <p>The New York Grill, located on the 52nd floor, offers one of Tokyo's most spectacular dining experiences with panoramic city views and a menu featuring premium steaks and fresh seafood. The restaurant's wine cellar contains over 1,600 labels, one of the most extensive collections in Asia. The adjacent New York Bar provides an intimate setting for evening cocktails with live jazz performances and those unforgettable views featured in "Lost in Translation."</p>
+      
+      <p>The Peak Lounge on the 41st floor serves refined afternoon tea and cocktails in an atmosphere of understated elegance. The space features comfortable seating areas with panoramic windows, making it perfect for both business meetings and leisurely conversations while watching Tokyo's urban rhythm unfold below.</p>
+      
+      <h2>Elevated Wellness & Recreation</h2>
+      
+      <p>Club on the Park spa provides a tranquil retreat with treatments that blend international techniques with traditional Japanese wellness practices. The facility includes private treatment rooms with city views, relaxation areas, and a comprehensive menu of massages, facials, and body treatments using premium products.</p>
+      
+      <p>The swimming pool on the 47th floor offers a unique aquatic experience with floor-to-ceiling windows providing panoramic Tokyo views. The adjacent fitness center features state-of-the-art equipment and personal training services, all while suspended high above one of the world's most vibrant cities.</p>
+      
+      <h2>Prime Shinjuku Location & Access</h2>
+      
+      <ul>
+        <li><strong>Shinjuku Station:</strong> 10-minute walk to one of the world's busiest transportation hubs</li>
+        <li><strong>Tokyo Metropolitan Government Building:</strong> Adjacent to the hotel for official business</li>
+        <li><strong>Shibuya District:</strong> 15-minute train ride to iconic crossing and shopping</li>
+        <li><strong>Traditional Tokyo:</strong> Easy access to Meiji Shrine, Imperial Palace, and historic districts</li>
+        <li><strong>Narita Airport:</strong> 60-90 minutes via Narita Express or hotel car service</li>
+        <li><strong>Haneda Airport:</strong> 45-60 minutes via monorail and train connections</li>
+      </ul>
+      
+      <!-- Final Booking Section -->
+      <div class="booking-section">
+        <h3>Experience Tokyo's Most Iconic Luxury Hotel</h3>
+        <p>Book your stay at Park Hyatt Tokyo for an unforgettable journey above one of the world's greatest cities.</p>
+        <a href="#" class="booking-button">
+          <i class="fas fa-calendar-alt"></i> Reserve Your Tokyo Experience
+        </a>
+        <a href="#" class="booking-button">
+          <i class="fas fa-phone"></i> Contact Concierge Tokyo
+        </a>
+      </div>
+      
+      <a href="../stays.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Stays Guide</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Review category switching
+    document.querySelectorAll('.review-category').forEach(button => {
+      button.addEventListener('click', function() {
+        // Remove active class from all buttons
+        document.querySelectorAll('.review-category').forEach(btn => btn.classList.remove('active'));
+        // Add active class to clicked button
+        this.classList.add('active');
+        
+        // Hide all review content
+        document.querySelectorAll('.review-content').forEach(content => content.classList.remove('active'));
+        // Show selected review content
+        const category = this.getAttribute('data-category');
+        document.getElementById(category + '-reviews').classList.add('active');
+      });
+    });
+
+    // Carousel functionality
+    function setupCarousel(carouselType) {
+      const slides = document.getElementById(carouselType + '-slides');
+      const dots = document.querySelectorAll(`#${carouselType}-reviews .carousel-dot`);
+      const prevBtn = document.querySelector(`#${carouselType}-reviews .carousel-prev`);
+      const nextBtn = document.querySelector(`#${carouselType}-reviews .carousel-next`);
+      
+      let currentSlide = 0;
+      
+      function showSlide(index) {
+        slides.style.transform = `translateX(-${index * 100}%)`;
+        dots.forEach(dot => dot.classList.remove('active'));
+        dots[index].classList.add('active');
+        currentSlide = index;
+      }
+      
+      dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => showSlide(index));
+      });
+      
+      prevBtn.addEventListener('click', () => {
+        const newIndex = currentSlide > 0 ? currentSlide - 1 : dots.length - 1;
+        showSlide(newIndex);
+      });
+      
+      nextBtn.addEventListener('click', () => {
+        const newIndex = currentSlide < dots.length - 1 ? currentSlide + 1 : 0;
+        showSlide(newIndex);
+      });
+    }
+
+    // Initialize carousels
+    setupCarousel('local');
+    setupCarousel('tourist');
+  </script>
+</body>
+</html> 

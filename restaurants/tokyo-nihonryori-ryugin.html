@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nihonryori RyuGin - Eastworld Restaurant Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Additional styles specific to restaurant reviews */
+    .restaurant-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+      .restaurant-info {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .restaurant-details {
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .detail-row {
+      display: flex;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+    }
+    
+    .detail-label {
+      font-weight: 600;
+      min-width: 120px;
+      color: #333;
+    }
+    
+    .detail-value {
+      flex: 1;
+      color: #555;
+    }
+    
+    .rating {
+      margin-bottom: 1rem;
+    }
+    
+    .star {
+      color: #ddd;
+      font-size: 1.5rem;
+    }
+    
+    .star.filled {
+      color: #FFD700;
+    }
+    
+    .half-star {
+      position: relative;
+    }
+    
+    .half-star .fas.fa-star-half {
+      color: #FFD700;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    
+    .score-label {
+      margin-left: 0.5rem;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .map-container {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .map-container iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+    }
+    
+    .photos-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .photo-item {
+      border-radius: 8px;
+      overflow: hidden;
+      height: 150px;
+    }
+    
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .photo-item img:hover {
+      transform: scale(1.05);
+    }
+    
+    .review-section {
+      margin: 2rem 0;
+      padding: 2rem;
+      background: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    /* Booking button styles */
+    .booking-button {
+      display: block;
+      background-color: #ff4d4d;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      margin: 1.5rem 0;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    
+    .booking-button:hover {
+      background-color: #e63939;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    /* Review carousel styles */
+    .review-carousel {
+      position: relative;
+      margin: 2rem 0;
+      overflow: hidden;
+      padding: 1rem 0;
+    }
+    
+    .review-slides {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    
+    .review-slide {
+      min-width: 100%;
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .reviewer-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #f0f0f0;
+      padding-bottom: 0.8rem;
+    }
+    
+    .reviewer-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 0.8rem;
+    }
+    
+    .reviewer-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding-top: 0.2rem;
+    }
+    
+    .review-date {
+      color: #888;
+      font-size: 0.75rem;
+      margin-top: 0.1rem;
+    }
+    
+    .review-rating {
+      display: flex;
+      margin-top: 0.2rem;
+    }
+    
+    .review-rating i {
+      font-size: 0.8rem;
+      margin-right: 2px;
+    }
+    
+    .carousel-nav {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+    
+    .carousel-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ddd;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .carousel-dot.active {
+      background: #ff4d4d;
+    }
+    
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.7);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+    
+    .carousel-prev {
+      left: 10px;
+    }
+    
+    .carousel-next {
+      right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../food.html" class="nav-item active">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="content-container">
+    <div class="content-header">
+      <span class="content-category">FINE DINING</span>
+      <h1 class="content-title">Nihonryori RyuGin - Exquisite Kaiseki with a Modern Edge</h1>
+      
+      <!-- Rating Section -->
+      <div class="rating">
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="score-label">5.0/5.0</span>
+      </div>
+    </div>
+    
+    <div class="hero-container">
+      <img class="content-hero" src="https://cdn.vox-cdn.com/thumbor/NKgb1puhxNzVMuXXM_cFgJHJ5F0=/0x0:5616x3744/1200x900/filters:focal(2359x1423:3257x2321)/cdn.vox-cdn.com/uploads/chorus_image/image/67184916/20191203_Eater_Nihonryoi_RyuGin_092.0.jpg" alt="Nihonryori RyuGin Restaurant" 
+      onerror="this.onerror=null; 
+      this.parentElement.innerHTML = '<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#333;color:white;font-size:1.5rem;text-align:center;padding:2rem;\'>Nihonryori RyuGin</div>';">
+    </div>
+    
+    <!-- Booking Button -->
+    <a href="#booking-form" class="booking-button">
+      <i class="fas fa-calendar-alt"></i> RESERVE A TABLE
+    </a>
+    
+    <!-- Restaurant Information Section -->
+    <div class="restaurant-info">
+      <div class="restaurant-details">
+        <h2>Restaurant Details</h2>
+        
+        <div class="detail-row">
+          <div class="detail-label">Address:</div>
+          <div class="detail-value">7-17-24 Roppongi, Minato City, Tokyo 106-0032, Japan</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Hours:</div>
+          <div class="detail-value">Dinner: 6:00 PM - 10:00 PM<br>Closed on Sundays and public holidays</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Phone:</div>
+          <div class="detail-value">+81 3-3423-8006</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Price Range:</div>
+          <div class="detail-value">¥40,000-60,000 ($350-525) per person for omakase menu</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Cuisine:</div>
+          <div class="detail-value">Modern Kaiseki, Innovative Japanese</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Reservations:</div>
+          <div class="detail-value">Essential, book 2-3 months in advance</div>
+        </div>
+        
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">How to Get There</h3>
+        <p>From Roppongi Station:</p>
+        <ul style="margin-bottom: 1rem; padding-left: 1.5rem;">
+          <li>Take Exit 3 from Roppongi Station</li>
+          <li>Walk approximately 8 minutes along Roppongi-dori Avenue</li>
+          <li>Turn right at the Roppongi Tower Records intersection</li>
+          <li>RyuGin is located in a modern building on your left</li>
+        </ul>
+      </div>
+      
+      <div class="map-container">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3241.5066795264205!2d139.73140687608844!3d35.66801532636697!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60188b95e589c3bb%3A0x8a2435849983ec3c!2sNihonryori%20RyuGin!5e0!3m2!1sen!2sjp!4v1693319390086!5m2!1sen!2sjp" 
+        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+    
+    <div class="content-text">
+      <h2>Japanese Tradition with Contemporary Vision</h2>
+      
+      <p>Nihonryori RyuGin, led by celebrated chef Seiji Yamamoto, stands as one of Japan's most acclaimed fine dining establishments. With three Michelin stars and consistent rankings among the World's 50 Best Restaurants, RyuGin showcases the pinnacle of Japanese culinary artistry while incorporating innovative techniques and presentations.</p>
+      
+      <p>The restaurant's name, which translates to "singing dragon," reflects Chef Yamamoto's philosophy of bringing dormant ingredients to life through his cooking—much like a dragon awakening. This poetic approach underpins every aspect of the dining experience at RyuGin, where seasonal Japanese ingredients are transformed through both ancient and cutting-edge culinary methods.</p>
+      
+      <div class="photos-container">
+        <div class="photo-item">
+          <img src="https://www.theworlds50best.com/filestore/jpg/50best_ryugin_interior2019.jpg" alt="RyuGin interior">
+        </div>
+        <div class="photo-item">
+          <img src="https://www.theworlds50best.com/filestore/jpg/RyuGin-dish2.jpg" alt="Artistic dish at RyuGin">
+        </div>
+        <div class="photo-item">
+          <img src="https://cdn.vox-cdn.com/thumbor/QVHwnDOXVNlwBsMk6sAMEIbhGf0=/0x0:5616x3744/1520x1013/filters:focal(2359x1423:3257x2321):format(webp)/cdn.vox-cdn.com/uploads/chorus_image/image/67184902/20191203_Eater_Nihonryoi_RyuGin_018.0.jpg" alt="Seasonal presentation">
+        </div>
+        <div class="photo-item">
+          <img src="https://asia.nikkei.com/var/site_cache/storage/images/node_43/node_51/2020/202007/20200727-nihonryori-ryugin-seiji-yamamoto/9171063-1-eng-GB/20200727-Nihonryori-RyuGin-Seiji-Yamamoto_image_728.jpg" alt="Chef Seiji Yamamoto">
+        </div>
+      </div>
+      
+      <h2>The Ultimate Kaiseki Experience</h2>
+      
+      <p>RyuGin offers a single meticulously crafted omakase (chef's choice) menu that changes daily according to the finest seasonal ingredients. Based on kaiseki principles—the traditional multi-course Japanese dining format—the menu typically includes 12-15 courses that progress through a thoughtfully orchestrated sequence of tastes, textures, and temperatures.</p>
+      
+      <p>What distinguishes RyuGin from other high-end kaiseki establishments is Chef Yamamoto's integration of modern culinary techniques with profound respect for traditions. He was among the first Japanese chefs to incorporate elements of molecular gastronomy into traditional Japanese cuisine, creating dishes that surprise and delight while remaining deeply rooted in Japanese culinary philosophy.</p>
+      
+      <div class="content-quote">
+        "I want diners to taste the natural flavors of Japan's seasons—not just through ingredients, but through temperature, texture, and presentation. When you eat at RyuGin, you should experience Japan's nature and culture through all your senses." - Chef Seiji Yamamoto
+      </div>
+      
+      <!-- User Reviews Carousel -->
+      <h2>Customer Reviews</h2>
+      
+      <div class="review-carousel">
+        <div class="carousel-arrow carousel-prev">
+          <i class="fas fa-chevron-left"></i>
+        </div>
+        
+        <div class="review-slides">
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Richard H.</div>
+                <div class="review-date">Visited April 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"Having dined at many of the world's top restaurants, I can confidently say that RyuGin offers one of the most profound culinary experiences available. Every course tells a story about Japanese seasonality, tradition, and Chef Yamamoto's incredible vision. The signature 'Candy Negative & Positive' dessert—where a frozen candy shell containing seasonal fruit shatters to reveal a warm counterpart—was a technical masterpiece that perfectly encapsulated RyuGin's approach. The service strikes that rare balance of being impeccable without feeling stuffy. Yes, it's expensive, but for anyone serious about Japanese cuisine, this is an essential pilgrimage."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Miyuki T.</div>
+                <div class="review-date">Visited February 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"As a Japanese food critic, I've watched Chef Yamamoto's career with great interest. What makes RyuGin special isn't just the technical skill—though that's extraordinary—but the profound understanding of kaiseki principles combined with a willingness to evolve. The winter menu featured a clear soup with a single piece of turnip that had been aged for precisely 72 days to develop its sweetness, served with a solitary yuzu-scented shrimp dumpling. The seemingly simple dish represented months of research and perfectionism. While more conservative diners might prefer purely traditional kaiseki, RyuGin represents the vibrant evolution of our cuisine in the hands of a master."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Sophie L.</div>
+                <div class="review-date">Visited March 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"RyuGin was the highlight of our Japan trip, living up to its reputation as one of the world's great restaurants. I particularly appreciated how the staff took time to explain each dish's significance and the techniques involved—sometimes showing us before and after preparations to illustrate transformations. The charcoal-grilled Ise lobster was the most perfectly cooked crustacean I've ever tasted, with a distinctive smokiness that complemented rather than overwhelmed its natural sweetness. The sake pairing was equally impeccable, with selections I've never encountered outside Japan. This is a restaurant that merits planning your Tokyo visit around securing a reservation."</p>
+          </div>
+        </div>
+        
+        <div class="carousel-arrow carousel-next">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+        
+        <div class="carousel-nav">
+          <div class="carousel-dot active"></div>
+          <div class="carousel-dot"></div>
+          <div class="carousel-dot"></div>
+        </div>
+      </div>
+      
+      <h2>Signature Experiences</h2>
+      
+      <p>While RyuGin's menu changes constantly to reflect the season's finest offerings, several conceptual signatures recur in different forms throughout the year:</p>
+      
+      <ul>
+        <li><strong>The RyuGin Specialty Soup</strong> - A clear, perfectly clarified dashi that captures the essence of the season's most prized ingredient, whether it be matsutake mushrooms in autumn or tender bamboo shoots in spring</li>
+        <li><strong>Grilled Seasonal Fish</strong> - Often featuring rare specimens from specific Japanese coastal regions, perfectly grilled over binchō-tan charcoal to enhance their natural flavors</li>
+        <li><strong>A-5 Wagyu Beef</strong> - Served in various preparations depending on the season, demonstrating Chef Yamamoto's mastery of both traditional and contemporary techniques</li>
+        <li><strong>Candy Negative & Positive</strong> - RyuGin's iconic dessert featuring a contrasting experience of temperature and texture using seasonal fruits</li>
+        <li><strong>Seasonal Rice</strong> - A deceptively simple dish that arrives near the end of the meal, showcasing Japan's staple grain at its finest, often accompanied by pickles prepared in-house</li>
+      </ul>
+      
+      <div class="review-section">
+        <h2>Eastworld's Review</h2>
+        
+        <h3>Food Quality: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>RyuGin represents the pinnacle of Japanese cuisine, with each ingredient sourced from the finest producers across Japan and prepared with unparalleled precision. The technical mastery is matched by a profound understanding of flavor and balance.</p>
+        
+        <h3>Innovation: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Chef Yamamoto's ability to honor tradition while pushing boundaries places RyuGin at the forefront of modern Japanese cuisine. His innovations never feel gimmicky—each serves the purpose of enhancing the diner's experience of Japanese seasonality and flavors.</p>
+        
+        <h3>Atmosphere: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>The elegant, understated dining room features natural materials and soft lighting that focus attention where it belongs—on the food. With only a handful of tables, the atmosphere is intimate and hushed, creating a sense of ceremony around each course.</p>
+        
+        <h3>Service: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>The service team demonstrates perfect timing, deep knowledge, and genuine warmth. Staff members anticipate needs before they arise and provide detailed explanations in excellent English when requested, creating a seamless, educational experience.</p>
+        
+        <h3>Value: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>With dinner starting at ¥40,000 (approximately $350) per person before drinks, RyuGin represents a significant investment. However, considering the extraordinary ingredients, technical complexity, and overall experience, it delivers fair value for a world-class dining destination.</p>
+        
+        <h3>Overall: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Nihonryori RyuGin offers one of the most refined and thoughtful dining experiences available in Japan. For travelers seeking to understand the pinnacle of Japanese culinary arts, few restaurants can match its combination of tradition, innovation, and execution.</p>
+      </div>
+      
+      <h2>Tips for Visitors</h2>
+      
+      <ul>
+        <li>Reservations open exactly two months in advance and fill quickly—plan accordingly</li>
+        <li>Request a counter seat if you'd like to observe the kitchen's precise operations</li>
+        <li>Allocate at least 3 hours for the full dining experience</li>
+        <li>Consider the beverage pairing, which includes rare sakes and wines selected to complement each course</li>
+        <li>Dress code is smart formal—jackets for men are recommended</li>
+        <li>Photography is permitted but should be discreet and without flash</li>
+        <li>Communicate any dietary restrictions when booking—the kitchen can accommodate most needs with advance notice</li>
+      </ul>
+      
+      <!-- Booking Form -->
+      <div id="booking-form" class="review-section">
+        <h2>Reservation Information</h2>
+        <p>Reservations for Nihonryori RyuGin can be made through the following methods:</p>
+        
+        <h3>Booking Contact:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Official website: <a href="https://www.nihonryori-ryugin.com/en/" target="_blank" style="color: #ff4d4d;">www.nihonryori-ryugin.com</a></li>
+          <li>Phone: +81 3-3423-8006 (Japanese language preferred)</li>
+          <li>Email: info@nihonryori-ryugin.com</li>
+        </ul>
+        
+        <p>For international guests, we recommend:</p>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Asking your hotel concierge to secure your reservation</li>
+          <li>Using a reservation service like <a href="https://www.tableall.com/" target="_blank" style="color: #ff4d4d;">TableAll</a> (additional fee applies)</li>
+          <li>Contacting the Eastworld concierge service at <a href="mailto:concierge@eastworld.com" style="color: #ff4d4d;">concierge@eastworld.com</a></li>
+        </ul>
+        
+        <p>A credit card is required to secure your reservation. Cancellations must be made at least 3 days in advance to avoid a cancellation fee equal to the full menu price.</p>
+      </div>
+      
+      <a href="../food.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Food Guide</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Review carousel functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const slides = document.querySelector('.review-slides');
+      const dots = document.querySelectorAll('.carousel-dot');
+      const prevBtn = document.querySelector('.carousel-prev');
+      const nextBtn = document.querySelector('.carousel-next');
+      let currentSlide = 0;
+      const totalSlides = document.querySelectorAll('.review-slide').length;
+      
+      // Function to update slide position
+      function showSlide(index) {
+        if (index < 0) index = totalSlides - 1;
+        if (index >= totalSlides) index = 0;
+        
+        currentSlide = index;
+        slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+        
+        // Update active dot
+        dots.forEach((dot, i) => {
+          dot.classList.toggle('active', i === currentSlide);
+        });
+      }
+      
+      // Set up event listeners for dots
+      dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => showSlide(i));
+      });
+      
+      // Set up event listeners for arrows
+      prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
+      nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
+      
+      // Auto-rotate slides every 5 seconds
+      setInterval(() => {
+        showSlide(currentSlide + 1);
+      }, 5000);
+    });
+  </script>
+  
+  <script src="../script.js"></script>
+</body>
+</html> 

@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Genki Sushi - Eastworld Restaurant Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Additional styles specific to restaurant reviews */
+    .restaurant-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+      .restaurant-info {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .restaurant-details {
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .detail-row {
+      display: flex;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+    }
+    
+    .detail-label {
+      font-weight: 600;
+      min-width: 120px;
+      color: #333;
+    }
+    
+    .detail-value {
+      flex: 1;
+      color: #555;
+    }
+    
+    .rating {
+      margin-bottom: 1rem;
+    }
+    
+    .star {
+      color: #ddd;
+      font-size: 1.5rem;
+    }
+    
+    .star.filled {
+      color: #FFD700;
+    }
+    
+    .half-star {
+      position: relative;
+    }
+    
+    .half-star .fas.fa-star-half {
+      color: #FFD700;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    
+    .score-label {
+      margin-left: 0.5rem;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .map-container {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .map-container iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+    }
+    
+    .photos-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .photo-item {
+      border-radius: 8px;
+      overflow: hidden;
+      height: 150px;
+    }
+    
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .photo-item img:hover {
+      transform: scale(1.05);
+    }
+    
+    .review-section {
+      margin: 2rem 0;
+      padding: 2rem;
+      background: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    /* Booking button styles */
+    .booking-button {
+      display: block;
+      background-color: #ff4d4d;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      margin: 1.5rem 0;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    
+    .booking-button:hover {
+      background-color: #e63939;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    /* Review carousel styles */
+    .review-carousel {
+      position: relative;
+      margin: 2rem 0;
+      overflow: hidden;
+      padding: 1rem 0;
+    }
+    
+    .review-slides {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    
+    .review-slide {
+      min-width: 100%;
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .reviewer-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #f0f0f0;
+      padding-bottom: 0.8rem;
+    }
+    
+    .reviewer-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 0.8rem;
+    }
+    
+    .reviewer-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding-top: 0.2rem;
+    }
+    
+    .review-date {
+      color: #888;
+      font-size: 0.75rem;
+      margin-top: 0.1rem;
+    }
+    
+    .review-rating {
+      display: flex;
+      margin-top: 0.2rem;
+    }
+    
+    .review-rating i {
+      font-size: 0.8rem;
+      margin-right: 2px;
+    }
+    
+    .carousel-nav {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+    
+    .carousel-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ddd;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .carousel-dot.active {
+      background: #ff4d4d;
+    }
+    
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.7);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+    
+    .carousel-prev {
+      left: 10px;
+    }
+    
+    .carousel-next {
+      right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../food.html" class="nav-item active">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="content-container">
+    <div class="content-header">
+      <span class="content-category">SUSHI</span>
+      <h1 class="content-title">Genki Sushi - Tech-Savvy Conveyor Belt Sushi Experience</h1>
+      
+      <!-- Rating Section -->
+      <div class="rating">
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star">
+          <i class="far fa-star"></i>
+        </span>
+        <span class="score-label">4.0/5.0</span>
+      </div>
+    </div>
+    
+    <div class="hero-container">
+      <img class="content-hero" src="https://www.sushideliverylondon.co.uk/wp-content/uploads/2021/02/genki-sushi-banner.jpeg" alt="Genki Sushi Restaurant" 
+      onerror="this.onerror=null; 
+      this.parentElement.innerHTML = '<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#333;color:white;font-size:1.5rem;text-align:center;padding:2rem;\'>Genki Sushi</div>';">
+    </div>
+    
+    <!-- Booking Button -->
+    <a href="#booking-form" class="booking-button">
+      <i class="fas fa-calendar-alt"></i> NO RESERVATIONS NEEDED
+    </a>
+    
+    <!-- Restaurant Information Section -->
+    <div class="restaurant-info">
+      <div class="restaurant-details">
+        <h2>Restaurant Details</h2>
+        
+        <div class="detail-row">
+          <div class="detail-label">Address:</div>
+          <div class="detail-value">1-14-9 Dogenzaka, Shibuya City, Tokyo 150-0043, Japan</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Hours:</div>
+          <div class="detail-value">11:00 AM - 11:00 PM (Daily)</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Phone:</div>
+          <div class="detail-value">+81 3-3461-1281</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Price Range:</div>
+          <div class="detail-value">$10-15 per person</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Cuisine:</div>
+          <div class="detail-value">Sushi, Japanese</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Reservations:</div>
+          <div class="detail-value">Not accepted (walk-in only)</div>
+        </div>
+        
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">How to Get There</h3>
+        <p>From Shibuya Station:</p>
+        <ul style="margin-bottom: 1rem; padding-left: 1.5rem;">
+          <li>Exit from the Hachiko Exit</li>
+          <li>Walk towards the Shibuya Scramble Crossing</li>
+          <li>Turn right at the first street after the crossing (Dogenzaka)</li>
+          <li>Genki Sushi is about a 5-minute walk up the hill on your right</li>
+        </ul>
+      </div>
+      
+      <div class="map-container">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3241.4779909241726!2d139.6971417!3d35.6590258!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60188ca84bd673fb%3A0xa4ec7af6bef72b2f!2sGenki%20Sushi%20Shibuya!5e0!3m2!1sen!2sus!4v1693309090086!5m2!1sen!2sus" 
+        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+    
+    <div class="content-text">
+      <h2>Innovative Sushi Experience with Tablet Ordering</h2>
+      
+      <p>Genki Sushi represents the tech-forward evolution of conveyor belt sushi restaurants in Japan. Rather than the traditional setup where sushi circulates continuously on a belt, Genki utilizes a tablet ordering system and a high-speed "Shinkansen" (bullet train) delivery system that brings your selections directly to your seat.</p>
+      
+      <p>The restaurant's bright, modern interior with individual booths creates an efficient dining environment that's perfect for solo diners, couples, or small groups who want quality sushi at reasonable prices without the formality of traditional sushi restaurants.</p>
+      
+      <div class="photos-container">
+        <div class="photo-item">
+          <img src="https://www.japan-guide.com/g18/2007_04.jpg" alt="Genki Sushi interior">
+        </div>
+        <div class="photo-item">
+          <img src="https://jpninfo.com/wp-content/uploads/2018/09/genki-sushi-1.jpg" alt="Tablet ordering system">
+        </div>
+        <div class="photo-item">
+          <img src="https://bde.travel/wp-content/uploads/2022/09/Genki-Sushi-Delivery-Train.jpg" alt="Sushi delivery train">
+        </div>
+        <div class="photo-item">
+          <img src="https://media.cntraveler.com/photos/59affcf7012f097cea9bf03c/master/w_1920%2Cc_limit/Tuna-Maki-GenkiSushi-2017.jpg" alt="Sushi plates">
+        </div>
+      </div>
+      
+      <h2>Tech-Savvy Dining Experience</h2>
+      
+      <p>What sets Genki Sushi apart is its innovative ordering system. Each seat is equipped with a touchscreen tablet featuring a menu with photos of every item. Simply tap on what you want, confirm your order, and within minutes, your selections arrive on a miniature shinkansen (bullet train) that runs along tracks directly to your table.</p>
+      
+      <p>The system not only adds an element of fun to the dining experience but also ensures that every piece of sushi is made fresh to order rather than circulating on a conveyor belt for an indeterminate amount of time.</p>
+      
+      <div class="content-quote">
+        "We wanted to combine traditional sushi with modern technology to create a new kind of dining experience—one that's efficient but doesn't sacrifice quality or freshness." - Genki Sushi Management
+      </div>
+      
+      <!-- User Reviews Carousel -->
+      <h2>Customer Reviews</h2>
+      
+      <div class="review-carousel">
+        <div class="carousel-arrow carousel-prev">
+          <i class="fas fa-chevron-left"></i>
+        </div>
+        
+        <div class="review-slides">
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Thomas R.</div>
+                <div class="review-date">Visited May 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="far fa-star" style="color: #ddd;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"Such a fun dining experience! The tablet ordering was easy to use even with minimal Japanese knowledge, and watching your sushi arrive on the little train is entertaining. The quality is quite good for the price point, and the variety is impressive. We tried everything from classic nigiri to more creative rolls and were satisfied with almost everything. Much better than most conveyor belt sushi I've tried elsewhere."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Julia M.</div>
+                <div class="review-date">Visited February 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="far fa-star" style="color: #ddd;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"Genki Sushi is my go-to place in Shibuya when I want quick, decent sushi without breaking the bank. The tablet ordering system means there's no language barrier, and the food comes out impressively fast. While it's not the highest quality sushi in Tokyo (you'd need to spend much more for that), it's fresh and tasty. My favorites are the salmon nigiri and the spicy tuna rolls. There can be a wait during peak hours, but the line moves quickly."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Hiroki T.</div>
+                <div class="review-date">Visited April 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star-half-alt" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"As a Tokyo resident, I find Genki offers reliable quality for casual sushi dining. The Shibuya location is particularly convenient, and the automated system keeps prices reasonable. While purists might prefer traditional sushi-ya, Genki represents modern Tokyo food culture perfectly. The touch panel ordering is efficient, and the bullet train delivery system is uniquely Japanese - combining our love of technology with food service. Good place to bring visitors who want an 'only in Japan' experience without the formality of high-end sushi."</p>
+          </div>
+        </div>
+        
+        <div class="carousel-arrow carousel-next">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+        
+        <div class="carousel-nav">
+          <div class="carousel-dot active"></div>
+          <div class="carousel-dot"></div>
+          <div class="carousel-dot"></div>
+        </div>
+      </div>
+      
+      <h2>Menu Highlights</h2>
+      
+      <p>Genki Sushi offers an extensive menu with over 100 items, ranging from traditional nigiri to creative rolls, side dishes, and desserts. Most plates are priced between 100-500 yen, making it easy to sample a variety of options without overspending.</p>
+      
+      <p>Some standout items include:</p>
+      
+      <ul>
+        <li><strong>Salmon Nigiri</strong> - Consistently fresh and generously cut</li>
+        <li><strong>Spicy Tuna Roll</strong> - A perfect balance of heat and flavor</li>
+        <li><strong>Engawa</strong> - Flounder fin, a specialty not always found at budget sushi restaurants</li>
+        <li><strong>Wagyu Beef Nigiri</strong> - Briefly seared and seasoned with a touch of wasabi</li>
+        <li><strong>Tamagoyaki</strong> - Sweet Japanese omelet, a good option for those new to sushi</li>
+      </ul>
+      
+      <div class="review-section">
+        <h2>Eastworld's Review</h2>
+        
+        <h3>Food Quality: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>While not comparable to high-end sushi establishments, Genki offers impressively fresh fish and well-prepared rice for its price point. The sushi is made to order, ensuring optimal freshness.</p>
+        
+        <h3>Value: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Excellent value for money in Tokyo's often expensive dining scene. Most visitors can enjoy a satisfying meal for 1000-1500 yen ($10-15).</p>
+        
+        <h3>Atmosphere: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>The modern, tech-forward environment is fun and energetic. The individual booth setup provides some privacy while maintaining the communal feel of a sushi restaurant.</p>
+        
+        <h3>Service: <span style="color: #FFD700;">★★★</span></h3>
+        <p>The automated ordering system minimizes human interaction, but staff are available and generally helpful when needed. Water is self-serve, and you calculate your bill by stacking your plates.</p>
+        
+        <h3>Overall: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>Genki Sushi offers a perfect blend of quality, affordability, and uniquely Japanese innovation. It's an ideal spot for travelers seeking good sushi without the formality or high prices of traditional establishments.</p>
+      </div>
+      
+      <h2>Tips for Visitors</h2>
+      
+      <ul>
+        <li>Arrive outside peak hours (12-2 PM, 6-8 PM) to avoid the longest wait times</li>
+        <li>Plates are color-coded by price; green plates are the most affordable options</li>
+        <li>The touch screen has an English option—look for the language button in the corner</li>
+        <li>Green tea is free and self-serve at each table</li>
+        <li>Payment is calculated by counting your stacked plates at the end of your meal</li>
+        <li>If you're dining with children, request a table rather than counter seating for more space</li>
+      </ul>
+      
+      <!-- Booking Form -->
+      <div id="booking-form" class="review-section">
+        <h2>Visit Information</h2>
+        <p>Genki Sushi does not accept reservations. For the best experience, we recommend:</p>
+        
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Visiting during off-peak hours: 2-5 PM or after 9 PM</li>
+          <li>Being prepared for a short wait during busy periods (typically 15-30 minutes)</li>
+          <li>Having smaller groups (2-4 people) for faster seating</li>
+        </ul>
+        
+        <p>For large groups or special arrangements, you can contact the restaurant directly at +81 3-3461-1281.</p>
+      </div>
+      
+      <a href="../food.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Food Guide</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Review carousel functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const slides = document.querySelector('.review-slides');
+      const dots = document.querySelectorAll('.carousel-dot');
+      const prevBtn = document.querySelector('.carousel-prev');
+      const nextBtn = document.querySelector('.carousel-next');
+      let currentSlide = 0;
+      const totalSlides = document.querySelectorAll('.review-slide').length;
+      
+      // Function to update slide position
+      function showSlide(index) {
+        if (index < 0) index = totalSlides - 1;
+        if (index >= totalSlides) index = 0;
+        
+        currentSlide = index;
+        slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+        
+        // Update active dot
+        dots.forEach((dot, i) => {
+          dot.classList.toggle('active', i === currentSlide);
+        });
+      }
+      
+      // Set up event listeners for dots
+      dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => showSlide(i));
+      });
+      
+      // Set up event listeners for arrows
+      prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
+      nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
+      
+      // Auto-rotate slides every 5 seconds
+      setInterval(() => {
+        showSlide(currentSlide + 1);
+      }, 5000);
+    });
+  </script>
+  
+  <script src="../script.js"></script>
+</body>
+</html> 

@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EASTWORLD - Beijing City Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css' rel='stylesheet' />
+  <style>
+    /* City Guide specific styles */
+    .guide-hero {
+      height: 500px;
+      background-image: url('https://images.unsplash.com/photo-1584490867455-fceee4bdb6e2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 3rem;
+    }
+    
+    .guide-hero-content {
+      text-align: center;
+      color: white;
+      position: relative;
+      z-index: 2;
+      padding: 2rem;
+      max-width: 800px;
+      background-color: rgba(0, 0, 0, 0.6);
+    }
+    
+    .guide-hero::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(0deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.2) 100%);
+    }
+    
+    .guide-hero h1 {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      letter-spacing: 3px;
+    }
+    
+    .guide-hero p {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    
+    .guide-intro {
+      max-width: 800px;
+      margin: 0 auto 3rem;
+      padding: 0 1rem;
+      line-height: 1.8;
+    }
+    
+    .guide-section {
+      margin-bottom: 4rem;
+    }
+    
+    .guide-section-title {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: 2.2rem;
+      letter-spacing: 1px;
+    }
+    
+    .guide-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+    
+    .guide-card {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+    
+    .guide-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .guide-card-img {
+      height: 200px;
+      overflow: hidden;
+    }
+    
+    .guide-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    
+    .guide-card:hover .guide-card-img img {
+      transform: scale(1.05);
+    }
+    
+    .guide-card-content {
+      padding: 1.5rem;
+    }
+    
+    .guide-card h3 {
+      margin-bottom: 0.5rem;
+      font-size: 1.2rem;
+    }
+    
+    .guide-card-meta {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      color: #666;
+    }
+    
+    .guide-card-meta i {
+      margin-right: 0.3rem;
+    }
+    
+    .guide-card-meta span {
+      margin-right: 1rem;
+    }
+    
+    .guide-card p {
+      color: #555;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    
+    .guide-map {
+      width: 100%;
+      height: 500px;
+      border: none;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+    }
+    
+    .guide-tips {
+      background-color: #f8f8f8;
+      padding: 2rem;
+      border-radius: 8px;
+      margin-bottom: 3rem;
+    }
+    
+    .guide-tips h3 {
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+    
+    .guide-tips-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+    
+    .guide-tip-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+    }
+    
+    .guide-tip-item i {
+      margin-right: 0.5rem;
+      color: #000;
+      margin-top: 0.25rem;
+    }
+    
+    .guide-download {
+      text-align: center;
+      margin: 3rem 0;
+      padding: 2rem;
+      background-color: #f0f0f0;
+      border-radius: 8px;
+    }
+    
+    .guide-download h3 {
+      margin-bottom: 1rem;
+      font-size: 1.8rem;
+    }
+    
+    .guide-download-btn {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 1rem 2rem;
+      background-color: #000;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+    
+    .guide-download-btn:hover {
+      background-color: #333;
+    }
+    
+    .guide-map {
+      width: 100%;
+      height: 500px;
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../food.html" class="nav-item">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+  
+  <main class="content-container">
+    <div class="guide-hero">
+      <div class="guide-hero-content">
+        <h1>BEIJING</h1>
+        <p>Explore China's magnificent capital, where ancient imperial grandeur meets modern innovation in a city of extraordinary contrasts.</p>
+      </div>
+    </div>
+    
+    <section class="guide-intro">
+      <p>Beijing, the sprawling capital of China, stands as both a monument to Chinese civilization's ancient glory and a showcase of its rapid modernization. With a history spanning three millennia, the city has served as the seat of power for various dynasties and governments, accumulating layer upon layer of cultural heritage that makes it one of the world's most historically significant cities.</p>
+      
+      <p>Home to seven UNESCO World Heritage Sites including the Forbidden City and Great Wall, Beijing offers visitors an unparalleled journey through Chinese history while simultaneously presenting a vibrant contemporary metropolis of 21 million people. Massive ring roads, gleaming skyscrapers, and Olympic venues stand alongside centuries-old hutong alleyways, imperial palaces, and tranquil temples, creating a fascinating urban tapestry where tradition and innovation coexist in dynamic equilibrium.</p>
+    </section>
+    
+    <section class="guide-section">
+      <h2 class="guide-section-title">TOP ATTRACTIONS</h2>
+      
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://images.unsplash.com/photo-1584704135557-0cb61976dd2b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80" alt="Forbidden City">
+          </div>
+          <div class="guide-card-content">
+            <h3>Forbidden City (Palace Museum)</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Central Beijing</span>
+              <i class="far fa-clock"></i><span>8:30-17:00 (Closed Mondays)</span>
+            </div>
+            <p>The world's largest palace complex and China's most significant building, this Ming Dynasty imperial palace served as the home of 24 emperors. Its 980 buildings and 8,700 rooms showcase unparalleled Chinese architectural design and imperial collections.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://images.unsplash.com/photo-1604450491573-2b0785d95521?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80" alt="Great Wall">
+          </div>
+          <div class="guide-card-content">
+            <h3>Great Wall of China (Mutianyu Section)</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>70km Northeast of Beijing</span>
+              <i class="far fa-clock"></i><span>7:30-17:30</span>
+            </div>
+            <p>This fully-restored section of the Great Wall offers spectacular views with fewer crowds than Badaling. Dating back to the Northern Qi dynasty, the Mutianyu section features densely packed watchtowers and is accessible via cable car or a challenging hike.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://images.unsplash.com/photo-1558981408-db0ecd8a1ee4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80" alt="Temple of Heaven">
+          </div>
+          <div class="guide-card-content">
+            <h3>Temple of Heaven</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Dongcheng District</span>
+              <i class="far fa-clock"></i><span>8:00-17:30</span>
+            </div>
+            <p>A masterpiece of Ming dynasty architecture where emperors performed rituals to ensure good harvests. The complex features the striking Hall of Prayer for Good Harvests, Imperial Vault of Heaven, and Circular Mound Altar, set in a beautiful 267-hectare park.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://images.unsplash.com/photo-1565790442661-0a2dba198d5c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80" alt="Summer Palace">
+          </div>
+          <div class="guide-card-content">
+            <h3>Summer Palace</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Haidian District</span>
+              <i class="far fa-clock"></i><span>6:30-18:00</span>
+            </div>
+            <p>A vast ensemble of lakes, gardens, and palaces that served as the imperial summer retreat. Dominated by Longevity Hill and Kunming Lake, this UNESCO site showcases Chinese landscape garden design with temples, pavilions, bridges, and the famous marble boat.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://images.unsplash.com/photo-1566736594408-0a514843d176?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80" alt="Hutongs">
+          </div>
+          <div class="guide-card-content">
+            <h3>Nanluoguxiang Hutongs</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Dongcheng District</span>
+              <i class="far fa-clock"></i><span>Open 24 hours</span>
+            </div>
+            <p>Explore Beijing's traditional residential lanes dating back to the Yuan Dynasty. This well-preserved hutong area offers a glimpse into old Beijing life with its courtyard homes (siheyuan), now interspersed with boutique shops, cafes, and small museums.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://images.unsplash.com/photo-1577811037345-55fcfd92df21?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80" alt="798 Art District">
+          </div>
+          <div class="guide-card-content">
+            <h3>798 Art District</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Chaoyang District</span>
+              <i class="far fa-clock"></i><span>10:00-19:00</span>
+            </div>
+            <p>A thriving arts quarter housed in a complex of decommissioned military factory buildings. This creative hub features contemporary art galleries, studios, design firms, restaurants, and cafes in spaces that retain their Bauhaus-inspired industrial architecture.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="guide-section">
+      <h2 class="guide-section-title">WHERE TO EAT</h2>
+      
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://cn.chineseembassy.org/chn/kjww/kjgx/W020191231515338942528.jpg" alt="Quanjude">
+          </div>
+          <div class="guide-card-content">
+            <h3>Quanjude Roast Duck</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Multiple locations</span>
+              <i class="fas fa-yen-sign"></i><span>¥¥¥</span>
+            </div>
+            <p>Founded in 1864, this iconic restaurant is synonymous with Beijing's most famous dish: Peking duck. The ducks are roasted in traditional brick ovens over fruitwood to achieve the signature crispy skin and tender meat, served with thin pancakes and condiments.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://static.independent.co.uk/2023/02/05/13/beijing%20street%20food%201.jpg" alt="Wangfujing Snack Street">
+          </div>
+          <div class="guide-card-content">
+            <h3>Wangfujing Snack Street</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Dongcheng District</span>
+              <i class="fas fa-yen-sign"></i><span>¥</span>
+            </div>
+            <p>A bustling food street offering a wide array of traditional Chinese snacks and street food, from tanghulu (candied fruit skewers) and jianbing (savory crepes) to more adventurous options like scorpion skewers and starfish on sticks.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://i0.wp.com/www.eatdrinklaos.com/wp-content/uploads/2016/11/hutong-siji-minfu-restaurant-beijing-9.jpg" alt="Siji Minfu">
+          </div>
+          <div class="guide-card-content">
+            <h3>Siji Minfu</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Dongcheng District</span>
+              <i class="fas fa-yen-sign"></i><span>¥¥</span>
+            </div>
+            <p>A popular local chain famous for its Peking duck at reasonable prices, along with Beijing specialties like zhajiang noodles (noodles with bean sauce) and shredded pork with sweet bean sauce. The restaurant near the Forbidden City's east gate offers views of the palace.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://static.independent.co.uk/s3fs-public/thumbnails/image/2018/11/07/13/2018-alinea-website-interiors-1.jpg" alt="TRB Hutong">
+          </div>
+          <div class="guide-card-content">
+            <h3>TRB Hutong</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Dongcheng District</span>
+              <i class="fas fa-yen-sign"></i><span>¥¥¥¥</span>
+            </div>
+            <p>Set in a beautifully restored 600-year-old temple complex, this fine dining establishment offers contemporary European cuisine with impeccable service. The restaurant features seasonal tasting menus that showcase premium ingredients with artistic presentation.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="guide-section">
+      <h2 class="guide-section-title">WHERE TO STAY</h2>
+      
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/162479239.jpg?k=ab0aedd18bb1252efb4c376c16d949d7aef7bc0462e2beba7e29300df0a41856&o=&hp=1" alt="Aman Summer Palace">
+          </div>
+          <div class="guide-card-content">
+            <h3>Aman Summer Palace</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Haidian District</span>
+              <i class="fas fa-star"></i><span>5-star luxury</span>
+            </div>
+            <p>A peaceful retreat housed in historic buildings that once accommodated guests of the Empress Dowager Cixi. The resort features private access to the Summer Palace through a secret door, traditional courtyard architecture, and exquisite Chinese decor.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/13069447.jpg?k=c055b80adc52333d767668eed9d2d0d017a5393ad790d75a0150ca0e81b82c42&o=&hp=1" alt="The Peninsula Beijing">
+          </div>
+          <div class="guide-card-content">
+            <h3>The Peninsula Beijing</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Wangfujing</span>
+              <i class="fas fa-star"></i><span>5-star luxury</span>
+            </div>
+            <p>Recently renovated luxury hotel combining contemporary style with Chinese artistry, located near major shopping areas and the Forbidden City. All-suite accommodations feature cutting-edge technology, while the hotel's art gallery showcases works by Chinese artists.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/191391110.jpg?k=89c7d1da8aa4568ea35dd85b8a1e93d21ab7dc025ef0c3912002d1e2e7e63969&o=&hp=1" alt="The Orchid Hotel">
+          </div>
+          <div class="guide-card-content">
+            <h3>The Orchid Hotel</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Gulou Hutong</span>
+              <i class="fas fa-star"></i><span>Boutique hotel</span>
+            </div>
+            <p>A charming boutique hotel set in a traditional hutong neighborhood, offering a blend of Chinese architecture and contemporary design. The property features courtyard gardens, rooftop terraces with city views, and personalized service for an authentic Beijing experience.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/285931332.jpg?k=beb140339a2b7c99c98c28532dbc068be51b1a5a0b340959e44e46af29fa5fc2&o=&hp=1" alt="Rosewood Beijing">
+          </div>
+          <div class="guide-card-content">
+            <h3>Rosewood Beijing</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Chaoyang District</span>
+              <i class="fas fa-star"></i><span>5-star luxury</span>
+            </div>
+            <p>Contemporary luxury hotel in the Central Business District featuring spacious rooms with floor-to-ceiling windows, six restaurants and lounges, an indoor pool, and one of the city's largest spas. Art displays throughout showcase works by Chinese artists.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="guide-section">
+      <h2 class="guide-section-title">GETTING AROUND</h2>
+      
+      <div class="guide-map" id="beijingMap"></div>
+      
+      <div class="guide-tips">
+        <h3>Local Transportation Tips</h3>
+        <div class="guide-tips-list">
+          <div class="guide-tip-item">
+            <i class="fas fa-subway"></i>
+            <p>Beijing's extensive subway system is the world's busiest and most efficient way to navigate the city, with 24 lines covering most attractions. Trains run from 5:00 AM to 11:00 PM, with fares starting at ¥3.</p>
+          </div>
+          
+          <div class="guide-tip-item">
+            <i class="fas fa-bus"></i>
+            <p>The city has over 1,000 bus routes, though navigation can be challenging for non-Chinese speakers. Major routes like tour bus line 1 (¥10) stop at popular attractions including the Summer Palace and Temple of Heaven.</p>
+          </div>
+          
+          <div class="guide-tip-item">
+            <i class="fas fa-taxi"></i>
+            <p>Taxis are affordable and plentiful, with a starting fare of ¥13 for the first 3km. Always use official taxis (colored yellow or green with a light on top) and have your destination written in Chinese to show the driver.</p>
+          </div>
+          
+          <div class="guide-tip-item">
+            <i class="fas fa-mobile-alt"></i>
+            <p>Ride-hailing apps like Didi Chuxing (China's Uber) offer an easy alternative to street taxis, with an English interface available. Payment requires a Chinese payment method or cash.</p>
+          </div>
+          
+          <div class="guide-tip-item">
+            <i class="fas fa-bicycle"></i>
+            <p>Bike-sharing services like Mobike and Ofo provide a fun way to explore flat Beijing. Download the app, scan the QR code on the bike, and pay a small fee (typically ¥1-2 per 30 minutes).</p>
+          </div>
+          
+          <div class="guide-tip-item">
+            <i class="fas fa-walking"></i>
+            <p>Beijing's size makes walking impractical for covering large distances, but areas like the hutongs, Forbidden City, and Nanluoguxiang are best explored on foot for an authentic experience.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="guide-download">
+      <h3>Download the Complete Beijing City Guide</h3>
+      <p>Get our comprehensive 55-page guide to Beijing with detailed itineraries, cultural insights, language essentials, and off-the-beaten-path recommendations.</p>
+      <p>Available as a PDF for your convenience - take it with you offline!</p>
+      <a href="#" class="guide-download-btn">Download Guide (PDF) - $12.99</a>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+  
+  <script src='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js'></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize Mapbox for Beijing
+      mapboxgl.accessToken = 'pk.eyJ1IjoiZWFzdHdvcmxkIiwiYSI6ImNscDg5c3dsaDBrN3YyanBsZzV1dmg0OG0ifQ.9h-PyeATCU2zO9L43WHBEw';
+      const map = new mapboxgl.Map({
+        container: 'beijingMap',
+        style: 'mapbox://styles/mapbox/streets-v12',
+        center: [116.4074, 39.9042], // Beijing coordinates
+        zoom: 12,
+        pitch: 60, // Add 3D perspective
+        bearing: 30
+      });
+      
+      // Add 3D buildings layer
+      map.on('load', function() {
+        // Add 3D buildings layer
+        const layers = map.getStyle().layers;
+        
+        // Find the index of the first symbol layer
+        let firstSymbolId;
+        for (const layer of layers) {
+          if (layer.type === 'symbol') {
+            firstSymbolId = layer.id;
+            break;
+          }
+        }
+        
+        // Add 3D buildings
+        map.addLayer({
+          'id': '3d-buildings',
+          'source': 'composite',
+          'source-layer': 'building',
+          'filter': ['==', 'extrude', 'true'],
+          'type': 'fill-extrusion',
+          'minzoom': 15,
+          'paint': {
+            'fill-extrusion-color': '#aaa',
+            'fill-extrusion-height': [
+              'interpolate', ['linear'], ['zoom'],
+              15, 0,
+              15.05, ['get', 'height']
+            ],
+            'fill-extrusion-base': [
+              'interpolate', ['linear'], ['zoom'],
+              15, 0,
+              15.05, ['get', 'min_height']
+            ],
+            'fill-extrusion-opacity': 0.6
+          }
+        }, firstSymbolId);
+        
+        // Add navigation controls
+        map.addControl(new mapboxgl.NavigationControl());
+        
+        // Add key attraction markers
+        const attractions = [
+          { name: 'Forbidden City', coordinates: [116.3972, 39.9163], description: 'Imperial palace complex' },
+          { name: 'Temple of Heaven', coordinates: [116.4055, 39.8822], description: 'Ancient religious complex' },
+          { name: 'Summer Palace', coordinates: [116.2755, 39.9988], description: 'Imperial garden and palace' },
+          { name: 'Tiananmen Square', coordinates: [116.3912, 39.9053], description: 'World\'s largest public square' },
+          { name: '798 Art District', coordinates: [116.4955, 39.9840], description: 'Contemporary art hub' },
+          { name: 'Nanluoguxiang Hutongs', coordinates: [116.4019, 39.9405], description: 'Historic traditional alleyways' }
+        ];
+        
+        attractions.forEach(spot => {
+          // Create popup content
+          const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(
+            `<strong>${spot.name}</strong><br>${spot.description}`
+          );
+          
+          // Add marker
+          new mapboxgl.Marker({ color: '#ff4d4d' })
+            .setLngLat(spot.coordinates)
+            .setPopup(popup)
+            .addTo(map);
+        });
+        
+        // Start with a fly-to animation
+        map.flyTo({
+          center: [116.3972, 39.9163], // Forbidden City
+          zoom: 14,
+          pitch: 65,
+          bearing: 45,
+          duration: 5000
+        });
+      });
+    });
+  </script>
+  <script src="../script.js"></script>
+</body>
+</html> 

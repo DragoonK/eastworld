@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EASTWORLD - Siem Reap City Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css' rel='stylesheet' />
+  <style>
+    /* City Guide specific styles */
+    .guide-hero {
+      height: 500px;
+      background-image: url('https://images.unsplash.com/photo-1558424071-3dd0dae395ad?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 3rem;
+    }
+    
+    .guide-hero-content {
+      text-align: center;
+      color: white;
+      position: relative;
+      z-index: 2;
+      padding: 2rem;
+      max-width: 800px;
+      background-color: rgba(0, 0, 0, 0.6);
+    }
+    
+    .guide-hero::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(0deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.2) 100%);
+    }
+    
+    .guide-hero h1 {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      letter-spacing: 3px;
+    }
+    
+    .guide-hero p {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    
+    .guide-intro {
+      max-width: 800px;
+      margin: 0 auto 3rem;
+      padding: 0 1rem;
+      line-height: 1.8;
+    }
+    
+    .guide-section {
+      margin-bottom: 4rem;
+    }
+    
+    .guide-section-title {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: 2.2rem;
+      letter-spacing: 1px;
+    }
+    
+    .guide-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+    
+    .guide-card {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+    
+    .guide-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .guide-card-img {
+      height: 200px;
+      overflow: hidden;
+    }
+    
+    .guide-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    
+    .guide-card:hover .guide-card-img img {
+      transform: scale(1.05);
+    }
+    
+    .guide-card-content {
+      padding: 1.5rem;
+    }
+    
+    .guide-card h3 {
+      margin-bottom: 0.5rem;
+      font-size: 1.2rem;
+    }
+    
+    .guide-card-meta {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      color: #666;
+    }
+    
+    .guide-card-meta i {
+      margin-right: 0.3rem;
+    }
+    
+    .guide-card-meta span {
+      margin-right: 1rem;
+    }
+    
+    .guide-card p {
+      color: #555;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    
+    .guide-map {
+      width: 100%;
+      height: 500px;
+      border: none;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+    }
+    
+    .guide-tips {
+      background-color: #f8f8f8;
+      padding: 2rem;
+      border-radius: 8px;
+      margin-bottom: 3rem;
+    }
+    
+    .guide-tips h3 {
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+    
+    .guide-tips-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+    
+    .guide-tip-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+    }
+    
+    .guide-tip-item i {
+      margin-right: 0.5rem;
+      color: #000;
+      margin-top: 0.25rem;
+    }
+    
+    .guide-download {
+      text-align: center;
+      margin: 3rem 0;
+      padding: 2rem;
+      background-color: #f0f0f0;
+      border-radius: 8px;
+    }
+    
+    .guide-download h3 {
+      margin-bottom: 1rem;
+      font-size: 1.8rem;
+    }
+    
+    .guide-download-btn {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 1rem 2rem;
+      background-color: #000;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+    
+    .guide-download-btn:hover {
+      background-color: #333;
+    }
+    
+    .guide-map {
+      width: 100%;
+      height: 500px;
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../food.html" class="nav-item">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+  
+  <main class="content-container">
+    <div class="guide-hero">
+      <div class="guide-hero-content">
+        <h1>SIEM REAP</h1>
+        <p>Discover the gateway to Cambodia's ancient wonders, where timeless temples and vibrant culture create an unforgettable journey into the heart of the Khmer Empire.</p>
+      </div>
+    </div>
+    
+    <section class="guide-intro">
+      <p>Siem Reap, once a sleepy Cambodian village, has transformed into a vibrant tourist hub that serves as the gateway to the magnificent temples of Angkor, one of the most important archaeological sites in Southeast Asia. The city beautifully balances its role as custodian of Cambodia's ancient Khmer heritage with a thriving contemporary scene of boutique hotels, world-class dining, and creative arts.</p>
+      
+      <p>Beyond the breathtaking temple complexes that draw millions of visitors annually, Siem Reap offers travelers an authentic glimpse into Cambodian life. From the bustling markets and floating villages to the traditional dance performances and evolving food scene, the city provides a perfect blend of cultural immersion and modern comfort. With its friendly locals, laid-back atmosphere, and rich historical significance, Siem Reap has rightfully earned its place as one of Southeast Asia's most captivating destinations.</p>
+    </section>
+    
+    <section class="guide-section">
+      <h2 class="guide-section-title">TOP ATTRACTIONS</h2>
+      
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://images.unsplash.com/photo-1606468582663-32c61a276522?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80" alt="Angkor Wat">
+          </div>
+          <div class="guide-card-content">
+            <h3>Angkor Wat</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Angkor Archaeological Park</span>
+              <i class="far fa-clock"></i><span>5:00-17:30</span>
+            </div>
+            <p>The crown jewel of Khmer architecture, this 12th-century temple complex is the largest religious monument in the world. Originally built as a Hindu temple dedicated to Vishnu, it gradually transformed into a Buddhist temple. Don't miss the spectacular sunrise over its iconic silhouette.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://images.unsplash.com/photo-1600107875249-7ec6fa7a3be3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1771&q=80" alt="Bayon Temple">
+          </div>
+          <div class="guide-card-content">
+            <h3>Bayon Temple</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Angkor Thom</span>
+              <i class="far fa-clock"></i><span>7:30-17:30</span>
+            </div>
+            <p>Known for its 216 enigmatic stone faces of Avalokiteshvara, this late 12th-century temple represents the creative genius of King Jayavarman VII. The temple's three-tiered structure is adorned with extensive bas-reliefs depicting historical events and everyday life during the Khmer Empire.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?ixlib=rb-4.0.3&auto=format&fit=crop&w=1632&q=80" alt="Ta Prohm">
+          </div>
+          <div class="guide-card-content">
+            <h3>Ta Prohm</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Angkor Archaeological Park</span>
+              <i class="far fa-clock"></i><span>7:30-17:30</span>
+            </div>
+            <p>Made famous by the film "Tomb Raider," this temple has been left largely as it was found, with massive tree roots growing over and through the ancient stone structures. The atmospheric combination of jungle and ruins creates a truly magical experience unlike any other temple in Angkor.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://images.unsplash.com/photo-1573455494033-12631ac85908?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80" alt="Pub Street">
+          </div>
+          <div class="guide-card-content">
+            <h3>Pub Street & Old Market Area</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Central Siem Reap</span>
+              <i class="far fa-clock"></i><span>Open 24 hours</span>
+            </div>
+            <p>The lively heart of Siem Reap comes alive at night with bustling bars, restaurants, and nightclubs. The adjacent alleyways and Old Market (Phsar Chas) offer excellent shopping opportunities for souvenirs, textiles, art, and street food, creating a vibrant cultural hub.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://media.tacdn.com/media/attractions-splice-spp-674x446/0b/17/6c/e3.jpg" alt="Floating Village">
+          </div>
+          <div class="guide-card-content">
+            <h3>Kampong Phluk Floating Village</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Tonle Sap Lake</span>
+              <i class="far fa-clock"></i><span>7:00-18:00</span>
+            </div>
+            <p>Located on the edge of Tonle Sap Lake, this fascinating village consists of houses built on 6-7 meter high stilts that protect against seasonal flooding. Boat tours through the village and flooded forest provide insight into a unique way of life that has adapted to the lake's extreme water level changes.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://www.cambodiamuseum.info/img/landpage/1.jpg" alt="Cambodia Landmine Museum">
+          </div>
+          <div class="guide-card-content">
+            <h3>Cambodia Landmine Museum</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>25km from Siem Reap</span>
+              <i class="far fa-clock"></i><span>7:30-17:30</span>
+            </div>
+            <p>Founded by ex-child soldier Aki Ra, this museum tells the sobering story of Cambodia's landmine problem through exhibits of deactivated mines and educational displays. Entry fees support relief programs for landmine victims and the museum's rehabilitation center.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="guide-section">
+      <h2 class="guide-section-title">WHERE TO EAT</h2>
+      
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://khmermalis.com/wp-content/uploads/2023/10/MALIS-SR-Exterior-Night-High-Res-3.jpg" alt="Malis Restaurant">
+          </div>
+          <div class="guide-card-content">
+            <h3>Malis Restaurant</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Pokambor Avenue</span>
+              <i class="fas fa-dollar-sign"></i><span>$$$</span>
+            </div>
+            <p>Founded by Master Chef Luu Meng, Malis serves sophisticated Cambodian cuisine with a focus on reviving traditional recipes that were nearly lost during the Khmer Rouge era. The elegant riverside setting and beautifully presented dishes make this a premier dining destination in Siem Reap.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://media-cdn.tripadvisor.com/media/photo-s/17/c6/83/36/restaurant-ambiance.jpg" alt="Cuisine Wat Damnak">
+          </div>
+          <div class="guide-card-content">
+            <h3>Cuisine Wat Damnak</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Wat Damnak Village</span>
+              <i class="fas fa-dollar-sign"></i><span>$$$</span>
+            </div>
+            <p>Helmed by French chef Joannès Rivière, this acclaimed restaurant offers innovative tasting menus that showcase Cambodian ingredients and techniques with French influence. The constantly changing menu reflects seasonal availability from local markets, farms, and foraged ingredients.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/10/5c/8c/6a/the-entrance-of-chanrey.jpg" alt="Chanrey Tree">
+          </div>
+          <div class="guide-card-content">
+            <h3>Chanrey Tree</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Pokambor Avenue</span>
+              <i class="fas fa-dollar-sign"></i><span>$$</span>
+            </div>
+            <p>Set in a traditional wooden house with a beautiful garden, Chanrey Tree offers authentic Khmer cuisine focusing on family recipes and fresh, local ingredients. The menu includes both familiar dishes and lesser-known regional specialties, served in a refined yet relaxed atmosphere.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/0f/ca/7c/8c/photo1jpg.jpg" alt="Genevieve's">
+          </div>
+          <div class="guide-card-content">
+            <h3>Genevieve's Restaurant</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Near Old Market</span>
+              <i class="fas fa-dollar-sign"></i><span>$$</span>
+            </div>
+            <p>This socially responsible restaurant donates a significant portion of profits to local community projects. The menu offers a mix of Cambodian and international dishes prepared with high-quality ingredients. Known for exceptional service, it's consistently top-rated on travel sites.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="guide-section">
+      <h2 class="guide-section-title">WHERE TO STAY</h2>
+      
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/313904505.jpg?k=e997366b8f4c62efa73e3c2cb1f77b5bd03d351e530695d6cd7ad04bc3115568&o=&hp=1" alt="Raffles Grand Hotel">
+          </div>
+          <div class="guide-card-content">
+            <h3>Raffles Grand Hotel d'Angkor</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Royal Garden</span>
+              <i class="fas fa-star"></i><span>5-star luxury</span>
+            </div>
+            <p>A landmark since 1932, this historic luxury hotel blends colonial charm with modern amenities. Set amid lush tropical gardens with Cambodia's largest swimming pool, the property features antique-filled rooms, the famous Elephant Bar, and impeccable service that has hosted royalty and celebrities.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/371591057.jpg?k=0a488e797e691b1a1a60e942869d29b23b8f40dec4c3b8bf8f10c57f1a4bb18a&o=&hp=1" alt="Shinta Mani Angkor">
+          </div>
+          <div class="guide-card-content">
+            <h3>Shinta Mani Angkor</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>French Quarter</span>
+              <i class="fas fa-star"></i><span>5-star boutique</span>
+            </div>
+            <p>Designed by acclaimed architect Bill Bensley, this stylish boutique hotel combines contemporary design with Khmer influences. The property features a refreshing pool, spa, and excellent dining options. A portion of profits supports the Shinta Mani Foundation's community development projects.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/193064792.jpg?k=e04ef5be5a32c7ffcbee3a511e51bea6c1693a713b1d90e2a2d8b9be37ce5f7c&o=&hp=1" alt="Jaya House River Park">
+          </div>
+          <div class="guide-card-content">
+            <h3>Jaya House River Park</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Riverside</span>
+              <i class="fas fa-star"></i><span>5-star boutique</span>
+            </div>
+            <p>This eco-conscious boutique hotel offers just 36 rooms, two swimming pools, and exceptional personalized service. The property is renowned for its plastic-free initiative and community involvement. Each room features Khmer-inspired art and design elements with modern luxury amenities.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/174610865.jpg?k=ee5513e301e7b00001cfef11b5a6f4c652f453a95b50efce99a324785898b8f3&o=&hp=1" alt="Viroth's Hotel">
+          </div>
+          <div class="guide-card-content">
+            <h3>Viroth's Hotel</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Wat Bo Area</span>
+              <i class="fas fa-star"></i><span>5-star boutique</span>
+            </div>
+            <p>A sleek 1950s-inspired design hotel with 35 rooms centered around a stunning courtyard pool. The hotel perfectly balances retro-chic aesthetics with modern luxury and exemplary service. Features include a spa, restaurant, and rooftop terrace with city views.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="guide-section">
+      <h2 class="guide-section-title">GETTING AROUND</h2>
+      
+      <div class="guide-map" id="siemreapMap"></div>
+      
+      <div class="guide-tips">
+        <h3>Local Transportation Tips</h3>
+        <div class="guide-tips-list">
+          <div class="guide-tip-item">
+            <i class="fas fa-motorcycle"></i>
+            <p>Tuk-tuks are the most popular and convenient way to travel around Siem Reap and to nearby temples. Expect to pay $5-8 for transportation within town, $15-20 for a day at the main Angkor temples, and $25-30 for further sites. Always agree on a price before departing.</p>
+          </div>
+          
+          <div class="guide-tip-item">
+            <i class="fas fa-bicycle"></i>
+            <p>Bicycles are an excellent option for exploring the town and even the closer temples (the main Angkor complex is within cycling distance). Many hotels offer free or low-cost bicycle rentals, or you can rent from shops in town for $2-5 per day.</p>
+          </div>
+          
+          <div class="guide-tip-item">
+            <i class="fas fa-taxi"></i>
+            <p>Air-conditioned taxis are available for longer journeys or day trips to distant temples. A full day of temple exploration costs around $35-45. Apps like PassApp and Grab are available in Siem Reap for convenient booking.</p>
+          </div>
+          
+          <div class="guide-tip-item">
+            <i class="fas fa-car"></i>
+            <p>Private drivers with cars or vans can be arranged through your hotel for maximum comfort and flexibility, particularly useful for full-day temple tours. Expect to pay $45-80 per day depending on distance and vehicle type.</p>
+          </div>
+          
+          <div class="guide-tip-item">
+            <i class="fas fa-walking"></i>
+            <p>Central Siem Reap is quite walkable, with most restaurants, markets, and shops clustered around the Old Market area and riverfront. Walking is ideal in the cooler early mornings and evenings, though midday heat can be intense.</p>
+          </div>
+          
+          <div class="guide-tip-item">
+            <i class="fas fa-water"></i>
+            <p>For visiting floating villages on Tonle Sap Lake, boat tours are the only option. These can be arranged through your hotel, tour agencies in town, or at the boat docks. Prices vary by village and tour length ($20-35 per person).</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="guide-download">
+      <h3>Download the Complete Siem Reap City Guide</h3>
+      <p>Get our comprehensive 55-page guide to Siem Reap with detailed temple itineraries, cultural insights, language essentials, and recommendations for unique experiences beyond the main attractions.</p>
+      <p>Available as a PDF for your convenience - take it with you offline!</p>
+      <a href="#" class="guide-download-btn">Download Guide (PDF) - $11.99</a>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+  
+  <script src='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js'></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize Mapbox for Siem Reap
+      mapboxgl.accessToken = 'pk.eyJ1IjoiZWFzdHdvcmxkIiwiYSI6ImNscDg5c3dsaDBrN3YyanBsZzV1dmg0OG0ifQ.9h-PyeATCU2zO9L43WHBEw';
+      const map = new mapboxgl.Map({
+        container: 'siemreapMap',
+        style: 'mapbox://styles/mapbox/streets-v12',
+        center: [103.8560, 13.3633], // Siem Reap coordinates
+        zoom: 11,
+        pitch: 45, // Add 3D perspective
+        bearing: 0
+      });
+      
+      // Add 3D buildings layer
+      map.on('load', function() {
+        // Add 3D buildings layer
+        const layers = map.getStyle().layers;
+        
+        // Find the index of the first symbol layer
+        let firstSymbolId;
+        for (const layer of layers) {
+          if (layer.type === 'symbol') {
+            firstSymbolId = layer.id;
+            break;
+          }
+        }
+        
+        // Add 3D buildings
+        map.addLayer({
+          'id': '3d-buildings',
+          'source': 'composite',
+          'source-layer': 'building',
+          'filter': ['==', 'extrude', 'true'],
+          'type': 'fill-extrusion',
+          'minzoom': 15,
+          'paint': {
+            'fill-extrusion-color': '#aaa',
+            'fill-extrusion-height': [
+              'interpolate', ['linear'], ['zoom'],
+              15, 0,
+              15.05, ['get', 'height']
+            ],
+            'fill-extrusion-base': [
+              'interpolate', ['linear'], ['zoom'],
+              15, 0,
+              15.05, ['get', 'min_height']
+            ],
+            'fill-extrusion-opacity': 0.6
+          }
+        }, firstSymbolId);
+        
+        // Add navigation controls
+        map.addControl(new mapboxgl.NavigationControl());
+        
+        // Add key attraction markers
+        const attractions = [
+          { name: 'Angkor Wat', coordinates: [103.8670, 13.4125], description: 'World\'s largest religious monument' },
+          { name: 'Bayon Temple', coordinates: [103.8597, 13.4411], description: 'Famous for 216 smiling faces' },
+          { name: 'Ta Prohm', coordinates: [103.8901, 13.4349], description: 'Temple reclaimed by jungle' },
+          { name: 'Pub Street', coordinates: [103.8584, 13.3542], description: 'Nightlife and entertainment district' },
+          { name: 'Old Market', coordinates: [103.8593, 13.3540], description: 'Traditional market and shopping' },
+          { name: 'Tonle Sap Lake', coordinates: [103.8189, 13.2181], description: 'Floating villages' },
+          { name: 'Angkor National Museum', coordinates: [103.8632, 13.3677], description: 'Archaeological museum' }
+        ];
+        
+        attractions.forEach(spot => {
+          // Create popup content
+          const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(
+            `<strong>${spot.name}</strong><br>${spot.description}`
+          );
+          
+          // Add marker
+          new mapboxgl.Marker({ color: '#ff4d4d' })
+            .setLngLat(spot.coordinates)
+            .setPopup(popup)
+            .addTo(map);
+        });
+        
+        // Start with a fly-to animation
+        map.flyTo({
+          center: [103.8670, 13.4125], // Angkor Wat
+          zoom: 14,
+          pitch: 60,
+          bearing: 20,
+          duration: 5000
+        });
+      });
+    });
+  </script>
+  <script src="../script.js"></script>
+</body>
+</html> 

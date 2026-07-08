@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mizuno Okonomiyaki Osaka - Eastworld Restaurant Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Additional styles specific to restaurant reviews */
+    .restaurant-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+      .restaurant-info {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .restaurant-details {
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .detail-row {
+      display: flex;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+    }
+    
+    .detail-label {
+      font-weight: 600;
+      min-width: 120px;
+      color: #333;
+    }
+    
+    .detail-value {
+      flex: 1;
+      color: #555;
+    }
+    
+    .rating {
+      margin-bottom: 1rem;
+    }
+    
+    .star {
+      color: #ddd;
+      font-size: 1.5rem;
+    }
+    
+    .star.filled {
+      color: #FFD700;
+    }
+    
+    .half-star {
+      position: relative;
+    }
+    
+    .half-star .fas.fa-star-half {
+      color: #FFD700;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    
+    .score-label {
+      margin-left: 0.5rem;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .map-container {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .map-container iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+    }
+    
+    .photos-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .photo-item {
+      border-radius: 8px;
+      overflow: hidden;
+      height: 150px;
+    }
+    
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .photo-item img:hover {
+      transform: scale(1.05);
+    }
+    
+    .review-section {
+      margin: 2rem 0;
+      padding: 2rem;
+      background: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    /* Booking button styles */
+    .booking-button {
+      display: block;
+      background-color: #ff4d4d;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      margin: 1.5rem 0;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    
+    .booking-button:hover {
+      background-color: #e63939;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    /* Review carousel styles */
+    .review-carousel {
+      position: relative;
+      margin: 2rem 0;
+      overflow: hidden;
+      padding: 1rem 0;
+    }
+    
+    .review-slides {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    
+    .review-slide {
+      min-width: 100%;
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .reviewer-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #f0f0f0;
+      padding-bottom: 0.8rem;
+    }
+    
+    .reviewer-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 0.8rem;
+    }
+    
+    .reviewer-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding-top: 0.2rem;
+    }
+    
+    .review-date {
+      color: #888;
+      font-size: 0.75rem;
+      margin-top: 0.1rem;
+    }
+    
+    .review-rating {
+      display: flex;
+      margin-top: 0.2rem;
+    }
+    
+    .review-rating i {
+      font-size: 0.8rem;
+      margin-right: 2px;
+    }
+    
+    .carousel-nav {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+    
+    .carousel-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ddd;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .carousel-dot.active {
+      background: #ff4d4d;
+    }
+    
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.7);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+    
+    .carousel-prev {
+      left: 10px;
+    }
+    
+    .carousel-next {
+      right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../food.html" class="nav-item active">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="content-container">
+    <div class="content-header">
+      <span class="content-category">OKONOMIYAKI</span>
+      <h1 class="content-title">Mizuno - Osaka's Legendary Okonomiyaki Since 1945</h1>
+      
+      <!-- Rating Section -->
+      <div class="rating">
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="score-label">4.7/5.0</span>
+      </div>
+    </div>
+    
+    <div class="hero-container">
+      <img class="content-hero" src="https://media.cnn.com/api/v1/images/stellar/prod/180219110232-osaka-food-okonomiyaki-mizuno.jpg?q=w_1600,h_900,x_0,y_0,c_fill" alt="Mizuno Okonomiyaki" 
+      onerror="this.onerror=null; 
+      this.parentElement.innerHTML = '<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#333;color:white;font-size:1.5rem;text-align:center;padding:2rem;\'>Mizuno Okonomiyaki</div>';">
+    </div>
+    
+    <!-- Booking Button -->
+    <a href="#visitor-info" class="booking-button">
+      <i class="fas fa-info-circle"></i> VISITOR INFORMATION
+    </a>
+    
+    <!-- Restaurant Information Section -->
+    <div class="restaurant-info">
+      <div class="restaurant-details">
+        <h2>Restaurant Details</h2>
+        
+        <div class="detail-row">
+          <div class="detail-label">Address:</div>
+          <div class="detail-value">1-4-15 Dotonbori, Chuo-ku, Osaka 542-0071, Japan</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Hours:</div>
+          <div class="detail-value">
+            11:00 AM - 10:00 PM (Mon-Sun)<br>
+            Last orders at 9:30 PM
+          </div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Phone:</div>
+          <div class="detail-value">+81 6-6212-6360</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Price Range:</div>
+          <div class="detail-value">¥1,000-2,500 ($7-18) per person</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Cuisine:</div>
+          <div class="detail-value">Okonomiyaki, Osaka, Japanese</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Reservations:</div>
+          <div class="detail-value">Accepted for groups of 4+ via phone (Japanese only)</div>
+        </div>
+        
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">About Mizuno</h3>
+        <p>Mizuno (also known as "Micchan" to locals) is one of Osaka's oldest and most respected okonomiyaki establishments, serving authentic Osaka-style savory pancakes since 1945. This family-run institution has been listed in the Michelin Guide's Bib Gourmand category, recognizing its exceptional food at moderate prices. Located in the heart of Dotonbori, Mizuno is renowned for its premium ingredients and time-honored techniques.</p>
+      </div>
+      
+      <div class="map-container">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3281.1842726271186!2d135.50004477617485!3d34.6687179813682!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6000e713818af9cd%3A0xb8bb1a8445ee66b4!2sMizuno!5e0!3m2!1sen!2sus!4v1698205950112!5m2!1sen!2sus" 
+        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+    
+    <div class="content-text">
+      <h2>An Okonomiyaki Legacy Since 1945</h2>
+      
+      <p>Mizuno stands as a living testament to Osaka's okonomiyaki tradition, continuing to serve exceptional versions of this iconic dish after nearly eight decades in business. Founded in 1945 in the aftermath of World War II, the restaurant has survived through Japan's most transformative periods while maintaining its commitment to quality and tradition.</p>
+      
+      <p>Still operated by the Mizuno family, now in its third generation, this modest establishment has earned international acclaim while remaining true to its roots. The restaurant's enduring popularity speaks to both its historical significance and the consistently exceptional quality of its food. Despite its Michelin recognition and international fame, Mizuno maintains the welcoming, unpretentious atmosphere that characterizes Osaka's food culture.</p>
+      
+      <div class="photos-container">
+        <div class="photo-item">
+          <img src="https://media-cdn.tripadvisor.com/media/photo-s/0f/84/41/49/restaurant-frontage.jpg" alt="Mizuno Storefront">
+        </div>
+        <div class="photo-item">
+          <img src="https://media-cdn.tripadvisor.com/media/photo-s/06/8c/fc/27/caption.jpg" alt="Chef preparing okonomiyaki">
+        </div>
+        <div class="photo-item">
+          <img src="https://media-cdn.tripadvisor.com/media/photo-s/13/9c/33/c4/photo0jpg.jpg" alt="Yamaimo-yaki Special">
+        </div>
+        <div class="photo-item">
+          <img src="https://media-cdn.tripadvisor.com/media/photo-f/11/74/9a/e4/counter-seating.jpg" alt="Counter seating at Mizuno">
+        </div>
+      </div>
+      
+      <h2>The Art of Osaka-Style Okonomiyaki</h2>
+      
+      <p>Mizuno specializes in Osaka-style okonomiyaki (sometimes called Kansai-style), which differs from Hiroshima-style by mixing all ingredients into the batter before cooking. What distinguishes Mizuno from countless other okonomiyaki establishments is their meticulous attention to ingredients and technique.</p>
+      
+      <p>Their signature dish, the Yamaimo-yaki, incorporates grated mountain yam into the batter, creating an exceptionally light and fluffy texture that contrasts beautifully with the crisp exterior. Every okonomiyaki is prepared with precision by skilled chefs right before your eyes on the teppan (iron griddle), allowing you to witness the artistry that goes into each dish.</p>
+      
+      <p>Premium ingredients feature prominently in all their offerings – from the high-grade Kagoshima pork belly and fresh seafood to the specially selected cabbage and dashi. The restaurant makes their own tare (okonomiyaki sauce) according to a secret family recipe, creating a distinctive flavor that can't be found elsewhere.</p>
+      
+      <div class="content-quote">
+        "Okonomiyaki is Osaka's soul food, and at Mizuno, we honor this tradition by focusing on quality above all else. Our recipe has been refined over three generations, but the essence remains the same – creating okonomiyaki that brings joy to those who eat it. That's the Osaka way." - Mizuno Family
+      </div>
+      
+      <!-- User Reviews Carousel -->
+      <h2>Customer Reviews</h2>
+      
+      <div class="review-carousel">
+        <div class="carousel-arrow carousel-prev">
+          <i class="fas fa-chevron-left"></i>
+        </div>
+        
+        <div class="review-slides">
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">David L.</div>
+                <div class="review-date">Visited April 2024</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"After trying okonomiyaki all over Japan, I can confidently say Mizuno serves the best I've ever had. We arrived 30 minutes before opening and were first in line - worth it! The Yamaimo-yaki with pork and shrimp was life-changing - so fluffy inside yet perfectly crisp on the outside. Watching the chef prepare it with such precision added to the experience. The restaurant's modest appearance belies the perfection on the plate. Even my Japanese friend who grew up in Osaka said this was exceptional. A must-visit for any food lover in Osaka. The only downside is that no other okonomiyaki will ever compare now!"</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Yuki T.</div>
+                <div class="review-date">Visited February 2024</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"As an Osaka native who moved away years ago, I always make a pilgrimage to Mizuno when I return home. Their okonomiyaki represents everything I miss about Osaka food - unpretentious yet made with uncompromising quality. The texture of their Yamaimo-yaki is impossible to replicate, and their sauce has a depth that balances perfectly with the dish. I love sitting at the counter watching the chefs work their magic on the teppan. Despite its popularity with tourists now, they haven't changed their approach or quality over the decades. The line moves efficiently, and the staff remain friendly despite the constant crowds. Some things never change, thankfully."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Claire M.</div>
+                <div class="review-date">Visited March 2024</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="far fa-star" style="color: #ddd;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"We waited about 45 minutes for a table at Mizuno, which was actually shorter than expected given its reputation. The Yamaimo-yaki Special with pork, shrimp, and squid was delicious - notably lighter and more refined than other okonomiyaki I've tried. The mountain yam really makes a difference in the texture. I appreciated that they didn't rush us despite the line outside. English menu available, though ordering was still a bit challenging with the language barrier. The restaurant is small and basic, focused entirely on the food. Worth the wait, though I'd recommend going at off-peak hours if possible. A true Osaka culinary experience!"</p>
+          </div>
+        </div>
+        
+        <div class="carousel-arrow carousel-next">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+        
+        <div class="carousel-nav">
+          <div class="carousel-dot active"></div>
+          <div class="carousel-dot"></div>
+          <div class="carousel-dot"></div>
+        </div>
+      </div>
+      
+      <h2>Menu Highlights</h2>
+      
+      <p>Mizuno's menu focuses on perfecting a select range of okonomiyaki variations:</p>
+      
+      <ul>
+        <li><strong>Yamaimo-yaki (¥1,550)</strong> - Their signature dish featuring grated mountain yam in the batter for exceptional fluffiness, with pork belly</li>
+        <li><strong>Yamaimo-yaki Special (¥1,980)</strong> - The signature with an added premium selection of seafood (shrimp, squid, and scallops)</li>
+        <li><strong>Mizuno Special (¥1,730)</strong> - The house specialty combining pork, shrimp, squid, and kimchi for a slightly spicy flavor profile</li>
+        <li><strong>Negi-yaki (¥1,500)</strong> - A thinner variation with abundant green onions and tender pork</li>
+        <li><strong>Modanyaki (¥1,580)</strong> - "Modern-yaki" style with yakisoba noodles incorporated into the batter</li>
+        <li><strong>Dotonbori-yaki (¥1,880)</strong> - A generous seafood-focused variation with a variety of fresh catches</li>
+      </ul>
+      
+      <p>Additional items and accompaniments:</p>
+      <ul>
+        <li><strong>Yakisoba (¥1,100)</strong> - Stir-fried noodles prepared on the same teppan</li>
+        <li><strong>Chilled Beer (¥650)</strong> - Perfect pairing with the rich flavors of okonomiyaki</li>
+        <li><strong>Sake Selection (from ¥750)</strong> - Curated to complement their dishes</li>
+      </ul>
+      
+      <div class="review-section">
+        <h2>Eastworld's Review</h2>
+        
+        <h3>Food Quality: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Mizuno sets the gold standard for okonomiyaki in Osaka. Their Yamaimo-yaki's texture is nothing short of sublime – light and fluffy inside with the perfect crisp exterior. Every ingredient shows thoughtful selection, from the cabbage's sweetness to the premium quality meats and seafood. Their house-made sauce and mayo provide distinctive flavor that elevates the entire experience.</p>
+        
+        <h3>Atmosphere: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>The restaurant maintains an authentic, unpretentious atmosphere despite its fame. Seating at the teppan counter offers an engaging dining experience as you watch skilled chefs craft each dish with remarkable precision. The space is modest and can feel crowded, but this adds to its authentic charm rather than detracting from it.</p>
+        
+        <h3>Service: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>Service is efficient and friendly, with staff managing the constant flow of diners with practiced ease. While language barriers can present minor challenges for international visitors, the staff makes a genuine effort to accommodate everyone. The chefs' skill and performance at the teppan add an additional dimension to the service experience.</p>
+        
+        <h3>Value: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>While prices are higher than at typical okonomiyaki shops, the quality fully justifies the cost. The portions are generous, and the premium ingredients and masterful preparation make this a worthwhile culinary investment. The Bib Gourmand recognition from Michelin correctly identifies Mizuno as offering exceptional quality at reasonable prices.</p>
+        
+        <h3>Location: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Situated in the heart of Dotonbori, Osaka's famous food district, Mizuno is perfectly positioned for visitors exploring the area. Its central location makes it easily accessible from major transit hubs and tourist attractions, though this convenience also contributes to the frequent lines.</p>
+        
+        <h3>Overall: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Mizuno represents okonomiyaki at its finest – a perfect demonstration of why this dish is considered Osaka's soul food. For visitors seeking an authentic and exceptional okonomiyaki experience, Mizuno delivers a meal that will become a highlight of any Osaka trip. Its combination of historical significance, culinary excellence, and authentic atmosphere make it essential for food enthusiasts.</p>
+      </div>
+      
+      <h2>Tips for Visitors</h2>
+      
+      <ul>
+        <li>Arrive 15-30 minutes before opening time to minimize waiting, especially on weekends</li>
+        <li>Late afternoon (3-5 PM) typically sees shorter lines than peak lunch and dinner hours</li>
+        <li>Counter seating offers the best view of the chefs' artistry at the teppan</li>
+        <li>The Yamaimo-yaki is their signature dish for good reason - don't miss it</li>
+        <li>Portions are generous; consider sharing if you want to try multiple varieties</li>
+        <li>Ask the chefs questions if you're curious about the preparation - they appreciate genuine interest</li>
+        <li>Taking photos is permitted, but be respectful of other diners and the chefs' work</li>
+        <li>English menus are available, making ordering accessible for international visitors</li>
+      </ul>
+      
+      <!-- Visitor Information -->
+      <div id="visitor-info" class="review-section">
+        <h2>Visitor Information</h2>
+        <p>Here's what you need to know when planning your visit to Mizuno:</p>
+        
+        <h3>Location & Access:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Address: 1-4-15 Dotonbori, Chuo-ku, Osaka 542-0071, Japan</li>
+          <li>8-minute walk from Namba Station (various lines)</li>
+          <li>10-minute walk from Nipponbashi Station</li>
+          <li>Located on a side street just off the main Dotonbori thoroughfare</li>
+        </ul>
+        
+        <h3>Hours of Operation:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Open daily from 11:00 AM to 10:00 PM</li>
+          <li>Last orders taken at 9:30 PM</li>
+          <li>Peak hours: 12:00-2:00 PM and 6:00-8:00 PM</li>
+          <li>Closed occasionally for holidays (check their website for notifications)</li>
+        </ul>
+        
+        <h3>Facilities:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Counter seating around the teppan (iron griddle)</li>
+          <li>Table seating available for larger groups</li>
+          <li>Small restaurant with approximately 40 seats</li>
+          <li>Air-conditioned interior</li>
+          <li>Small restroom on premises</li>
+          <li>Not fully wheelchair accessible (narrow entrance)</li>
+        </ul>
+        
+        <h3>Additional Information:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Credit cards accepted (Visa, Mastercard, JCB)</li>
+          <li>Average waiting time: 30-60 minutes during peak hours</li>
+          <li>English menu available</li>
+          <li>Some staff speak basic English</li>
+          <li>Reservations only accepted for groups of 4 or more (phone call in Japanese required)</li>
+          <li>Official website: <a href="http://www.mizuno-osaka.com" target="_blank" style="color: #ff4d4d;">www.mizuno-osaka.com</a> (Japanese only)</li>
+        </ul>
+        
+        <p>After your meal at Mizuno, take time to explore the vibrant Dotonbori area with its famous illuminated signs, energetic atmosphere, and numerous shops. For dessert, consider visiting one of the nearby taiyaki (fish-shaped cake) or takoyaki (octopus ball) vendors to continue your Osaka food adventure.</p>
+      </div>
+      
+      <a href="../food.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Food Guide</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Review carousel functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const slides = document.querySelector('.review-slides');
+      const dots = document.querySelectorAll('.carousel-dot');
+      const prevBtn = document.querySelector('.carousel-prev');
+      const nextBtn = document.querySelector('.carousel-next');
+      let currentSlide = 0;
+      const totalSlides = document.querySelectorAll('.review-slide').length;
+      
+      // Function to update slide position
+      function showSlide(index) {
+        if (index < 0) index = totalSlides - 1;
+        if (index >= totalSlides) index = 0;
+        
+        currentSlide = index;
+        slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+        
+        // Update active dot
+        dots.forEach((dot, i) => {
+          dot.classList.toggle('active', i === currentSlide);
+        });
+      }
+      
+      // Set up event listeners for dots
+      dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => showSlide(i));
+      });
+      
+      // Set up event listeners for arrows
+      prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
+      nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
+      
+      // Auto-rotate slides every 5 seconds
+      setInterval(() => {
+        showSlide(currentSlide + 1);
+      }, 5000);
+    });
+  </script>
+  
+  <script src="../script.js"></script>
+</body>
+</html> 

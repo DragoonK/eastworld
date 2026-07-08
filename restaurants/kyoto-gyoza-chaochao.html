@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gyoza ChaoChao Sanjo Kiyamachi - Eastworld Restaurant Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Additional styles specific to restaurant reviews */
+    .restaurant-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+      .restaurant-info {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .restaurant-details {
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .detail-row {
+      display: flex;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+    }
+    
+    .detail-label {
+      font-weight: 600;
+      min-width: 120px;
+      color: #333;
+    }
+    
+    .detail-value {
+      flex: 1;
+      color: #555;
+    }
+    
+    .rating {
+      margin-bottom: 1rem;
+    }
+    
+    .star {
+      color: #ddd;
+      font-size: 1.5rem;
+    }
+    
+    .star.filled {
+      color: #FFD700;
+    }
+    
+    .half-star {
+      position: relative;
+    }
+    
+    .half-star .fas.fa-star-half {
+      color: #FFD700;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    
+    .score-label {
+      margin-left: 0.5rem;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .map-container {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .map-container iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+    }
+    
+    .photos-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .photo-item {
+      border-radius: 8px;
+      overflow: hidden;
+      height: 150px;
+    }
+    
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .photo-item img:hover {
+      transform: scale(1.05);
+    }
+    
+    .review-section {
+      margin: 2rem 0;
+      padding: 2rem;
+      background: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    /* Booking button styles */
+    .booking-button {
+      display: block;
+      background-color: #ff4d4d;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      margin: 1.5rem 0;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    
+    .booking-button:hover {
+      background-color: #e63939;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    /* Review carousel styles */
+    .review-carousel {
+      position: relative;
+      margin: 2rem 0;
+      overflow: hidden;
+      padding: 1rem 0;
+    }
+    
+    .review-slides {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    
+    .review-slide {
+      min-width: 100%;
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .reviewer-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #f0f0f0;
+      padding-bottom: 0.8rem;
+    }
+    
+    .reviewer-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 0.8rem;
+    }
+    
+    .reviewer-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding-top: 0.2rem;
+    }
+    
+    .review-date {
+      color: #888;
+      font-size: 0.75rem;
+      margin-top: 0.1rem;
+    }
+    
+    .review-rating {
+      display: flex;
+      margin-top: 0.2rem;
+    }
+    
+    .review-rating i {
+      font-size: 0.8rem;
+      margin-right: 2px;
+    }
+    
+    .carousel-nav {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+    
+    .carousel-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ddd;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .carousel-dot.active {
+      background: #ff4d4d;
+    }
+    
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.7);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+    
+    .carousel-prev {
+      left: 10px;
+    }
+    
+    .carousel-next {
+      right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../food.html" class="nav-item active">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="content-container">
+    <div class="content-header">
+      <span class="content-category">GYOZA</span>
+      <h1 class="content-title">Gyoza ChaoChao Sanjo Kiyamachi - Kyoto's Beloved Dumpling Specialist</h1>
+      
+      <!-- Rating Section -->
+      <div class="rating">
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star">
+          <i class="far fa-star"></i>
+        </span>
+        <span class="score-label">4.0/5.0</span>
+      </div>
+    </div>
+    
+    <div class="hero-container">
+      <img class="content-hero" src="https://media-assets.lacucinaitaliana.it/photos/61fae7f7c2ff522d40a2cf5f/16:9/w_2560%2Cc_limit/gyozza.jpg" alt="Crispy Pan-Fried Gyoza" 
+      onerror="this.onerror=null; 
+      this.parentElement.innerHTML = '<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#333;color:white;font-size:1.5rem;text-align:center;padding:2rem;\'>Gyoza ChaoChao Kyoto</div>';">
+    </div>
+    
+    <!-- Visitor Information Button -->
+    <a href="#visitor-info" class="booking-button">
+      <i class="fas fa-info-circle"></i> VISITOR INFORMATION
+    </a>
+    
+    <!-- Restaurant Information Section -->
+    <div class="restaurant-info">
+      <div class="restaurant-details">
+        <h2>Restaurant Details</h2>
+        
+        <div class="detail-row">
+          <div class="detail-label">Address:</div>
+          <div class="detail-value">530 Kamiyacho, Nakagyo-ku, Kyoto 604-8004, Japan</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Hours:</div>
+          <div class="detail-value">11:30 AM - 2:00 PM, 5:00 PM - 11:00 PM<br>Closed Tuesdays</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Phone:</div>
+          <div class="detail-value">+81 75-211-3405</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Price Range:</div>
+          <div class="detail-value">¥600-1,500 ($4-10) per person<br>Average meal: ¥1,200 ($8) with drinks</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Cuisine:</div>
+          <div class="detail-value">Japanese, Chinese-inspired, Gyoza (Dumplings), Budget-Friendly</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Reservations:</div>
+          <div class="detail-value">Not accepted - first come, first served</div>
+        </div>
+        
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">How to Get There</h3>
+        <p>From Sanjo Station or Kyoto Shiyakusho-mae Station:</p>
+        <ul style="margin-bottom: 1rem; padding-left: 1.5rem;">
+          <li>5-minute walk to Kiyamachi Street, one of Kyoto's famous nightlife and dining areas</li>
+          <li>Located between Sanjo and Nijo streets along the Takase River</li>
+          <li>Look for the distinctive red lanterns with the "餃子" (gyoza) characters</li>
+          <li>Often identifiable by the line of people waiting outside during peak hours</li>
+        </ul>
+      </div>
+      
+      <div class="map-container">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3267.9693881874604!2d135.7686191!3d35.0089825!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x600108959cd15555%3A0xaa9380bdbca1059a!2sGyoza%20ChaoChao%20Kiyamachi!5e0!3m2!1sen!2sus!4v1693230090086!5m2!1sen!2sus" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+    
+    <div class="content-text">
+      <h2>A Kyoto Institution Devoted to the Perfect Dumpling</h2>
+      
+      <p>Located in Kyoto's lively Kiyamachi district alongside the picturesque Takase River, Gyoza ChaoChao has established itself as the city's premier destination for gyoza—the savory, pan-fried dumplings that originated in China but have become deeply integrated into Japanese culinary culture. This casual, no-frills establishment has been serving its signature gyoza to hungry locals and tourists alike for over two decades, earning a devoted following for its consistent quality and lively atmosphere.</p>
+      
+      <p>Unlike many restaurants that treat gyoza as merely a side dish, ChaoChao elevates these dumplings to star status. The restaurant's compact, bustling space is dominated by an open kitchen where skilled chefs meticulously prepare, fold, and fry hundreds of gyoza each evening. The sizzle of dumplings hitting the hot griddle and the mouthwatering aroma that permeates the air create an immersive sensory experience that begins before you even taste your first bite.</p>
+      
+      <div class="photos-container">
+        <div class="photo-item">
+          <img src="https://tabelog.com/imgview/original?id=r0497204235728" alt="Perfectly Arranged Gyoza">
+        </div>
+        <div class="photo-item">
+          <img src="https://farm66.static.flickr.com/65535/49525308231_b9de5cfda4_c.jpg" alt="Chef Preparing Gyoza">
+        </div>
+        <div class="photo-item">
+          <img src="https://tabelog.com/imgview/original?id=r49418275268826" alt="Restaurant Interior">
+        </div>
+        <div class="photo-item">
+          <img src="https://tabelog.com/imgview/original?id=r84924063183933" alt="Speciality Gyoza Varieties">
+        </div>
+      </div>
+      
+      <h2>The Art of Perfect Gyoza</h2>
+      
+      <p>What separates ChaoChao's gyoza from countless others across Japan is their fanatical attention to three crucial elements: the filling, the wrapper, and the cooking technique. The filling strikes a perfect balance between ground pork, cabbage, garlic, ginger, and green onions—juicy and flavorful without being overly fatty. The wrappers are made in-house daily, achieving the ideal thickness that can withstand the high-heat cooking process while remaining delicate enough to showcase the filling.</p>
+      
+      <p>However, it's perhaps the cooking technique that truly distinguishes ChaoChao's offerings. Their gyoza are pan-fried using the traditional "steam-fry" method, where the dumplings are first fried until golden on the bottom, then steamed to ensure the filling cooks through while maintaining the wrapper's integrity. The result is textural perfection: a crispy, golden-brown bottom giving way to tender, chewy sides.</p>
+      
+      <p>While traditional pork gyoza remain their signature, ChaoChao also offers creative variations like shrimp gyoza, vegetable gyoza, and seasonal specials that incorporate local Kyoto vegetables. Each order is served with their house-made dipping sauce—a precise blend of soy sauce, vinegar, and chili oil that provides the perfect counterpoint to the rich dumplings.</p>
+      
+      <div class="content-quote">
+        "ChaoChao represents gyoza in its purest form—unpretentious, perfectly executed, and deeply satisfying. In a city known for refined kaiseki cuisine and centuries-old traditions, this humble gyoza shop provides a necessary counterbalance: accessible, affordable food that focuses on doing one thing exceptionally well." - Kyoto Food Guide
+      </div>
+      
+      <!-- User Reviews Carousel -->
+      <h2>Customer Reviews</h2>
+      
+      <div class="review-carousel">
+        <div class="carousel-arrow carousel-prev">
+          <i class="fas fa-chevron-left"></i>
+        </div>
+        
+        <div class="review-slides">
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Emma L.</div>
+                <div class="review-date">Visited March 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"After a full day of temple-hopping in Kyoto, my partner and I were craving something satisfying but casual, and ChaoChao was recommended by our hotel concierge. We arrived around 6:30 PM and waited about 20 minutes for a spot at the counter, which was perfect because we got to watch the chefs in action. The restaurant is tiny and bustling with energy—definitely not a quiet, romantic spot, but full of character! We ordered the classic pork gyoza, the garlic shrimp gyoza, and the daily special which was a spicy miso gyoza. All three were exceptional, but the classic pork was truly perfect—crispy bottom, tender wrapper, and a juicy filling with just the right balance of meat and vegetables. The dipping sauce added the perfect tangy accent. We also tried the cucumber salad which was a refreshing counterpoint to the rich gyoza. With a couple of beers, our total bill came to around ¥3,000 for two people—incredible value for the quality. The staff didn't speak much English but the menu has pictures and everyone was friendly. This place is a must-visit in Kyoto for casual dining!"</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Takeshi M.</div>
+                <div class="review-date">Visited January 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="far fa-star" style="color: #ddd;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"As a Kyoto resident, I've been eating at ChaoChao for years, and it remains one of my favorite casual dining spots. Their gyoza have a consistency that's remarkable—I've never had a bad batch in all my visits. The classic pork gyoza are still the highlight, with a perfect balance of meat and vegetables and that signature crispy bottom. The shrimp gyoza are also excellent, especially if you're looking for something slightly lighter. Where this place really shines is in the execution—the wrappers are always the perfect thickness, and the fry-steam technique is masterfully done. It's not fancy dining by any means—the space is cramped and you'll likely be seated elbow-to-elbow with other diners, but that's part of the authentic izakaya-style experience. Pro tip for visitors: they open at 5 PM for dinner, and if you arrive right at opening, you can usually get seated without a wait. Also, don't miss their homemade chili oil that's available on every table—it takes the gyoza to another level. While prices have increased slightly over the years, it remains one of Kyoto's best values for quality food."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Sophie R.</div>
+                <div class="review-date">Visited April 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star-half-alt" style="color: #FFD700;"></i>
+                  <i class="far fa-star" style="color: #ddd;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"ChaoChao was a welcome break from the more formal dining experiences we'd been having in Kyoto. We visited on a Thursday night around 7:30 PM and waited about 30 minutes for a table, which seemed reasonable given its popularity. The restaurant is definitely cozy (i.e., small and crowded), but the atmosphere is lively and fun. We tried three types of gyoza: the standard pork, a seasonal vegetable option, and their special 'deluxe' gyoza with extra garlic and ginger. The standard pork was excellent—perfectly crisp on the bottom with a juicy filling. The vegetable option was surprisingly flavorful, though I found the wrapper slightly thicker than ideal. The deluxe gyoza was indeed very garlicky—wonderful if you love garlic, but perhaps overwhelming if you don't! Beyond gyoza, we tried their cold tofu and seaweed salad, both of which were simple but good palate cleansers. Service was efficient but very rushed, which is understandable given the line of people waiting. There's not much English spoken, but the picture menu makes ordering straightforward. For the price (about ¥1,200 per person including a beer), the quality is excellent. I'd definitely recommend it for casual dining in Kyoto, just don't expect a lengthy, relaxed meal—this is more of an 'eat and move on' establishment."</p>
+          </div>
+        </div>
+        
+        <div class="carousel-arrow carousel-next">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+        
+        <div class="carousel-nav">
+          <div class="carousel-dot active"></div>
+          <div class="carousel-dot"></div>
+          <div class="carousel-dot"></div>
+        </div>
+      </div>
+      
+      <h2>Menu Highlights</h2>
+      
+      <p>While the menu at Gyoza ChaoChao is intentionally focused, each item is executed with precision:</p>
+      
+      <ul>
+        <li><strong>Classic Pork Gyoza (¥450 for 6 pieces)</strong> - Their signature offering with the perfect balance of pork, cabbage, garlic, and ginger</li>
+        <li><strong>Garlic Shrimp Gyoza (¥550 for 6 pieces)</strong> - A lighter alternative featuring minced shrimp with a hint of lemon</li>
+        <li><strong>Vegetable Gyoza (¥450 for 6 pieces)</strong> - Seasonal vegetables and mushrooms for a meat-free option</li>
+        <li><strong>Spicy Miso Gyoza (¥500 for 6 pieces)</strong> - The classic filling enhanced with Kyoto-style red miso and chili</li>
+        <li><strong>Special Seasonal Gyoza</strong> - Rotating limited-time offerings that incorporate seasonal ingredients</li>
+        <li><strong>Cucumber Salad (¥350)</strong> - Crunchy cucumbers dressed with sesame oil and vinegar</li>
+        <li><strong>Cold Tofu (¥300)</strong> - Silken tofu topped with ginger, green onions, and soy sauce</li>
+        <li><strong>Gyoza Rice Bowl (¥750)</strong> - A satisfying combination of steamed rice topped with chopped gyoza and special sauce</li>
+        <li><strong>House Highball (¥500)</strong> - Japanese whisky with soda water, the perfect refreshing complement to gyoza</li>
+        <li><strong>Draft Beer (¥550)</strong> - Kirin or Sapporo, served ice cold</li>
+      </ul>
+      
+      <div class="review-section">
+        <h2>Eastworld's Review</h2>
+        
+        <h3>Food Quality: <span style="color: #FFD700;">★★★★½</span></h3>
+        <p>ChaoChao excels at its specialty, producing gyoza of consistent excellence. The wrappers strike the perfect balance between chewy and crisp, while the fillings are juicy and well-seasoned. The supporting menu items are simple but competently prepared, clearly designed to complement the star attraction. For a specialized, single-focus restaurant, the execution is nearly flawless.</p>
+        
+        <h3>Value: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>This is where ChaoChao truly shines. Six perfectly prepared gyoza for ¥450 represents extraordinary value in a tourist city, and even with a few side dishes and drinks, it's difficult to spend more than ¥1,500 per person. The price-to-quality ratio is among the best in Kyoto for any dining establishment.</p>
+        
+        <h3>Atmosphere: <span style="color: #FFD700;">★★★</span></h3>
+        <p>The cramped, bustling environment is authentic but not particularly comfortable. The counter seating provides a wonderful view of the kitchen action, but tables are closely packed, and the space can feel hectic during peak hours. That said, the energy is part of the experience, lending an authentic izakaya-style atmosphere that many visitors seek.</p>
+        
+        <h3>Service: <span style="color: #FFD700;">★★★½</span></h3>
+        <p>Service is efficient and friendly, if somewhat hurried during busy periods. While English proficiency is limited, the staff make genuine efforts to accommodate international visitors. The picture menu facilitates easy ordering, and the food arrives promptly—often impressively so given how busy they get.</p>
+        
+        <h3>Authenticity: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>ChaoChao offers an authentic Japanese casual dining experience that hasn't been notably altered for tourists, despite its popularity with international visitors. This is how locals enjoy gyoza in Japan—unpretentious, social, and focused on quality over frills. The restaurant remains true to its roots while being accessible to foreign guests.</p>
+        
+        <h3>Overall: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>Gyoza ChaoChao delivers a quintessential Japanese casual dining experience centered around one of the country's beloved comfort foods. While not the place for a long, relaxed meal or extensive menu exploration, it excels at its focused purpose: serving outstanding gyoza in a lively, authentic environment at prices that represent exceptional value. For travelers seeking a break from more formal or expensive dining options in Kyoto, ChaoChao provides a delicious glimpse into everyday Japanese food culture.</p>
+      </div>
+      
+      <h2>Tips for Visitors</h2>
+      
+      <ul>
+        <li><strong>Timing:</strong> Arrive right at opening (11:30 AM for lunch, 5:00 PM for dinner) to minimize wait times</li>
+        <li><strong>Order Strategy:</strong> A typical order is 2-3 plates of gyoza per person, plus perhaps one side dish</li>
+        <li><strong>Counter vs. Table:</strong> Request counter seating if possible to watch the chefs at work</li>
+        <li><strong>Dipping Sauce:</strong> The house sauce is perfect as is, but try adding some of their homemade chili oil for extra kick</li>
+        <li><strong>Drink Pairing:</strong> Beer or highballs are traditional pairings, but they also offer non-alcoholic options like oolong tea</li>
+        <li><strong>Language:</strong> Basic English is understood, and the picture menu makes ordering straightforward</li>
+        <li><strong>Pace:</strong> This is not a restaurant for lingering—efficient eating is appreciated when others are waiting</li>
+        <li><strong>Cash:</strong> While credit cards are now accepted, having cash on hand is recommended for smoother payment</li>
+      </ul>
+      
+      <!-- Visitor Information -->
+      <div id="visitor-info" class="review-section">
+        <h2>Visitor Information</h2>
+        <p>Here's what you need to know when planning your visit to Gyoza ChaoChao:</p>
+        
+        <h3>Best Times to Visit:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Lunch service (11:30 AM - 2:00 PM) is typically less crowded than dinner</li>
+          <li>Early dinner (5:00 PM - 6:00 PM) usually has shorter wait times</li>
+          <li>Weekdays are generally less busy than weekends</li>
+          <li>During peak dinner hours (7:00 PM - 9:00 PM), expect a 20-40 minute wait</li>
+        </ul>
+        
+        <h3>Location Context:</h3>
+        <p>Kiyamachi Street is one of Kyoto's premier nightlife and dining districts, running parallel to the Takase River. The area comes alive in the evening with its numerous restaurants, bars, and traditional tea houses. ChaoChao's location makes it ideal to combine with:</p>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>A pre-dinner walk along the scenic Takase River</li>
+          <li>Shopping in the nearby Teramachi or Shinkyogoku covered shopping arcades</li>
+          <li>Post-dinner drinks at one of the many bars along Kiyamachi Street</li>
+          <li>Evening strolls in the Pontocho dining alley just across the Kamo River</li>
+        </ul>
+        
+        <h3>What to Expect:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>A small, crowded restaurant with approximately 25-30 seats</li>
+          <li>Counter seating offering views of the gyoza being prepared</li>
+          <li>Tables that may be shared with other parties during busy periods</li>
+          <li>A lively, somewhat noisy atmosphere</li>
+          <li>Quick service - most meals are completed within 30-45 minutes</li>
+        </ul>
+        
+        <h3>Payment Information:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Cash (Japanese yen) is preferred</li>
+          <li>Major credit cards (Visa, Mastercard) are accepted but cash is faster</li>
+          <li>No tipping necessary, as is standard in Japan</li>
+          <li>Expect to pay between ¥800-1,500 per person including drinks</li>
+        </ul>
+        
+        <p>This casual dining spot doesn't require reservations, but be prepared for a potential wait during peak hours. The line moves relatively quickly, and many would agree that these exemplary gyoza are worth a short wait.</p>
+      </div>
+      
+      <a href="../food.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Food Guide</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Review carousel functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const slides = document.querySelector('.review-slides');
+      const dots = document.querySelectorAll('.carousel-dot');
+      const prevBtn = document.querySelector('.carousel-prev');
+      const nextBtn = document.querySelector('.carousel-next');
+      let currentSlide = 0;
+      const totalSlides = document.querySelectorAll('.review-slide').length;
+      
+      // Function to update slide position
+      function showSlide(index) {
+        if (index < 0) index = totalSlides - 1;
+        if (index >= totalSlides) index = 0;
+        
+        currentSlide = index;
+        slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+        
+        // Update active dot
+        dots.forEach((dot, i) => {
+          dot.classList.toggle('active', i === currentSlide);
+        });
+      }
+      
+      // Set up event listeners for dots
+      dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => showSlide(i));
+      });
+      
+      // Set up event listeners for arrows
+      prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
+      nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
+      
+      // Auto-rotate slides every 5 seconds
+      setInterval(() => {
+        showSlide(currentSlide + 1);
+      }, 5000);
+    });
+  </script>
+  
+  <script src="../script.js"></script>
+</body>
+</html> 

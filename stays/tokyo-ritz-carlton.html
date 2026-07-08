@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Ritz-Carlton Tokyo - Eastworld Hotel Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Additional styles specific to hotel reviews */
+    .review-categories {
+      display: flex;
+      margin: 2rem 0;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .review-category {
+      flex: 1;
+      padding: 1rem;
+      background: #f9f9f9;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 1rem;
+      font-weight: 500;
+    }
+    
+    .review-category.active {
+      background: #000;
+      color: white;
+    }
+    
+    .review-content {
+      display: none;
+      margin: 2rem 0;
+    }
+    
+    .review-content.active {
+      display: block;
+    }
+    
+    .review-carousel {
+      position: relative;
+      margin: 2rem 0;
+    }
+    
+    .review-slides {
+      display: flex;
+      overflow: hidden;
+      scroll-behavior: smooth;
+    }
+    
+    .review-slide {
+      min-width: 100%;
+      padding: 1.5rem;
+      background: #f9f9f9;
+      border-radius: 8px;
+      margin-right: 1rem;
+    }
+    
+    .reviewer-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    
+    .reviewer-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: #ddd;
+      margin-right: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: #666;
+    }
+    
+    .reviewer-details {
+      flex: 1;
+    }
+    
+    .reviewer-name {
+      font-weight: bold;
+      margin-bottom: 0.25rem;
+    }
+    
+    .reviewer-location {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 0.25rem;
+    }
+    
+    .review-rating {
+      color: #FFD700;
+    }
+    
+    .carousel-nav {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 1rem 0;
+      gap: 0.5rem;
+    }
+    
+    .carousel-arrow {
+      background: #000;
+      color: white;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.3s ease;
+    }
+    
+    .carousel-arrow:hover {
+      background: #333;
+    }
+    
+    .carousel-dots {
+      display: flex;
+      gap: 0.5rem;
+      margin: 0 1rem;
+    }
+    
+    .carousel-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #ddd;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .carousel-dot.active {
+      background: #000;
+    }
+    
+    .hotel-amenities {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .amenity-item {
+      display: flex;
+      align-items: center;
+      padding: 0.5rem;
+      background: #f9f9f9;
+      border-radius: 4px;
+    }
+    
+    .amenity-item i {
+      margin-right: 0.5rem;
+      color: #666;
+    }
+    
+    .booking-section {
+      background: #f0f8ff;
+      padding: 2rem;
+      border-radius: 8px;
+      margin: 2rem 0;
+      text-align: center;
+    }
+    
+    .booking-button {
+      display: inline-block;
+      background: #000;
+      color: white;
+      padding: 1rem 2rem;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: bold;
+      transition: background 0.3s ease;
+      margin: 1rem 0.5rem;
+    }
+    
+    .booking-button:hover {
+      background: #333;
+    }
+    
+    .hotel-info-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+    
+    .hotel-details {
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 8px;
+    }
+    
+    .detail-row {
+      display: flex;
+      margin: 0.75rem 0;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+    }
+    
+    .detail-label {
+      font-weight: bold;
+      min-width: 120px;
+      margin-right: 1rem;
+    }
+    
+    .detail-value {
+      flex: 1;
+    }
+    
+    @media (max-width: 768px) {
+      .hotel-info-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .review-categories {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../food.html" class="nav-item">FOOD</a>
+        <a href="../stays.html" class="nav-item active">STAYS</a>
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="content-container">
+    <div class="content-header">
+      <span class="content-category">ULTRA-LUXURY</span>
+      <h1 class="content-title">The Ritz-Carlton Tokyo - Opulent Luxury in Roppongi's Heart</h1>
+      
+      <!-- Rating Section -->
+      <div class="rating">
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="score-label">4.8/5.0</span>
+      </div>
+    </div>
+    
+    <div class="hero-container">
+      <img class="content-hero" src="https://www.ritzcarlton.com/content/dam/ritzcarlton/hotels/asia-pacific/tokyo/TYORT-AERIAL-HEROSHOT.jpg" alt="The Ritz-Carlton Tokyo" 
+      onerror="this.onerror=null; 
+      this.parentElement.innerHTML = '<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#333;color:white;font-size:1.5rem;text-align:center;padding:2rem;\'>The Ritz-Carlton Tokyo</div>';">
+    </div>
+    
+    <!-- Booking Buttons -->
+    <div class="booking-section">
+      <h3>Book Your Stay at The Ritz-Carlton Tokyo</h3>
+      <a href="#" class="booking-button">
+        <i class="fas fa-calendar-alt"></i> Book Direct - Marriott Bonvoy Benefits
+      </a>
+      <a href="#" class="booking-button">
+        <i class="fas fa-phone"></i> Call Concierge: +81 3 3423 8000
+      </a>
+    </div>
+    
+    <!-- Hotel Information Section -->
+    <div class="hotel-info-grid">
+      <div class="hotel-details">
+        <h2>Hotel Details</h2>
+        
+        <div class="detail-row">
+          <div class="detail-label">Address:</div>
+          <div class="detail-value">9-7-1 Akasaka, Minato-ku, Tokyo 107-6245, Japan</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Check-in:</div>
+          <div class="detail-value">3:00 PM</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Check-out:</div>
+          <div class="detail-value">12:00 PM</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Phone:</div>
+          <div class="detail-value">+81 3 3423 8000</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Price Range:</div>
+          <div class="detail-value">$500-1000 USD per night</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Category:</div>
+          <div class="detail-value">Ultra-Luxury Hotel</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Floors:</div>
+          <div class="detail-value">45th-53rd floors of Tokyo Midtown</div>
+        </div>
+      </div>
+      
+      <div>
+        <h3>Key Amenities</h3>
+        <div class="hotel-amenities">
+          <div class="amenity-item">
+            <i class="fas fa-wifi"></i>
+            <span>Complimentary WiFi</span>
+          </div>
+          <div class="amenity-item">
+            <i class="fas fa-swimming-pool"></i>
+            <span>46th Floor Indoor Pool</span>
+          </div>
+          <div class="amenity-item">
+            <i class="fas fa-spa"></i>
+            <span>The Ritz-Carlton Spa</span>
+          </div>
+          <div class="amenity-item">
+            <i class="fas fa-dumbbell"></i>
+            <span>Fitness Center</span>
+          </div>
+          <div class="amenity-item">
+            <i class="fas fa-utensils"></i>
+            <span>Azure 45 Restaurant</span>
+          </div>
+          <div class="amenity-item">
+            <i class="fas fa-wine-glass"></i>
+            <span>The Bar & The Lobby Lounge</span>
+          </div>
+          <div class="amenity-item">
+            <i class="fas fa-concierge-bell"></i>
+            <span>24/7 Personal Butler</span>
+          </div>
+          <div class="amenity-item">
+            <i class="fas fa-crown"></i>
+            <span>Club Level Access</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="content-text">
+      <h2>The Pinnacle of Tokyo Luxury</h2>
+      
+      <p>The Ritz-Carlton Tokyo represents the absolute pinnacle of luxury hospitality in Japan's capital, occupying floors 45 through 53 of the prestigious Tokyo Midtown complex in Roppongi. This ultra-luxury hotel sets the global standard for opulent accommodations, impeccable service, and attention to detail that has made The Ritz-Carlton name synonymous with the world's finest hospitality experiences.</p>
+      
+      <p>Every aspect of the hotel reflects meticulous attention to luxury, from the handcrafted furnishings and premium materials to the legendary service that anticipates guests' needs before they're even expressed. The hotel's elevated location provides stunning views of Tokyo's skyline, Mount Fuji, and the Imperial Palace gardens, creating an atmosphere of serene grandeur high above the bustling metropolis.</p>
+      
+      <div class="photos-container">
+        <div class="photo-item">
+          <img src="https://www.ritzcarlton.com/content/dam/ritzcarlton/hotels/asia-pacific/tokyo/TYORT-GUESTROOM-SUITE.jpg" alt="Ritz-Carlton Tokyo luxury suite">
+        </div>
+        <div class="photo-item">
+          <img src="https://www.ritzcarlton.com/content/dam/ritzcarlton/hotels/asia-pacific/tokyo/TYORT-AZURE45-RESTAURANT.jpg" alt="Azure 45 restaurant">
+        </div>
+        <div class="photo-item">
+          <img src="https://www.ritzcarlton.com/content/dam/ritzcarlton/hotels/asia-pacific/tokyo/TYORT-SPA-POOL.jpg" alt="46th floor spa pool">
+        </div>
+        <div class="photo-item">
+          <img src="https://www.ritzcarlton.com/content/dam/ritzcarlton/hotels/asia-pacific/tokyo/TYORT-LOBBY-LOUNGE.jpg" alt="The Lobby Lounge">
+        </div>
+      </div>
+      
+      <h2>Ultra-Luxury Accommodations</h2>
+      
+      <p>Each of the 247 guest rooms and suites showcases the finest materials and craftsmanship, featuring Italian marble bathrooms, handwoven silk furnishings, and floor-to-ceiling windows with breathtaking city views. The rooms blend contemporary luxury with subtle Japanese design elements, creating spaces that feel both opulent and harmonious.</p>
+      
+      <p>The Club Level accommodations provide access to The Club Lounge, offering personalized concierge services, private check-in, and exclusive culinary presentations throughout the day. The Presidential Suite, spanning an entire floor, offers unparalleled luxury with wraparound terraces, panoramic views, and a dedicated butler service that exemplifies The Ritz-Carlton's legendary hospitality standards.</p>
+
+      <!-- Local vs Tourist Reviews Section -->
+      <div class="review-section">
+        <h2>What Our Community Says</h2>
+        <p style="margin-bottom: 2rem; color: #666; font-style: italic;">Experience The Ritz-Carlton Tokyo through the eyes of locals who appreciate ultimate luxury and tourists seeking the pinnacle of hospitality excellence.</p>
+        
+        <!-- Review Category Tabs -->
+        <div class="review-categories">
+          <button class="review-category active" data-category="local">
+            <i class="fas fa-map-marked-alt"></i>
+            <div>Local Reviews</div>
+            <small>Tokyo luxury connoisseurs & elite professionals</small>
+          </button>
+          <button class="review-category" data-category="tourist">
+            <i class="fas fa-camera-retro"></i>
+            <div>Tourist Reviews</div>
+            <small>International luxury travelers & special occasion guests</small>
+          </button>
+        </div>
+        
+        <!-- Local Reviews -->
+        <div class="review-content active" id="local-reviews">
+          <div class="review-carousel">
+            <div class="review-slides" id="local-slides">
+              <div class="review-slide">
+                <div class="reviewer-info">
+                  <div class="reviewer-avatar">KN</div>
+                  <div class="reviewer-details">
+                    <div class="reviewer-name">Kenji Nakamura</div>
+                    <div class="reviewer-location">Tokyo CEO, Luxury Industry Professional</div>
+                    <div class="review-rating">
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                    </div>
+                  </div>
+                </div>
+                <p>"As someone who regularly entertains international executives and VIPs, The Ritz-Carlton Tokyo is unparalleled in the city. The Club Level service is exceptional - they remember preferences from previous visits and anticipate needs with remarkable precision. The location in Roppongi provides convenient access to business districts while maintaining the prestige necessary for high-level entertainment. Azure 45's private dining rooms are perfect for confidential business discussions with spectacular views. The butler service exceeds even international standards. For Tokyo's business elite, this represents the absolute pinnacle of luxury hospitality. Every detail reflects the highest level of sophistication."</p>
+              </div>
+              
+              <div class="review-slide">
+                <div class="reviewer-info">
+                  <div class="reviewer-avatar">YS</div>
+                  <div class="reviewer-details">
+                    <div class="reviewer-name">Yuki Suzuki</div>
+                    <div class="reviewer-location">Tokyo Luxury Consultant, Hotel Industry Expert</div>
+                    <div class="review-rating">
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                    </div>
+                  </div>
+                </div>
+                <p>"Working in Tokyo's luxury hospitality sector, I can confidently say The Ritz-Carlton sets the global standard here. The staff training is extraordinary - they seamlessly blend international luxury service with Japanese omotenashi principles. The spa treatments are world-class, incorporating both Western techniques and traditional Japanese wellness practices. The Club Lounge's afternoon tea and evening canapés rival the city's best restaurants. For locals who appreciate the finest luxury experiences, this hotel consistently exceeds expectations. The attention to detail in everything from room amenities to concierge services is simply unmatched in Tokyo."</p>
+              </div>
+              
+              <div class="review-slide">
+                <div class="reviewer-info">
+                  <div class="reviewer-avatar">MT</div>
+                  <div class="reviewer-details">
+                    <div class="reviewer-name">Michiko Tanaka</div>
+                    <div class="reviewer-location">Tokyo Socialite, Art Collector</div>
+                    <div class="review-rating">
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="far fa-star"></i>
+                    </div>
+                  </div>
+                </div>
+                <p>"For special occasions and entertaining, The Ritz-Carlton Tokyo provides an atmosphere of refined elegance that reflects well on hosts. The art collection throughout the hotel is impressive, and the design aesthetic appeals to sophisticated tastes. The afternoon tea service is exceptional, and the private dining experiences are memorable for guests. The location in Tokyo Midtown provides excellent shopping and cultural access. While the pricing reflects its ultra-luxury positioning, the experience justifies the investment for important celebrations. During peak seasons, advance reservations are essential as demand from Tokyo's elite is consistently high."</p>
+              </div>
+            </div>
+            
+            <div class="carousel-nav">
+              <button class="carousel-arrow carousel-prev" data-carousel="local">
+                <i class="fas fa-chevron-left"></i>
+              </button>
+              <div class="carousel-dots">
+                <div class="carousel-dot active" data-slide="0"></div>
+                <div class="carousel-dot" data-slide="1"></div>
+                <div class="carousel-dot" data-slide="2"></div>
+              </div>
+              <button class="carousel-arrow carousel-next" data-carousel="local">
+                <i class="fas fa-chevron-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Tourist Reviews -->
+        <div class="review-content" id="tourist-reviews">
+          <div class="review-carousel">
+            <div class="review-slides" id="tourist-slides">
+              <div class="review-slide">
+                <div class="reviewer-info">
+                  <div class="reviewer-avatar">RW</div>
+                  <div class="reviewer-details">
+                    <div class="reviewer-name">Robert Williams</div>
+                    <div class="reviewer-location">New York, Luxury Travel Connoisseur</div>
+                    <div class="review-rating">
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                    </div>
+                  </div>
+                </div>
+                <p>"Having stayed at Ritz-Carlton properties worldwide, Tokyo exceeds even their global standards. The attention to detail is extraordinary - from the welcome amenities to the turndown service, every interaction reflects meticulous care. Our Club Level suite offered breathtaking Mount Fuji views and butler service that anticipated our every need. The spa experience was transformational, blending Japanese wellness traditions with luxury amenities. Dining at Azure 45 provided world-class cuisine with spectacular city views. The concierge arranged exclusive cultural experiences that we couldn't have accessed independently. For travelers seeking the absolute pinnacle of luxury hospitality, The Ritz-Carlton Tokyo delivers an unforgettable experience that justifies its premium positioning."</p>
+              </div>
+              
+              <div class="review-slide">
+                <div class="reviewer-info">
+                  <div class="reviewer-avatar">SC</div>
+                  <div class="reviewer-details">
+                    <div class="reviewer-name">Sophia Chen</div>
+                    <div class="reviewer-location">Hong Kong, Anniversary Celebration</div>
+                    <div class="review-rating">
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                    </div>
+                  </div>
+                </div>
+                <p>"Celebrated our 25th anniversary at The Ritz-Carlton Tokyo and it exceeded our highest expectations. When we mentioned the special occasion, they upgraded our room and arranged champagne, flowers, and personalized amenities that made us feel truly special. The Club Lounge became our daily retreat with exceptional afternoon tea and evening cocktails with panoramic city views. The spa couple's treatment was the most luxurious we've experienced anywhere in the world. Dining experiences were extraordinary, from the innovative cuisine to the impeccable service. The location provided easy access to Tokyo's cultural attractions while feeling like a serene luxury retreat. Every moment felt like we were experiencing the very best Tokyo has to offer."</p>
+              </div>
+              
+              <div class="review-slide">
+                <div class="reviewer-info">
+                  <div class="reviewer-avatar">AL</div>
+                  <div class="reviewer-details">
+                    <div class="reviewer-name">Andrea Lopez</div>
+                    <div class="reviewer-location">Madrid, First-time Tokyo Visitor</div>
+                    <div class="review-rating">
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                    </div>
+                  </div>
+                </div>
+                <p>"Our first visit to Tokyo and The Ritz-Carlton provided the perfect introduction to Japanese luxury and hospitality. The staff's cultural knowledge and language skills made navigating Tokyo effortless - they arranged everything from traditional tea ceremonies to modern art gallery visits. Our room felt like a luxury sanctuary with stunning city views and amenities that exceeded European luxury standards. The Japanese breakfast experience was culturally authentic yet refined for international tastes. The concierge team provided insider access to experiences we couldn't have discovered ourselves. The pool and spa on the 46th floor created surreal moments floating above one of the world's greatest cities. For first-time Tokyo visitors seeking uncompromising luxury, this hotel creates memories that last a lifetime."</p>
+              </div>
+            </div>
+            
+            <div class="carousel-nav">
+              <button class="carousel-arrow carousel-prev" data-carousel="tourist">
+                <i class="fas fa-chevron-left"></i>
+              </button>
+              <div class="carousel-dots">
+                <div class="carousel-dot active" data-slide="0"></div>
+                <div class="carousel-dot" data-slide="1"></div>
+                <div class="carousel-dot" data-slide="2"></div>
+              </div>
+              <button class="carousel-arrow carousel-next" data-carousel="tourist">
+                <i class="fas fa-chevron-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <h2>World-Class Dining & Entertainment</h2>
+      
+      <p>Azure 45, located on the 45th floor, offers contemporary French cuisine with breathtaking panoramic views of Tokyo's skyline and Mount Fuji. The restaurant's intimate atmosphere and world-class cuisine make it one of Tokyo's most sought-after dining destinations. The wine program features an exceptional collection of vintage wines and champagnes, carefully curated to complement the sophisticated menu.</p>
+      
+      <p>The Bar provides an intimate setting for premium spirits and creative cocktails, while The Lobby Lounge serves traditional afternoon tea and light meals in an atmosphere of refined elegance. The Club Lounge offers exclusive dining experiences throughout the day for Club Level guests, featuring artisanal canapés, premium beverages, and personalized service.</p>
+      
+      <h2>Ultra-Luxury Wellness & Recreation</h2>
+      
+      <p>The Ritz-Carlton Spa provides the ultimate wellness experience with treatments that blend international techniques with traditional Japanese healing practices. The facility features private treatment suites, a relaxation lounge, and a comprehensive menu of massages, facials, and body treatments using the finest products and techniques.</p>
+      
+      <p>The indoor swimming pool on the 46th floor offers a unique aquatic experience with floor-to-ceiling windows providing spectacular city views. The adjacent fitness center features state-of-the-art equipment, personal training services, and yoga and meditation classes, all while suspended high above Tokyo's urban landscape.</p>
+      
+      <h2>Premium Roppongi Location</h2>
+      
+      <ul>
+        <li><strong>Tokyo Midtown:</strong> Located within Tokyo's premier luxury shopping and dining complex</li>
+        <li><strong>Roppongi Hills:</strong> 5-minute walk to entertainment, art galleries, and upscale dining</li>
+        <li><strong>Imperial Palace:</strong> 15-minute drive to historic gardens and traditional architecture</li>
+        <li><strong>Ginza District:</strong> 20-minute drive to luxury shopping and fine dining</li>
+        <li><strong>Narita Airport:</strong> 75-90 minutes via luxury car service or Narita Express</li>
+        <li><strong>Haneda Airport:</strong> 45-60 minutes via hotel car service or monorail connections</li>
+      </ul>
+      
+      <h2>Legendary Ritz-Carlton Service</h2>
+      
+      <p>The Ritz-Carlton Tokyo exemplifies the brand's legendary service philosophy with personalized attention that exceeds the highest expectations. The concierge team provides access to exclusive cultural experiences, private shopping appointments, and insider access to Tokyo's most coveted restaurants and entertainment venues. Butler service and Club Level amenities ensure that every aspect of the stay reflects the pinnacle of luxury hospitality.</p>
+      
+      <!-- Final Booking Section -->
+      <div class="booking-section">
+        <h3>Experience Tokyo's Ultimate Luxury Hotel</h3>
+        <p>Book your stay at The Ritz-Carlton Tokyo for the absolute pinnacle of luxury hospitality in Japan's capital.</p>
+        <a href="#" class="booking-button">
+          <i class="fas fa-calendar-alt"></i> Reserve Your Ultra-Luxury Experience
+        </a>
+        <a href="#" class="booking-button">
+          <i class="fas fa-phone"></i> Contact Personal Concierge
+        </a>
+      </div>
+      
+      <a href="../stays.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Stays Guide</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Review category switching
+    document.querySelectorAll('.review-category').forEach(button => {
+      button.addEventListener('click', function() {
+        // Remove active class from all buttons
+        document.querySelectorAll('.review-category').forEach(btn => btn.classList.remove('active'));
+        // Add active class to clicked button
+        this.classList.add('active');
+        
+        // Hide all review content
+        document.querySelectorAll('.review-content').forEach(content => content.classList.remove('active'));
+        // Show selected review content
+        const category = this.getAttribute('data-category');
+        document.getElementById(category + '-reviews').classList.add('active');
+      });
+    });
+
+    // Carousel functionality
+    function setupCarousel(carouselType) {
+      const slides = document.getElementById(carouselType + '-slides');
+      const dots = document.querySelectorAll(`#${carouselType}-reviews .carousel-dot`);
+      const prevBtn = document.querySelector(`#${carouselType}-reviews .carousel-prev`);
+      const nextBtn = document.querySelector(`#${carouselType}-reviews .carousel-next`);
+      
+      let currentSlide = 0;
+      
+      function showSlide(index) {
+        slides.style.transform = `translateX(-${index * 100}%)`;
+        dots.forEach(dot => dot.classList.remove('active'));
+        dots[index].classList.add('active');
+        currentSlide = index;
+      }
+      
+      dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => showSlide(index));
+      });
+      
+      prevBtn.addEventListener('click', () => {
+        const newIndex = currentSlide > 0 ? currentSlide - 1 : dots.length - 1;
+        showSlide(newIndex);
+      });
+      
+      nextBtn.addEventListener('click', () => {
+        const newIndex = currentSlide < dots.length - 1 ? currentSlide + 1 : 0;
+        showSlide(newIndex);
+      });
+    }
+
+    // Initialize carousels
+    setupCarousel('local');
+    setupCarousel('tourist');
+  </script>
+</body>
+</html> 

@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aman Kyoto - Eastworld Hotel Guide</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Additional styles specific to hotel reviews */
+    .hotel-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+      .hotel-info {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .hotel-details {
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .detail-row {
+      display: flex;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+    }
+    
+    .detail-label {
+      font-weight: 600;
+      min-width: 120px;
+      color: #333;
+    }
+    
+    .detail-value {
+      flex: 1;
+      color: #555;
+    }
+    
+    .rating {
+      margin-bottom: 1rem;
+    }
+    
+    .star {
+      color: #ddd;
+      font-size: 1.5rem;
+    }
+    
+    .star.filled {
+      color: #FFD700;
+    }
+    
+    .half-star {
+      position: relative;
+    }
+    
+    .half-star .fas.fa-star-half {
+      color: #FFD700;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    
+    .score-label {
+      margin-left: 0.5rem;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .map-container {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .map-container iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+    }
+    
+    .photos-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .photo-item {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .photo-item img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+    }
+    
+    /* Review Categories - NEW FEATURE */
+    .review-categories {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      border-bottom: 2px solid #eee;
+    }
+    
+    .category-tab {
+      padding: 1rem 2rem;
+      background: #f5f5f5;
+      border: none;
+      border-radius: 8px 8px 0 0;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      color: #666;
+    }
+    
+    .category-tab.active {
+      background: #ff4d4d;
+      color: white;
+      transform: translateY(2px);
+    }
+    
+    .category-tab:hover:not(.active) {
+      background: #e0e0e0;
+    }
+    
+    .review-content {
+      display: none;
+    }
+    
+    .review-content.active {
+      display: block;
+    }
+    
+    .category-intro {
+      background: linear-gradient(135deg, #ff4d4d, #ff6b6b);
+      color: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+    
+    .category-intro h3 {
+      margin: 0 0 0.5rem 0;
+      font-size: 1.3rem;
+    }
+    
+    .category-intro p {
+      margin: 0;
+      opacity: 0.9;
+    }
+    
+    .review-carousel {
+      position: relative;
+      overflow: hidden;
+      margin: 2rem 0;
+    }
+    
+    .review-slides {
+      display: flex;
+      transition: transform 0.3s ease;
+    }
+    
+    .review-slide {
+      min-width: 100%;
+      padding: 2rem;
+      background: #fafafa;
+      border-radius: 8px;
+      margin-right: 1rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .reviewer-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      gap: 1rem;
+    }
+    
+    .reviewer-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ff4d4d, #ff6b6b);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+    
+    .reviewer-name {
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: #333;
+    }
+    
+    .review-date {
+      color: #888;
+      font-size: 0.9rem;
+    }
+    
+    .review-rating {
+      margin-top: 0.25rem;
+    }
+    
+    .review-rating i {
+      font-size: 0.8rem;
+      margin-right: 2px;
+    }
+    
+    .carousel-nav {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+    
+    .carousel-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ddd;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .carousel-dot.active {
+      background: #ff4d4d;
+    }
+    
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.7);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+    
+    .carousel-prev {
+      left: 10px;
+    }
+    
+    .carousel-next {
+      right: 10px;
+    }
+    
+    .amenities-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .amenity-item {
+      display: flex;
+      align-items: center;
+      background: #f0f0f0;
+      padding: 0.8rem 1rem;
+      border-radius: 4px;
+    }
+    
+    .amenity-item i {
+      margin-right: 0.5rem;
+      color: #333;
+    }
+    
+    .room-types {
+      margin: 2rem 0;
+    }
+    
+    .room-card {
+      border: 1px solid #eee;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 2rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    
+    .room-image {
+      height: 250px;
+    }
+    
+    .room-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .room-details {
+      padding: 1.5rem;
+    }
+    
+    .room-name {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .room-price {
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 1rem;
+    }
+    
+    .room-features {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    .room-feature {
+      background: #f0f0f0;
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="places.html" class="nav-item">PLACES</a>
+        <a href="food.html" class="nav-item">FOOD</a>
+        <a href="stays.html" class="nav-item active">STAYS</a>
+        <a href="products.html" class="nav-item">PRODUCTS</a>
+        <a href="cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="login.html" class="nav-item">LOGIN</a>
+          <a href="register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="content-container">
+    <div class="content-header">
+      <span class="content-category">ULTRA-LUXURY RESORT</span>
+      <h1 class="content-title">Aman Kyoto - Forest Sanctuary of Ultimate Luxury</h1>
+      
+      <!-- Rating Section -->
+      <div class="rating">
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="score-label">5.0/5.0</span>
+      </div>
+    </div>
+    
+    <div class="hero-container">
+      <img class="content-hero" src="https://www.amankyoto.com/wp-content/uploads/2019/03/Aman-Kyoto-Exterior.jpg" alt="Aman Kyoto Resort" 
+      onerror="this.onerror=null; 
+      this.parentElement.innerHTML = '<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#333;color:white;font-size:1.5rem;text-align:center;padding:2rem;\'>Aman Kyoto</div>';">
+    </div>
+    
+    <!-- Booking Button -->
+    <a href="#booking-form" class="booking-button">
+      <i class="fas fa-calendar-alt"></i> BOOK YOUR STAY
+    </a>
+    
+    <!-- Hotel Information Section -->
+    <div class="hotel-info">
+      <div class="hotel-details">
+        <h2>Resort Details</h2>
+        
+        <div class="detail-row">
+          <div class="detail-label">Address:</div>
+          <div class="detail-value">1 Okitayama Washimine-Cho, Kita-ku, Kyoto 603-8458, Japan</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Check-in:</div>
+          <div class="detail-value">3:00 PM</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Check-out:</div>
+          <div class="detail-value">12:00 PM</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Phone:</div>
+          <div class="detail-value">+81 75-496-1333</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Price Range:</div>
+          <div class="detail-value">$850-2,500 per night</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Style:</div>
+          <div class="detail-value">Ultra-Luxury Forest Resort</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Amenities:</div>
+          <div class="detail-value">Private Spa, Forest Gardens, Cultural Experiences, Michelin-Level Dining</div>
+        </div>
+        
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">How to Get There</h3>
+        <p>From Kyoto Station:</p>
+        <ul style="margin-bottom: 1rem; padding-left: 1.5rem;">
+          <li>Complimentary resort transfer (30 minutes)</li>
+          <li>Private car service available</li>
+          <li>Karasuma Line to Kitaoji Station + 10-minute taxi</li>
+          <li>Helicopter transfer from Kansai Airport (available on request)</li>
+        </ul>
+      </div>
+      
+      <div class="map-container">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3266.6792071619143!2d135.74891741522035!3d35.05176198034425!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6001a82f69e9eb6d%3A0xbb738eb9a387e24d!2sAman%20Kyoto!5e0!3m2!1sen!2sus!4v1619430912488!5m2!1sen!2sus" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+    
+    <div class="content-text">
+      <h2>A Forest Sanctuary in Historic Kyoto</h2>
+      
+      <p>Hidden at the foot of Mount Daimonji within a once-forgotten secret garden, Aman Kyoto is a sanctuary of serene luxury that seamlessly blends with its natural surroundings. Set on 80 acres of forested grounds, this exclusive retreat offers an uncommon perspective on Japan's ancient imperial capital, merging cultural immersion with pristine natural beauty.</p>
+      
+      <p>Designed by Kerry Hill Architects, who masterfully created other iconic Aman properties, the resort comprises a collection of modernist pavilions constructed using traditional Japanese materials and techniques. Each structure honors the cultural heritage of its setting while offering contemporary comforts and sophisticated design.</p>
+      
+      <div class="photos-container">
+        <div class="photo-item">
+          <img src="https://www.amankyoto.com/wp-content/uploads/2019/04/Aman-Kyoto_Pavilion-1024x683.jpg" alt="Aman Kyoto Pavilion">
+        </div>
+        <div class="photo-item">
+          <img src="https://www.amankyoto.com/wp-content/uploads/2019/05/Aman-Kyoto_Living-Pavilion-Restaurant-1024x683.jpg" alt="Aman Kyoto Restaurant">
+        </div>
+        <div class="photo-item">
+          <img src="https://www.amankyoto.com/wp-content/uploads/2019/04/Aman-Kyoto_Susuki-1024x576.jpg" alt="Aman Kyoto Garden">
+        </div>
+        <div class="photo-item">
+          <img src="https://www.amankyoto.com/wp-content/uploads/2019/04/Aman-Kyoto_Tsuboniwa-1024x683.jpg" alt="Aman Kyoto Interior">
+        </div>
+      </div>
+      
+      <h2>Accommodations & Experiences</h2>
+      
+      <p>The resort features 26 guest rooms and suites, housed within six pavilions that blend harmoniously with the surrounding forest. Each room is a minimalist sanctuary, featuring floor-to-ceiling windows, tatami mats, hinoki cypress ofuro bathtubs, and tokonoma alcoves showcasing local artwork.</p>
+      
+      <div class="content-quote">
+        "Aman Kyoto represents the essence of Japan's cultural and natural splendor, offering an intimate connection to place through design that honors both tradition and innovation. Here, luxury is defined by space, privacy, and immersion in the extraordinary beauty of a secret garden." - Vladimir Kojic, General Manager
+      </div>
+      
+      <!-- REVIEWS WITH LOCAL VS TOURIST CATEGORIES -->
+      <h2>Guest Reviews</h2>
+      
+      <div class="review-categories">
+        <button class="category-tab active" onclick="showCategory('locals')">
+          <i class="fas fa-home"></i> Local Reviews
+        </button>
+        <button class="category-tab" onclick="showCategory('tourists')">
+          <i class="fas fa-plane"></i> Tourist Reviews
+        </button>
+      </div>
+      
+      <!-- LOCAL REVIEWS -->
+      <div id="locals" class="review-content active">
+        <div class="category-intro">
+          <h3><i class="fas fa-home"></i> Local Perspective</h3>
+          <p>Reviews from Kyoto and Kansai region residents who understand the cultural significance and hidden luxury</p>
+        </div>
+        
+        <div class="review-carousel" id="locals-carousel">
+          <div class="carousel-arrow carousel-prev" onclick="prevSlide('locals')">
+            <i class="fas fa-chevron-left"></i>
+          </div>
+          
+          <div class="review-slides">
+            <div class="review-slide">
+              <div class="reviewer-info">
+                <div class="reviewer-avatar">HT</div>
+                <div>
+                  <div class="reviewer-name">Hiroshi T. - Kyoto Cultural Historian</div>
+                  <div class="review-date">Stayed March 2024</div>
+                  <div class="review-rating">
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                  </div>
+                </div>
+              </div>
+              <p>"As someone who has lived in Kyoto for 40 years and witnessed countless hotels attempt to capture our city's essence, Aman Kyoto stands apart. The way they've integrated with the mountain forest while respecting sacred boundaries is remarkable. The staff's understanding of local customs goes beyond surface-level training—they genuinely embody omotenashi. What impressed me most was their collaboration with local artisans and temples for authentic cultural experiences. This isn't just accommodation; it's a bridge between worlds that honors our heritage while creating something entirely new."</p>
+            </div>
+            
+            <div class="review-slide">
+              <div class="reviewer-info">
+                <div class="reviewer-avatar">MK</div>
+                <div>
+                  <div class="reviewer-name">Michiko K. - Traditional Arts Master</div>
+                  <div class="review-date">Stayed February 2024</div>
+                  <div class="review-rating">
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                  </div>
+                </div>
+              </div>
+              <p>"I've conducted tea ceremonies at Aman Kyoto and always marvel at how the architecture enhances rather than competes with traditional practices. The pavilions create perfect frames for seasonal changes—something only locals truly appreciate about Kyoto's rhythm. The resort's garden maintenance follows principles that take decades to master. Their cultural program director genuinely understands that luxury in Japan means space, silence, and subtlety. When international guests experience authentic kaiseki here, they're receiving something many Kyoto restaurants have forgotten how to provide."</p>
+            </div>
+            
+            <div class="review-slide">
+              <div class="reviewer-info">
+                <div class="reviewer-avatar">NK</div>
+                <div>
+                  <div class="reviewer-name">Naoki K. - Local Business Executive</div>
+                  <div class="review-date">Stayed January 2024</div>
+                  <div class="review-rating">
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star-half-alt" style="color: #FFD700;"></i>
+                  </div>
+                </div>
+              </div>
+              <p>"I use Aman Kyoto for hosting international business partners because it provides an uncompromising introduction to Japanese luxury without overwhelming them. The forest setting offers privacy impossible to find elsewhere in Kyoto, while the service anticipates needs with precision that reflects deep cultural understanding. The seasonal menu changes showcase ingredients even locals struggle to source. My only minor concern is accessibility during heavy snow periods, but the resort handles winter logistics expertly."</p>
+            </div>
+          </div>
+          
+          <div class="carousel-arrow carousel-next" onclick="nextSlide('locals')">
+            <i class="fas fa-chevron-right"></i>
+          </div>
+          
+          <div class="carousel-nav">
+            <div class="carousel-dot active"></div>
+            <div class="carousel-dot"></div>
+            <div class="carousel-dot"></div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- TOURIST REVIEWS -->
+      <div id="tourists" class="review-content">
+        <div class="category-intro">
+          <h3><i class="fas fa-plane"></i> Tourist Experience</h3>
+          <p>Reviews from international travelers discovering the pinnacle of Japanese luxury hospitality</p>
+        </div>
+        
+        <div class="review-carousel" id="tourists-carousel">
+          <div class="carousel-arrow carousel-prev" onclick="prevSlide('tourists')">
+            <i class="fas fa-chevron-left"></i>
+          </div>
+          
+          <div class="review-slides">
+            <div class="review-slide">
+              <div class="reviewer-info">
+                <div class="reviewer-avatar">RL</div>
+                <div>
+                  <div class="reviewer-name">Robert L. - Luxury Travel Connoisseur</div>
+                  <div class="review-date">Stayed March 2024</div>
+                  <div class="review-rating">
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                  </div>
+                </div>
+              </div>
+              <p>"After staying at Aman properties worldwide, Aman Kyoto represents the absolute pinnacle of the brand. Waking up in a forest pavilion with Mount Daimonji visible through floor-to-ceiling windows creates an almost spiritual connection to place. The cultural immersion program is unparalleled—private temple visits, master artisan workshops, and meditation sessions that transformed my understanding of Japanese philosophy. Every meal was a revelation, featuring ingredients I'd never encountered. The service transcends accommodation to become cultural education delivered with extraordinary grace."</p>
+            </div>
+            
+            <div class="review-slide">
+              <div class="reviewer-info">
+                <div class="reviewer-avatar">SC</div>
+                <div>
+                  <div class="reviewer-name">Sarah & Christopher - Anniversary Travelers</div>
+                  <div class="review-date">Stayed February 2024</div>
+                  <div class="review-rating">
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                  </div>
+                </div>
+              </div>
+              <p>"Aman Kyoto redefined our conception of luxury travel. The Washigamine Pavilion became our private sanctuary, complete with personal onsen overlooking ancient forests. The staff anticipated our needs with remarkable intuition, arranging surprises that felt organic rather than orchestrated. Dining at the Living Pavilion felt like participating in an artistic performance—each course told stories about seasons, traditions, and local terroir. The forest walks at dawn revealed wild deer and created moments of profound tranquility impossible to experience elsewhere. This represents the ultimate fusion of nature, culture, and luxury."</p>
+            </div>
+            
+            <div class="review-slide">
+              <div class="reviewer-info">
+                <div class="reviewer-avatar">DS</div>
+                <div>
+                  <div class="reviewer-name">Dr. Diana S. - First-time Japan Visitor</div>
+                  <div class="review-date">Stayed January 2024</div>
+                  <div class="review-rating">
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star-half-alt" style="color: #FFD700;"></i>
+                  </div>
+                </div>
+              </div>
+              <p>"As my introduction to Japan, Aman Kyoto set impossibly high standards for cultural authenticity and luxury. The resort's location provided perfect balance—immersed in nature yet accessible to Kyoto's temples and gardens. Staff guidance helped navigate cultural practices with confidence, from proper bathing etiquette to tea ceremony participation. The architectural details revealed new beauty daily, while the seasonal gardens taught me to appreciate Japanese aesthetic principles. My only minor disappointment was feeling isolated from bustling Kyoto energy, though I understand that's precisely the point of this sanctuary."</p>
+            </div>
+          </div>
+          
+          <div class="carousel-arrow carousel-next" onclick="nextSlide('tourists')">
+            <i class="fas fa-chevron-right"></i>
+          </div>
+          
+          <div class="carousel-nav">
+            <div class="carousel-dot active"></div>
+            <div class="carousel-dot"></div>
+            <div class="carousel-dot"></div>
+          </div>
+        </div>
+      </div>
+      
+      <h2>Room Categories</h2>
+      
+      <div class="room-types">
+        <div class="room-card">
+          <div class="room-image">
+            <img src="https://www.amankyoto.com/wp-content/uploads/2019/04/Aman-Kyoto_Garden-Room.jpg" alt="Garden Room">
+          </div>
+          <div class="room-details">
+            <h3 class="room-name">Garden Room ($850-1,200/night)</h3>
+            <div class="room-features">
+              <span class="room-feature">60m² / 646 sq ft</span>
+              <span class="room-feature">Garden View</span>
+              <span class="room-feature">King or Twin Beds</span>
+              <span class="room-feature">Hinoki Soaking Tub</span>
+            </div>
+            <p>Light-filled rooms with floor-to-ceiling windows offering seasonal garden views. Minimalist aesthetics combined with traditional materials including tatami matting and tokonoma alcoves.</p>
+          </div>
+        </div>
+        
+        <div class="room-card">
+          <div class="room-image">
+            <img src="https://www.amankyoto.com/wp-content/uploads/2019/04/Aman-Kyoto_Pavilion-1-1024x683.jpg" alt="Pavilion Suite">
+          </div>
+          <div class="room-details">
+            <h3 class="room-name">Pavilion Suite ($1,500-2,000/night)</h3>
+            <div class="room-features">
+              <span class="room-feature">99m² / 1,065 sq ft</span>
+              <span class="room-feature">Forest View</span>
+              <span class="room-feature">King Bed</span>
+              <span class="room-feature">Separate Living Area</span>
+            </div>
+            <p>Expansive suites with elegant living areas and panoramic forest views. Spacious bathrooms feature hinoki cypress soaking tubs and private onsen experiences.</p>
+          </div>
+        </div>
+        
+        <div class="room-card">
+          <div class="room-image">
+            <img src="https://www.amankyoto.com/wp-content/uploads/2019/04/Aman-Kyoto_Washigamine-Pavilion-Living-Area-1024x683.jpg" alt="Washigamine Pavilion">
+          </div>
+          <div class="room-details">
+            <h3 class="room-name">Washigamine Pavilion ($2,500-3,500/night)</h3>
+            <div class="room-features">
+              <span class="room-feature">243m² / 2,616 sq ft</span>
+              <span class="room-feature">Private Pavilion</span>
+              <span class="room-feature">Two Bedrooms</span>
+              <span class="room-feature">Private Onsen</span>
+            </div>
+            <p>Private two-bedroom pavilion perfect for families or groups, featuring spacious living and dining areas, kitchen and two master bedrooms with individual hinoki bathtubs.</p>
+          </div>
+        </div>
+      </div>
+      
+      <h2>Amenities & Experiences</h2>
+      
+      <div class="amenities-container">
+        <div class="amenity-item">
+          <i class="fas fa-spa"></i>
+          <span>Aman Spa</span>
+        </div>
+        <div class="amenity-item">
+          <i class="fas fa-hot-tub"></i>
+          <span>Private Onsen</span>
+        </div>
+        <div class="amenity-item">
+          <i class="fas fa-utensils"></i>
+          <span>Michelin-Level Dining</span>
+        </div>
+        <div class="amenity-item">
+          <i class="fas fa-concierge-bell"></i>
+          <span>24/7 Personal Concierge</span>
+        </div>
+        <div class="amenity-item">
+          <i class="fas fa-hands"></i>
+          <span>Traditional Tea Ceremony</span>
+        </div>
+        <div class="amenity-item">
+          <i class="fas fa-hiking"></i>
+          <span>Forest Walks</span>
+        </div>
+        <div class="amenity-item">
+          <i class="fas fa-tree"></i>
+          <span>Private Gardens</span>
+        </div>
+        <div class="amenity-item">
+          <i class="fas fa-wifi"></i>
+          <span>Complimentary Wi-Fi</span>
+        </div>
+      </div>
+      
+      <div class="review-section">
+        <h2>Eastworld's Review</h2>
+        
+        <h3>Location & Setting: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Unmatched forest sanctuary offering profound connection to nature while maintaining access to Kyoto's cultural treasures. The mountain setting creates spiritual retreat atmosphere.</p>
+        
+        <h3>Architecture & Design: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Masterful integration of contemporary architecture with traditional Japanese aesthetics. Every pavilion maximizes natural beauty while honoring cultural heritage.</p>
+        
+        <h3>Service & Hospitality: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Exemplary service that transcends accommodation to become cultural education. Staff demonstrate profound understanding of both luxury standards and local traditions.</p>
+        
+        <h3>Cultural Authenticity: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Exceptional cultural programming that provides genuine insight into Japanese philosophy, arts, and traditions. Collaborations with local masters ensure authentic experiences.</p>
+        
+        <h3>Value: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>Ultimate luxury command premium pricing, but the unique setting, architectural distinction, and transformative experiences justify the investment for discerning travelers.</p>
+        
+        <h3>Overall: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Aman Kyoto represents the absolute pinnacle of luxury hospitality in Japan, offering experiences that transcend accommodation to become profound cultural and spiritual encounters.</p>
+      </div>
+      
+      <h2>Tips for Guests</h2>
+      
+      <ul>
+        <li>Book 4-6 months in advance, especially during cherry blossom and autumn foliage seasons</li>
+        <li>Request the complimentary guided morning forest walk to appreciate the property's natural setting</li>
+        <li>Consider half-board dining option given the resort's isolated location</li>
+        <li>Allow minimum three nights to balance Kyoto exploration with resort immersion</li>
+        <li>Reserve cultural experiences and spa treatments when booking your room</li>
+        <li>Pack layers for forest walks as mountain temperatures vary significantly</li>
+        <li>Embrace the digital detox opportunity—limited connectivity enhances the sanctuary experience</li>
+      </ul>
+      
+      <!-- Booking Form -->
+      <div id="booking-form" class="review-section">
+        <h2>Booking Information</h2>
+        <p>Reserve your transformative stay at Aman Kyoto through these exclusive channels:</p>
+        
+        <h3>Direct Booking:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Phone: +81 75-496-1333</li>
+          <li>Email: <a href="mailto:amankyoto@aman.com" style="color: #ff4d4d;">amankyoto@aman.com</a></li>
+          <li>Website: <a href="https://www.aman.com/resorts/aman-kyoto" target="_blank" style="color: #ff4d4d;">www.aman.com/kyoto</a></li>
+        </ul>
+        
+        <h3>Luxury Booking Services:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Aman Preferred Partner Program (exclusive amenities)</li>
+          <li>Virtuoso luxury travel advisors (additional benefits)</li>
+          <li>Eastworld ultra-luxury concierge (bespoke cultural experiences)</li>
+        </ul>
+        
+        <p>For transformative cultural experiences, private ceremonies, or exclusive access arrangements, contact our ultra-luxury specialists at <a href="mailto:ultra-luxury@eastworld.com" style="color: #ff4d4d;">ultra-luxury@eastworld.com</a>.</p>
+      </div>
+      
+      <a href="stays.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Stays Guide</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Review category switching
+    function showCategory(category) {
+      // Hide all content
+      document.querySelectorAll('.review-content').forEach(content => {
+        content.classList.remove('active');
+      });
+      
+      // Remove active from all tabs
+      document.querySelectorAll('.category-tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      
+      // Show selected content
+      document.getElementById(category).classList.add('active');
+      
+      // Add active to selected tab
+      event.target.classList.add('active');
+    }
+
+    // Carousel functionality for each category
+    const carousels = {
+      locals: { currentSlide: 0, totalSlides: 3 },
+      tourists: { currentSlide: 0, totalSlides: 3 }
+    };
+
+    function showSlide(category, index) {
+      const carousel = carousels[category];
+      if (index < 0) index = carousel.totalSlides - 1;
+      if (index >= carousel.totalSlides) index = 0;
+      
+      carousel.currentSlide = index;
+      const slides = document.querySelector(`#${category}-carousel .review-slides`);
+      slides.style.transform = `translateX(-${carousel.currentSlide * 100}%)`;
+      
+      // Update active dot
+      const dots = document.querySelectorAll(`#${category}-carousel .carousel-dot`);
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === carousel.currentSlide);
+      });
+    }
+
+    function prevSlide(category) {
+      showSlide(category, carousels[category].currentSlide - 1);
+    }
+
+    function nextSlide(category) {
+      showSlide(category, carousels[category].currentSlide + 1);
+    }
+
+    // Set up event listeners for dots
+    document.addEventListener('DOMContentLoaded', function() {
+      ['locals', 'tourists'].forEach(category => {
+        const dots = document.querySelectorAll(`#${category}-carousel .carousel-dot`);
+        dots.forEach((dot, i) => {
+          dot.addEventListener('click', () => showSlide(category, i));
+        });
+      });
+    });
+  </script>
+  
+  <script src="script.js"></script>
+</body>
+</html> 

@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kinryu Ramen Osaka - Eastworld Restaurant Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Additional styles specific to restaurant reviews */
+    .restaurant-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+      .restaurant-info {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .restaurant-details {
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .detail-row {
+      display: flex;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+    }
+    
+    .detail-label {
+      font-weight: 600;
+      min-width: 120px;
+      color: #333;
+    }
+    
+    .detail-value {
+      flex: 1;
+      color: #555;
+    }
+    
+    .rating {
+      margin-bottom: 1rem;
+    }
+    
+    .star {
+      color: #ddd;
+      font-size: 1.5rem;
+    }
+    
+    .star.filled {
+      color: #FFD700;
+    }
+    
+    .half-star {
+      position: relative;
+    }
+    
+    .half-star .fas.fa-star-half {
+      color: #FFD700;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    
+    .score-label {
+      margin-left: 0.5rem;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .map-container {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .map-container iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+    }
+    
+    .photos-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .photo-item {
+      border-radius: 8px;
+      overflow: hidden;
+      height: 150px;
+    }
+    
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .photo-item img:hover {
+      transform: scale(1.05);
+    }
+    
+    .review-section {
+      margin: 2rem 0;
+      padding: 2rem;
+      background: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    /* Booking button styles */
+    .booking-button {
+      display: block;
+      background-color: #ff4d4d;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      margin: 1.5rem 0;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    
+    .booking-button:hover {
+      background-color: #e63939;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    /* Review carousel styles */
+    .review-carousel {
+      position: relative;
+      margin: 2rem 0;
+      overflow: hidden;
+      padding: 1rem 0;
+    }
+    
+    .review-slides {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    
+    .review-slide {
+      min-width: 100%;
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .reviewer-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #f0f0f0;
+      padding-bottom: 0.8rem;
+    }
+    
+    .reviewer-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 0.8rem;
+    }
+    
+    .reviewer-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding-top: 0.2rem;
+    }
+    
+    .review-date {
+      color: #888;
+      font-size: 0.75rem;
+      margin-top: 0.1rem;
+    }
+    
+    .review-rating {
+      display: flex;
+      margin-top: 0.2rem;
+    }
+    
+    .review-rating i {
+      font-size: 0.8rem;
+      margin-right: 2px;
+    }
+    
+    .carousel-nav {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+    
+    .carousel-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ddd;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .carousel-dot.active {
+      background: #ff4d4d;
+    }
+    
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.7);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+    
+    .carousel-prev {
+      left: 10px;
+    }
+    
+    .carousel-next {
+      right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../food.html" class="nav-item active">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="content-container">
+    <div class="content-header">
+      <span class="content-category">RAMEN</span>
+      <h1 class="content-title">Kinryu Ramen - Dotonbori's Iconic Dragon Ramen</h1>
+      
+      <!-- Rating Section -->
+      <div class="rating">
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star half-star">
+          <i class="far fa-star"></i>
+          <i class="fas fa-star-half"></i>
+        </span>
+        <span class="score-label">4.3/5.0</span>
+      </div>
+    </div>
+    
+    <div class="hero-container">
+      <img class="content-hero" src="https://media.timeout.com/images/105885551/image.jpg" alt="Kinryu Ramen Dotonbori Shop" 
+      onerror="this.onerror=null; 
+      this.parentElement.innerHTML = '<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#333;color:white;font-size:1.5rem;text-align:center;padding:2rem;\'>Kinryu Ramen Dotonbori</div>';">
+    </div>
+    
+    <!-- Booking Button -->
+    <a href="#visitor-info" class="booking-button">
+      <i class="fas fa-info-circle"></i> VISITOR INFORMATION
+    </a>
+    
+    <!-- Restaurant Information Section -->
+    <div class="restaurant-info">
+      <div class="restaurant-details">
+        <h2>Restaurant Details</h2>
+        
+        <div class="detail-row">
+          <div class="detail-label">Address:</div>
+          <div class="detail-value">1-7-26 Dotonbori, Chuo-ku, Osaka 542-0071, Japan</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Hours:</div>
+          <div class="detail-value">
+            24 hours, 7 days a week
+          </div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Phone:</div>
+          <div class="detail-value">+81 6-6211-3999</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Price Range:</div>
+          <div class="detail-value">¥600-1,200 ($4-9) per person</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Cuisine:</div>
+          <div class="detail-value">Ramen, Japanese</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Reservations:</div>
+          <div class="detail-value">Not accepted (Counter service only)</div>
+        </div>
+        
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">About Kinryu Ramen</h3>
+        <p>Kinryu Ramen (Golden Dragon Ramen) is an Osaka institution and one of Dotonbori's most recognizable landmarks, famous for its giant golden dragon sign. Operating 24 hours a day since 1982, this standing ramen shop offers affordable, quick, and authentic Osaka-style ramen that draws both locals and tourists at all hours.</p>
+      </div>
+      
+      <div class="map-container">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3281.189628540553!2d135.50045727617484!3d34.66860848134837!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6000e71459c2a3b5%3A0xfcbf3b5a93fb9966!2sKinryu%20Ramen!5e0!3m2!1sen!2sus!4v1698204935001!5m2!1sen!2sus" 
+        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+    
+    <div class="content-text">
+      <h2>A Dotonbori Icon Since 1982</h2>
+      
+      <p>Few restaurants capture the vibrant energy of Osaka's Dotonbori district like Kinryu Ramen. Established in 1982, this iconic ramen shop has become a landmark in its own right, with a massive golden dragon adorning its facade that rivals the famous Glico Running Man and Kani Doraku crab as symbols of Dotonbori's culinary excitement.</p>
+      
+      <p>Kinryu embodies the Osaka spirit of "kuidaore" (eat until you drop) by operating 24 hours a day, providing hearty, affordable ramen to hungry visitors at any hour. The restaurant's counter-style standing setup reflects traditional Japanese street food culture and encourages quick dining, perfectly suited for Dotonbori's bustling atmosphere. Despite its popularity with tourists, Kinryu remains a favorite among locals, particularly late-night revelers seeking sustenance after enjoying Osaka's nightlife.</p>
+      
+      <div class="photos-container">
+        <div class="photo-item">
+          <img src="https://www.japan-guide.com/g22/4027_12.jpg" alt="Kinryu Dragon Sign">
+        </div>
+        <div class="photo-item">
+          <img src="https://d3mwfhs3nz12var.cloudfront.net/recommended/KO13/KO13_Osaka_Japan_Ramen-Osaka-Kinryu-Ramen3.jpg" alt="Kinryu Tonkotsu Ramen Bowl">
+        </div>
+        <div class="photo-item">
+          <img src="https://media.timeout.com/images/105888664/750/422/image.jpg" alt="Kinryu Dotonbori Location">
+        </div>
+        <div class="photo-item">
+          <img src="https://www.tsunagujapan.com/wp-content/uploads/2022/01/ffc1d28fa3e8d4c0fbba0a02ae7d2b0a-1.jpg" alt="Customers at Kinryu Ramen">
+        </div>
+      </div>
+      
+      <h2>Osaka-Style Ramen with Straightforward Charm</h2>
+      
+      <p>Kinryu specializes in Osaka-style ramen, characterized by its rich tonkotsu (pork bone) and shoyu (soy sauce) broth combination. Their signature bowl features a cloudy, flavorful broth that strikes a perfect balance between richness and drinkability, paired with medium-thick, straight noodles that offer just the right amount of chew.</p>
+      
+      <p>The beauty of Kinryu's offering lies in its simplicity. Their focused menu centers around their classic tonkotsu ramen, allowing them to maintain consistent quality and quick service. Each bowl comes with the standard toppings of sliced chashu pork, green onions, bean sprouts, and kikurage mushrooms. Customers can customize their experience with an array of complimentary toppings available at every counter, including garlic chips, pickled ginger, and spicy bean sprouts.</p>
+      
+      <div class="content-quote">
+        "Kinryu isn't trying to reinvent ramen or win culinary awards - we're serving the same honest, satisfying bowl that Osakans have loved for over 40 years. Our dragon watches over Dotonbori 24 hours a day, welcoming anyone seeking authentic Osaka flavor." - Kinryu Ramen Management
+      </div>
+      
+      <!-- User Reviews Carousel -->
+      <h2>Customer Reviews</h2>
+      
+      <div class="review-carousel">
+        <div class="carousel-arrow carousel-prev">
+          <i class="fas fa-chevron-left"></i>
+        </div>
+        
+        <div class="review-slides">
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Mark T.</div>
+                <div class="review-date">Visited March 2024</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"You can't visit Dotonbori without eating at Kinryu! The giant dragon sign drew us in at 1 AM after exploring Osaka's nightlife. The standing counter experience was novel and very Japanese. The ramen itself was exactly what I needed - rich, flavorful broth and perfectly cooked noodles. I appreciated the self-serve toppings bar where I loaded up on garlic chips and pickled ginger. Being able to watch the chefs prepare our bowls right in front of us added to the experience. Yes, it's popular with tourists, but there were plenty of locals too, which is always a good sign!"</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Naomi K.</div>
+                <div class="review-date">Visited January 2024</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="far fa-star" style="color: #ddd;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"As an Osaka resident, Kinryu is my go-to late-night ramen spot. Their tonkotsu broth has that perfect balance - rich without being overwhelming. The standing counter format means you're never waiting too long for a spot, even when Dotonbori is packed with tourists. It's not the absolute best ramen in Osaka if you're a connoisseur, but it's consistently good and incredibly convenient. Pro tip: their gyoza are crispy and delicious too! It's comfort food that never disappoints, especially after a night out. The 24-hour service is a lifesaver for night owls like me."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Sophie L.</div>
+                <div class="review-date">Visited February 2024</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star-half-alt" style="color: #FFD700;"></i>
+                  <i class="far fa-star" style="color: #ddd;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"Kinryu was our first meal in Osaka after a long flight. The iconic dragon sign made it easy to find, and the vending machine ordering system was simple to use despite the language barrier. The ramen was satisfying - good flavor in the broth and generous toppings. Standing while eating was a new experience but actually quite fun and authentic. The shop was clean and efficient. It's not gourmet ramen, but it's a solid, affordable option right in the heart of Dotonbori. Perfect for a quick meal before exploring more of the area. I'd recommend it for the experience as much as the food."</p>
+          </div>
+        </div>
+        
+        <div class="carousel-arrow carousel-next">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+        
+        <div class="carousel-nav">
+          <div class="carousel-dot active"></div>
+          <div class="carousel-dot"></div>
+          <div class="carousel-dot"></div>
+        </div>
+      </div>
+      
+      <h2>Menu Highlights</h2>
+      
+      <p>Kinryu Ramen keeps its menu deliberately simple, focusing on perfecting a few key items:</p>
+      
+      <ul>
+        <li><strong>Tonkotsu Ramen (¥800)</strong> - Their signature dish featuring a rich pork bone broth blended with soy sauce, topped with chashu pork, green onions, bean sprouts, and kikurage mushrooms</li>
+        <li><strong>Spicy Tonkotsu Ramen (¥880)</strong> - The classic bowl with a spicy kick from house-made chili oil</li>
+        <li><strong>Extra Chashu Ramen (¥980)</strong> - For meat lovers, featuring additional slices of tender chashu pork</li>
+        <li><strong>Gyoza (¥380)</strong> - Crispy pan-fried dumplings, perfect as a side dish</li>
+        <li><strong>Kaedama (¥200)</strong> - Extra serving of noodles to add to your remaining broth</li>
+        <li><strong>Draft Beer (¥450)</strong> - Ice-cold Japanese beer that pairs perfectly with their rich ramen</li>
+      </ul>
+      
+      <p>Complimentary toppings available at each counter include:</p>
+      <ul>
+        <li>Fresh garlic chips</li>
+        <li>Pickled ginger (beni shoga)</li>
+        <li>Spicy bean sprouts</li>
+        <li>Toasted sesame seeds</li>
+        <li>Pepper and spice mixes</li>
+      </ul>
+      
+      <div class="review-section">
+        <h2>Eastworld's Review</h2>
+        
+        <h3>Food Quality: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>Kinryu delivers reliable, satisfying Osaka-style tonkotsu ramen. While not revolutionizing the genre, their broth strikes the right balance between richness and drinkability, and their noodles maintain good texture. The complimentary toppings bar allows for customization to personal taste. Their focused menu ensures consistent quality across their signature items.</p>
+        
+        <h3>Atmosphere: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Few ramen shops can match Kinryu's iconic atmosphere. The enormous golden dragon sign, the bustling energy of Dotonbori, and the authentic standing counter experience combine to create a memorable dining environment that captures the essence of Osaka street food culture. The open kitchen adds entertainment value as you watch chefs skillfully prepare your bowl.</p>
+        
+        <h3>Service: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>Service is efficient and straightforward, as expected from a high-volume standing ramen shop. The ticket vending machine system minimizes language barriers, and staff work quickly to ensure no one waits too long for their meal. During peak tourist times, staff members are accustomed to helping first-timers navigate the ordering process.</p>
+        
+        <h3>Value: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Kinryu offers exceptional value, with filling bowls of quality ramen at prices that haven't dramatically increased despite their iconic status. The free toppings bar further enhances value, allowing customers to customize their meal at no additional cost. For around ¥1,000, you can enjoy a complete meal in one of Osaka's most famous locations.</p>
+        
+        <h3>Location: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Location doesn't get better than this for experiencing Osaka's food culture. Positioned right in the heart of Dotonbori, Kinryu is perfectly situated for tourists exploring the area. The 24-hour operation means it's accessible whenever hunger strikes, whether after sightseeing or late-night adventures.</p>
+        
+        <h3>Overall: <span style="color: #FFD700;">★★★★½</span></h3>
+        <p>Kinryu Ramen delivers exactly what it promises - authentic, satisfying Osaka ramen in an iconic setting. It successfully balances being a tourist destination while maintaining quality and authenticity that keeps locals coming back. For visitors to Osaka seeking the quintessential Dotonbori dining experience, Kinryu should be high on the list.</p>
+      </div>
+      
+      <h2>Tips for Visitors</h2>
+      
+      <ul>
+        <li>Kinryu has multiple locations in Dotonbori, but the main shop with the large dragon sign offers the most authentic experience</li>
+        <li>Avoid peak tourist hours (7-9 PM) for shorter waiting times</li>
+        <li>The ordering process uses a ticket vending machine with pictures, making it accessible for non-Japanese speakers</li>
+        <li>Take advantage of the free toppings bar to customize your ramen</li>
+        <li>Standing counters are the norm here - embrace the authentic experience, but be aware if you need seating</li>
+        <li>Kinryu is perfect for a quick meal between sightseeing or after exploring Osaka's nightlife</li>
+        <li>Look for the iconic golden dragon sign - it's impossible to miss and a great photo opportunity</li>
+        <li>Consider visiting during cooler weather to fully appreciate the hot, steaming bowl of ramen</li>
+      </ul>
+      
+      <!-- Visitor Information -->
+      <div id="visitor-info" class="review-section">
+        <h2>Visitor Information</h2>
+        <p>Here's what you need to know when planning your visit to Kinryu Ramen:</p>
+        
+        <h3>Location & Access:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Address: 1-7-26 Dotonbori, Chuo-ku, Osaka 542-0071, Japan</li>
+          <li>10-minute walk from Namba Station (various lines)</li>
+          <li>7-minute walk from Nipponbashi Station (Sakaisuji Line)</li>
+          <li>Multiple branches in Dotonbori area - look for the iconic dragon signs</li>
+        </ul>
+        
+        <h3>Hours of Operation:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Open 24 hours a day, 7 days a week</li>
+          <li>Busiest between 6:00 PM - 10:00 PM</li>
+          <li>Less crowded in early morning hours (2:00 AM - 10:00 AM)</li>
+        </ul>
+        
+        <h3>Facilities:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Standing counter service only (no seating)</li>
+          <li>Ticket vending machine ordering system with pictures</li>
+          <li>Complimentary toppings bar</li>
+          <li>No public restrooms within the restaurant</li>
+          <li>Not wheelchair accessible</li>
+          <li>Limited space - not suitable for large groups</li>
+        </ul>
+        
+        <h3>Additional Information:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Cash only (no credit cards accepted)</li>
+          <li>No reservations - first come, first served</li>
+          <li>English picture menu available on vending machines</li>
+          <li>Average dining time: 15-20 minutes</li>
+          <li>Official website: None (Local franchise operation)</li>
+        </ul>
+        
+        <p>After enjoying your ramen at Kinryu, take time to explore the vibrant Dotonbori area with its famous illuminated signs, street food vendors, and bustling atmosphere. The restaurant is perfectly positioned for a night of experiencing Osaka's food culture and entertainment districts.</p>
+      </div>
+      
+      <a href="../food.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Food Guide</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Review carousel functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const slides = document.querySelector('.review-slides');
+      const dots = document.querySelectorAll('.carousel-dot');
+      const prevBtn = document.querySelector('.carousel-prev');
+      const nextBtn = document.querySelector('.carousel-next');
+      let currentSlide = 0;
+      const totalSlides = document.querySelectorAll('.review-slide').length;
+      
+      // Function to update slide position
+      function showSlide(index) {
+        if (index < 0) index = totalSlides - 1;
+        if (index >= totalSlides) index = 0;
+        
+        currentSlide = index;
+        slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+        
+        // Update active dot
+        dots.forEach((dot, i) => {
+          dot.classList.toggle('active', i === currentSlide);
+        });
+      }
+      
+      // Set up event listeners for dots
+      dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => showSlide(i));
+      });
+      
+      // Set up event listeners for arrows
+      prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
+      nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
+      
+      // Auto-rotate slides every 5 seconds
+      setInterval(() => {
+        showSlide(currentSlide + 1);
+      }, 5000);
+    });
+  </script>
+  
+  <script src="../script.js"></script>
+</body>
+</html> 

@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EASTWORLD - Discover Asian Cities</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Cities page specific styles */
+    .section-header {
+      text-align: center;
+      margin: 2rem 0;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .section-title {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      letter-spacing: 1px;
+    }
+    
+    .section-description {
+      color: #555;
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    
+    .map-display-container {
+      display: flex;
+      flex-direction: row;
+      gap: 2rem;
+      margin: 3rem 0;
+    }
+    
+    .cities-grid-container {
+      flex: 1;
+    }
+    
+    .map-container {
+      flex: 1;
+      height: 450px;
+      background-color: #f5f5f5;
+      position: relative;
+      overflow: hidden;
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      max-width: 700px;
+    }
+    
+    .map-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 1s ease;
+    }
+    
+    .map-container:hover img {
+      transform: scale(1.02);
+    }
+    
+    .map-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.3));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .map-title {
+      color: white;
+      font-size: 2.5rem;
+      letter-spacing: 3px;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+    }
+    
+    .city-buttons-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    
+    .city-button {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-color: #f8f8f8;
+      border: 1px solid #eee;
+      border-radius: 4px;
+      padding: 1rem;
+      text-align: center;
+      text-decoration: none;
+      color: #000;
+      transition: all 0.3s ease;
+      height: 110px;
+      width: 100%;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      aspect-ratio: 1 / 1;
+    }
+    
+    .city-button:hover {
+      background-color: #eee;
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .city-name {
+      font-weight: 600;
+      letter-spacing: 1px;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    
+    .country-label {
+      font-size: 0.75rem;
+      color: #888;
+      width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    
+    .coming-soon {
+      font-style: italic;
+      color: #aaa;
+      font-size: 0.65rem;
+      margin-top: 0.3rem;
+    }
+    
+    /* New style for non-focus countries */
+    .non-focus-city {
+      background-color: #222;
+      color: #fff;
+      border: 1px solid #333;
+    }
+    
+    .non-focus-city .country-label {
+      color: #ccc;
+    }
+    
+    .non-focus-city .coming-soon {
+      color: #ff4d4d;
+    }
+    
+    .non-focus-city:hover {
+      background-color: #333;
+      color: #fff;
+    }
+    
+    /* Section for focus cities */
+    .section-subtitle {
+      font-size: 1.5rem;
+      margin: 1.5rem 0 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #eee;
+    }
+    
+    @media (max-width: 1200px) {
+      .city-buttons-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    
+    @media (max-width: 992px) {
+      .map-display-container {
+        flex-direction: column;
+      }
+      
+      .map-container {
+        height: 350px;
+        max-width: 100%;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .city-buttons-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .city-buttons-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .map-title {
+        font-size: 1.8rem;
+      }
+    }
+    
+    /* Mapbox specific styles */
+    #map {
+      width: 100%;
+      height: 450px;
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="food.html" class="nav-item">FOOD</a>
+        <a href="stays.html" class="nav-item">STAYS</a>
+        <a href="places.html" class="nav-item">PLACES</a>
+        <a href="products.html" class="nav-item">PRODUCTS</a>
+        <a href="cities.html" class="nav-item active">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="login.html" class="nav-item">LOGIN</a>
+          <a href="register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="content-container">
+    <section class="section-header">
+      <h1 class="section-title">EXPLORE ASIAN CITIES</h1>
+      <p class="section-description">Discover the rich tapestry of East and Southeast Asian cities through our curated guides. From ancient cultural centers to modern metropolises, find your next destination.</p>
+    </section>
+    
+    <div class="map-display-container">
+      <div class="cities-grid-container">
+        <h3 class="section-subtitle">FEATURED CITIES</h3>
+        <div class="city-buttons-grid">
+          <!-- JAPAN CITIES -->
+          <a href="guides/tokyo-guide.html" class="city-button">
+            <div class="city-name">TOKYO</div>
+            <div class="country-label">JAPAN</div>
+          </a>
+          <a href="guides/osaka-guide.html" class="city-button">
+            <div class="city-name">OSAKA</div>
+            <div class="country-label">JAPAN</div>
+          </a>
+          <a href="guides/kyoto-guide.html" class="city-button">
+            <div class="city-name">KYOTO</div>
+            <div class="country-label">JAPAN</div>
+          </a>
+          <a href="guides/kobe-guide.html" class="city-button">
+            <div class="city-name">KOBE</div>
+            <div class="country-label">JAPAN</div>
+          </a>
+          
+          <!-- CHINA CITIES -->
+          <a href="guides/beijing-guide.html" class="city-button">
+            <div class="city-name">BEIJING</div>
+            <div class="country-label">CHINA</div>
+          </a>
+          <a href="guides/shanghai-guide.html" class="city-button">
+            <div class="city-name">SHANGHAI</div>
+            <div class="country-label">CHINA</div>
+          </a>
+          <a href="guides/guangzhou-guide.html" class="city-button">
+            <div class="city-name">GUANGZHOU</div>
+            <div class="country-label">CHINA</div>
+          </a>
+          <a href="guides/chongqing-guide.html" class="city-button">
+            <div class="city-name">CHONGQING</div>
+            <div class="country-label">CHINA</div>
+          </a>
+          <a href="cities/shenzhen.html" class="city-button">
+            <div class="city-name">SHENZHEN</div>
+            <div class="country-label">CHINA</div>
+          </a>
+          
+          <!-- THAILAND CITIES -->
+          <a href="guides/bangkok-guide.html" class="city-button">
+            <div class="city-name">BANGKOK</div>
+            <div class="country-label">THAILAND</div>
+          </a>
+          <a href="guides/phuket-guide.html" class="city-button">
+            <div class="city-name">PHUKET</div>
+            <div class="country-label">THAILAND</div>
+          </a>
+          
+          <!-- CAMBODIA CITIES -->
+          <a href="guides/phnom-penh-guide.html" class="city-button">
+            <div class="city-name">PHNOM PENH</div>
+            <div class="country-label">CAMBODIA</div>
+          </a>
+          <a href="guides/siemreap-guide.html" class="city-button" id="siemReapButton">
+            <div class="city-name">SIEM REAP</div>
+            <div class="country-label">CAMBODIA</div>
+          </a>
+          
+          <!-- AUSTRALIA CITIES -->
+          <a href="guides/melbourne-guide.html" class="city-button">
+            <div class="city-name">MELBOURNE</div>
+            <div class="country-label">AUSTRALIA</div>
+          </a>
+          <a href="guides/sydney-guide.html" class="city-button">
+            <div class="city-name">SYDNEY</div>
+            <div class="country-label">AUSTRALIA</div>
+          </a>
+        </div>
+        
+        <h3 class="section-subtitle">COMING SOON</h3>
+        <div class="city-buttons-grid">
+          <!-- OTHER COUNTRIES - GRAYED OUT -->
+          <a href="#" class="city-button non-focus-city">
+            <div class="city-name">HONG KONG</div>
+            <div class="country-label">CHINA (SAR)</div>
+            <div class="coming-soon">(Coming Soon)</div>
+          </a>
+          <a href="#" class="city-button non-focus-city">
+            <div class="city-name">SINGAPORE</div>
+            <div class="country-label">SINGAPORE</div>
+            <div class="coming-soon">(Coming Soon)</div>
+          </a>
+          <a href="#" class="city-button non-focus-city">
+            <div class="city-name">BALI</div>
+            <div class="country-label">INDONESIA</div>
+            <div class="coming-soon">(Coming Soon)</div>
+          </a>
+          <a href="#" class="city-button non-focus-city">
+            <div class="city-name">MANILA</div>
+            <div class="country-label">PHILIPPINES</div>
+            <div class="coming-soon">(Coming Soon)</div>
+          </a>
+          <a href="#" class="city-button non-focus-city">
+            <div class="city-name">HO CHI MINH CITY</div>
+            <div class="country-label">VIETNAM</div>
+            <div class="coming-soon">(Coming Soon)</div>
+          </a>
+          <a href="#" class="city-button non-focus-city">
+            <div class="city-name">HANOI</div>
+            <div class="country-label">VIETNAM</div>
+            <div class="coming-soon">(Coming Soon)</div>
+          </a>
+          <a href="#" class="city-button non-focus-city">
+            <div class="city-name">TAIPEI</div>
+            <div class="country-label">TAIWAN</div>
+            <div class="coming-soon">(Coming Soon)</div>
+          </a>
+          <a href="#" class="city-button non-focus-city">
+            <div class="city-name">KUALA LUMPUR</div>
+            <div class="country-label">MALAYSIA</div>
+            <div class="coming-soon">(Coming Soon)</div>
+          </a>
+        </div>
+      </div>
+      
+      <div class="map-container">
+        <div id="map"></div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js'></script>
+  <link href='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css' rel='stylesheet' />
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize Mapbox
+      mapboxgl.accessToken = 'pk.eyJ1IjoiZWFzdHdvcmxkIiwiYSI6ImNscDg5c3dsaDBrN3YyanBsZzV1dmg0OG0ifQ.9h-PyeATCU2zO9L43WHBEw';
+      const map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/streets-v12',
+        center: [114.1095, 22.3964], // Centered on East Asia
+        zoom: 3,
+        pitch: 45, // Add 3D perspective
+        bearing: 0
+      });
+      
+      // Add 3D buildings layer
+      map.on('load', function() {
+        // Add 3D buildings layer
+        const layers = map.getStyle().layers;
+        
+        // Find the index of the first symbol layer in the map style
+        let firstSymbolId;
+        for (const layer of layers) {
+          if (layer.type === 'symbol') {
+            firstSymbolId = layer.id;
+            break;
+          }
+        }
+        
+        // Add the 3D buildings layer
+        map.addLayer({
+          'id': '3d-buildings',
+          'source': 'composite',
+          'source-layer': 'building',
+          'filter': ['==', 'extrude', 'true'],
+          'type': 'fill-extrusion',
+          'minzoom': 15,
+          'paint': {
+            'fill-extrusion-color': '#aaa',
+            'fill-extrusion-height': [
+              'interpolate', ['linear'], ['zoom'],
+              15, 0,
+              15.05, ['get', 'height']
+            ],
+            'fill-extrusion-base': [
+              'interpolate', ['linear'], ['zoom'],
+              15, 0,
+              15.05, ['get', 'min_height']
+            ],
+            'fill-extrusion-opacity': 0.6
+          }
+        }, firstSymbolId);
+        
+        // Add navigation controls
+        map.addControl(new mapboxgl.NavigationControl());
+        
+        // Add markers for focus cities
+        const focusCities = {
+          'TOKYO': [139.6917, 35.6895, 12],
+          'OSAKA': [135.5023, 34.6937, 12],
+          'KYOTO': [135.7681, 35.0116, 12],
+          'KOBE': [135.1943, 34.6901, 12],
+          'BEIJING': [116.4074, 39.9042, 12],
+          'SHANGHAI': [121.4737, 31.2304, 12],
+          'GUANGZHOU': [113.2644, 23.1291, 12],
+          'CHONGQING': [106.5504, 29.5630, 12],
+          'SHENZHEN': [114.0579, 22.5431, 12],
+          'BANGKOK': [100.5018, 13.7563, 12],
+          'PHUKET': [98.3923, 7.8804, 12],
+          'PHNOM PENH': [104.9136, 11.5564, 12],
+          'SIEM REAP': [103.8550, 13.3550, 12],
+          'MELBOURNE': [144.9631, -37.8136, 12],
+          'SYDNEY': [151.2093, -33.8688, 12]
+        };
+        
+        focusCities.forEach(city => {
+          // Create popup content
+          const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(
+            `<strong>${city.name}</strong><br>${city.country}`
+          );
+          
+          // Add marker
+          new mapboxgl.Marker({ color: '#ff4d4d' })
+            .setLngLat(city.coordinates)
+            .setPopup(popup)
+            .addTo(map);
+        });
+      });
+      
+      // Add fly-to functionality when clicking on city buttons
+      document.querySelectorAll('.city-button').forEach(button => {
+        button.addEventListener('click', function(e) {
+          // Skip animation for "Coming Soon" cities
+          if (this.classList.contains('non-focus-city')) {
+            return; // Allow default link behavior
+          }
+          
+          const cityName = this.querySelector('.city-name').textContent.trim();
+          const targetHref = this.getAttribute('href');
+          
+          // Skip animation if no href or href is just a hash
+          if (!targetHref || targetHref === '#') {
+            return; // Allow default link behavior
+          }
+          
+          if (focusCities[cityName]) {
+            e.preventDefault(); // Prevent default navigation
+            const [lng, lat, zoom] = focusCities[cityName];
+            
+            // Animate map
+            map.flyTo({
+              center: [lng, lat],
+              zoom: zoom,
+              pitch: 60,
+              bearing: 30,
+              duration: 2000
+            });
+            
+            // Navigate after animation completes
+            setTimeout(() => {
+              window.location.href = targetHref;
+            }, 2200);
+          }
+        });
+      });
+      
+      // Special fix for Siem Reap button
+      document.getElementById('siemReapButton').addEventListener('click', function(event) {
+        // Cancel the map fly-to animation for this specific button to ensure direct navigation
+        event.stopPropagation();
+        
+        // Short delay to ensure the click is complete
+        setTimeout(() => {
+          window.location.href = "guides/siemreap-guide.html";
+        }, 100);
+      });
+    });
+  </script>
+</body>
+</html> 

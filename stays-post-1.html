@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aman Kyoto - Eastworld Stays Review</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Additional styles specific to hotel reviews */
+    .hotel-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+      .hotel-info {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .hotel-details {
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .detail-row {
+      display: flex;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+    }
+    
+    .detail-label {
+      font-weight: 600;
+      min-width: 120px;
+      color: #333;
+    }
+    
+    .detail-value {
+      flex: 1;
+      color: #555;
+    }
+    
+    .rating {
+      margin-bottom: 1rem;
+    }
+    
+    .rating i {
+      color: gold;
+      margin-right: 3px;
+    }
+    
+    .map-container {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .gallery-section {
+      margin: 2rem 0;
+    }
+    
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1rem;
+    }
+    
+    .gallery-item {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      height: 250px;
+    }
+    
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .gallery-item:hover img {
+      transform: scale(1.05);
+    }
+    
+    .room-section {
+      margin: 2rem 0;
+    }
+    
+    .room-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 2rem;
+    }
+    
+    .room-card {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+    
+    .room-img {
+      height: 200px;
+      position: relative;
+    }
+    
+    .room-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .room-content {
+      padding: 1.2rem;
+    }
+    
+    .room-title {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      display: flex;
+      justify-content: space-between;
+    }
+    
+    .room-price {
+      font-weight: bold;
+      color: #333;
+    }
+    
+    .room-desc {
+      font-size: 0.9rem;
+      color: #666;
+      line-height: 1.5;
+      margin-bottom: 1rem;
+    }
+    
+    .room-features {
+      display: flex;
+      flex-wrap: wrap;
+      font-size: 0.8rem;
+      color: #777;
+    }
+    
+    .room-feature {
+      margin-right: 1rem;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+    }
+    
+    .room-feature i {
+      margin-right: 5px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="places.html" class="nav-item">PLACES</a>
+        <a href="food.html" class="nav-item">FOOD</a>
+        <a href="stays.html" class="nav-item">STAYS</a>
+        <a href="products.html" class="nav-item">PRODUCTS</a>
+        <a href="cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="login.html" class="nav-item">LOGIN</a>
+        <a href="register.html" class="nav-item">REGISTER</a>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="content-container">
+    <div class="content-header">
+      <span class="content-category">LUXURY</span>
+      <h1 class="content-title">Aman Kyoto: A Sanctuary in the Ancient Forest</h1>
+    </div>
+    
+    <div class="hero-container">
+      <img class="content-hero" src="https://www.amankyoto.com/wp-content/uploads/2019/03/Aman-Kyoto-Exterior.jpg" alt="Aman Kyoto">
+    </div>
+    
+    <div class="content-text">
+      <div class="rating">
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <span>Eastworld Rating</span>
+      </div>
+      
+      <p>Nestled within a hidden garden surrounded by ancient temples and moss-covered stones, Aman Kyoto offers a rare blend of serenity and cultural immersion that defines the very essence of luxury in Japan.</p>
+      
+      <div class="hotel-info">
+        <div class="hotel-details">
+          <div class="detail-row">
+            <div class="detail-label">Location</div>
+            <div class="detail-value">Northern Kyoto, Japan</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">Price Range</div>
+            <div class="detail-value">$900 - $3,500 per night</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">Rooms</div>
+            <div class="detail-value">26 rooms and suites</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">Dining</div>
+            <div class="detail-value">Restaurant, lounge, private dining</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">Amenities</div>
+            <div class="detail-value">Onsen spa, garden lounges, library</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">Website</div>
+            <div class="detail-value"><a href="https://www.aman.com/resorts/aman-kyoto" target="_blank">aman.com/resorts/aman-kyoto</a></div>
+          </div>
+        </div>
+        <div class="map-container">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3266.6889385523945!2d135.75017211524134!3d35.05146268034742!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6001a82c114aa26f%3A0x7dd40d97c7df9d8a!2sAman%20Kyoto!5e0!3m2!1sen!2sjp!4v1615275124896!5m2!1sen!2sjp" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+      </div>
+      
+      <p>Opened in November 2019 as Aman's third property in Japan, Aman Kyoto occupies 80 acres of pristine forest landscape at the foot of Mount Daimonji. The resort's grounds were originally intended as the garden for a textile museum, lovingly tended for decades before Aman acquired the site.</p>
+      
+      <p>What makes Aman Kyoto truly exceptional is its setting - a secret garden within walking distance of Kinkaku-ji Temple (Golden Pavilion). Moss-covered stone pathways wind through the forest, connecting the resort's pavilions and guest rooms, which are designed to blend harmoniously with the natural surroundings.</p>
+      
+      <div class="content-quote">
+        "In a city known for exceptional hospitality, Aman Kyoto sets a new standard for immersive luxury that honors both the natural environment and the cultural heritage of Kyoto."
+      </div>
+      
+      <section class="gallery-section">
+        <h2>THE PROPERTY</h2>
+        <div class="gallery-grid">
+          <div class="gallery-item">
+            <img src="https://www.aman.com/sites/default/files/styles/full_size_landscape/public/2021-03/Aman-Kyoto-Pavilion.jpg" alt="Aman Kyoto Pavilion">
+          </div>
+          <div class="gallery-item">
+            <img src="https://www.aman.com/sites/default/files/styles/full_size_landscape/public/2021-03/Aman-Kyoto-Gardens.jpg" alt="Aman Kyoto Gardens">
+          </div>
+          <div class="gallery-item">
+            <img src="https://www.aman.com/sites/default/files/styles/full_size_landscape/public/2021-03/Aman-Kyoto-Onsen.jpg" alt="Aman Kyoto Onsen">
+          </div>
+        </div>
+      </section>
+      
+      <p>The architectural vision, brought to life by Kerry Hill Architects, draws on traditional Japanese design principles while incorporating contemporary elements. The structures feature floor-to-ceiling windows that frame forest views, tatami-matted rooms, and ofuro (Japanese bathtubs) crafted from hinoki cypress wood.</p>
+      
+      <p>Each of the resort's 26 guest rooms occupies a series of latticed pavilions, their dark timber frames and neutral palette offering a minimalist aesthetic that lets the vibrant greenery outside take center stage. Interiors feature traditional Japanese lanterns, tokonoma alcoves displaying seasonal art, and handcrafted furnishings by local artisans.</p>
+      
+      <section class="room-section">
+        <h2>ACCOMMODATION</h2>
+        <div class="room-grid">
+          <div class="room-card">
+            <div class="room-img">
+              <img src="https://media.cntraveler.com/photos/5e1cd8b63a9192000828c77d/master/w_1600,c_limit/aman-kyoto-suite-feb2020.jpg" alt="Aman Suite">
+            </div>
+            <div class="room-content">
+              <div class="room-title">
+                <span>Aman Suite</span>
+                <span class="room-price">$3,500</span>
+              </div>
+              <p class="room-desc">The ultimate expression of Aman luxury, featuring separate living areas, private onsen, and garden views.</p>
+              <div class="room-features">
+                <div class="room-feature"><i class="fas fa-ruler-combined"></i> 156 sq.m</div>
+                <div class="room-feature"><i class="fas fa-bath"></i> Private Onsen</div>
+                <div class="room-feature"><i class="fas fa-bed"></i> King Bed</div>
+                <div class="room-feature"><i class="fas fa-concierge-bell"></i> Butler Service</div>
+              </div>
+            </div>
+          </div>
+          <div class="room-card">
+            <div class="room-img">
+              <img src="https://media.cntraveler.com/photos/5e1cd8b5e9decf00087da23f/master/w_1600,c_limit/aman-kyoto-feb2020-bedroom.jpg" alt="Pavilion Room">
+            </div>
+            <div class="room-content">
+              <div class="room-title">
+                <span>Pavilion Room</span>
+                <span class="room-price">$900</span>
+              </div>
+              <p class="room-desc">Elegant accommodations with tatami floors, tokonoma alcoves, and forest views.</p>
+              <div class="room-features">
+                <div class="room-feature"><i class="fas fa-ruler-combined"></i> 60 sq.m</div>
+                <div class="room-feature"><i class="fas fa-bath"></i> Hinoki Soaking Tub</div>
+                <div class="room-feature"><i class="fas fa-bed"></i> King or Twin</div>
+                <div class="room-feature"><i class="fas fa-tree"></i> Garden Access</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <p>Dining at Aman Kyoto is a celebration of local ingredients and seasonal flavors. The resort's restaurant, Taka-an, offers Japanese haute cuisine in an intimate setting overlooking the moss garden. The Living Pavilion serves all-day dining with both Western and Japanese options, featuring vegetables and herbs harvested from the resort's own garden.</p>
+      
+      <p>The spa at Aman Kyoto harnesses the healing powers of the property's natural hot springs. Traditional onsen baths use mineral-rich water drawn from the resort's own spring, while treatments incorporate local ingredients like green tea, sake, and cold-pressed camellia oil.</p>
+      
+      <p>What truly sets Aman Kyoto apart is its ability to offer exclusive cultural experiences. Guests can participate in private tea ceremonies with local masters, enjoy ikebana (flower arranging) lessons, or explore nearby temples before they open to the public. The resort can also arrange visits to local artisan workshops, including some that typically remain closed to visitors.</p>
+      
+      <section>
+        <h2>EASTWORLD VERDICT</h2>
+        <p>Aman Kyoto represents the pinnacle of luxury hospitality in a city already renowned for exceptional accommodations. Its unparalleled setting within a secret garden, minimalist yet supremely comfortable accommodations, and ability to provide authentic cultural immersion make it worth the considerable investment for those seeking a truly transcendent experience in Kyoto.</p>
+        
+        <p>The resort excels at creating moments of tranquility and discovery - whether soaking in an outdoor onsen as mist rises through the forest, enjoying a private meditation session at a nearby temple, or savoring kaiseki cuisine crafted from ingredients harvested that morning.</p>
+        
+        <p>While the price point places it firmly in the ultra-luxury category, Aman Kyoto delivers an experience that goes beyond traditional notions of luxury, offering something increasingly rare in our hyperconnected world: genuine sanctuary and the space to reconnect with both nature and Japanese cultural traditions.</p>
+      </section>
+      
+      <a href="stays.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Stays Guide</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html> 

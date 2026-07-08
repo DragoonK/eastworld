@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register - Eastworld</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="auth-page">
+  <div class="auth-container">
+    <div class="auth-left">
+      <div class="auth-overlay"></div>
+      <img src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?ixlib=rb-1.2.1&auto=format&fit=crop&w=1971&q=80" alt="Tokyo Street">
+    </div>
+    <div class="auth-right">
+      <div class="auth-header">
+        <a href="index.html" class="auth-logo">EASTWORLD</a>
+      </div>
+      <div class="auth-form-container">
+        <h2>Create Account</h2>
+        <p class="auth-subtitle">Join the Eastworld community</p>
+        
+        <form id="register-form" class="auth-form">
+          <div class="form-group">
+            <input type="text" id="username" name="username" required placeholder="Username">
+          </div>
+          <div class="form-group">
+            <input type="email" id="email" name="email" required placeholder="Email">
+          </div>
+          <div class="form-group">
+            <input type="password" id="password" name="password" required placeholder="Password">
+            <i class="fas fa-eye toggle-password"></i>
+          </div>
+          
+          <div class="form-group">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="confirm-password" placeholder="Confirm Password" required>
+            <i class="fas fa-eye-slash toggle-password"></i>
+          </div>
+
+          <button type="submit">
+            <span>Create Account</span>
+            <i class="fas fa-arrow-right"></i>
+          </button>
+        </form>
+
+        <div class="social-auth">
+          <p>Or sign up with</p>
+          <div class="social-buttons">
+            <button class="social-button google">
+              <i class="fab fa-google"></i>
+              <span>Google</span>
+            </button>
+            <button class="social-button apple">
+              <i class="fab fa-apple"></i>
+              <span>Apple</span>
+            </button>
+          </div>
+        </div>
+
+        <p class="auth-redirect">
+          Already have an account? <a href="login.html">Sign in</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script src="auth.js"></script>
+</body>
+</html>

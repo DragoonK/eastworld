@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kikunoi - Eastworld Restaurant Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Additional styles specific to restaurant reviews */
+    .restaurant-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+      .restaurant-info {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .restaurant-details {
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .detail-row {
+      display: flex;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+    }
+    
+    .detail-label {
+      font-weight: 600;
+      min-width: 120px;
+      color: #333;
+    }
+    
+    .detail-value {
+      flex: 1;
+      color: #555;
+    }
+    
+    .rating {
+      margin-bottom: 1rem;
+    }
+    
+    .star {
+      color: #ddd;
+      font-size: 1.5rem;
+    }
+    
+    .star.filled {
+      color: #FFD700;
+    }
+    
+    .half-star {
+      position: relative;
+    }
+    
+    .half-star .fas.fa-star-half {
+      color: #FFD700;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    
+    .score-label {
+      margin-left: 0.5rem;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .map-container {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .map-container iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+    }
+    
+    .photos-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .photo-item {
+      border-radius: 8px;
+      overflow: hidden;
+      height: 150px;
+    }
+    
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .photo-item img:hover {
+      transform: scale(1.05);
+    }
+    
+    .review-section {
+      margin: 2rem 0;
+      padding: 2rem;
+      background: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    /* Booking button styles */
+    .booking-button {
+      display: block;
+      background-color: #ff4d4d;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      margin: 1.5rem 0;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    
+    .booking-button:hover {
+      background-color: #e63939;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    /* Review carousel styles */
+    .review-carousel {
+      position: relative;
+      margin: 2rem 0;
+      overflow: hidden;
+      padding: 1rem 0;
+    }
+    
+    .review-slides {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    
+    .review-slide {
+      min-width: 100%;
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .reviewer-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #f0f0f0;
+      padding-bottom: 0.8rem;
+    }
+    
+    .reviewer-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 0.8rem;
+    }
+    
+    .reviewer-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding-top: 0.2rem;
+    }
+    
+    .review-date {
+      color: #888;
+      font-size: 0.75rem;
+      margin-top: 0.1rem;
+    }
+    
+    .review-rating {
+      display: flex;
+      margin-top: 0.2rem;
+    }
+    
+    .review-rating i {
+      font-size: 0.8rem;
+      margin-right: 2px;
+    }
+    
+    .carousel-nav {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+    
+    .carousel-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ddd;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .carousel-dot.active {
+      background: #ff4d4d;
+    }
+    
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.7);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+    
+    .carousel-prev {
+      left: 10px;
+    }
+    
+    .carousel-next {
+      right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../food.html" class="nav-item active">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="content-container">
+    <div class="content-header">
+      <span class="content-category">KAISEKI</span>
+      <h1 class="content-title">Kikunoi - Three Michelin Star Kaiseki Excellence</h1>
+      
+      <!-- Rating Section -->
+      <div class="rating">
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="score-label">4.9/5.0</span>
+      </div>
+    </div>
+    
+    <div class="hero-container">
+      <img class="content-hero" src="https://res.cloudinary.com/tf-lab/image/upload/restaurant/f03a26f3-9590-4996-b706-2a4e3fb23d68/0a39c9c2-bef7-48a7-9a01-c96ea1f00ddc.jpg" alt="Kikunoi restaurant garden view" 
+      onerror="this.onerror=null; 
+      this.parentElement.innerHTML = '<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#333;color:white;font-size:1.5rem;text-align:center;padding:2rem;\'>Kikunoi Kyoto</div>';">
+    </div>
+    
+    <!-- Booking Button -->
+    <a href="#booking-form" class="booking-button">
+      <i class="fas fa-calendar-alt"></i> RESERVE A TABLE
+    </a>
+    
+    <!-- Restaurant Information Section -->
+    <div class="restaurant-info">
+      <div class="restaurant-details">
+        <h2>Restaurant Details</h2>
+        
+        <div class="detail-row">
+          <div class="detail-label">Address:</div>
+          <div class="detail-value">459 Shimokawara-cho, Yasakatoriimae-sagaru, Shimokawara-dori, Higashiyama-ku, Kyoto 605-0825, Japan</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Hours:</div>
+          <div class="detail-value">Lunch: 12:00 PM - 1:00 PM (Last seating)<br>Dinner: 5:00 PM - 8:00 PM (Last seating)<br>Closed on Wednesdays</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Phone:</div>
+          <div class="detail-value">+81 75-561-0015</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Price Range:</div>
+          <div class="detail-value">Lunch: ¥9,000-15,000 ($65-110)<br>Dinner: ¥25,000-40,000 ($180-290) per person</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Cuisine:</div>
+          <div class="detail-value">Japanese, Kaiseki, Traditional Kyoto Cuisine</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Reservations:</div>
+          <div class="detail-value">Essential, book 2-3 months in advance</div>
+        </div>
+        
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">How to Get There</h3>
+        <p>From Gion-Shijo Station:</p>
+        <ul style="margin-bottom: 1rem; padding-left: 1.5rem;">
+          <li>Take the Keihan Main Line to Gion-Shijo Station</li>
+          <li>Exit the station and walk east along Shijo Street for about 5 minutes</li>
+          <li>Turn right onto Yamato Oji Street and continue for 3 minutes</li>
+          <li>Turn left at Shimokawara Street</li>
+          <li>Kikunoi is on the left, identified by its elegant wooden entrance gate</li>
+        </ul>
+      </div>
+      
+      <div class="map-container">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3268.012686737453!2d135.779056!3d35.002083!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x600108e9c6e2439f%3A0xb61133d22aba880c!2sKikunoi!5e0!3m2!1sen!2sus!4v1693230090086!5m2!1sen!2sus" 
+        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+    
+    <div class="content-text">
+      <h2>Kyoto's Kaiseki Legacy</h2>
+      
+      <p>Kikunoi, meaning "Chrysanthemum Well," is a three Michelin-starred restaurant that represents the pinnacle of kaiseki ryori, the traditional multi-course Japanese dining experience. Founded in 1912 and now helmed by third-generation chef Yoshihiro Murata, Kikunoi has played a pivotal role in preserving and elevating Kyoto's culinary heritage while gracefully integrating modern sensibilities.</p>
+      
+      <p>Located in Kyoto's historic Higashiyama district near Yasaka Shrine, the restaurant occupies a beautiful traditional building surrounded by immaculately maintained Japanese gardens. The name "Kikunoi" references a well on the property where water would surface with petals resembling chrysanthemums—a poetic beginning for a restaurant that treats cuisine as a form of artistic expression.</p>
+      
+      <div class="photos-container">
+        <div class="photo-item">
+          <img src="https://res.cloudinary.com/tf-lab/image/upload/restaurant/f03a26f3-9590-4996-b706-2a4e3fb23d68/43c96e61-00c5-428b-9241-5c7fb43ff834.jpg" alt="Kaiseki presentation">
+        </div>
+        <div class="photo-item">
+          <img src="https://res.cloudinary.com/tf-lab/image/upload/restaurant/f03a26f3-9590-4996-b706-2a4e3fb23d68/4878ecb0-4be5-4f1e-97f3-58329d651830.jpg" alt="Seasonal dish">
+        </div>
+        <div class="photo-item">
+          <img src="https://res.cloudinary.com/tf-lab/image/upload/restaurant/f03a26f3-9590-4996-b706-2a4e3fb23d68/ba94f5fd-ad3f-4ac8-a12e-04e2eaf2add2.jpg" alt="Chef Murata">
+        </div>
+        <div class="photo-item">
+          <img src="https://res.cloudinary.com/tf-lab/image/upload/restaurant/f03a26f3-9590-4996-b706-2a4e3fb23d68/f800ead8-38c0-4d8e-aee6-d15fba775c03.jpg" alt="Private dining room">
+        </div>
+      </div>
+      
+      <h2>The Art of Kaiseki</h2>
+      
+      <p>Kaiseki ryori is often described as Japan's most refined culinary tradition—a highly ritualized form of dining that evolved from the tea ceremony traditions. Each course is meticulously crafted not only for flavor but also for aesthetic beauty, seasonal relevance, and symbolic meaning. At Kikunoi, this tradition is honored with extraordinary attention to detail while incorporating subtle contemporary influences.</p>
+      
+      <p>Chef Murata, who trained extensively in both Japanese and French cuisine, is renowned for his deep understanding of traditional Kyoto cooking techniques and his ability to reveal the essence of each ingredient. His approach respects the seasonal rhythms that are so fundamental to Japanese gastronomy, with menus changing not just with the four seasons but adapting to more nuanced seasonal transitions.</p>
+      
+      <p>A typical kaiseki meal at Kikunoi progresses through as many as 12 courses, each serving a specific purpose within the overall experience. From the delicate appetizers (sakizuke and zensai) through to the rice, pickles, and dessert courses, each dish builds upon what came before, creating a harmonious progression that reflects the Japanese concept of balance.</p>
+      
+      <div class="content-quote">
+        "Kaiseki is not just about food—it's about sharing the beauty of the seasons, telling a story through ingredients, and creating moments of harmony between nature, the artisan, and the guest. Our commitment at Kikunoi is to preserve these traditions while allowing them to breathe and evolve naturally." - Chef Yoshihiro Murata
+      </div>
+      
+      <!-- User Reviews Carousel -->
+      <h2>Customer Reviews</h2>
+      
+      <div class="review-carousel">
+        <div class="carousel-arrow carousel-prev">
+          <i class="fas fa-chevron-left"></i>
+        </div>
+        
+        <div class="review-slides">
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Rebecca L.</div>
+                <div class="review-date">Visited April 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"Our dinner at Kikunoi was the highlight of our two-week journey through Japan. From the moment we walked through the entrance gate, we were transported into a world of refined tranquility. Each dish was a masterpiece of visual composition that somehow managed to taste even better than it looked. What struck me most was how the meal connected us to Kyoto's sense of place and the spring season—cherry blossom motifs appeared subtly throughout the courses, and our server explained the significance of each seasonal ingredient. The service achieved that perfect balance of being attentive without ever feeling intrusive. One particularly memorable dish was a clear soup with a single cherry blossom floating in it—simple yet profound in its celebration of the fleeting nature of spring. Yes, it's expensive, but for a once-in-a-lifetime cultural and culinary experience, Kikunoi delivers exceptional value."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Takashi I.</div>
+                <div class="review-date">Visited March 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"As someone who has dined at many of Japan's top kaiseki restaurants, I can confidently say that Kikunoi stands among the very finest. Chef Murata's deep respect for tradition is evident, but what distinguishes his cuisine is how he subtly incorporates modern techniques without compromising the essential character of Kyoto cuisine. During my visit, the hassun course (seasonal platter) featured early spring vegetables prepared in eight different ways—each preparation highlighting a different aspect of the vegetable's character. The knife work throughout the meal was extraordinary, showing the years of disciplined training behind each dish. The private dining room overlooking the garden created an atmosphere of serene exclusivity, and the kimono-clad servers moved with graceful precision. Chef Murata himself came to greet us during the meal, adding a personal touch to an already exceptional experience."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Claire M.</div>
+                <div class="review-date">Visited February 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star-half-alt" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"Kikunoi offered us a profound glimpse into the soul of Japanese cuisine. We opted for the lunch kaiseki, which, while slightly abbreviated compared to dinner, still provided a comprehensive journey through traditional Kyoto flavors. Each dish arrived on exquisite pottery that seemed perfectly selected to complement the food—I later learned many pieces were antiques or made by renowned contemporary ceramicists. The winter menu emphasized hearty, warming dishes including a remarkable hot pot with locally raised duck. My only slight critique would be that despite making a reservation well in advance and noting our dietary preferences, one dish contained an ingredient I couldn't eat. However, the staff rectified this immediately with grace and provided an alternative that matched the quality of the original course. For those seeking to understand the depth and philosophy behind Japanese cuisine, Kikunoi provides an immersive education through taste, sight, and thoughtful explanation."</p>
+          </div>
+        </div>
+        
+        <div class="carousel-arrow carousel-next">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+        
+        <div class="carousel-nav">
+          <div class="carousel-dot active"></div>
+          <div class="carousel-dot"></div>
+          <div class="carousel-dot"></div>
+        </div>
+      </div>
+      
+      <h2>Kaiseki Structure</h2>
+      
+      <p>While Kikunoi's menu changes constantly with the seasons, the structure of a traditional kaiseki meal follows established patterns. Here's what you might experience in a full kaiseki dinner:</p>
+      
+      <ul>
+        <li><strong>Sakizuke</strong> - An appetizer similar to the French amuse-bouche, often featuring a small taste of something refreshing</li>
+        <li><strong>Hassun</strong> - A seasonal platter representing both mountain and sea, setting the seasonal theme for the meal</li>
+        <li><strong>Mukōzuke</strong> - The sashimi course, showcasing the freshest seasonal fish</li>
+        <li><strong>Takiawase</strong> - Vegetables and meats simmered separately but served together</li>
+        <li><strong>Futamono</strong> - A "lidded dish," typically a soup with seasonal ingredients</li>
+        <li><strong>Yakimono</strong> - Grilled items, often fish</li>
+        <li><strong>Su-zakana</strong> - A vinegared dish to cleanse the palate</li>
+        <li><strong>Hiyashi-bachi</strong> - Chilled dishes served in summer</li>
+        <li><strong>Naka-choko</strong> - Another palate cleanser, often a light soup</li>
+        <li><strong>Shiizakana</strong> - A substantial dish, often a hot pot or stew</li>
+        <li><strong>Gohan</strong> - The rice course, often served with pickles and miso soup</li>
+        <li><strong>Mizumono</strong> - Dessert, typically highlighting seasonal fruits or traditional Japanese sweets</li>
+      </ul>
+      
+      <div class="review-section">
+        <h2>Eastworld's Review</h2>
+        
+        <h3>Food Quality: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Chef Murata's cuisine represents the pinnacle of Kyoto's kaiseki tradition. Each ingredient is selected with extraordinary care, prepared with impeccable technique, and presented with artistic sensibility. Flavors are clean, precise, and harmoniously balanced, allowing the natural qualities of seasonal ingredients to shine.</p>
+        
+        <h3>Cultural Significance: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Beyond merely serving delicious food, Kikunoi provides a profound experience of Japanese aesthetics and philosophy. The meal functions as a cultural education, illuminating concepts of seasonality, impermanence, and harmony that are central to Japanese cultural identity.</p>
+        
+        <h3>Atmosphere: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>The traditional architecture, private dining rooms, and meticulously maintained gardens create an atmosphere of refined tranquility. Every element—from the antique pottery to the ikebana flower arrangements—contributes to a holistic sensory experience that transcends mere dining.</p>
+        
+        <h3>Service: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>The service at Kikunoi exemplifies omotenashi, the Japanese concept of hospitality that anticipates guests' needs before they arise. Staff are knowledgeable about every aspect of the meal and provide thoughtful explanations without overwhelming diners with information.</p>
+        
+        <h3>Value: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>While Kikunoi represents a significant investment (¥30,000-40,000 for dinner), the quality of ingredients, level of craftsmanship, exclusivity of the experience, and cultural significance provide substantial value. The lunch kaiseki offers a more accessible entry point without compromising quality.</p>
+        
+        <h3>Overall: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Kikunoi delivers one of Japan's most profound culinary experiences, seamlessly blending centuries of tradition with subtle contemporary sensibilities. For those seeking to understand the soul of Japanese cuisine, a meal at Kikunoi is an essential pilgrimage.</p>
+      </div>
+      
+      <h2>Tips for Visitors</h2>
+      
+      <ul>
+        <li>Make reservations 2-3 months in advance, especially during cherry blossom (April) and autumn foliage (November) seasons</li>
+        <li>Consider the lunch kaiseki for a slightly more affordable experience that still captures the essence of Kikunoi</li>
+        <li>Request an English-speaking server when booking if you don't speak Japanese</li>
+        <li>Inform the restaurant of any dietary restrictions when making your reservation</li>
+        <li>Dress respectfully—formal attire is not required, but casual clothing like jeans, t-shirts, or sneakers is discouraged</li>
+        <li>Photography is permitted but be discreet and respect the peaceful atmosphere</li>
+        <li>Allow at least 3 hours for dinner to fully appreciate the experience without rushing</li>
+        <li>Consider purchasing Chef Murata's book "Kaiseki: The Exquisite Cuisine of Kyoto's Kikunoi Restaurant" as a memento</li>
+      </ul>
+      
+      <!-- Booking Form -->
+      <div id="booking-form" class="review-section">
+        <h2>Reservation Information</h2>
+        <p>Reservations for Kikunoi can be made through the following methods:</p>
+        
+        <h3>Booking Contact:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Phone: +81 75-561-0015 (Japanese language preferred)</li>
+          <li>Email: <a href="mailto:info@kikunoi.jp" style="color: #ff4d4d;">info@kikunoi.jp</a></li>
+          <li>Official website: <a href="https://kikunoi.jp/english/" target="_blank" style="color: #ff4d4d;">kikunoi.jp/english/</a></li>
+        </ul>
+        
+        <p>For international guests, we recommend:</p>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Asking your hotel concierge to assist with securing a reservation</li>
+          <li>Using a specialized concierge service like <a href="https://www.tableall.com/" target="_blank" style="color: #ff4d4d;">TableAll</a> (additional fee applies)</li>
+          <li>Booking through the Eastworld concierge service at <a href="mailto:concierge@eastworld.com" style="color: #ff4d4d;">concierge@eastworld.com</a></li>
+        </ul>
+        
+        <p>A credit card is required to secure your reservation. Cancellations must be made at least 3 days in advance to avoid a cancellation fee.</p>
+        
+        <p>When making your reservation, be sure to mention any dietary restrictions, preferred dining time, and whether you would like a private room (additional charges may apply).</p>
+      </div>
+      
+      <a href="../food.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Food Guide</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Review carousel functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const slides = document.querySelector('.review-slides');
+      const dots = document.querySelectorAll('.carousel-dot');
+      const prevBtn = document.querySelector('.carousel-prev');
+      const nextBtn = document.querySelector('.carousel-next');
+      let currentSlide = 0;
+      const totalSlides = document.querySelectorAll('.review-slide').length;
+      
+      // Function to update slide position
+      function showSlide(index) {
+        if (index < 0) index = totalSlides - 1;
+        if (index >= totalSlides) index = 0;
+        
+        currentSlide = index;
+        slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+        
+        // Update active dot
+        dots.forEach((dot, i) => {
+          dot.classList.toggle('active', i === currentSlide);
+        });
+      }
+      
+      // Set up event listeners for dots
+      dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => showSlide(i));
+      });
+      
+      // Set up event listeners for arrows
+      prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
+      nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
+      
+      // Auto-rotate slides every 5 seconds
+      setInterval(() => {
+        showSlide(currentSlide + 1);
+      }, 5000);
+    });
+  </script>
+  
+  <script src="../script.js"></script>
+</body>
+</html> 

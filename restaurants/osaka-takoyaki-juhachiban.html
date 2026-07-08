@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Takoyaki Juhachiban - Eastworld Restaurant Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Additional styles specific to restaurant reviews */
+    .restaurant-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+      .restaurant-info {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .restaurant-details {
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .detail-row {
+      display: flex;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+    }
+    
+    .detail-label {
+      font-weight: 600;
+      min-width: 120px;
+      color: #333;
+    }
+    
+    .detail-value {
+      flex: 1;
+      color: #555;
+    }
+    
+    .rating {
+      margin-bottom: 1rem;
+    }
+    
+    .star {
+      color: #ddd;
+      font-size: 1.5rem;
+    }
+    
+    .star.filled {
+      color: #FFD700;
+    }
+    
+    .half-star {
+      position: relative;
+    }
+    
+    .half-star .fas.fa-star-half {
+      color: #FFD700;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    
+    .score-label {
+      margin-left: 0.5rem;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .map-container {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .map-container iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+    }
+    
+    .photos-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .photo-item {
+      border-radius: 8px;
+      overflow: hidden;
+      height: 150px;
+    }
+    
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .photo-item img:hover {
+      transform: scale(1.05);
+    }
+    
+    .review-section {
+      margin: 2rem 0;
+      padding: 2rem;
+      background: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    /* Booking button styles */
+    .booking-button {
+      display: block;
+      background-color: #ff4d4d;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      margin: 1.5rem 0;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    
+    .booking-button:hover {
+      background-color: #e63939;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    /* Review carousel styles */
+    .review-carousel {
+      position: relative;
+      margin: 2rem 0;
+      overflow: hidden;
+      padding: 1rem 0;
+    }
+    
+    .review-slides {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    
+    .review-slide {
+      min-width: 100%;
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .reviewer-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #f0f0f0;
+      padding-bottom: 0.8rem;
+    }
+    
+    .reviewer-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 0.8rem;
+    }
+    
+    .reviewer-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding-top: 0.2rem;
+    }
+    
+    .review-date {
+      color: #888;
+      font-size: 0.75rem;
+      margin-top: 0.1rem;
+    }
+    
+    .review-rating {
+      display: flex;
+      margin-top: 0.2rem;
+    }
+    
+    .review-rating i {
+      font-size: 0.8rem;
+      margin-right: 2px;
+    }
+    
+    .carousel-nav {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+    
+    .carousel-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ddd;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .carousel-dot.active {
+      background: #ff4d4d;
+    }
+    
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.7);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+    
+    .carousel-prev {
+      left: 10px;
+    }
+    
+    .carousel-next {
+      right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../food.html" class="nav-item active">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="content-container">
+    <div class="content-header">
+      <span class="content-category">STREET FOOD</span>
+      <h1 class="content-title">Takoyaki Juhachiban - Legendary Octopus Balls in Dotonbori</h1>
+      
+      <!-- Rating Section -->
+      <div class="rating">
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star half-star">
+          <i class="far fa-star"></i>
+          <i class="fas fa-star-half"></i>
+        </span>
+        <span class="score-label">4.5/5.0</span>
+      </div>
+    </div>
+    
+    <div class="hero-container">
+      <img class="content-hero" src="https://media-cdn.tripadvisor.com/media/photo-s/04/3a/3d/b5/takoyaki-18-ban.jpg" alt="Takoyaki Juhachiban stand" 
+      onerror="this.onerror=null; 
+      this.parentElement.innerHTML = '<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#333;color:white;font-size:1.5rem;text-align:center;padding:2rem;\'>Takoyaki Juhachiban</div>';">
+    </div>
+    
+    <!-- Booking Button -->
+    <a href="#visitor-info" class="booking-button">
+      <i class="fas fa-info-circle"></i> VISITOR INFORMATION
+    </a>
+    
+    <!-- Restaurant Information Section -->
+    <div class="restaurant-info">
+      <div class="restaurant-details">
+        <h2>Restaurant Details</h2>
+        
+        <div class="detail-row">
+          <div class="detail-label">Address:</div>
+          <div class="detail-value">1-6-18 Dotonbori, Chuo Ward, Osaka 542-0071, Japan</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Hours:</div>
+          <div class="detail-value">11:00 AM - 11:00 PM<br>Open daily</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Phone:</div>
+          <div class="detail-value">+81 6-6211-0829</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Price Range:</div>
+          <div class="detail-value">¥500-1,000 ($3.50-7) per serving</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Cuisine:</div>
+          <div class="detail-value">Japanese Street Food, Takoyaki (Octopus Balls)</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Reservations:</div>
+          <div class="detail-value">Not accepted - street food stall</div>
+        </div>
+        
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">How to Get There</h3>
+        <p>From Namba Station:</p>
+        <ul style="margin-bottom: 1rem; padding-left: 1.5rem;">
+          <li>Take the north exit from Namba Station</li>
+          <li>Walk north along Midosuji street for about 5 minutes</li>
+          <li>Turn right onto Dotonbori Street</li>
+          <li>Look for the giant mechanical crab sign (Kani Doraku) – Takoyaki Juhachiban is nearby</li>
+          <li>The stand has a distinctive yellow signboard with "18" (juhachi) in Japanese</li>
+        </ul>
+      </div>
+      
+      <div class="map-container">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3280.969761001066!2d135.4995573751967!3d34.66943738044297!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6000e714038ff9e3%3A0x4c30f5be12f7bc0!2sTakoyaki%20Juhachiban!5e0!3m2!1sen!2sus!4v1693230090086!5m2!1sen!2sus" 
+        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+    
+    <div class="content-text">
+      <h2>Osaka's Beloved Takoyaki Institution</h2>
+      
+      <p>Takoyaki Juhachiban (literally "Number 18") stands as one of the most renowned takoyaki vendors in Osaka—a city famous for this quintessential street food. Located in the heart of the vibrant Dotonbori entertainment district, this humble street-side stand has been serving perfectly crisp-yet-gooey octopus balls to both locals and tourists for generations.</p>
+      
+      <p>The name "Juhachiban" (18) refers to its original location as the 18th stall in the Dotonbori food market. Though the market's organization has changed over the decades, the name remains as a testament to the stand's long history. Today, it's known for maintaining traditional takoyaki-making techniques while consistently delivering exceptional quality that rises above the numerous competitors along the same street.</p>
+      
+      <div class="photos-container">
+        <div class="photo-item">
+          <img src="https://cdn.tadaimajp.com/wp-content/uploads/2017/04/takoyakijuhachiban4.jpg" alt="Fresh takoyaki being prepared">
+        </div>
+        <div class="photo-item">
+          <img src="https://media-cdn.tripadvisor.com/media/photo-s/09/84/cf/17/caption.jpg" alt="Box of takoyaki with toppings">
+        </div>
+        <div class="photo-item">
+          <img src="https://media-cdn.tripadvisor.com/media/photo-s/0e/54/10/d7/photo0jpg.jpg" alt="Chef cooking takoyaki">
+        </div>
+        <div class="photo-item">
+          <img src="https://live.staticflickr.com/7318/9383072685_626e11aa1a_b.jpg" alt="Line of customers waiting">
+        </div>
+      </div>
+      
+      <h2>The Art of Perfect Takoyaki</h2>
+      
+      <p>Takoyaki—savory spherical balls filled with diced octopus, tempura scraps, pickled ginger, and green onion—might seem simple, but achieving the perfect texture requires significant skill. The outer shell should be crispy while the inside remains soft and almost molten—a delicate balance that the chefs at Juhachiban have mastered.</p>
+      
+      <p>What sets Juhachiban's takoyaki apart is their generous use of fresh octopus chunks rather than the smaller pieces often found elsewhere. Their batter achieves the ideal consistency—light yet substantial—and each ball is cooked to order in specialized round molds, constantly rotated by skilled staff using metal picks to ensure even cooking.</p>
+      
+      <p>The takoyaki is served piping hot and topped with a variety of traditional garnishes. The standard order comes drizzled with takoyaki sauce (similar to Worcestershire but sweeter), Japanese mayonnaise, aonori (seaweed flakes), and katsuobushi (bonito flakes) that dance from the heat. Other toppings and variations are available, but most regulars prefer the classic preparation that has stood the test of time.</p>
+      
+      <div class="content-quote">
+        "In Osaka, takoyaki isn't just food—it's part of our identity. Everyone has their favorite stand, and many locals will tell you that Juhachiban represents the gold standard. We focus on quality ingredients and maintaining the techniques that have kept customers coming back for decades." - Manager of Takoyaki Juhachiban
+      </div>
+      
+      <!-- User Reviews Carousel -->
+      <h2>Customer Reviews</h2>
+      
+      <div class="review-carousel">
+        <div class="carousel-arrow carousel-prev">
+          <i class="fas fa-chevron-left"></i>
+        </div>
+        
+        <div class="review-slides">
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Andy T.</div>
+                <div class="review-date">Visited May 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"I've tried takoyaki all over Osaka, and Juhachiban consistently delivers the best. Their takoyaki has the perfect texture—crispy exterior giving way to that molten, savory interior. What really distinguishes them is the generous chunks of tender octopus in each ball. The staff work with mesmerizing efficiency, flipping dozens of takoyaki simultaneously. Yes, there's often a line, but it moves quickly, and the product is worth the short wait. Pro tip: find a spot nearby to eat them immediately while they're hot—these aren't meant to travel far! The standard sauce/mayo/bonito topping is perfect, but if you like spice, their mentaiko (spicy cod roe) version is exceptional."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Haruka M.</div>
+                <div class="review-date">Visited April 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="far fa-star" style="color: #ddd;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"As an Osaka native, I consider Juhachiban to be among the top 3 takoyaki shops in the city. Their takoyaki features the ideal balance of crispness and gooeyness, with a generous filling that includes large, fresh octopus pieces. The only reason I don't give 5 stars is that their popularity means sometimes the staff rushes the cooking process slightly during peak hours, resulting in occasional inconsistency. That said, even their 'off' batches are better than most other places' best efforts. The pricing is fair for the quality (¥600 for 8 pieces), and despite being in the touristy Dotonbori area, they maintain authentic Osaka flavors without compromising for foreign palates. Look for times when the line is shorter for the best experience."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Marie C.</div>
+                <div class="review-date">Visited June 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star-half-alt" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"This was my first time trying takoyaki, and I'm so glad we chose Juhachiban for the experience! The staff were incredibly efficient, and it was fascinating watching them prepare the takoyaki with such precision. The balls themselves were absolutely delicious—crisp on the outside with that unique soft center that slowly firms up as it cools. I appreciated that the menu had pictures and English descriptions, making it easy to order. We got the classic takoyaki with all the toppings, and the dance of the bonito flakes on top was mesmerizing! The only challenging part was finding somewhere to eat them, as there's no seating area. We ended up perching on a ledge nearby. Definitely worth seeking out for an authentic Osaka street food experience."</p>
+          </div>
+        </div>
+        
+        <div class="carousel-arrow carousel-next">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+        
+        <div class="carousel-nav">
+          <div class="carousel-dot active"></div>
+          <div class="carousel-dot"></div>
+          <div class="carousel-dot"></div>
+        </div>
+      </div>
+      
+      <h2>Menu Options</h2>
+      
+      <p>Takoyaki Juhachiban keeps things straightforward with a focused menu:</p>
+      
+      <ul>
+        <li><strong>Regular Takoyaki (8 pieces - ¥600)</strong> - The classic version with takoyaki sauce, mayonnaise, aonori, and katsuobushi</li>
+        <li><strong>Spicy Mentaiko Takoyaki (8 pieces - ¥700)</strong> - Topped with spicy cod roe for an extra kick</li>
+        <li><strong>Cheese Takoyaki (8 pieces - ¥700)</strong> - Includes melted cheese inside each ball for added richness</li>
+        <li><strong>Plain Takoyaki (8 pieces - ¥550)</strong> - For purists who prefer to taste the unadulterated takoyaki</li>
+        <li><strong>Large Serving (12 pieces - ¥850)</strong> - For those with bigger appetites or to share</li>
+        <li><strong>Soft Drinks (¥150-200)</strong> - Various Japanese sodas and bottled water</li>
+      </ul>
+      
+      <div class="review-section">
+        <h2>Eastworld's Review</h2>
+        
+        <h3>Food Quality: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Juhachiban excels at the fundamentals of great takoyaki. The batter is perfectly balanced, the octopus is fresh and generously portioned, and the toppings enhance rather than overwhelm the flavors. Their consistency, especially given the high volume they serve, is impressive.</p>
+        
+        <h3>Authenticity: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>This is quintessential Osaka street food prepared in the traditional manner. From the cooking technique to the serving style, Juhachiban offers an unadulterated taste of local food culture without any tourist-focused modifications.</p>
+        
+        <h3>Value: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>At ¥600 for eight pieces of high-quality takoyaki, Juhachiban offers excellent value, especially considering its prime location in the heart of Dotonbori. The portion size is satisfying and the quality justifies the price.</p>
+        
+        <h3>Speed & Efficiency: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>Despite the constant queue, the staff work with impressive speed and efficiency. The line moves quickly, though during peak hours there can be a wait of 15-20 minutes. The takoyaki itself is always cooked to order.</p>
+        
+        <h3>Location: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Situated in the heart of Dotonbori, Osaka's entertainment and street food hub, Juhachiban is easy to find and conveniently located for tourists exploring the area. The vibrant atmosphere adds to the authentic street food experience.</p>
+        
+        <h3>Overall: <span style="color: #FFD700;">★★★★½</span></h3>
+        <p>Takoyaki Juhachiban provides one of Osaka's defining culinary experiences. For visitors seeking to understand why takoyaki is so beloved in Osaka, this stand offers the perfect introduction through exceptional quality, authentic preparation, and reasonable pricing.</p>
+      </div>
+      
+      <h2>Tips for Visitors</h2>
+      
+      <ul>
+        <li>Visit outside peak meal times (12-1 PM, 6-8 PM) to minimize waiting</li>
+        <li>Have your order ready before reaching the front of the line—the staff appreciate quick decisions during busy periods</li>
+        <li>Pay in cash—credit cards are not accepted</li>
+        <li>Be prepared to eat standing up or find a nearby spot to perch—there's no seating area</li>
+        <li>Use the small wooden picks provided to eat the takoyaki—they're very hot inside!</li>
+        <li>Let the takoyaki cool for a minute or two before eating to avoid burning your mouth</li>
+        <li>Consider trying different variations if you visit multiple times</li>
+        <li>Combine with other street food stops along Dotonbori for a complete Osaka food tour</li>
+      </ul>
+      
+      <!-- Visitor Information -->
+      <div id="visitor-info" class="review-section">
+        <h2>Visitor Information</h2>
+        <p>As a street food stand, Takoyaki Juhachiban doesn't take reservations. Here's what you need to know:</p>
+        
+        <h3>Best Times to Visit:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Weekday afternoons (2-5 PM) typically have the shortest lines</li>
+          <li>Early evenings (5-6 PM) before the dinner rush can also be good</li>
+          <li>Expect 15-30 minute waits during peak times (lunch and dinner hours)</li>
+        </ul>
+        
+        <h3>Practical Information:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Cash only – no credit cards accepted</li>
+          <li>English menu with pictures is available</li>
+          <li>Staff speak limited English but are accustomed to international visitors</li>
+          <li>No seating available – takeaway only</li>
+          <li>Nearby public benches along the Dotonbori canal offer places to sit and eat</li>
+        </ul>
+        
+        <p>While in the Dotonbori area, take the opportunity to try other Osaka specialties like okonomiyaki (savory pancakes) and kushikatsu (deep-fried skewers)—the district is a food lover's paradise that showcases Osaka's reputation as "Japan's kitchen."</p>
+      </div>
+      
+      <a href="../food.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Food Guide</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Review carousel functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const slides = document.querySelector('.review-slides');
+      const dots = document.querySelectorAll('.carousel-dot');
+      const prevBtn = document.querySelector('.carousel-prev');
+      const nextBtn = document.querySelector('.carousel-next');
+      let currentSlide = 0;
+      const totalSlides = document.querySelectorAll('.review-slide').length;
+      
+      // Function to update slide position
+      function showSlide(index) {
+        if (index < 0) index = totalSlides - 1;
+        if (index >= totalSlides) index = 0;
+        
+        currentSlide = index;
+        slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+        
+        // Update active dot
+        dots.forEach((dot, i) => {
+          dot.classList.toggle('active', i === currentSlide);
+        });
+      }
+      
+      // Set up event listeners for dots
+      dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => showSlide(i));
+      });
+      
+      // Set up event listeners for arrows
+      prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
+      nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
+      
+      // Auto-rotate slides every 5 seconds
+      setInterval(() => {
+        showSlide(currentSlide + 1);
+      }, 5000);
+    });
+  </script>
+  
+  <script src="../script.js"></script>
+</body>
+</html> 

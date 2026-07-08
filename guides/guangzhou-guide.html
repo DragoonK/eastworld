@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EASTWORLD - Guangzhou City Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* City Guide specific styles */
+    .guide-hero {
+      height: 500px;
+      background-image: url('https://images.unsplash.com/photo-1542990379-5be5fce485cd?q=80&w=1470&auto=format&fit=crop');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 3rem;
+    }
+    
+    .guide-hero-content {
+      text-align: center;
+      color: white;
+      position: relative;
+      z-index: 2;
+      padding: 2rem;
+      max-width: 800px;
+      background-color: rgba(0, 0, 0, 0.6);
+    }
+    
+    .guide-hero::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(0deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.2) 100%);
+    }
+    
+    .guide-hero h1 {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      letter-spacing: 3px;
+    }
+    
+    .guide-hero p {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    
+    .guide-intro {
+      max-width: 800px;
+      margin: 0 auto 3rem;
+      padding: 0 1rem;
+      line-height: 1.8;
+    }
+    
+    .guide-section {
+      margin-bottom: 4rem;
+    }
+    
+    .guide-section-title {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: 2.2rem;
+      letter-spacing: 1px;
+    }
+    
+    .guide-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+    
+    .guide-card {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+    
+    .guide-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .guide-card-img {
+      height: 200px;
+      overflow: hidden;
+    }
+    
+    .guide-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    
+    .guide-card:hover .guide-card-img img {
+      transform: scale(1.05);
+    }
+    
+    .guide-card-content {
+      padding: 1.5rem;
+    }
+    
+    .guide-card h3 {
+      margin-bottom: 0.5rem;
+      font-size: 1.2rem;
+    }
+    
+    .guide-card-meta {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      color: #666;
+    }
+    
+    .guide-card-meta i {
+      margin-right: 0.3rem;
+    }
+    
+    .guide-card-meta span {
+      margin-right: 1rem;
+    }
+    
+    .guide-card p {
+      color: #555;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    
+    .guide-map {
+      width: 100%;
+      height: 400px;
+      border: none;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+    }
+    
+    .guide-tips {
+      background-color: #f8f8f8;
+      padding: 2rem;
+      border-radius: 8px;
+      margin-bottom: 3rem;
+    }
+    
+    .guide-tips h3 {
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+    
+    .guide-tips-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+    
+    .guide-tip-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+    }
+    
+    .guide-tip-item i {
+      margin-right: 0.5rem;
+      color: #000;
+      margin-top: 0.25rem;
+    }
+    
+    .guide-download {
+      text-align: center;
+      margin: 3rem 0;
+      padding: 2rem;
+      background-color: #f0f0f0;
+      border-radius: 8px;
+    }
+    
+    .guide-download h3 {
+      margin-bottom: 1rem;
+      font-size: 1.8rem;
+    }
+    
+    .guide-download-btn {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 1rem 2rem;
+      background-color: #000;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+    
+    .guide-download-btn:hover {
+      background-color: #333;
+    }
+    
+    @media (max-width: 768px) {
+      .guide-hero h1 {
+        font-size: 3rem;
+      }
+      
+      .guide-hero p {
+        font-size: 1rem;
+      }
+      
+      .guide-section-title {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../food.html" class="nav-item">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../login.html" class="nav-item">LOGIN</a>
+        <a href="../register.html" class="nav-item">REGISTER</a>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="guide-hero">
+      <div class="guide-hero-content">
+        <h1>GUANGZHOU</h1>
+        <p>Where ancient heritage meets stunning modernity in China's vibrant southern metropolis</p>
+      </div>
+    </section>
+    
+    <section class="guide-intro">
+      <p>Guangzhou, historically known in the West as Canton, is the capital and largest city of Guangdong Province in southern China. As one of China's three largest cities and a major transportation hub, Guangzhou blends its 2,200 years of history with rapid modern development.</p>
+      
+      <p>Once the starting point of the ancient Maritime Silk Road, today's Guangzhou is a global commercial center renowned for its twice-yearly Canton Fair, cutting-edge architecture, and Cantonese cuisine—considered by many to be China's finest. The city's unique location near Hong Kong and Macau makes it an essential destination for understanding China's economic development and southern culture.</p>
+    </section>
+    
+    <section class="guide-section">
+      <h2 class="guide-section-title">TOP ATTRACTIONS</h2>
+      
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://media.istockphoto.com/id/1193473035/photo/canton-tower-guangzhou-china.jpg?s=612x612&w=0&k=20&c=XLUhttT1Hm7MKN0_h5bdA2tKs9XKlTLfMayb-G9Jn5Y=" alt="Canton Tower">
+          </div>
+          <div class="guide-card-content">
+            <h3>Canton Tower</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Haizhu District</span>
+              <i class="far fa-clock"></i><span>9:30-22:30</span>
+            </div>
+            <p>The 600-meter tall Canton Tower dominates Guangzhou's skyline, offering breathtaking views, a glass observation deck, and the world's highest horizontal Ferris wheel.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://media.istockphoto.com/id/1281595603/photo/guangzhou-opera-house.jpg?s=612x612&w=0&k=20&c=FqmYT0bY_RrRdQkUU3Sg4rBmdyQcRWJQIu4pFBx0OmI=" alt="Guangzhou Opera House">
+          </div>
+          <div class="guide-card-content">
+            <h3>Guangzhou Opera House</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Tianhe District</span>
+              <i class="far fa-clock"></i><span>10:00-16:30</span>
+            </div>
+            <p>Designed by architect Zaha Hadid, this stunning example of modern architecture resembles two pebbles on the Pearl River and hosts world-class performances.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://media.istockphoto.com/id/1128462201/photo/shamian-european-architecture-guangzhou-china.jpg?s=612x612&w=0&k=20&c=bNjQJFAbYzYf7ZRgS-YdpSYWTEkCHSvTr5gqwCWq_pg=" alt="Shamian Island">
+          </div>
+          <div class="guide-card-content">
+            <h3>Shamian Island</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Liwan District</span>
+              <i class="far fa-clock"></i><span>Always accessible</span>
+            </div>
+            <p>A historic sandbank island with tree-lined avenues and colonial European architecture that once housed foreign trading companies. Now a peaceful retreat from the bustling city.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://media.istockphoto.com/id/612224522/photo/chen-clan-ancestral-hall-guangzhou-china.jpg?s=612x612&w=0&k=20&c=rrF9EWKbGWNcGa4Wm0vM65DVDzB3bO6j-9HRPvBLCrA=" alt="Chen Clan Ancestral Hall">
+          </div>
+          <div class="guide-card-content">
+            <h3>Chen Clan Ancestral Hall</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Yuexiu District</span>
+              <i class="far fa-clock"></i><span>9:00-17:00</span>
+            </div>
+            <p>Built in 1894, this magnificent complex showcases traditional Chinese architecture and houses the Guangdong Folk Art Museum with impressive wood carvings, pottery, and embroidery.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://media.istockphoto.com/id/1150982503/photo/qingping-market-in-guangzhou.jpg?s=612x612&w=0&k=20&c=UmCCVZpGkW8iqQE-HLWLLKRw6FkkjJ3_ofrG6wbHapo=" alt="Qingping Market">
+          </div>
+          <div class="guide-card-content">
+            <h3>Qingping Market</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Liwan District</span>
+              <i class="far fa-clock"></i><span>8:00-18:00</span>
+            </div>
+            <p>China's largest traditional medicine market and a vibrant trading hub where you can find everything from herbs and spices to dried seafood and exotic teas.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://media.istockphoto.com/id/1023030280/photo/guangzhou-traditional-temple-china.jpg?s=612x612&w=0&k=20&c=hZzlzTGPP4VCXLFQyoLCQ8wGkBKbKcGHsKyJdgWA-QM=" alt="Temple of the Six Banyan Trees">
+          </div>
+          <div class="guide-card-content">
+            <h3>Temple of the Six Banyan Trees</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Yuexiu District</span>
+              <i class="far fa-clock"></i><span>8:30-17:00</span>
+            </div>
+            <p>A 1,500-year-old Buddhist temple featuring the iconic Flower Pagoda, ancient sculptures, and a serene atmosphere in the heart of the bustling city.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="guide-section">
+      <h2 class="guide-section-title">WHERE TO EAT</h2>
+      
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://media.istockphoto.com/id/522799928/photo/dim-sum-chinese-food.jpg?s=612x612&w=0&k=20&c=jqmLl4BXvSVGRUAHw4SCqLs2pIAKzBr9pRDAyhEK7Jg=" alt="Panxi Restaurant">
+          </div>
+          <div class="guide-card-content">
+            <h3>Panxi Restaurant</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Liwan District</span>
+              <i class="fas fa-dollar-sign"></i><span>$$$</span>
+            </div>
+            <p>A historic restaurant established in 1947 set in a beautiful garden with pavilions and ponds, serving authentic Cantonese dim sum and classic dishes.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://media.istockphoto.com/id/1008953940/photo/chinese-dishes.jpg?s=612x612&w=0&k=20&c=1YIoFMjpDRLxw3fvxwkXQvvzlS3_INw5n4tW-0vhWCU=" alt="Taotao Ju">
+          </div>
+          <div class="guide-card-content">
+            <h3>Taotao Ju</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Liwan District</span>
+              <i class="fas fa-dollar-sign"></i><span>$$</span>
+            </div>
+            <p>A century-old dim sum institution where trolleys laden with bamboo steamers circle the dining room offering a vast selection of traditional dim sum items.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://media.istockphoto.com/id/1421542066/photo/a-bustling-market-in-china.jpg?s=612x612&w=0&k=20&c=i9NdA4EE9FUFxjpvG9lgnfk2e0JK9JDJWLR5w9I9kQU=" alt="Huangsha Seafood Market">
+          </div>
+          <div class="guide-card-content">
+            <h3>Huangsha Seafood Market</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Liwan District</span>
+              <i class="fas fa-dollar-sign"></i><span>$$</span>
+            </div>
+            <p>Select fresh seafood from the market and have it cooked to your specifications at the surrounding restaurants for the ultimate fresh dining experience.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://media.istockphoto.com/id/1458205667/photo/authentic-chinese-hot-pot-sichuan-style-with-meat-mushrooms-vegetables-and-many-dips.jpg?s=612x612&w=0&k=20&c=lXf4RQWyPPDrMOBmLcEu5gH2SEaMh_r72GJPWkNB9RY=" alt="Liuhua Restaurant">
+          </div>
+          <div class="guide-card-content">
+            <h3>Liuhua Restaurant</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Yuexiu District</span>
+              <i class="fas fa-dollar-sign"></i><span>$$$</span>
+            </div>
+            <p>Famous for its Cantonese hot pot, this upscale restaurant serves premium ingredients in a refined setting, featuring the region's distinctive broth and accompaniments.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="guide-section">
+      <h2 class="guide-section-title">WHERE TO STAY</h2>
+      
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/31890562.jpg?k=db9d0f299d68fe89b9dcb5ec643f9bb2d8782d27d6e15a086594bc3158969292&o=&hp=1" alt="Four Seasons Hotel Guangzhou">
+          </div>
+          <div class="guide-card-content">
+            <h3>Four Seasons Hotel Guangzhou</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Tianhe District</span>
+              <i class="fas fa-star"></i><span>5-star luxury</span>
+            </div>
+            <p>Occupying the upper floors of the IFC tower, this luxury hotel offers spectacular city views, an infinity pool on the 69th floor, and exquisite dining options.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/43681709.jpg?k=396cd9c9a4264b33cc56c89c525c521cb83d9c2ac63e36e44e7fc9e1aaeb7360&o=&hp=1" alt="White Swan Hotel">
+          </div>
+          <div class="guide-card-content">
+            <h3>White Swan Hotel</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Shamian Island</span>
+              <i class="fas fa-star"></i><span>5-star historic</span>
+            </div>
+            <p>An iconic hotel on Shamian Island featuring elegant rooms, a stunning atrium waterfall, and garden views of the Pearl River in a tranquil historic setting.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/77307041.jpg?k=39dff6183da0c28d8bd0ac7863e2bab72afe7ac368eb12283e2e4e45aeeaabc2&o=&hp=1" alt="LN Garden Hotel">
+          </div>
+          <div class="guide-card-content">
+            <h3>LN Garden Hotel</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Yuexiu District</span>
+              <i class="fas fa-star"></i><span>5-star classic</span>
+            </div>
+            <p>Located beside Yuexiu Park, this historic hotel offers classic elegance with modern amenities, multiple restaurants, and traditional Chinese gardens.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/391847797.jpg?k=07b75355000f8e00f302a1eb54967a0e7e6a74bdc4513cc2c4a3b91ccd859bf2&o=&hp=1" alt="Aloft Guangzhou Tianhe">
+          </div>
+          <div class="guide-card-content">
+            <h3>Aloft Guangzhou Tianhe</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Tianhe District</span>
+              <i class="fas fa-star"></i><span>4-star</span>
+            </div>
+            <p>Modern and stylish hotel with colorful design, convenient access to shopping and transportation, plus an energetic social scene with live music.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="guide-section">
+      <h2 class="guide-section-title">GETTING AROUND</h2>
+      
+      <div class="guide-map">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d236161.66907452205!2d113.16113915443396!3d23.13069389878251!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3402fe9d3c0afe21%3A0xbfd7b0c17844c73d!2sGuangzhou%2C%20Guangdong%20Province%2C%20China!5e0!3m2!1sen!2sus!4v1693397825682!5m2!1sen!2sus" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+      
+      <div class="guide-tips">
+        <h3>Local Transportation Tips</h3>
+        <div class="guide-tips-list">
+          <div class="guide-tip-item">
+            <i class="fas fa-subway"></i>
+            <p>Guangzhou's extensive metro system has 13 lines covering most major attractions. It's clean, efficient, and signs are in both Chinese and English.</p>
+          </div>
+          
+          <div class="guide-tip-item">
+            <i class="fas fa-bus"></i>
+            <p>The city has a comprehensive bus network, though route information may be limited in English. The Yang Cheng Tong card works for both metro and buses.</p>
+          </div>
+          
+          <div class="guide-tip-item">
+            <i class="fas fa-taxi"></i>
+            <p>Taxis are plentiful and relatively inexpensive. Have your destination written in Chinese characters to show the driver, as many don't speak English.</p>
+          </div>
+          
+          <div class="guide-tip-item">
+            <i class="fas fa-ship"></i>
+            <p>Pearl River cruises offer a scenic way to view the city's impressive skyline, particularly beautiful when illuminated at night.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="guide-download">
+      <h3>Download the Complete Guangzhou City Guide</h3>
+      <p>Get our comprehensive 30-page guide to Guangzhou with detailed itineraries, maps, and insider recommendations.</p>
+      <p>Available as a PDF for your convenience - take it with you offline!</p>
+      <a href="#" class="guide-download-btn">Download Guide (PDF) - $9.99</a>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+  
+  <script src="../script.js"></script>
+</body>
+</html> 

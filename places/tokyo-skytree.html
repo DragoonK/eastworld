@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tokyo Skytree - Eastworld Wonders</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Wonder page specific styles */
+    .wonder-hero {
+      height: 70vh;
+      background-image: url('https://images.unsplash.com/photo-1557547143-47b1bcb4e52c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+    }
+    
+    .wonder-hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+    }
+    
+    .wonder-hero-content {
+      position: relative;
+      z-index: 2;
+      padding: 3rem;
+      width: 100%;
+      color: white;
+    }
+    
+    .wonder-title {
+      font-size: 3.5rem;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+    
+    .wonder-location {
+      display: flex;
+      align-items: center;
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+    }
+    
+    .wonder-location i {
+      margin-right: 0.5rem;
+    }
+    
+    .wonder-meta {
+      display: flex;
+      gap: 2rem;
+      margin-top: 1.5rem;
+    }
+    
+    .wonder-meta-item {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .meta-label {
+      font-size: 0.9rem;
+      opacity: 0.8;
+      margin-bottom: 0.3rem;
+    }
+    
+    .meta-value {
+      font-size: 1.2rem;
+      font-weight: 500;
+    }
+    
+    .wonder-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+    
+    .wonder-section {
+      margin-bottom: 4rem;
+    }
+    
+    .section-title {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      padding-bottom: 0.8rem;
+    }
+    
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 70px;
+      height: 3px;
+      background-color: #000;
+    }
+    
+    .section-content p {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: #333;
+      margin-bottom: 1.5rem;
+    }
+    
+    .wonder-image-container {
+      margin: 2.5rem 0;
+    }
+    
+    .wonder-image {
+      width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+    }
+    
+    .caption {
+      font-size: 0.95rem;
+      color: #555;
+      margin-top: 0.8rem;
+      text-align: center;
+      font-style: italic;
+    }
+    
+    /* Facts grid */
+    .facts-container {
+      background: #f9f9f9;
+      padding: 2rem;
+      border-radius: 8px;
+      margin-bottom: 4rem;
+    }
+    
+    .facts-title {
+      font-size: 1.8rem;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    .facts-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    
+    .fact-item {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      transition: transform 0.3s ease;
+    }
+    
+    .fact-item:hover {
+      transform: translateY(-5px);
+    }
+    
+    .fact-icon {
+      font-size: 2rem;
+      color: #1e88e5;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    
+    .fact-title {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+    
+    .fact-text {
+      font-size: 0.95rem;
+      color: #555;
+      line-height: 1.5;
+    }
+    
+    /* Gallery styles */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .gallery-item {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .gallery-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+    }
+    
+    .gallery-item img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      display: block;
+    }
+    
+    /* Visitor information */
+    .practical-info {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .info-card {
+      background: #f9f9f9;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    
+    .info-card-title {
+      font-size: 1.2rem;
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+    }
+    
+    .info-card-title i {
+      margin-right: 0.5rem;
+      color: #1e88e5;
+    }
+    
+    .info-list, .tips-list {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .info-list li {
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .info-list li:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    
+    .info-label {
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      color: #444;
+    }
+    
+    .tips-list li {
+      margin-bottom: 0.8rem;
+      padding-left: 1.5rem;
+      position: relative;
+    }
+    
+    .tips-list li:before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: #1e88e5;
+      font-weight: bold;
+    }
+    
+    .map-container {
+      margin-top: 2rem;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    /* Related wonders section */
+    .related-wonders {
+      background: #f9f9f9;
+      padding: 3rem 1.5rem;
+    }
+    
+    .related-wonders-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .wonder-card {
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      text-decoration: none;
+      color: inherit;
+    }
+    
+    .wonder-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+    }
+    
+    .wonder-card-img {
+      height: 200px;
+      overflow: hidden;
+    }
+    
+    .wonder-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    
+    .wonder-card:hover .wonder-card-img img {
+      transform: scale(1.05);
+    }
+    
+    .wonder-card-content {
+      padding: 1.5rem;
+    }
+    
+    .wonder-card-category {
+      font-size: 0.8rem;
+      color: #1e88e5;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+    
+    .wonder-card-title {
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .wonder-card-description {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 1rem;
+    }
+    
+    .wonder-card-location {
+      font-size: 0.9rem;
+      color: #888;
+      display: flex;
+      align-items: center;
+    }
+    
+    .wonder-card-location i {
+      margin-right: 0.5rem;
+      font-size: 0.8rem;
+    }
+    
+    /* Responsive fixes */
+    @media (max-width: 768px) {
+      .facts-grid,
+      .gallery,
+      .practical-info,
+      .related-wonders-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .wonder-meta {
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+      
+      .wonder-meta-item {
+        flex-basis: calc(50% - 1rem);
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .wonder-hero-content {
+        padding: 2rem 1.5rem;
+      }
+      
+      .wonder-title {
+        font-size: 2.5rem;
+      }
+      
+      .facts-grid,
+      .gallery,
+      .practical-info,
+      .related-wonders-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../food.html" class="nav-item">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../places.html" class="nav-item active">PLACES</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <div class="wonder-hero">
+      <div class="wonder-hero-content">
+        <h1 class="wonder-title">Tokyo Skytree</h1>
+        <div class="wonder-location">
+          <i class="fas fa-map-marker-alt"></i> Tokyo, Japan
+        </div>
+        <p>Japan's tallest structure offering breathtaking panoramic views of the sprawling Tokyo metropolis</p>
+        <div class="wonder-meta">
+          <div class="wonder-meta-item">
+            <span class="meta-label">CATEGORY</span>
+            <span class="meta-value">Modern</span>
+          </div>
+          <div class="wonder-meta-item">
+            <span class="meta-label">HEIGHT</span>
+            <span class="meta-value">634 meters</span>
+          </div>
+          <div class="wonder-meta-item">
+            <span class="meta-label">COMPLETED</span>
+            <span class="meta-value">2012</span>
+          </div>
+          <div class="wonder-meta-item">
+            <span class="meta-label">STATUS</span>
+            <span class="meta-value">Tallest Tower in Japan</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wonder-content">
+      <!-- Content sections will be added next -->
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="../script.js"></script>
+</body>
+</html> 

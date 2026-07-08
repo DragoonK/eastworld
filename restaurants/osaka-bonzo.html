@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yakitori Bonzo - Eastworld Restaurant Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Additional styles specific to restaurant reviews */
+    .restaurant-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+      .restaurant-info {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .restaurant-details {
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .detail-row {
+      display: flex;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+    }
+    
+    .detail-label {
+      font-weight: 600;
+      min-width: 120px;
+      color: #333;
+    }
+    
+    .detail-value {
+      flex: 1;
+      color: #555;
+    }
+    
+    .rating {
+      margin-bottom: 1rem;
+    }
+    
+    .star {
+      color: #ddd;
+      font-size: 1.5rem;
+    }
+    
+    .star.filled {
+      color: #FFD700;
+    }
+    
+    .half-star {
+      position: relative;
+    }
+    
+    .half-star .fas.fa-star-half {
+      color: #FFD700;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    
+    .score-label {
+      margin-left: 0.5rem;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .map-container {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .map-container iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+    }
+    
+    .photos-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .photo-item {
+      border-radius: 8px;
+      overflow: hidden;
+      height: 150px;
+    }
+    
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .photo-item img:hover {
+      transform: scale(1.05);
+    }
+    
+    .review-section {
+      margin: 2rem 0;
+      padding: 2rem;
+      background: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    /* Booking button styles */
+    .booking-button {
+      display: block;
+      background-color: #ff4d4d;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      margin: 1.5rem 0;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    
+    .booking-button:hover {
+      background-color: #e63939;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    /* Review carousel styles */
+    .review-carousel {
+      position: relative;
+      margin: 2rem 0;
+      overflow: hidden;
+      padding: 1rem 0;
+    }
+    
+    .review-slides {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    
+    .review-slide {
+      min-width: 100%;
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .reviewer-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #f0f0f0;
+      padding-bottom: 0.8rem;
+    }
+    
+    .reviewer-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 0.8rem;
+    }
+    
+    .reviewer-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding-top: 0.2rem;
+    }
+    
+    .review-date {
+      color: #888;
+      font-size: 0.75rem;
+      margin-top: 0.1rem;
+    }
+    
+    .review-rating {
+      display: flex;
+      margin-top: 0.2rem;
+    }
+    
+    .review-rating i {
+      font-size: 0.8rem;
+      margin-right: 2px;
+    }
+    
+    .carousel-nav {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+    
+    .carousel-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ddd;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .carousel-dot.active {
+      background: #ff4d4d;
+    }
+    
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.7);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+    
+    .carousel-prev {
+      left: 10px;
+    }
+    
+    .carousel-next {
+      right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../food.html" class="nav-item active">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="content-container">
+    <div class="content-header">
+      <span class="content-category">YAKITORI</span>
+      <h1 class="content-title">Yakitori Bonzo - Premium Grilled Chicken in Shinsaibashi</h1>
+      
+      <!-- Rating Section -->
+      <div class="rating">
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star half-star">
+          <i class="far fa-star"></i>
+          <i class="fas fa-star-half"></i>
+        </span>
+        <span class="score-label">4.5/5.0</span>
+      </div>
+    </div>
+    
+    <div class="hero-container">
+      <img class="content-hero" src="https://yakitori-bonzo.com/img/1e07d2f3e5252ec5ae43caec79f4fe74.jpg" alt="Yakitori Bonzo charcoal grilled chicken" 
+      onerror="this.onerror=null; 
+      this.parentElement.innerHTML = '<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#333;color:white;font-size:1.5rem;text-align:center;padding:2rem;\'>Yakitori Bonzo Shinsaibashi</div>';">
+    </div>
+    
+    <!-- Booking Button -->
+    <a href="#visitor-info" class="booking-button">
+      <i class="fas fa-info-circle"></i> VISITOR INFORMATION
+    </a>
+    
+    <!-- Restaurant Information Section -->
+    <div class="restaurant-info">
+      <div class="restaurant-details">
+        <h2>Restaurant Details</h2>
+        
+        <div class="detail-row">
+          <div class="detail-label">Address:</div>
+          <div class="detail-value">2-8-19 Higashi Shinsaibashi, Chuo-ku, Osaka 542-0083, Japan<br>Southern Diamond Building 1F</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Hours:</div>
+          <div class="detail-value">6:00 PM - 2:00 AM<br>Open daily, no holidays</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Phone:</div>
+          <div class="detail-value">+81 6-6226-8697</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Price Range:</div>
+          <div class="detail-value">¥4,000-5,000 ($28-35) per person</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Cuisine:</div>
+          <div class="detail-value">Japanese, Yakitori, Grilled Chicken, Chicken Sashimi</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Payment:</div>
+          <div class="detail-value">Credit cards accepted<br>(VISA, MasterCard, JCB, AMEX, Diners)</div>
+        </div>
+        
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">About the Restaurant</h3>
+        <p>Opened in June 2023, Yakitori Bonzo is the second location of the popular "Bonzo Honten" from Kamishinjo, which has been in business for 17 years. Located in the vibrant Shinsaibashi district, this stylish yakitori restaurant specializes in premium charcoal-grilled chicken dishes featuring fresh chicken delivered directly from Miyazaki Prefecture.</p>
+      </div>
+      
+      <div class="map-container">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3280.8044663798865!2d135.50042487519672!3d34.67371638044172!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6000e71193bf54e7%3A0x29cb93aae61c1ece!2sYakitori%20Bonzo%20Shinsaibashi!5e0!3m2!1sen!2sus!4v1693230090086!5m2!1sen!2sus" 
+        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+    
+    <div class="content-text">
+      <h2>Elevated Yakitori Experience in Osaka</h2>
+      
+      <p>Yakitori Bonzo brings a refined approach to the beloved Japanese tradition of grilled chicken skewers. What sets this establishment apart is their commitment to sourcing the finest chicken directly from Miyazaki Prefecture, known for producing some of Japan's highest quality poultry. Unlike many yakitori restaurants that serve chicken on skewers, Bonzo offers a distinctive "bara-yaki" style where the meat is grilled without skewers, allowing for unique cuts and preparation methods.</p>
+      
+      <p>The restaurant opened its Shinsaibashi location in June 2023 as the second branch of the highly regarded Bonzo Honten in Kamishinjo, which has built a loyal following over its 17 years in operation. The stylish interior creates a sophisticated yet comfortable atmosphere, making it ideal for everything from date nights to business dinners.</p>
+      
+      <div class="photos-container">
+        <div class="photo-item">
+          <img src="https://yakitori-bonzo.com/img/be5c6fe36e20ac8a8d21e5b5a0304e2f.jpg" alt="Charcoal grilled chicken thigh">
+        </div>
+        <div class="photo-item">
+          <img src="https://yakitori-bonzo.com/img/fae5db36e3a6e1ddf1e6feb40ffe20bb.jpg" alt="Chicken sashimi plate">
+        </div>
+        <div class="photo-item">
+          <img src="https://yakitori-bonzo.com/img/a32a5a98f8b723f2a79e22fc86a53b19.jpg" alt="Cheese tsukune (chicken meatballs)">
+        </div>
+        <div class="photo-item">
+          <img src="https://yakitori-bonzo.com/img/db9ae14ce487f21c8eb3d5eebe0e18ec.jpg" alt="Restaurant interior">
+        </div>
+      </div>
+      
+      <h2>Charcoal-Grilled Specialties</h2>
+      
+      <p>At the heart of Yakitori Bonzo's menu is their exceptional charcoal-grilled chicken prepared over high-quality bincho charcoal. This traditional cooking method imparts a distinctive smoky flavor while sealing in the natural juices of the meat. The restaurant's signature dish is the "Charcoal-grilled Sorires," which features a particularly tender part of the chicken thigh that is carefully grilled to achieve a rare, succulent texture while maintaining food safety.</p>
+      
+      <p>Another standout offering is their aged thigh charcoal grill, which uses a proprietary aging technique to enhance the flavor and tenderness of the meat. The chicken is brought directly from select poultry farms and prepared using methods that have been refined over the restaurant's 17-year history.</p>
+      
+      <p>For the more adventurous diner, Yakitori Bonzo offers chicken sashimi and chicken yukke (a tartare-like preparation), showcasing the exceptional freshness and quality of their ingredients. These raw chicken preparations are possible due to the restaurant's strict sourcing standards and daily delivery of fresh chicken from Miyazaki.</p>
+      
+      <div class="content-quote">
+        "What makes our yakitori special is our commitment to using only the freshest chicken from Miyazaki, grilled over premium bincho charcoal. We don't use skewers for many of our dishes, which allows us to prepare unique cuts like our signature Sorires in ways that bring out their natural flavors and textures. Our aging process, developed over 17 years, creates a depth of flavor you won't find elsewhere in Osaka." - Chef at Yakitori Bonzo
+      </div>
+      
+      <!-- User Reviews Carousel -->
+      <h2>Customer Reviews</h2>
+      
+      <div class="review-carousel">
+        <div class="carousel-arrow carousel-prev">
+          <i class="fas fa-chevron-left"></i>
+        </div>
+        
+        <div class="review-slides">
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Kenji T.</div>
+                <div class="review-date">Visited July 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"As someone who has tried yakitori across Japan, I can confidently say that Bonzo ranks among the best. Their charcoal-grilled Sorires was tender beyond belief, with a perfect sear on the outside and juicy interior. The attention to detail is evident in every dish, from the precise grilling of each piece to the thoughtful presentation. I was initially hesitant about trying the chicken sashimi, but it was remarkably fresh and buttery in texture, clearly showcasing the quality of their sourcing. The cheese tsukune was another highlight—served on a sizzling iron plate with the egg yolk adding richness as it cooked into the meat. The staff were knowledgeable and attentive, happy to explain the different cuts and preparation methods. While not inexpensive, the quality justifies the price point. This is definitely a place for yakitori connoisseurs or anyone looking to experience chicken dishes beyond the standard skewers."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Emma L.</div>
+                <div class="review-date">Visited August 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="far fa-star" style="color: #ddd;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"Visited Bonzo's new Shinsaibashi location after hearing about their unique approach to yakitori. The restaurant has a sleek, modern interior that creates a more upscale dining experience than typical yakitori places. We tried the charcoal-grilled aged thigh, which had incredible depth of flavor from their aging process, and the signature Sorires, which was melt-in-your-mouth tender. The chicken-stuffed whole tomato was an unexpected delight—the juicy tomato complemented the seasoned chicken perfectly. The staff recommended pairing our meal with cold sake, which was an excellent suggestion. The only reason I'm not giving five stars is that the price point is quite high compared to other yakitori restaurants, though the quality does justify much of the premium. Also, the wait time for food was a bit longer than expected, though they did warn us that proper grilling takes time. Still, a fantastic addition to Osaka's dining scene and worth the experience for chicken lovers."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">David W.</div>
+                <div class="review-date">Visited September 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star-half-alt" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"My wife and I discovered Bonzo during our recent trip to Osaka and were blown away by their approach to yakitori. As tourists, we appreciated that they had an English menu and staff who could explain the different chicken parts and preparations. The highlight was definitely the cheese tsukune—a chicken meatball served on a hot plate with melted cheese and a raw egg yolk that you mix in as it cooks. The combination of flavors was incredible! We also loved the chicken skirt steak (harami), which had a texture more like beef than chicken. The restaurant has a sophisticated ambiance with dark wood and subtle lighting that made for a pleasant dining experience. Even though it was busy (we went around 8 PM), we never felt rushed. If you want to experience Japanese chicken dishes beyond basic yakitori skewers, this is definitely the place to go. It was one of our favorite meals during our two-week trip across Japan."</p>
+          </div>
+        </div>
+        
+        <div class="carousel-arrow carousel-next">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+        
+        <div class="carousel-nav">
+          <div class="carousel-dot active"></div>
+          <div class="carousel-dot"></div>
+          <div class="carousel-dot"></div>
+        </div>
+      </div>
+      
+      <h2>Menu Highlights</h2>
+      
+      <p>Yakitori Bonzo offers a diverse menu centered around premium chicken preparations:</p>
+      
+      <ul>
+        <li><strong>Charcoal-grilled aged thigh (¥1,375)</strong> - A signature dish featuring their proprietary aging method, bringing out deep chicken flavor</li>
+        <li><strong>Charcoal-grilled Sorires (¥858)</strong> - A particularly tender part of the chicken thigh, grilled to rare perfection</li>
+        <li><strong>Local chicken thigh sashimi & yukke assortment (¥1,705)</strong> - Fresh raw chicken preparations showcasing the exceptional quality of their Miyazaki chicken</li>
+        <li><strong>Cheese moon-viewing tsukune (¥902)</strong> - Chicken meatballs with cartilage served on a sizzling plate with cheese and egg yolk</li>
+        <li><strong>Whole tomato tsukune (¥902)</strong> - A whole tomato stuffed with seasoned ground chicken</li>
+        <li><strong>Yakitori Seseri (¥528)</strong> - Grilled chicken neck, available with sauce or salt</li>
+        <li><strong>Chicken harami (skirt steak) (¥528)</strong> - A flavorful cut similar to beef skirt steak</li>
+        <li><strong>Chicken Nanban (¥1,012)</strong> - Fried chicken with tartar sauce, an Osaka specialty</li>
+        <li><strong>Yakitori Bowl (¥1,012)</strong> - Grilled chicken pieces served over rice</li>
+        <li><strong>Red pork tofu salad (¥748-1,045)</strong> - A refreshing side dish</li>
+        <li><strong>Haagen-Dazs desserts (¥605)</strong> - Including unique flavors like Oreo cookies & cream with seasonal strawberries</li>
+      </ul>
+      
+      <div class="review-section">
+        <h2>Eastworld's Review</h2>
+        
+        <h3>Food Quality: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Yakitori Bonzo elevates grilled chicken to an art form. Their strict adherence to using only the freshest Miyazaki chicken, cooked over premium bincho charcoal, results in exceptional flavor and texture. The unique bara-yaki (non-skewered) style allows for specialized preparation of different cuts, showcasing the restaurant's deep understanding of chicken cuisine.</p>
+        
+        <h3>Authenticity: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>While innovating within the yakitori tradition, Bonzo maintains deep respect for the essential elements that make Japanese grilled chicken special. The restaurant offers a genuine taste of high-end Japanese yakitori that builds upon tradition rather than merely replicating it.</p>
+        
+        <h3>Atmosphere: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>The restaurant features a sophisticated design with a stylish bar counter and comfortable seating that creates an upscale yet relaxed dining environment. The open kitchen allows diners to watch the skilled preparation of dishes, adding to the experience. While elegant, it maintains a welcoming atmosphere.</p>
+        
+        <h3>Service: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>Staff are knowledgeable about the menu and can guide diners through the various specialized chicken cuts and preparations. They offer attentive service without being intrusive. While English capability varies among staff members, they make concerted efforts to accommodate international diners.</p>
+        
+        <h3>Value: <span style="color: #FFD700;">★★★½</span></h3>
+        <p>With an average price point of ¥4,000-5,000 per person, Yakitori Bonzo sits at the premium end of the yakitori spectrum. The exceptional quality of ingredients and preparation justifies much of this cost, though it may not be suitable for budget-conscious diners. The experience and quality delivered are worth the investment for a special meal.</p>
+        
+        <h3>Overall: <span style="color: #FFD700;">★★★★½</span></h3>
+        <p>Yakitori Bonzo offers an exceptional dining experience that showcases the depth and sophistication possible within Japanese chicken cuisine. From unique preparations like their signature Sorires to the rare offering of chicken sashimi, the restaurant provides dishes that can't be found at typical yakitori establishments. For culinary adventurers seeking to experience the heights of Japanese chicken preparation, Bonzo is a must-visit destination in Osaka.</p>
+      </div>
+      
+      <h2>Tips for Visitors</h2>
+      
+      <ul>
+        <li>Reservations are recommended, especially for weekend evenings</li>
+        <li>Try the signature charcoal-grilled Sorires for a unique dish you won't find elsewhere</li>
+        <li>If you're feeling adventurous, the chicken sashimi is exceptionally fresh and high-quality</li>
+        <li>The restaurant is busiest between 7:00-9:00 PM; consider dining earlier or later for a more relaxed experience</li>
+        <li>Ask the staff for sake or shochu pairing recommendations with your chicken dishes</li>
+        <li>The cheese tsukune is particularly popular and recommended for first-time visitors</li>
+        <li>Budget around ¥4,000-5,000 per person for a complete dining experience</li>
+        <li>Credit cards are accepted (VISA, MasterCard, JCB, AMEX, Diners)</li>
+      </ul>
+      
+      <!-- Visitor Information -->
+      <div id="visitor-info" class="review-section">
+        <h2>Visitor Information</h2>
+        <p>Here's what you need to know when planning your visit to Yakitori Bonzo:</p>
+        
+        <h3>Location & Access:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Address: 2-8-19 Higashi Shinsaibashi, Chuo-ku, Osaka 542-0083, Japan (Southern Diamond Building 1F)</li>
+          <li>By train: Approximately 5 minutes walk from Shinsaibashi Station (Osaka Metro)</li>
+          <li>The restaurant is conveniently located near other Shinsaibashi attractions and shopping areas</li>
+        </ul>
+        
+        <h3>Hours of Operation:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>6:00 PM - 2:00 AM daily</li>
+          <li>Open year-round with no regular holidays</li>
+        </ul>
+        
+        <h3>Seating Information:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Total of 38 seats</li>
+          <li>Both counter seating and table options are available</li>
+          <li>The restaurant is entirely non-smoking</li>
+        </ul>
+        
+        <h3>Reservation & Contact Information:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Phone: +81 6-6226-8697</li>
+          <li>Reservations are recommended, especially on weekends</li>
+          <li>Official website: <a href="https://yakitori-bonzo.com/" target="_blank">https://yakitori-bonzo.com/</a></li>
+        </ul>
+        
+        <p>After your meal at Bonzo, take time to explore the vibrant Shinsaibashi area, one of Osaka's premier shopping and entertainment districts. The famous Dotonbori district with its iconic neon signs is just a short walk away, making Bonzo a perfect dining stop during an evening of exploring Osaka's exciting nightlife.</p>
+      </div>
+      
+      <a href="../food.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Food Guide</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Review carousel functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const slides = document.querySelector('.review-slides');
+      const dots = document.querySelectorAll('.carousel-dot');
+      const prevBtn = document.querySelector('.carousel-prev');
+      const nextBtn = document.querySelector('.carousel-next');
+      let currentSlide = 0;
+      const totalSlides = document.querySelectorAll('.review-slide').length;
+      
+      // Function to update slide position
+      function showSlide(index) {
+        if (index < 0) index = totalSlides - 1;
+        if (index >= totalSlides) index = 0;
+        
+        currentSlide = index;
+        slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+        
+        // Update active dot
+        dots.forEach((dot, i) => {
+          dot.classList.toggle('active', i === currentSlide);
+        });
+      }
+      
+      // Set up event listeners for dots
+      dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => showSlide(i));
+      });
+      
+      // Set up event listeners for arrows
+      prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
+      nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
+      
+      // Auto-rotate slides every 5 seconds
+      setInterval(() => {
+        showSlide(currentSlide + 1);
+      }, 5000);
+    });
+  </script>
+  
+  <script src="../script.js"></script>
+</body>
+</html> 

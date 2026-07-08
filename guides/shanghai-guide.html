@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EASTWORLD - Shanghai City Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css' rel='stylesheet' />
+  <style>
+    /* City Guide specific styles */
+    .guide-hero {
+      height: 500px;
+      background-image: url('https://images.unsplash.com/photo-1610638898218-61a7715ce70f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 3rem;
+    }
+    
+    .guide-hero-content {
+      text-align: center;
+      color: white;
+      position: relative;
+      z-index: 2;
+      padding: 2rem;
+      max-width: 800px;
+      background-color: rgba(0, 0, 0, 0.6);
+    }
+    
+    .guide-hero::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(0deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.2) 100%);
+    }
+    
+    .guide-hero h1 {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      letter-spacing: 3px;
+    }
+    
+    .guide-hero p {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    
+    .guide-intro {
+      max-width: 800px;
+      margin: 0 auto 3rem;
+      padding: 0 1rem;
+      line-height: 1.8;
+    }
+    
+    .guide-section {
+      margin-bottom: 4rem;
+    }
+    
+    .guide-section-title {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: 2.2rem;
+      letter-spacing: 1px;
+    }
+    
+    .guide-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+    
+    .guide-card {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+    
+    .guide-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .guide-card-img {
+      height: 200px;
+      overflow: hidden;
+    }
+    
+    .guide-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    
+    .guide-card:hover .guide-card-img img {
+      transform: scale(1.05);
+    }
+    
+    .guide-card-content {
+      padding: 1.5rem;
+    }
+    
+    .guide-card h3 {
+      margin-bottom: 0.5rem;
+      font-size: 1.2rem;
+    }
+    
+    .guide-card-meta {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      color: #666;
+    }
+    
+    .guide-card-meta i {
+      margin-right: 0.3rem;
+    }
+    
+    .guide-card-meta span {
+      margin-right: 1rem;
+    }
+    
+    .guide-card p {
+      color: #555;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    
+    .guide-map {
+      width: 100%;
+      height: 500px;
+      border: none;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+    }
+    
+    .guide-tips {
+      background-color: #f8f8f8;
+      padding: 2rem;
+      border-radius: 8px;
+      margin-bottom: 3rem;
+    }
+    
+    .guide-tips h3 {
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+    
+    .guide-tips-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+    
+    .guide-tip-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+    }
+    
+    .guide-tip-item i {
+      margin-right: 0.5rem;
+      color: #000;
+      margin-top: 0.25rem;
+    }
+    
+    .guide-download {
+      text-align: center;
+      margin: 3rem 0;
+      padding: 2rem;
+      background-color: #f0f0f0;
+      border-radius: 8px;
+    }
+    
+    .guide-download h3 {
+      margin-bottom: 1rem;
+      font-size: 1.8rem;
+    }
+    
+    .guide-download-btn {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 1rem 2rem;
+      background-color: #000;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+    
+    .guide-download-btn:hover {
+      background-color: #333;
+    }
+    
+    .guide-map {
+      width: 100%;
+      height: 500px;
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../food.html" class="nav-item">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+  
+  <main class="content-container">
+    <div class="guide-hero">
+      <div class="guide-hero-content">
+        <h1>SHANGHAI</h1>
+        <p>Discover China's vibrant global metropolis, where futuristic skylines meet colonial heritage in a thrilling symphony of East and West.</p>
+      </div>
+    </div>
+    
+    <section class="guide-intro">
+      <p>Shanghai, China's largest city and global financial hub, stands as a testament to the nation's rapid rise and cosmopolitan ambitions. Situated on the Yangtze River Delta where it meets the East China Sea, this city of over 26 million people represents China's window to the world and its vision for the future.</p>
+      
+      <p>With its iconic skyline dominated by the Oriental Pearl Tower and Shanghai Tower, the city seamlessly blends ultra-modern architecture with its historical European concessions and traditional Chinese elements. From the colonial-era buildings of the Bund to the ancient gardens of Yuyuan, and from the vibrant street life of Tianzifang to the luxury shopping of Nanjing Road, Shanghai offers visitors an intoxicating blend of experiences that captures both China's rich heritage and its ambitious future.</p>
+    </section>
+    
+    <section class="guide-section">
+      <h2 class="guide-section-title">TOP ATTRACTIONS</h2>
+      
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://images.unsplash.com/photo-1582487809094-520150b24168?ixlib=rb-4.0.3&auto=format&fit=crop&w=1771&q=80" alt="The Bund">
+          </div>
+          <div class="guide-card-content">
+            <h3>The Bund (Waitan)</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Huangpu District</span>
+              <i class="far fa-clock"></i><span>Open 24 hours</span>
+            </div>
+            <p>This iconic waterfront promenade stretches along the Huangpu River, offering spectacular views of the Pudong skyline. The west side features 52 beautifully preserved buildings in various architectural styles including Gothic, Romanesque, and Art Deco, representing Shanghai's colonial past.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://images.unsplash.com/photo-1522234422580-db80e42a16ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80" alt="Yu Garden">
+          </div>
+          <div class="guide-card-content">
+            <h3>Yu Garden (Yuyuan)</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Huangpu District</span>
+              <i class="far fa-clock"></i><span>8:30-17:00</span>
+            </div>
+            <p>This exquisite Ming dynasty garden built in 1559 showcases classical Chinese garden design with rockeries, pavilions, ponds, and halls. Surrounding the garden is the bustling Yuyuan Bazaar, perfect for sampling local snacks and shopping for souvenirs.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://images.unsplash.com/photo-1632853073412-782bf0279f65?ixlib=rb-4.0.3&auto=format&fit=crop&w=1769&q=80" alt="Shanghai Tower">
+          </div>
+          <div class="guide-card-content">
+            <h3>Shanghai Tower</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Pudong New Area</span>
+              <i class="far fa-clock"></i><span>8:30-21:30</span>
+            </div>
+            <p>China's tallest building and the world's second-tallest skyscraper features the world's highest observation deck at 546 meters. Its unique twisted design reduces wind loads and symbolizes China's emergence as a global power, offering breathtaking 360° views of the city.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://images.unsplash.com/photo-1599643092303-49b6bb86b348?ixlib=rb-4.0.3&auto=format&fit=crop&w=1767&q=80" alt="Tianzifang">
+          </div>
+          <div class="guide-card-content">
+            <h3>Tianzifang</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Huangpu District</span>
+              <i class="far fa-clock"></i><span>10:00-22:00</span>
+            </div>
+            <p>A labyrinth of narrow alleyways formed by traditional shikumen architecture now housing hip boutiques, art studios, craft shops, and trendy cafes. This arts and crafts enclave preserves the residential atmosphere of the old Shanghai longtang neighborhoods.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://images.unsplash.com/photo-1619169448345-64a67a546e11?ixlib=rb-4.0.3&auto=format&fit=crop&w=1769&q=80" alt="Nanjing Road">
+          </div>
+          <div class="guide-card-content">
+            <h3>Nanjing Road</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Huangpu District</span>
+              <i class="far fa-clock"></i><span>10:00-22:00 (varies by store)</span>
+            </div>
+            <p>One of the world's busiest shopping streets stretching 5.5km from the Bund to Jing'an Temple. The pedestrian section offers everything from traditional Chinese brands to international luxury labels, department stores, restaurants, and street performers.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://images.unsplash.com/photo-1630949559746-07a1cbdaa645?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80" alt="Former French Concession">
+          </div>
+          <div class="guide-card-content">
+            <h3>Former French Concession</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Xuhui District</span>
+              <i class="far fa-clock"></i><span>Open 24 hours</span>
+            </div>
+            <p>A charming district characterized by plane tree-lined avenues, European architecture, and village-like atmosphere. Explore colonial mansions, boutique shops, stylish restaurants, hidden cafes, and art galleries while soaking in Shanghai's most beautiful neighborhood.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="guide-section">
+      <h2 class="guide-section-title">WHERE TO EAT</h2>
+      
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://res.cloudinary.com/hk53khflu/image/upload/v1650280153/din-tai-fung-xiao-long-bao-dumpling_blmh89.jpg" alt="Din Tai Fung">
+          </div>
+          <div class="guide-card-content">
+            <h3>Din Tai Fung</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Multiple locations</span>
+              <i class="fas fa-yen-sign"></i><span>¥¥</span>
+            </div>
+            <p>World-famous Taiwanese chain renowned for its perfect xiaolongbao (soup dumplings). Watch skilled chefs craft each dumpling through glass-walled kitchens, ensuring each perfect pocket contains exactly 18 pleats and the perfect amount of soup and filling.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://image-tc.galaxy.tf/wijpeg-2clb6f71p1v6wkbskc7n1gtw2/jiajiakitchenchinesefood.jpg" alt="Jia Jia Tang Bao">
+          </div>
+          <div class="guide-card-content">
+            <h3>Jia Jia Tang Bao</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Huangpu District</span>
+              <i class="fas fa-yen-sign"></i><span>¥</span>
+            </div>
+            <p>A no-frills local institution for xiaolongbao with perpetual lines out the door. This humble eatery serves what many consider the city's best soup dumplings with pork, crab-pork, and other fillings at incredibly reasonable prices.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://thewoksoflife.com/wp-content/uploads/2019/04/shanghainese-scallion-oil-noodles-3.jpg" alt="Wei Xiang Zhai">
+          </div>
+          <div class="guide-card-content">
+            <h3>Wei Xiang Zhai</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Huangpu District</span>
+              <i class="fas fa-yen-sign"></i><span>¥</span>
+            </div>
+            <p>A Shanghai institution famous for its cong you ban mian (scallion oil noodles), the quintessential Shanghainese comfort food. This simple dish of chewy noodles coated in scallion-infused oil and soy sauce is elevated to perfection at this tiny, perpetually crowded eatery.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://axwwgrkdco.cloudimg.io/v7/__gmpics__/393a10ae57ec4d399eba31b50b8a7bf9" alt="Ultraviolet by Paul Pairet">
+          </div>
+          <div class="guide-card-content">
+            <h3>Ultraviolet by Paul Pairet</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Secret location</span>
+              <i class="fas fa-yen-sign"></i><span>¥¥¥¥¥</span>
+            </div>
+            <p>The city's most avant-garde dining experience: a 20-course sensory feast where just 10 diners are transported to a secret location. Each course is paired with lights, sounds, music, and scents in a fully immersive experience that has earned three Michelin stars.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="guide-section">
+      <h2 class="guide-section-title">WHERE TO STAY</h2>
+      
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/210406650.jpg?k=39b1a178c5978022dbbcbe2a8566e83a1e5c059cece79e4a5bbede3def5e794f&o=&hp=1" alt="The Peninsula Shanghai">
+          </div>
+          <div class="guide-card-content">
+            <h3>The Peninsula Shanghai</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>The Bund</span>
+              <i class="fas fa-star"></i><span>5-star luxury</span>
+            </div>
+            <p>Elegant Art Deco-inspired hotel with a prime location on the historic Bund, offering spectacular views of the Pudong skyline. Features spacious rooms with cutting-edge technology, exquisite dining options, a luxurious spa, and indoor pool.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/154512048.jpg?k=6eeca14befd3518eecab3af5c9fa45f43080af878c6975fbfa183ed7c25a0f39&o=&hp=1" alt="The Waterhouse at South Bund">
+          </div>
+          <div class="guide-card-content">
+            <h3>The Waterhouse at South Bund</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Huangpu District</span>
+              <i class="fas fa-star"></i><span>Boutique hotel</span>
+            </div>
+            <p>Award-winning design hotel housed in a converted 1930s warehouse. This architectural gem juxtaposes the building's industrial past with minimalist modern design. Features 19 unique rooms, a popular rooftop bar with stunning Pudong views, and the acclaimed Table No. 1 restaurant.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/129349304.jpg?k=81e8997371ffb6acd872c465b92f9ca8d5411e5b4dadc321710889715c252651&o=&hp=1" alt="Capella Shanghai">
+          </div>
+          <div class="guide-card-content">
+            <h3>Capella Shanghai, Jian Ye Li</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Former French Concession</span>
+              <i class="fas fa-star"></i><span>5-star luxury</span>
+            </div>
+            <p>Luxurious all-villa urban resort set within a restored 1930s shikumen (stone gate) estate in the heart of the former French Concession. Each villa combines Ming dynasty-inspired decor with contemporary comforts and private courtyards or terraces.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/203054753.jpg?k=a9c0b4064d53f9bd564b9aeea844c7ecae2e21a193d286c541bbe39ec840e1aa&o=&hp=1" alt="W Shanghai">
+          </div>
+          <div class="guide-card-content">
+            <h3>W Shanghai - The Bund</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>North Bund</span>
+              <i class="fas fa-star"></i><span>5-star luxury</span>
+            </div>
+            <p>Vibrant, design-forward hotel offering playful interpretations of Shanghai's past and future. Features dramatic views of the Huangpu River and Pudong skyline, innovative dining concepts, a luxurious AWAY spa, and the brand's signature Whatever/Whenever service philosophy.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="guide-section">
+      <h2 class="guide-section-title">GETTING AROUND</h2>
+      
+      <div class="guide-map" id="shanghaiMap"></div>
+      
+      <div class="guide-tips">
+        <h3>Local Transportation Tips</h3>
+        <div class="guide-tips-list">
+          <div class="guide-tip-item">
+            <i class="fas fa-subway"></i>
+            <p>Shanghai's extensive metro system is one of the world's largest with 16 lines covering most tourist attractions. Clean, efficient, and affordable (¥3-10 per trip), with all signs and announcements in both Chinese and English.</p>
+          </div>
+          
+          <div class="guide-tip-item">
+            <i class="fas fa-train"></i>
+            <p>The Maglev train connects Pudong International Airport to Longyang Road Station in just 8 minutes at speeds up to 430 km/h. From there, transfer to the metro to reach downtown. One-way fare: ¥50 (standard) or ¥40 (with same-day flight ticket).</p>
+          </div>
+          
+          <div class="guide-tip-item">
+            <i class="fas fa-taxi"></i>
+            <p>Taxis are plentiful and relatively affordable, with starting fares of ¥14 for the first 3km. Look for official taxis (typically turquoise or red) with a light on top, and always ask for the meter to be turned on. Having your destination written in Chinese is helpful.</p>
+          </div>
+          
+          <div class="guide-tip-item">
+            <i class="fas fa-mobile-alt"></i>
+            <p>DiDi (China's equivalent of Uber) offers convenient ride-hailing through its app, which has an English interface. Payment requires a Chinese payment method or cash. The app shows estimated fare before booking.</p>
+          </div>
+          
+          <div class="guide-tip-item">
+            <i class="fas fa-bicycle"></i>
+            <p>Bike-sharing apps like Meituan (yellow bikes) and Hello (blue bikes) offer an easy way to explore the city. Download the app, scan the QR code on the bike, and pay a small fee (typically ¥1.5-2 per 30 minutes).</p>
+          </div>
+          
+          <div class="guide-tip-item">
+            <i class="fas fa-walking"></i>
+            <p>Many of Shanghai's most interesting areas are best explored on foot, particularly the Former French Concession, The Bund, and the pedestrianized sections of Nanjing Road. Walking allows you to discover hidden gems and local life beyond the tourist spots.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="guide-download">
+      <h3>Download the Complete Shanghai City Guide</h3>
+      <p>Get our comprehensive 60-page guide to Shanghai with detailed itineraries, cultural insights, language essentials, and hidden gems recommended by locals.</p>
+      <p>Available as a PDF for your convenience - take it with you offline!</p>
+      <a href="#" class="guide-download-btn">Download Guide (PDF) - $12.99</a>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+  
+  <script src='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js'></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize Mapbox for Shanghai
+      mapboxgl.accessToken = 'pk.eyJ1IjoiZWFzdHdvcmxkIiwiYSI6ImNscDg5c3dsaDBrN3YyanBsZzV1dmg0OG0ifQ.9h-PyeATCU2zO9L43WHBEw';
+      const map = new mapboxgl.Map({
+        container: 'shanghaiMap',
+        style: 'mapbox://styles/mapbox/streets-v12',
+        center: [121.4737, 31.2304], // Shanghai coordinates
+        zoom: 12,
+        pitch: 60, // Add 3D perspective
+        bearing: 30
+      });
+      
+      // Add 3D buildings layer
+      map.on('load', function() {
+        // Add 3D buildings layer
+        const layers = map.getStyle().layers;
+        
+        // Find the index of the first symbol layer
+        let firstSymbolId;
+        for (const layer of layers) {
+          if (layer.type === 'symbol') {
+            firstSymbolId = layer.id;
+            break;
+          }
+        }
+        
+        // Add 3D buildings
+        map.addLayer({
+          'id': '3d-buildings',
+          'source': 'composite',
+          'source-layer': 'building',
+          'filter': ['==', 'extrude', 'true'],
+          'type': 'fill-extrusion',
+          'minzoom': 15,
+          'paint': {
+            'fill-extrusion-color': '#aaa',
+            'fill-extrusion-height': [
+              'interpolate', ['linear'], ['zoom'],
+              15, 0,
+              15.05, ['get', 'height']
+            ],
+            'fill-extrusion-base': [
+              'interpolate', ['linear'], ['zoom'],
+              15, 0,
+              15.05, ['get', 'min_height']
+            ],
+            'fill-extrusion-opacity': 0.6
+          }
+        }, firstSymbolId);
+        
+        // Add navigation controls
+        map.addControl(new mapboxgl.NavigationControl());
+        
+        // Add key attraction markers
+        const attractions = [
+          { name: 'The Bund', coordinates: [121.4902, 31.2398], description: 'Historic waterfront' },
+          { name: 'Yu Garden', coordinates: [121.4880, 31.2272], description: 'Classical Chinese garden' },
+          { name: 'Shanghai Tower', coordinates: [121.5055, 31.2336], description: 'China\'s tallest building' },
+          { name: 'Nanjing Road', coordinates: [121.4737, 31.2304], description: 'Famous shopping street' },
+          { name: 'Former French Concession', coordinates: [121.4580, 31.2100], description: 'Charming historic district' },
+          { name: 'Tianzifang', coordinates: [121.4701, 31.2098], description: 'Artsy alleyways and shops' }
+        ];
+        
+        attractions.forEach(spot => {
+          // Create popup content
+          const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(
+            `<strong>${spot.name}</strong><br>${spot.description}`
+          );
+          
+          // Add marker
+          new mapboxgl.Marker({ color: '#ff4d4d' })
+            .setLngLat(spot.coordinates)
+            .setPopup(popup)
+            .addTo(map);
+        });
+        
+        // Start with a fly-to animation
+        map.flyTo({
+          center: [121.5055, 31.2336], // Shanghai Tower
+          zoom: 15,
+          pitch: 70,
+          bearing: -30,
+          duration: 5000
+        });
+      });
+    });
+  </script>
+  <script src="../script.js"></script>
+</body>
+</html> 

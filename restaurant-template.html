@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[RESTAURANT_NAME] - Eastworld Restaurant Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Additional styles specific to restaurant reviews */
+    .restaurant-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+      .restaurant-info {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .restaurant-details {
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .detail-row {
+      display: flex;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+    }
+    
+    .detail-label {
+      font-weight: 600;
+      min-width: 120px;
+      color: #333;
+    }
+    
+    .detail-value {
+      flex: 1;
+      color: #555;
+    }
+    
+    .rating {
+      margin-bottom: 1rem;
+    }
+    
+    .star {
+      color: #ddd;
+      font-size: 1.5rem;
+    }
+    
+    .star.filled {
+      color: #FFD700;
+    }
+    
+    .half-star {
+      position: relative;
+    }
+    
+    .half-star .fas.fa-star-half {
+      color: #FFD700;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    
+    .score-label {
+      margin-left: 0.5rem;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .map-container {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .map-container iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+    }
+    
+    .photos-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .photo-item {
+      border-radius: 8px;
+      overflow: hidden;
+      height: 150px;
+    }
+    
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .photo-item img:hover {
+      transform: scale(1.05);
+    }
+    
+    .review-section {
+      margin: 2rem 0;
+      padding: 2rem;
+      background: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    /* Booking button styles */
+    .booking-button {
+      display: block;
+      background-color: #ff4d4d;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      margin: 1.5rem 0;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    
+    .booking-button:hover {
+      background-color: #e63939;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    /* Review carousel styles */
+    .review-carousel {
+      position: relative;
+      margin: 2rem 0;
+      overflow: hidden;
+      padding: 1rem 0;
+    }
+    
+    .review-slides {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    
+    .review-slide {
+      min-width: 100%;
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .reviewer-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #f0f0f0;
+      padding-bottom: 0.8rem;
+    }
+    
+    .reviewer-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 0.8rem;
+    }
+    
+    .reviewer-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding-top: 0.2rem;
+    }
+    
+    .review-date {
+      color: #888;
+      font-size: 0.75rem;
+      margin-top: 0.1rem;
+    }
+    
+    .review-rating {
+      display: flex;
+      margin-top: 0.2rem;
+    }
+    
+    .review-rating i {
+      font-size: 0.8rem;
+      margin-right: 2px;
+    }
+    
+    .carousel-nav {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+    
+    .carousel-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ddd;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .carousel-dot.active {
+      background: #ff4d4d;
+    }
+    
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.7);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+    
+    .carousel-prev {
+      left: 10px;
+    }
+    
+    .carousel-next {
+      right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../food.html" class="nav-item active">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="places.html" class="nav-item">PLACES</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="content-container">
+    <div class="content-header">
+      <span class="content-category">[CUISINE_TYPE]</span>
+      <h1 class="content-title">[RESTAURANT_NAME] - [BRIEF_DESCRIPTION]</h1>
+      
+      <!-- Rating Section -->
+      <div class="rating">
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star half-star">
+          <i class="far fa-star"></i>
+          <i class="fas fa-star-half"></i>
+        </span>
+        <span class="score-label">4.5/5.0</span>
+      </div>
+    </div>
+    
+    <div class="hero-container">
+      <img class="content-hero" src="[HERO_IMAGE_URL]" alt="[RESTAURANT_NAME] Restaurant" 
+      onerror="this.onerror=null; 
+      this.parentElement.innerHTML = '<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#333;color:white;font-size:1.5rem;text-align:center;padding:2rem;\'>[RESTAURANT_NAME]</div>';">
+    </div>
+    
+    <!-- Booking Button -->
+    <a href="#booking-form" class="booking-button">
+      <i class="fas fa-calendar-alt"></i> BOOK A TABLE NOW
+    </a>
+    
+    <!-- Restaurant Information Section -->
+    <div class="restaurant-info">
+      <div class="restaurant-details">
+        <h2>Restaurant Details</h2>
+        
+        <div class="detail-row">
+          <div class="detail-label">Address:</div>
+          <div class="detail-value">[FULL_ADDRESS]</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Hours:</div>
+          <div class="detail-value">[OPENING_HOURS]</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Phone:</div>
+          <div class="detail-value">[PHONE_NUMBER]</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Price Range:</div>
+          <div class="detail-value">[PRICE_RANGE]</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Cuisine:</div>
+          <div class="detail-value">[CUISINE_DETAILS]</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Reservations:</div>
+          <div class="detail-value">[RESERVATION_INFO]</div>
+        </div>
+        
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">How to Get There</h3>
+        <p>From [NEARBY_LANDMARK]:</p>
+        <ul style="margin-bottom: 1rem; padding-left: 1.5rem;">
+          <li>[DIRECTION_STEP_1]</li>
+          <li>[DIRECTION_STEP_2]</li>
+          <li>[DIRECTION_STEP_3]</li>
+          <li>[DIRECTION_STEP_4]</li>
+        </ul>
+      </div>
+      
+      <div class="map-container">
+        <iframe src="[GOOGLE_MAPS_EMBED_URL]" 
+        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+    
+    <div class="content-text">
+      <h2>[INTRO_HEADING]</h2>
+      
+      <p>[INTRO_PARAGRAPH_1]</p>
+      
+      <p>[INTRO_PARAGRAPH_2]</p>
+      
+      <div class="photos-container">
+        <div class="photo-item">
+          <img src="[PHOTO_1_URL]" alt="[PHOTO_1_ALT]">
+        </div>
+        <div class="photo-item">
+          <img src="[PHOTO_2_URL]" alt="[PHOTO_2_ALT]">
+        </div>
+        <div class="photo-item">
+          <img src="[PHOTO_3_URL]" alt="[PHOTO_3_ALT]">
+        </div>
+        <div class="photo-item">
+          <img src="[PHOTO_4_URL]" alt="[PHOTO_4_ALT]">
+        </div>
+      </div>
+      
+      <h2>[SPECIALTY_HEADING]</h2>
+      
+      <p>[SPECIALTY_PARAGRAPH_1]</p>
+      
+      <p>[SPECIALTY_PARAGRAPH_2]</p>
+      
+      <div class="content-quote">
+        "[QUOTE_TEXT]" - [QUOTE_AUTHOR]
+      </div>
+      
+      <!-- User Reviews Carousel -->
+      <h2>Customer Reviews</h2>
+      
+      <div class="review-carousel">
+        <div class="carousel-arrow carousel-prev">
+          <i class="fas fa-chevron-left"></i>
+        </div>
+        
+        <div class="review-slides">
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <img src="https://randomuser.me/api/portraits/men/[RANDOM_MAN_ID].jpg" alt="[REVIEWER_1_NAME]" class="reviewer-avatar">
+              <div>
+                <div class="reviewer-name">[REVIEWER_1_NAME]</div>
+                <div class="review-date">Visited [REVIEWER_1_VISIT_DATE]</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"[REVIEW_1_TEXT]"</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <img src="https://randomuser.me/api/portraits/women/[RANDOM_WOMAN_ID].jpg" alt="[REVIEWER_2_NAME]" class="reviewer-avatar">
+              <div>
+                <div class="reviewer-name">[REVIEWER_2_NAME]</div>
+                <div class="review-date">Visited [REVIEWER_2_VISIT_DATE]</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="far fa-star" style="color: #ddd;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"[REVIEW_2_TEXT]"</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <img src="https://randomuser.me/api/portraits/[REVIEWER_3_GENDER]/[RANDOM_PERSON_ID].jpg" alt="[REVIEWER_3_NAME]" class="reviewer-avatar">
+              <div>
+                <div class="reviewer-name">[REVIEWER_3_NAME]</div>
+                <div class="review-date">Visited [REVIEWER_3_VISIT_DATE]</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star-half-alt" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"[REVIEW_3_TEXT]"</p>
+          </div>
+        </div>
+        
+        <div class="carousel-arrow carousel-next">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+        
+        <div class="carousel-nav">
+          <div class="carousel-dot active"></div>
+          <div class="carousel-dot"></div>
+          <div class="carousel-dot"></div>
+        </div>
+      </div>
+      
+      <h2>Atmosphere & Experience</h2>
+      
+      <p>[ATMOSPHERE_PARAGRAPH_1]</p>
+      
+      <p>[ATMOSPHERE_PARAGRAPH_2]</p>
+      
+      <div class="review-section">
+        <h2>Eastworld's Review</h2>
+        
+        <h3>Food Quality: <span style="color: #FFD700;">[FOOD_QUALITY_STARS]</span></h3>
+        <p>[FOOD_QUALITY_DESCRIPTION]</p>
+        
+        <h3>Value: <span style="color: #FFD700;">[VALUE_STARS]</span></h3>
+        <p>[VALUE_DESCRIPTION]</p>
+        
+        <h3>Atmosphere: <span style="color: #FFD700;">[ATMOSPHERE_STARS]</span></h3>
+        <p>[ATMOSPHERE_DESCRIPTION]</p>
+        
+        <h3>Service: <span style="color: #FFD700;">[SERVICE_STARS]</span></h3>
+        <p>[SERVICE_DESCRIPTION]</p>
+        
+        <h3>Overall: <span style="color: #FFD700;">[OVERALL_STARS]</span></h3>
+        <p>[OVERALL_DESCRIPTION]</p>
+      </div>
+      
+      <h2>Tips for Visitors</h2>
+      
+      <ul>
+        <li>[TIP_1]</li>
+        <li>[TIP_2]</li>
+        <li>[TIP_3]</li>
+        <li>[TIP_4]</li>
+        <li>[TIP_5]</li>
+      </ul>
+      
+      <!-- Booking Form -->
+      <div id="booking-form" class="review-section">
+        <h2>Make a Reservation</h2>
+        <p>Reserve your table at [RESTAURANT_NAME] to experience [RESERVATION_PITCH]:</p>
+        
+        <form style="margin-top: 1rem;">
+          <div style="margin-bottom: 1rem;">
+            <label for="name" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Name:</label>
+            <input type="text" id="name" name="name" style="width: 100%; padding: 0.7rem; border: 1px solid #ddd; border-radius: 4px;" required>
+          </div>
+          
+          <div style="margin-bottom: 1rem;">
+            <label for="email" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Email:</label>
+            <input type="email" id="email" name="email" style="width: 100%; padding: 0.7rem; border: 1px solid #ddd; border-radius: 4px;" required>
+          </div>
+          
+          <div style="margin-bottom: 1rem;">
+            <label for="phone" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Phone Number:</label>
+            <input type="tel" id="phone" name="phone" style="width: 100%; padding: 0.7rem; border: 1px solid #ddd; border-radius: 4px;" required>
+          </div>
+          
+          <div style="margin-bottom: 1rem;">
+            <label for="date" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Date:</label>
+            <input type="date" id="date" name="date" style="width: 100%; padding: 0.7rem; border: 1px solid #ddd; border-radius: 4px;" required>
+          </div>
+          
+          <div style="margin-bottom: 1rem;">
+            <label for="time" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Preferred Time:</label>
+            <select id="time" name="time" style="width: 100%; padding: 0.7rem; border: 1px solid #ddd; border-radius: 4px;" required>
+              <option value="">Select a time</option>
+              [TIME_OPTIONS]
+            </select>
+          </div>
+          
+          <div style="margin-bottom: 1rem;">
+            <label for="people" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Number of People:</label>
+            <select id="people" name="people" style="width: 100%; padding: 0.7rem; border: 1px solid #ddd; border-radius: 4px;" required>
+              <option value="1">1 person</option>
+              <option value="2">2 people</option>
+              <option value="3">3 people</option>
+              <option value="4">4 people</option>
+              <option value="5">5-6 people</option>
+              <option value="7">7-8 people</option>
+              [LARGE_GROUP_OPTION]
+            </select>
+          </div>
+          
+          [ADDITIONAL_BOOKING_FIELDS]
+          
+          <div style="margin-bottom: 1.5rem;">
+            <label for="notes" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Special Requests:</label>
+            <textarea id="notes" name="notes" rows="3" style="width: 100%; padding: 0.7rem; border: 1px solid #ddd; border-radius: 4px;" placeholder="[NOTES_PLACEHOLDER]"></textarea>
+          </div>
+          
+          <button type="submit" class="booking-button" style="width: 100%; cursor: pointer; border: none;">[BOOKING_BUTTON_TEXT]</button>
+        </form>
+      </div>
+      
+      <a href="../food.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Food Guide</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Review carousel functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const slides = document.querySelector('.review-slides');
+      const dots = document.querySelectorAll('.carousel-dot');
+      const prevBtn = document.querySelector('.carousel-prev');
+      const nextBtn = document.querySelector('.carousel-next');
+      let currentSlide = 0;
+      const totalSlides = document.querySelectorAll('.review-slide').length;
+      
+      // Function to update slide position
+      function showSlide(index) {
+        if (index < 0) index = totalSlides - 1;
+        if (index >= totalSlides) index = 0;
+        
+        currentSlide = index;
+        slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+        
+        // Update active dot
+        dots.forEach((dot, i) => {
+          dot.classList.toggle('active', i === currentSlide);
+        });
+      }
+      
+      // Set up event listeners for dots
+      dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => showSlide(i));
+      });
+      
+      // Set up event listeners for arrows
+      prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
+      nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
+      
+      // Auto-rotate slides every 5 seconds
+      setInterval(() => {
+        showSlide(currentSlide + 1);
+      }, 5000);
+    });
+    
+    // Booking form submission
+    const bookingForm = document.querySelector('#booking-form form');
+    if (bookingForm) {
+      bookingForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        alert('[BOOKING_CONFIRMATION_MESSAGE]');
+      });
+    }
+  </script>
+  
+  <script src="../script.js"></script>
+</body>
+</html> 

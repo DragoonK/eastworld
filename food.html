@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EASTWORLD - Food Guide</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Food category page specific styles */
+    .section-header {
+      text-align: center;
+      margin: 2rem 0;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+    }
+    
+    /* Filter styles */
+    .filter-container {
+      margin: 2rem 0;
+    }
+    
+    .active-filter-path {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .clear-filter {
+      cursor: pointer;
+      color: #ff4d4d;
+      font-weight: 500;
+      padding: 0.3rem 0.8rem;
+      border-radius: 4px;
+      border: 1px solid #ff4d4d;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: all 0.2s ease;
+    }
+    
+    .clear-filter:hover {
+      background-color: #ff4d4d;
+      color: white;
+      text-decoration: none;
+    }
+    
+    .filter-section {
+      margin-bottom: 1.5rem;
+    }
+    
+    .filter-section-title {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    
+    .filter-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    
+    /* Hide city sections by default */
+    .filter-section.cities {
+      display: none;
+    }
+    
+    .section-title {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      letter-spacing: 1px;
+    }
+    
+    .section-description {
+      color: #555;
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    
+    .category-filter {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .filter-btn {
+      background: transparent;
+      border: 1px solid #ddd;
+      padding: 0.5rem 1.5rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+    }
+    
+    .filter-btn:hover {
+      background: #f5f5f5;
+      border-color: #ccc;
+    }
+    
+    .filter-btn.active {
+      background: #000;
+      color: white;
+      border-color: #000;
+      font-weight: 500;
+    }
+    
+    .food-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+    
+    .featured-section {
+      margin: 4rem 0;
+    }
+    
+    .featured-hero {
+      display: flex;
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      margin: 2rem 0;
+      min-height: 400px;
+    }
+    
+    .featured-hero-image {
+      flex: 0 0 60%;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .featured-hero-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    
+    .featured-hero:hover .featured-hero-image img {
+      transform: scale(1.05);
+    }
+    
+    .featured-hero-content {
+      flex: 0 0 40%;
+      padding: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    
+    .featured-category {
+      font-size: 0.8rem;
+      background: #ff4d4d;
+      padding: 0.3rem 0.7rem;
+      border-radius: 2px;
+      margin-bottom: 1rem;
+      display: inline-block;
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .featured-title {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+    
+    .featured-desc {
+      font-size: 1rem;
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+    
+    .featured-meta {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      font-size: 0.9rem;
+      color: #777;
+    }
+    
+    .featured-location {
+      margin-right: 1.5rem;
+    }
+    
+    .featured-price {
+      font-weight: 500;
+    }
+    
+    .featured-cta {
+      display: inline-block;
+      background: #000;
+      color: white;
+      padding: 0.8rem 1.5rem;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: background 0.3s ease;
+      margin-top: auto;
+    }
+    
+    .featured-cta:hover {
+      background: #333;
+    }
+    
+    @media (max-width: 768px) {
+      .featured-hero {
+        flex-direction: column;
+      }
+      
+      .featured-hero-image,
+      .featured-hero-content {
+        flex: 0 0 100%;
+      }
+      
+      .featured-hero-image {
+        height: 250px;
+      }
+    }
+    
+    .food-card {
+      display: block;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      text-decoration: none;
+      color: inherit;
+    }
+    
+    .food-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    
+    .food-card.highlight {
+      box-shadow: 0 0 20px 5px rgba(255, 77, 77, 0.7);
+      transform: translateY(-5px) scale(1.02);
+      position: relative;
+      z-index: 10;
+    }
+    
+    .food-card-img {
+      height: 200px;
+      position: relative;
+    }
+    
+    .food-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    
+    .food-card:hover .food-card-img img {
+      transform: scale(1.05);
+    }
+    
+    .food-card-category {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: #000;
+      color: white;
+      padding: 0.2rem 0.6rem;
+      font-size: 0.7rem;
+      border-radius: 2px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .food-card-content {
+      padding: 1.2rem;
+    }
+    
+    .food-card-title {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      line-height: 1.3;
+    }
+    
+    .food-card-desc {
+      font-size: 0.9rem;
+      color: #666;
+      line-height: 1.5;
+    }
+    
+    .food-card-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid #eee;
+      font-size: 0.8rem;
+      color: #777;
+    }
+    
+    .food-card-stars {
+      color: #FFD700;
+    }
+    
+    .newsletter-section {
+      background: #f9f9f9;
+      padding: 3rem;
+      text-align: center;
+      margin: 3rem 0;
+      border-radius: 8px;
+    }
+    
+    .newsletter-title {
+      margin-bottom: 1rem;
+    }
+    
+    .newsletter-form {
+      display: flex;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    
+    .newsletter-input {
+      flex: 1;
+      padding: 0.8rem 1rem;
+      border: 1px solid #ddd;
+      border-radius: 4px 0 0 4px;
+      font-size: 1rem;
+    }
+    
+    .newsletter-btn {
+      background: #000;
+      color: white;
+      border: none;
+      padding: 0 1.5rem;
+      border-radius: 0 4px 4px 0;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.3s ease;
+    }
+    
+    .newsletter-btn:hover {
+      background: #333;
+    }
+    
+    /* Pagination styles */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 2rem 0;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    
+    .pagination-btn {
+      background: #fff;
+      border: 1px solid #ddd;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+    }
+    
+    .pagination-btn:hover, 
+    .pagination-btn.active {
+      background: #000;
+      color: white;
+      border-color: #000;
+    }
+    
+    .pagination-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      background: #f5f5f5;
+    }
+    
+    .pagination-btn:disabled:hover {
+      background: #f5f5f5;
+      color: inherit;
+      border-color: #ddd;
+    }
+    
+    .page-btn {
+      min-width: 2.5rem;
+      text-align: center;
+    }
+    
+    .pagination-ellipsis {
+      padding: 0.5rem 0.3rem;
+      font-size: 0.9rem;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="food.html" class="nav-item active">FOOD</a>
+        <a href="stays.html" class="nav-item">STAYS</a>
+        <a href="places.html" class="nav-item">PLACES</a>
+        <a href="products.html" class="nav-item">PRODUCTS</a>
+        <a href="cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="login.html" class="nav-item">LOGIN</a>
+          <a href="register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="content-container">
+    <section class="section-header">
+      <h1 class="section-title">FOOD GUIDE</h1>
+      <p class="section-description">Discover the authentic tastes of the East through our curated food guides, restaurant reviews, and culinary insights. From street food to fine dining, we explore the flavors that define Asian cuisine.</p>
+    </section>
+    
+    <div class="filter-container">
+      <div class="active-filter-path">
+        <div>Filtering by: <strong class="current-filter">All</strong></div>
+        <div class="clear-filter"><i class="fas fa-times-circle"></i> Clear filters</div>
+      </div>
+      
+      <div class="filter-section countries">
+        <div class="filter-section-title">By Country</div>
+        <div class="filter-options">
+          <button class="filter-btn active" data-country="all">All</button>
+          <button class="filter-btn" data-country="japan">Japan</button>
+          <button class="filter-btn" data-country="china">China</button>
+          <!-- <button class="filter-btn" data-country="korea">Korea</button> -->
+          <button class="filter-btn" data-country="thailand">Thailand</button>
+          <button class="filter-btn" data-country="cambodia">Cambodia</button>
+          <button class="filter-btn" data-country="australia">Australia</button>
+        </div>
+      </div>
+      
+      <!-- Japan Cities -->
+      <div class="filter-section cities japan-cities" data-country="japan">
+        <div class="filter-section-title">Japan Cities</div>
+        <div class="filter-options">
+          <button class="filter-btn" data-city="kyoto">Kyoto</button>
+          <button class="filter-btn" data-city="kobe">Kobe</button>
+          <button class="filter-btn" data-city="tokyo">Tokyo</button>
+          <button class="filter-btn" data-city="osaka">Osaka</button>
+        </div>
+      </div>
+      
+      <!-- China Cities -->
+      <div class="filter-section cities china-cities" data-country="china">
+        <div class="filter-section-title">China Cities</div>
+        <div class="filter-options">
+          <button class="filter-btn" data-city="shenzhen">Shenzhen</button>
+          <button class="filter-btn" data-city="shanghai">Shanghai</button>
+          <button class="filter-btn" data-city="beijing">Beijing</button>
+          <button class="filter-btn" data-city="chongqing">Chongqing</button>
+          <button class="filter-btn" data-city="guangzhou">Guangzhou</button>
+        </div>
+      </div>
+      
+      <!-- Thailand Cities -->
+      <div class="filter-section cities thailand-cities" data-country="thailand">
+        <div class="filter-section-title">Thailand Cities</div>
+        <div class="filter-options">
+          <button class="filter-btn" data-city="bangkok">Bangkok</button>
+          <button class="filter-btn" data-city="phuket">Phuket</button>
+        </div>
+      </div>
+      
+      <!-- Cambodia Cities -->
+      <div class="filter-section cities cambodia-cities" data-country="cambodia">
+        <div class="filter-section-title">Cambodia Cities</div>
+        <div class="filter-options">
+          <button class="filter-btn" data-city="phnom-penh">Phnom Penh</button>
+          <button class="filter-btn" data-city="siem-reap">Siem Reap</button>
+        </div>
+      </div>
+      
+      <!-- Australia Cities -->
+      <div class="filter-section cities australia-cities" data-country="australia">
+        <div class="filter-section-title">Australia Cities</div>
+        <div class="filter-options">
+          <button class="filter-btn" data-city="melbourne">Melbourne</button>
+          <button class="filter-btn" data-city="sydney">Sydney</button>
+        </div>
+      </div>
+      
+      <!-- Price Categories -->
+      <div class="filter-section price-categories">
+        <div class="filter-section-title">By Price Range</div>
+        <div class="filter-options">
+          <button class="filter-btn" data-price="budget">Budget</button>
+          <button class="filter-btn" data-price="standard">Standard</button>
+          <button class="filter-btn" data-price="premium">Premium</button>
+        </div>
+      </div>
+    </div>
+    
+    <section class="featured-section">
+      <h2>FEATURED RESTAURANT</h2>
+      <div class="featured-hero">
+        <!-- Featured restaurant will be dynamically inserted here -->
+      </div>
+    </section>
+    
+    <section>
+      <h2>ALL FOOD GUIDES</h2>
+      <div class="food-grid">
+        <div class="initial-message" style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: #666;">
+          Loading restaurant listings... If no content appears, please check your browser console for errors.
+        </div>
+        
+        <!-- Hardcoded blog posts removed - restaurant cards are now generated dynamically from the restaurant database -->
+      </div>
+    </section>
+    
+    <section class="newsletter-section">
+      <h2 class="newsletter-title">JOIN OUR FOODIE COMMUNITY</h2>
+      <p>Subscribe to our newsletter for exclusive food guides, chef interviews, and the latest restaurant openings across Asia.</p>
+      <form class="newsletter-form">
+        <input type="email" class="newsletter-input" placeholder="Your email address">
+        <button type="submit" class="newsletter-btn">SUBSCRIBE</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script src="food.js"></script>
+</body>
+</html> 

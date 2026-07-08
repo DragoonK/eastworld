@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Haidilao Hot Pot - Eastworld Beijing Restaurant Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Restaurant-specific styles */
+    .restaurant-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+      .restaurant-info {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .restaurant-details {
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .detail-row {
+      display: flex;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+    }
+    
+    .detail-label {
+      font-weight: 600;
+      min-width: 120px;
+      color: #333;
+    }
+    
+    .detail-value {
+      flex: 1;
+      color: #555;
+    }
+    
+    .map-container {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .map-container iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+    }
+    
+    .broth-selection {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    @media (max-width: 768px) {
+      .broth-selection {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .broth-type {
+      padding: 1.5rem;
+      border-radius: 8px;
+      color: white;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+      transition: transform 0.3s ease;
+    }
+    
+    .broth-type:hover {
+      transform: translateY(-5px);
+    }
+    
+    .broth-type h3 {
+      margin-bottom: 0.8rem;
+      font-size: 1.2rem;
+    }
+    
+    .broth-type:nth-child(1) { background: #8B0000; } /* Spicy */
+    .broth-type:nth-child(2) { background: #4682B4; } /* Mushroom */
+    .broth-type:nth-child(3) { background: #DAA520; } /* Chicken */
+    
+    .photos-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .photo-item {
+      border-radius: 8px;
+      overflow: hidden;
+      height: 150px;
+    }
+    
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .photo-item img:hover {
+      transform: scale(1.05);
+    }
+    
+    .service-features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+    
+    @media (max-width: 768px) {
+      .service-features {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .service-item {
+      background: #fff;
+      border-radius: 8px;
+      padding: 1.5rem;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+    
+    .service-item:hover {
+      transform: translateY(-5px);
+    }
+    
+    .service-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      color: #8B0000;
+    }
+    
+    .service-title {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+    }
+    
+    .review-section {
+      margin: 2rem 0;
+      padding: 2rem;
+      background: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .booking-button {
+      display: block;
+      background-color: #ff4d4d;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      margin: 1.5rem 0;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    
+    .booking-button:hover {
+      background-color: #e63939;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    .content-quote {
+      font-style: italic;
+      padding: 1.5rem;
+      background: #f5f5f5;
+      border-left: 4px solid #ff4d4d;
+      margin: 1.5rem 0;
+      line-height: 1.6;
+    }
+    
+    .review-carousel {
+      position: relative;
+      margin: 2rem 0;
+      overflow: hidden;
+      padding: 1rem 0;
+    }
+    
+    .review-slides {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    
+    .review-slide {
+      min-width: 100%;
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .reviewer-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #f0f0f0;
+      padding-bottom: 0.8rem;
+    }
+    
+    .reviewer-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding-top: 0.2rem;
+    }
+    
+    .review-date {
+      color: #888;
+      font-size: 0.75rem;
+      margin-top: 0.1rem;
+    }
+    
+    .carousel-nav {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+    
+    .carousel-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ddd;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .carousel-dot.active {
+      background: #ff4d4d;
+    }
+    
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.7);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+    
+    .carousel-prev {
+      left: 10px;
+    }
+    
+    .carousel-next {
+      right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../food.html" class="nav-item active">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="content-container">
+    <div class="content-header">
+      <span class="content-category">HOT POT</span>
+      <h1 class="content-title">Haidilao - Beijing's Interactive Hot Pot Experience</h1>
+      <div class="rating">
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star half-star">
+          <i class="far fa-star"></i>
+          <i class="fas fa-star-half"></i>
+        </span>
+        <span class="score-label">4.4/5.0</span>
+      </div>
+    </div>
+
+    <div class="hero-container">
+      <img class="content-hero" src="https://ichef.bbci.co.uk/news/976/cpsprodpb/15BE8/production/_123953189_hotpot.jpg" alt="Haidilao hot pot spread" 
+      onerror="this.onerror=null;this.parentElement.innerHTML='<div style=\'background:#8B0000; color:white; padding:2rem; text-align:center\'>Haidilao Hot Pot</div>';">
+    </div>
+    
+    <!-- Booking Button -->
+    <a href="#visitor-info" class="booking-button">
+      <i class="fas fa-info-circle"></i> VISITOR INFORMATION
+    </a>
+
+    <div class="restaurant-info">
+      <div class="restaurant-details">
+        <h2>Restaurant Details</h2>
+        <div class="detail-row">
+          <div class="detail-label">Address:</div>
+          <div class="detail-value">2F, B Tower, Wangfujing Shopping Mall, Dongcheng District, Beijing</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Hours:</div>
+          <div class="detail-value">24 hours a day, 7 days a week</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Phone:</div>
+          <div class="detail-value">+86 10-6526-7877</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Price Range:</div>
+          <div class="detail-value">¥150-250 ($22-37) per person</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Cuisine:</div>
+          <div class="detail-value">Sichuan Hot Pot</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Reservations:</div>
+          <div class="detail-value">Recommended, especially for dinner and weekends</div>
+        </div>
+        
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">How to Get There</h3>
+        <p>From Wangfujing Subway Station:</p>
+        <ul style="margin-bottom: 1rem; padding-left: 1.5rem;">
+          <li>Take Exit A from Wangfujing Station (Line 1)</li>
+          <li>Walk south along Wangfujing Street for about 5 minutes</li>
+          <li>Enter the Wangfujing Shopping Mall</li>
+          <li>Take the elevator to the 2nd floor</li>
+        </ul>
+      </div>
+      <div class="map-container">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3055.325430879693!2d116.40658931536389!3d39.9411919794216!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x35f05296f5f1ffdb%3A0x4d91cc8ffd6b9e70!2sHaidilao%20Hot%20Pot!5e0!3m2!1sen!2sus!4v1693230090086!5m2!1sen!2sus" allowfullscreen loading="lazy"></iframe>
+      </div>
+    </div>
+
+    <div class="content-text">
+      <h2>The Hot Pot Empire's Flagship Experience</h2>
+      
+      <p>Haidilao has grown from a small restaurant in Sichuan Province to become China's most recognizable hot pot chain, with hundreds of locations across the country and internationally. Yet despite this massive expansion, the Beijing Wangfujing location maintains the exceptional standards and personalized service that made the brand famous.</p>
+      
+      <p>More than just a meal, Haidilao offers a comprehensive dining experience that showcases the interactive, social nature of hot pot—a style of cooking where diners cook fresh ingredients in a simmering pot of flavored broth at their table. While the concept is traditional, Haidilao's approach to service and atmosphere has revolutionized China's restaurant industry.</p>
+      
+      <div class="photos-container">
+        <div class="photo-item">
+          <img src="https://assets.epicurious.com/photos/5e566c6f660add000834ad1b/16:9/w_2560%2Cc_limit/HotPot_HERO_022020_6613.jpg" alt="Haidilao table setup">
+        </div>
+        <div class="photo-item">
+          <img src="https://i0.wp.com/post.healthline.com/wp-content/uploads/2021/09/hot-pot-spread-1296x728-header.jpg?w=1155&h=1528" alt="Hot pot ingredients">
+        </div>
+        <div class="photo-item">
+          <img src="https://media-cdn.tripadvisor.com/media/photo-s/0e/1d/e2/55/making-noodles.jpg" alt="Noodle dance performer">
+        </div>
+        <div class="photo-item">
+          <img src="https://media-cdn.tripadvisor.com/media/photo-s/0c/9a/c2/09/condiment-bar.jpg" alt="Sauce station">
+        </div>
+      </div>
+      
+      <h2>Legendary Service Excellence</h2>
+      
+      <p>What truly sets Haidilao apart from other hot pot establishments is their unwavering commitment to customer service. The chain has become legendary for going above and beyond in ways that have transformed expectations across China's service industry:</p>
+      
+      <div class="service-features">
+        <div class="service-item">
+          <div class="service-icon"><i class="fas fa-cut"></i></div>
+          <div class="service-title">Complimentary Manicures</div>
+          <p>While waiting for a table, guests can enjoy free manicures and shoe polishing services.</p>
+        </div>
+        <div class="service-item">
+          <div class="service-icon"><i class="fas fa-mobile-alt"></i></div>
+          <div class="service-title">Phone Protectors</div>
+          <p>Diners receive plastic covers to protect their phones from splashes during the meal.</p>
+        </div>
+        <div class="service-item">
+          <div class="service-icon"><i class="fas fa-baby"></i></div>
+          <div class="service-title">Family Support</div>
+          <p>Families with children receive special attention, including childcare assistance during the meal.</p>
+        </div>
+      </div>
+      
+      <p>These thoughtful touches exemplify the company's philosophy that service, rather than just food, creates loyal customers. Staff undergo intensive training to anticipate needs—from offering hair ties to long-haired diners to providing reading glasses for those who forgot theirs. For solo diners, they even provide a large stuffed animal companion to sit across the table.</p>
+      
+      <div class="content-quote">
+        "What makes us different is our dedication to solving problems for our guests. We don't just serve food; we create memories. Everyone who walks through our doors is treated like family, and that's why people keep coming back. The hot pot itself is important, but the experience surrounding it is what truly defines Haidilao." - Zhang Yong, Founder of Haidilao
+      </div>
+      
+      <h2>Signature Broth Selection</h2>
+      
+      <p>At the heart of the Haidilao experience is the selection of broths, which form the base for cooking all ingredients. The restaurant offers various flavors, often in a divided pot that allows diners to try multiple options simultaneously:</p>
+      
+      <div class="broth-selection">
+        <div class="broth-type">
+          <h3>Sichuan Mala</h3>
+          <p>The signature numbing-spicy broth features Sichuan peppercorns, dried chilies, and a proprietary blend of over 20 herbs and spices. The result is the distinctive ma-la (numbing-spicy) sensation that Sichuan cuisine is famous for.</p>
+        </div>
+        <div class="broth-type">
+          <h3>Mushroom</h3>
+          <p>A vegetarian-friendly option with a rich umami flavor derived from several varieties of dried mushrooms, including shiitake and porcini. The clear broth becomes increasingly flavorful as ingredients cook in it.</p>
+        </div>
+        <div class="broth-type">
+          <h3>Tomato</h3>
+          <p>A tangy, slightly sweet broth made with fresh tomatoes, ideal for those who prefer non-spicy options or as a palate-cleansing contrast to the spicy Sichuan broth. Popular with children and those new to hot pot.</p>
+        </div>
+      </div>
+      
+      <h2>The Sauce Bar Experience</h2>
+      
+      <p>Haidilao's extensive sauce bar is a destination in itself, offering dozens of ingredients that allow diners to create personalized dipping sauces. The typical sauce-making process involves selecting a base (such as sesame paste, soy sauce, or vinegar) and then adding various elements:</p>
+      
+      <ul>
+        <li><strong>Aromatics:</strong> Minced garlic, green onions, cilantro</li>
+        <li><strong>Spices:</strong> Chili oil, Sichuan pepper oil, white pepper</li>
+        <li><strong>Flavoring Agents:</strong> Sesame oil, oyster sauce, fermented bean curd</li>
+        <li><strong>Textural Elements:</strong> Crushed peanuts, fried garlic chips, preserved vegetables</li>
+      </ul>
+      
+      <p>Staff members are happy to recommend combinations or even prepare a sauce for you based on your preferences. This customization aspect adds another interactive dimension to the meal and allows each diner to tailor the experience to their taste.</p>
+      
+      <h2>Fresh Ingredients Selection</h2>
+      
+      <p>Haidilao's menu is extensive, featuring dozens of items that can be cooked in the hot pot. The focus is on ultra-fresh ingredients, with meat sliced paper-thin for quick cooking and vegetables selected for their ability to absorb the flavors of the broth:</p>
+      
+      <ul>
+        <li><strong>Premium Meats (¥48-88):</strong> Australian wagyu beef, lamb shoulder, pork belly</li>
+        <li><strong>Seafood (¥38-68):</strong> Live shrimp, fish fillets, scallops, crab sticks</li>
+        <li><strong>Handmade Specialties (¥28-48):</strong> Shrimp paste, beef and cuttlefish balls, tofu puffs</li>
+        <li><strong>Vegetables (¥18-28):</strong> Lotus root, crown daisy, Chinese cabbage, winter melon</li>
+        <li><strong>Mushrooms (¥18-28):</strong> Enoki, king oyster, shiitake, wood ear</li>
+        <li><strong>Noodles (¥18-28):</strong> Hand-pulled noodles, sweet potato noodles, rice noodles</li>
+      </ul>
+      
+      <p>One of the highlights of dining at Haidilao is their famous noodle dance, where a staff member performs an elaborate demonstration of pulling noodles by hand, stretching the dough with theatrical flair before adding the fresh noodles to your hot pot.</p>
+      
+      <!-- Customer Reviews Carousel -->
+      <h2>Customer Reviews</h2>
+      
+      <div class="review-carousel">
+        <div class="carousel-arrow carousel-prev">
+          <i class="fas fa-chevron-left"></i>
+        </div>
+        
+        <div class="review-slides">
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Michael L.</div>
+                <div class="review-date">Visited July 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"As a first-time visitor to China, Haidilao was recommended by everyone I spoke to, and now I understand why. From the moment we arrived, the service was unlike anything I've experienced. While waiting for our table, they offered us snacks, drinks, and even a shoulder massage! Once seated, our server noticed I was struggling with chopsticks and brought me a practice set with a guide. The food itself was delicious—we tried the half spicy/half tomato broth, and both were excellent. The beef melted in my mouth, and the handmade noodle performance was a highlight of our Beijing trip. Yes, it's more expensive than other hot pot places, but the overall experience is worth every yuan."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Liu Wei</div>
+                <div class="review-date">Visited August 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="far fa-star" style="color: #ddd;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"As a Beijing local, I've been to almost every Haidilao in the city, and the Wangfujing location maintains their high standards despite being in a tourist area. The spicy broth here seems less oily than at some other locations, which I prefer. We ordered the premium Australian beef platter, and the quality was excellent as always. The sauce bar was well-stocked and clean. My only small complaint is that this location tends to be louder than others due to many tourists, which slightly diminishes the experience. Still, their service remains impeccable—when my friend mentioned it was her birthday, they surprised her with a small cake and a performance, completely unprompted. That's typical Haidilao attention to detail."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Emily T.</div>
+                <div class="review-date">Visited June 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="far fa-star" style="color: #ddd;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"Haidilao is the gold standard for service in the restaurant industry—not just in China but anywhere. We visited with our 5-year-old daughter, and they immediately brought her a booster seat, plastic apron, and special child-friendly chopsticks. Our server even helped watch her when we visited the sauce bar. The divided pot allowed us to have mild broth for her and spicy for us. The ingredients were noticeably fresher than at other hot pot restaurants we've tried, especially the vegetables. While dining, I accidentally splashed sauce on my blouse, and within seconds, a staff member appeared with stain remover and offered to help clean it. This level of attentiveness is why people are willing to wait hours for a table. My only suggestion would be to introduce more non-spicy broth options for foreign visitors."</p>
+          </div>
+        </div>
+        
+        <div class="carousel-arrow carousel-next">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+        
+        <div class="carousel-nav">
+          <div class="carousel-dot active"></div>
+          <div class="carousel-dot"></div>
+          <div class="carousel-dot"></div>
+        </div>
+      </div>
+      
+      <div class="review-section">
+        <h2>Eastworld's Review</h2>
+        
+        <h3>Food Quality: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>Haidilao consistently offers premium ingredients that are noticeably fresher than many competitors. Their broths are complex and well-balanced, particularly the signature Sichuan mala option. While not the most innovative hot pot in Beijing, their execution of classics is nearly flawless.</p>
+        
+        <h3>Authenticity: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>The hot pot tradition is honored in its essential elements, with broths and ingredients that respect regional Chinese flavors. The theatrical service elements are modern innovations but don't detract from the authentic culinary experience.</p>
+        
+        <h3>Value: <span style="color: #FFD700;">★★★</span></h3>
+        <p>At ¥150-250 per person, Haidilao is more expensive than many local hot pot restaurants. However, the combination of ingredient quality, portion sizes, and extraordinary service creates fair value for the price. First-time visitors will find the experience worth the premium.</p>
+        
+        <h3>Atmosphere: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>The restaurant expertly balances energetic communal dining with comfort and privacy. Tables are well-spaced, noise levels are managed despite the bustling environment, and the decor is modern but not ostentatious. The Wangfujing location features particularly spacious seating and excellent ventilation systems.</p>
+        
+        <h3>Service: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Service is where Haidilao truly excels beyond all expectations. The attentiveness, resourcefulness, and genuine warmth of the staff create a dining experience that's memorable for reasons beyond the food. For international visitors, their patient explanations and English-speaking staff make hot pot accessible even to novices.</p>
+        
+        <h3>Overall: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>Haidilao offers an ideal introduction to Chinese hot pot for visitors while maintaining enough quality and authenticity to satisfy locals. The combination of good food and exceptional service makes it a reliable choice for experiencing this iconic Chinese dining tradition without intimidation.</p>
+      </div>
+      
+      <h2>Tips for Visitors</h2>
+      
+      <ul>
+        <li>Download the Haidilao app or arrive early to minimize wait times (30-60 minute waits are common during peak hours)</li>
+        <li>For first-timers, servers are happy to recommend cooking times for different ingredients—follow their guidance</li>
+        <li>The divided pot (鸳鸯锅 yuan yang guo) allows you to try multiple broths; typically half-spicy and half-mild is recommended</li>
+        <li>Wear casual clothes as there may be splashing despite aprons and bibs provided</li>
+        <li>Pace yourself when ordering—you can always add more items later</li>
+        <li>Visit the sauce bar early in your meal to prepare your dipping sauces</li>
+        <li>Don't miss the hand-pulled noodles demonstration near the end of your meal</li>
+        <li>Ask staff to adjust spice levels to your preference—they can customize the broth</li>
+        <li>Be prepared for a 2-3 hour dining experience to fully enjoy the hot pot process</li>
+      </ul>
+      
+      <!-- Visitor Information -->
+      <div id="visitor-info" class="review-section">
+        <h2>Visitor Information</h2>
+        
+        <h3>Reservations:</h3>
+        <p>Reservations are highly recommended and can be made through:</p>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Phone: +86 10-6526-7877 (Some English spoken)</li>
+          <li>Haidilao Mobile App (Chinese language only)</li>
+          <li>Most hotel concierge services can assist with bookings</li>
+          <li>Walk-ins are accepted but may involve waiting times of 30-90 minutes during peak hours</li>
+        </ul>
+        
+        <h3>English Support:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>English menus with pictures are available</li>
+          <li>Many staff at this location speak basic English</li>
+          <li>Pictorial guides for hot pot cooking are provided to international guests</li>
+          <li>The Wangfujing location is accustomed to international visitors</li>
+        </ul>
+        
+        <h3>Payment Information:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Major credit cards accepted (Visa, Mastercard, UnionPay)</li>
+          <li>WeChat Pay and Alipay widely used by locals</li>
+          <li>Cash (Chinese Yuan) also accepted</li>
+          <li>Tipping is not expected in China, and exceptional service is already included</li>
+        </ul>
+        
+        <p>The Wangfujing location is convenient for tourists staying in central Beijing, as it's within walking distance of the Forbidden City, Tiananmen Square, and many international hotels. The restaurant's 24-hour operation makes it an excellent option for late-night dining or for visitors adjusting to jet lag.</p>
+      </div>
+      
+      <a href="../food.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Food Guide</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Review carousel functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const slides = document.querySelector('.review-slides');
+      const dots = document.querySelectorAll('.carousel-dot');
+      const prevBtn = document.querySelector('.carousel-prev');
+      const nextBtn = document.querySelector('.carousel-next');
+      let currentSlide = 0;
+      const totalSlides = document.querySelectorAll('.review-slide').length;
+      
+      // Function to update slide position
+      function showSlide(index) {
+        if (index < 0) index = totalSlides - 1;
+        if (index >= totalSlides) index = 0;
+        
+        currentSlide = index;
+        slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+        
+        // Update active dot
+        dots.forEach((dot, i) => {
+          dot.classList.toggle('active', i === currentSlide);
+        });
+      }
+      
+      // Set up event listeners for dots
+      dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => showSlide(i));
+      });
+      
+      // Set up event listeners for arrows
+      prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
+      nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
+      
+      // Auto-rotate slides every 5 seconds
+      setInterval(() => {
+        showSlide(currentSlide + 1);
+      }, 5000);
+    });
+  </script>
+  
+  <script src="../script.js"></script>
+</body>
+</html> 

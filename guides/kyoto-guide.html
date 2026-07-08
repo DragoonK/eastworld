@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EASTWORLD - Kyoto City Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css' rel='stylesheet' />
+  <style>
+    /* City Guide specific styles */
+    .guide-hero {
+      height: 500px;
+      background-image: url('https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 3rem;
+    }
+    
+    .guide-hero-content {
+      text-align: center;
+      color: white;
+      position: relative;
+      z-index: 2;
+      padding: 2rem;
+      max-width: 800px;
+      background-color: rgba(0, 0, 0, 0.6);
+    }
+    
+    .guide-hero::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(0deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.2) 100%);
+    }
+    
+    .guide-hero h1 {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      letter-spacing: 3px;
+    }
+    
+    .guide-hero p {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    
+    .guide-intro {
+      max-width: 800px;
+      margin: 0 auto 3rem;
+      padding: 0 1rem;
+      line-height: 1.8;
+    }
+    
+    .guide-section {
+      margin-bottom: 4rem;
+    }
+    
+    .guide-section-title {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: 2.2rem;
+      letter-spacing: 1px;
+    }
+    
+    .guide-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+    
+    .guide-card {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+    
+    .guide-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .guide-card-img {
+      height: 200px;
+      overflow: hidden;
+    }
+    
+    .guide-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    
+    .guide-card:hover .guide-card-img img {
+      transform: scale(1.05);
+    }
+    
+    .guide-card-content {
+      padding: 1.5rem;
+    }
+    
+    .guide-card h3 {
+      margin-bottom: 0.5rem;
+      font-size: 1.2rem;
+    }
+    
+    .guide-card-meta {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      color: #666;
+    }
+    
+    .guide-card-meta i {
+      margin-right: 0.3rem;
+    }
+    
+    .guide-card-meta span {
+      margin-right: 1rem;
+    }
+    
+    .guide-card p {
+      color: #555;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    
+    .guide-map {
+      width: 100%;
+      height: 500px;
+      border: none;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+    }
+    
+    .guide-tips {
+      background-color: #f8f8f8;
+      padding: 2rem;
+      border-radius: 8px;
+      margin-bottom: 3rem;
+    }
+    
+    .guide-tips h3 {
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+    
+    .guide-tips-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+    
+    .guide-tip-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+    }
+    
+    .guide-tip-item i {
+      margin-right: 0.5rem;
+      color: #000;
+      margin-top: 0.25rem;
+    }
+    
+    .guide-download {
+      text-align: center;
+      margin: 3rem 0;
+      padding: 2rem;
+      background-color: #f0f0f0;
+      border-radius: 8px;
+    }
+    
+    .guide-download h3 {
+      margin-bottom: 1rem;
+      font-size: 1.8rem;
+    }
+    
+    .guide-download-btn {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 1rem 2rem;
+      background-color: #000;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+    
+    .guide-download-btn:hover {
+      background-color: #333;
+    }
+    
+    .guide-map {
+      width: 100%;
+      height: 500px;
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../food.html" class="nav-item">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+  
+  <main class="content-container">
+    <div class="guide-hero">
+      <div class="guide-hero-content">
+        <h1>KYOTO</h1>
+        <p>Experience the heart of traditional Japan in the ancient capital, where temples, shrines, and gardens create a living museum of Japanese culture.</p>
+      </div>
+    </div>
+    
+    <section class="guide-intro">
+      <p>Kyoto, Japan's ancient imperial capital for over 1,000 years, remains the country's spiritual and cultural heart. With its 1,600 Buddhist temples, 400 Shinto shrines, magnificent palaces, and traditional wooden townhouses (machiya), Kyoto offers visitors an immersive journey into traditional Japanese culture and aesthetics.</p>
+      
+      <p>Despite being a modern city of 1.5 million people, Kyoto has preserved its historical districts and traditional ways of life. The city is surrounded by mountains on three sides, creating a natural setting that changes dramatically with the seasons — from spring's cherry blossoms to autumn's fiery maple leaves. This combination of cultural depth, natural beauty, and living traditions makes Kyoto an essential destination for understanding the soul of Japan.</p>
+    </section>
+    
+    <section class="guide-section">
+      <h2 class="guide-section-title">TOP ATTRACTIONS</h2>
+      
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://images.unsplash.com/photo-1584646098378-0874589d76b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1500&q=80" alt="Fushimi Inari Shrine">
+          </div>
+          <div class="guide-card-content">
+            <h3>Fushimi Inari Taisha</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Southern Kyoto</span>
+              <i class="far fa-clock"></i><span>24 hours, free admission</span>
+            </div>
+            <p>Famous for its thousands of vermilion torii gates forming a network of trails leading into the wooded forest of Mount Inari, dedicated to the Shinto god of rice and business.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://images.unsplash.com/photo-1607279967458-abfa0652659f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80" alt="Kinkaku-ji">
+          </div>
+          <div class="guide-card-content">
+            <h3>Kinkaku-ji (Golden Pavilion)</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Northern Kyoto</span>
+              <i class="far fa-clock"></i><span>9:00-17:00</span>
+            </div>
+            <p>A stunning Zen Buddhist temple covered in gold leaf, set beside a reflective pond in a classical Japanese garden, originally built in 1397 as a retirement villa for shogun Ashikaga Yoshimitsu.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://images.unsplash.com/photo-1470075446560-4816149604a3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80" alt="Arashiyama Bamboo Grove">
+          </div>
+          <div class="guide-card-content">
+            <h3>Arashiyama Bamboo Grove</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Western Kyoto</span>
+              <i class="far fa-clock"></i><span>24 hours, free admission</span>
+            </div>
+            <p>A magical path through towering bamboo stalks that create an otherworldly atmosphere, particularly beautiful when sunlight filters through the dense bamboo. Located near Tenryu-ji Temple and the scenic Arashiyama district.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://images.unsplash.com/photo-1538324496826-6889d8147293?ixlib=rb-4.0.3&auto=format&fit=crop&w=1548&q=80" alt="Kiyomizu-dera">
+          </div>
+          <div class="guide-card-content">
+            <h3>Kiyomizu-dera</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Eastern Kyoto</span>
+              <i class="far fa-clock"></i><span>6:00-18:00</span>
+            </div>
+            <p>Founded in 778, this UNESCO World Heritage site features a wooden stage extending from the main hall, offering spectacular views of the city. The temple is named after the Otowa Waterfall's pure waters that flow within the complex.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://images.unsplash.com/photo-1516443537960-b6f5b9d7c075?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80" alt="Gion District">
+          </div>
+          <div class="guide-card-content">
+            <h3>Gion District</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Central Kyoto</span>
+              <i class="far fa-clock"></i><span>Best in early evening</span>
+            </div>
+            <p>Kyoto's famous geisha district with preserved machiya townhouses, traditional tea houses, and exclusive ryotei restaurants. Visitors might glimpse geiko (Kyoto's geisha) and maiko (apprentice geisha) on their way to evening appointments.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://images.unsplash.com/photo-1589333927953-a68318e6c1a6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80" alt="Philosophers Path">
+          </div>
+          <div class="guide-card-content">
+            <h3>Philosopher's Path</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Eastern Kyoto</span>
+              <i class="far fa-clock"></i><span>24 hours, free admission</span>
+            </div>
+            <p>A scenic stone path following a canal lined with cherry trees, named after philosopher Nishida Kitaro who used this route for daily meditation. Especially beautiful during cherry blossom season, connecting Ginkaku-ji and Nanzen-ji temples.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="guide-section">
+      <h2 class="guide-section-title">WHERE TO EAT</h2>
+      
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://images.japantravel.com/wp-content/uploads/2023/08/09170911/IMG_7175-scaled.jpg" alt="Nishiki Market">
+          </div>
+          <div class="guide-card-content">
+            <h3>Nishiki Market</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Central Kyoto</span>
+              <i class="fas fa-yen-sign"></i><span>¥-¥¥</span>
+            </div>
+            <p>Known as "Kyoto's Kitchen," this 400-year-old covered shopping street features over 100 stalls selling local specialties, fresh seafood, pickles, dried goods, and Japanese sweets, with plenty of options for sampling as you explore.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://kyotofoodie.com/wp-content/uploads/2009/01/kyoto-nakamura-01.jpg" alt="Nakamura">
+          </div>
+          <div class="guide-card-content">
+            <h3>Nakamura</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Central Kyoto</span>
+              <i class="fas fa-yen-sign"></i><span>¥¥¥¥</span>
+            </div>
+            <p>Three Michelin-starred restaurant serving traditional Kyoto cuisine (kaiseki) in an elegant setting, led by chef Motokazu Nakamura, the 6th generation of his family to run this 200-year-old establishment.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://res.cloudinary.com/jnto/image/upload/w_750,h_503,c_fill,f_auto,fl_lossy,q_60/v1520934657/kyoto/Tempura_Endo_Main_Store_Gavin.jpg" alt="Tempura Endo">
+          </div>
+          <div class="guide-card-content">
+            <h3>Tempura Endo</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Gion</span>
+              <i class="fas fa-yen-sign"></i><span>¥¥¥</span>
+            </div>
+            <p>Experience the art of tempura at this refined restaurant where seasonal ingredients are lightly battered and fried to perfection before your eyes, served as part of a multi-course meal alongside elegant side dishes.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://lp-cms-production.imgix.net/2019-06/f384e3cdfacb7c7ee0f47b4e9a30a2c5-ippudo.jpg" alt="Ippudo Ramen">
+          </div>
+          <div class="guide-card-content">
+            <h3>Ippudo Ramen Kyoto</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Downtown Kyoto</span>
+              <i class="fas fa-yen-sign"></i><span>¥¥</span>
+            </div>
+            <p>Branch of the famous ramen chain serving delicious Hakata-style tonkotsu ramen with rich pork broth and thin noodles, located in a beautiful machiya townhouse with both counter and table seating.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="guide-section">
+      <h2 class="guide-section-title">WHERE TO STAY</h2>
+      
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://cdn.tatlerasia.com/tatlerasia/i/2022/05/12153758-tawaraya_cover_1200x800.jpg" alt="Tawaraya Ryokan">
+          </div>
+          <div class="guide-card-content">
+            <h3>Tawaraya Ryokan</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Central Kyoto</span>
+              <i class="fas fa-star"></i><span>Traditional luxury ryokan</span>
+            </div>
+            <p>One of Japan's oldest and most exclusive ryokans (traditional inns), operating for over 300 years and hosting emperors, celebrities, and diplomats. Features impeccable service, tatami rooms, private gardens, and exquisite kaiseki meals.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://d2e5ushqwiltxm.cloudfront.net/wp-content/uploads/sites/140/2019/07/08053811/Kyoto-The-Ritz-Carlton-The-Lobby.jpg" alt="The Ritz-Carlton Kyoto">
+          </div>
+          <div class="guide-card-content">
+            <h3>The Ritz-Carlton Kyoto</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Kamogawa Riverfront</span>
+              <i class="fas fa-star"></i><span>5-star luxury</span>
+            </div>
+            <p>Stunning luxury hotel blending contemporary design with traditional Japanese aesthetics, situated along the Kamogawa River with views of the Higashiyama mountains. Features spacious rooms, Japanese gardens, spa, and excellent dining options.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://images.squarespace-cdn.com/content/v1/58bf9e1c9f7456e1326a0f98/1689228474088-VGN8PDCWG70I8W4W3OUE/shunkoin-kyoto-feature.jpg" alt="Shunkoin Temple">
+          </div>
+          <div class="guide-card-content">
+            <h3>Shunkoin Temple Stay</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Myoshinji Temple Complex</span>
+              <i class="fas fa-star"></i><span>Temple lodging</span>
+            </div>
+            <p>Experience authentic Zen Buddhist temple lodging with meditation sessions led by the English-speaking vice abbot. Simple but comfortable accommodations in a 400-year-old temple with beautiful gardens and cultural activities.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://pix8.agoda.net/hotelImages/7316481/-1/32ed32be382a5a6d22c1e67bcdff75a7.jpg?ca=10&ce=1&s=1024x768" alt="Kyoto Granbell Hotel">
+          </div>
+          <div class="guide-card-content">
+            <h3>Kyoto Granbell Hotel</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Gion District</span>
+              <i class="fas fa-star"></i><span>4-star boutique hotel</span>
+            </div>
+            <p>Stylish boutique hotel in the heart of the Gion district with Japanese-inspired modern design, rooftop terrace, public bath, and convenient access to Kyoto's main attractions and traditional entertainment areas.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="guide-section">
+      <h2 class="guide-section-title">GETTING AROUND</h2>
+      
+      <div class="guide-map" id="kyotoMap"></div>
+      
+      <div class="guide-tips">
+        <h3>Local Transportation Tips</h3>
+        <div class="guide-tips-list">
+          <div class="guide-tip-item">
+            <i class="fas fa-subway"></i>
+            <p>Kyoto has two subway lines (Karasuma and Tozai) that intersect at Karasuma Oike Station. The Karasuma Line runs north-south along Karasuma Street, while the Tozai Line runs east-west.</p>
+          </div>
+          
+          <div class="guide-tip-item">
+            <i class="fas fa-bus"></i>
+            <p>City buses are the most comprehensive way to reach major sights. Consider a one-day bus pass (¥700) for unlimited travel. Routes 100 and 101 cover most tourist destinations.</p>
+          </div>
+          
+          <div class="guide-tip-item">
+            <i class="fas fa-train"></i>
+            <p>JR lines and private railways connect different parts of Kyoto and neighboring cities. The JR Sagano Line is useful for reaching Arashiyama, while the Keihan Line serves eastern Kyoto.</p>
+          </div>
+          
+          <div class="guide-tip-item">
+            <i class="fas fa-bicycle"></i>
+            <p>Kyoto's flat terrain makes cycling an excellent option. Many hotels and rental shops offer bicycles for around ¥1,000 per day, with dedicated cycling paths along the Kamogawa River.</p>
+          </div>
+          
+          <div class="guide-tip-item">
+            <i class="fas fa-walking"></i>
+            <p>Many of Kyoto's districts like Higashiyama, Gion, and Arashiyama are best explored on foot. Walking allows you to discover hidden temples, gardens, and traditional shops not accessible by public transport.</p>
+          </div>
+          
+          <div class="guide-tip-item">
+            <i class="fas fa-taxi"></i>
+            <p>Taxis are plentiful and convenient for reaching destinations not well-served by public transport, especially in the evening. Drivers are reliable and usually understand major tourist destinations by name.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="guide-download">
+      <h3>Download the Complete Kyoto City Guide</h3>
+      <p>Get our comprehensive 45-page guide to Kyoto with detailed temple itineraries, seasonal highlights, cultural etiquette tips, and hidden gem recommendations.</p>
+      <p>Available as a PDF for your convenience - take it with you offline!</p>
+      <a href="#" class="guide-download-btn">Download Guide (PDF) - $11.99</a>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+  
+  <script src='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js'></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize Mapbox for Kyoto
+      mapboxgl.accessToken = 'pk.eyJ1IjoiZWFzdHdvcmxkIiwiYSI6ImNscDg5c3dsaDBrN3YyanBsZzV1dmg0OG0ifQ.9h-PyeATCU2zO9L43WHBEw';
+      const map = new mapboxgl.Map({
+        container: 'kyotoMap',
+        style: 'mapbox://styles/mapbox/streets-v12',
+        center: [135.7681, 35.0116], // Kyoto coordinates
+        zoom: 12,
+        pitch: 60, // Add 3D perspective
+        bearing: 30
+      });
+      
+      // Add 3D buildings layer
+      map.on('load', function() {
+        // Add 3D buildings layer
+        const layers = map.getStyle().layers;
+        
+        // Find the index of the first symbol layer
+        let firstSymbolId;
+        for (const layer of layers) {
+          if (layer.type === 'symbol') {
+            firstSymbolId = layer.id;
+            break;
+          }
+        }
+        
+        // Add 3D buildings
+        map.addLayer({
+          'id': '3d-buildings',
+          'source': 'composite',
+          'source-layer': 'building',
+          'filter': ['==', 'extrude', 'true'],
+          'type': 'fill-extrusion',
+          'minzoom': 15,
+          'paint': {
+            'fill-extrusion-color': '#aaa',
+            'fill-extrusion-height': [
+              'interpolate', ['linear'], ['zoom'],
+              15, 0,
+              15.05, ['get', 'height']
+            ],
+            'fill-extrusion-base': [
+              'interpolate', ['linear'], ['zoom'],
+              15, 0,
+              15.05, ['get', 'min_height']
+            ],
+            'fill-extrusion-opacity': 0.6
+          }
+        }, firstSymbolId);
+        
+        // Add navigation controls
+        map.addControl(new mapboxgl.NavigationControl());
+        
+        // Add key attraction markers
+        const attractions = [
+          { name: 'Fushimi Inari Taisha', coordinates: [135.7726, 34.9671], description: 'Famous shrine with thousands of torii gates' },
+          { name: 'Kinkaku-ji (Golden Pavilion)', coordinates: [135.7293, 35.0394], description: 'Gold-covered Zen Buddhist temple' },
+          { name: 'Arashiyama Bamboo Grove', coordinates: [135.6697, 35.0169], description: 'Iconic bamboo forest path' },
+          { name: 'Kiyomizu-dera', coordinates: [135.7855, 34.9949], description: 'Ancient temple with wooden stage' },
+          { name: 'Gion District', coordinates: [135.7766, 35.0036], description: 'Traditional geisha district' },
+          { name: 'Philosopher\'s Path', coordinates: [135.7909, 35.0277], description: 'Canal path lined with cherry trees' }
+        ];
+        
+        attractions.forEach(spot => {
+          // Create popup content
+          const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(
+            `<strong>${spot.name}</strong><br>${spot.description}`
+          );
+          
+          // Add marker
+          new mapboxgl.Marker({ color: '#ff4d4d' })
+            .setLngLat(spot.coordinates)
+            .setPopup(popup)
+            .addTo(map);
+        });
+        
+        // Start with a fly-to animation
+        map.flyTo({
+          center: [135.7680, 35.0120],
+          zoom: 13,
+          pitch: 65,
+          bearing: 45,
+          duration: 5000
+        });
+      });
+    });
+  </script>
+  <script src="../script.js"></script>
+</body>
+</html> 

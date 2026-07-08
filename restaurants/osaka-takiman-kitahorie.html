@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Takiman Kitahorie Yakiniku - Premium Wagyu Experience | EASTWORLD</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Additional styles specific to restaurant reviews */
+    .restaurant-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+      .restaurant-info {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .restaurant-details {
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .detail-row {
+      display: flex;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+    }
+    
+    .detail-label {
+      font-weight: 600;
+      min-width: 120px;
+      color: #333;
+    }
+    
+    .detail-value {
+      flex: 1;
+      color: #555;
+    }
+    
+    .rating {
+      margin-bottom: 1rem;
+    }
+    
+    .star {
+      color: #ddd;
+      font-size: 1.5rem;
+    }
+    
+    .star.filled {
+      color: #FFD700;
+    }
+    
+    .half-star {
+      position: relative;
+    }
+    
+    .half-star .fas.fa-star-half {
+      color: #FFD700;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    
+    .score-label {
+      margin-left: 0.5rem;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .map-container {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .map-container iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+    }
+    
+    .photos-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .photo-item {
+      border-radius: 8px;
+      overflow: hidden;
+      height: 150px;
+    }
+    
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .photo-item:hover img {
+      transform: scale(1.05);
+    }
+    
+    .specialty-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+    
+    .specialty-card {
+      background: #f8f9fa;
+      padding: 1.5rem;
+      border-radius: 8px;
+      text-align: center;
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+    }
+    
+    .specialty-card:hover {
+      border-color: #e74c3c;
+      transform: translateY(-5px);
+    }
+    
+    .specialty-card i {
+      font-size: 2rem;
+      color: #e74c3c;
+      margin-bottom: 1rem;
+    }
+    
+    .menu-section {
+      margin: 2rem 0;
+    }
+    
+    .menu-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .menu-item:last-child {
+      border-bottom: none;
+    }
+    
+    .menu-item-name {
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .menu-item-description {
+      font-size: 0.9rem;
+      color: #666;
+      margin-top: 0.25rem;
+    }
+    
+    .menu-item-price {
+      font-weight: 600;
+      color: #e74c3c;
+    }
+    
+    .highlight-box {
+      background: linear-gradient(135deg, #fff5f5, #ffe8e8);
+      border-left: 4px solid #e74c3c;
+      padding: 1.5rem;
+      margin: 2rem 0;
+      border-radius: 0 8px 8px 0;
+    }
+    
+    /* Booking button styles */
+    .booking-button {
+      display: block;
+      background-color: #e74c3c;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      margin: 1.5rem 0;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    
+    .booking-button:hover {
+      background-color: #c0392b;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../food.html" class="nav-item active">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="content-container">
+    <div class="content-header">
+      <span class="content-category">PREMIUM YAKINIKU</span>
+      <h1 class="content-title">Takiman Kitahorie - 70 Years of Wagyu Excellence</h1>
+      
+      <!-- Rating Section -->
+      <div class="rating">
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star half-star"><i class="fas fa-star-half-alt"></i></span>
+        <span class="score-label">4.5/5.0</span>
+      </div>
+    </div>
+    
+    <div class="hero-container">
+      <img class="content-hero" src="https://media-cdn.tripadvisor.com/media/photo-s/10/e0/04/76/photo0jpg.jpg" alt="Takiman Kitahorie Interior" 
+      onerror="this.onerror=null; 
+      this.parentElement.innerHTML = '<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#333;color:white;font-size:1.5rem;text-align:center;padding:2rem;\'>Takiman Kitahorie Yakiniku</div>';">
+    </div>
+    
+    <!-- Booking Button -->
+    <a href="https://www.hotpepper.jp/strJ003829801/" target="_blank" class="booking-button">
+      <i class="fas fa-calendar-alt"></i> MAKE RESERVATION
+    </a>
+    
+    <!-- Restaurant Information Section -->
+    <div class="restaurant-info">
+      <div class="restaurant-details">
+        <h2>Restaurant Details</h2>
+        
+        <div class="detail-row">
+          <div class="detail-label">Address:</div>
+          <div class="detail-value">Kitahorie, Nishi-ku, Osaka, Japan</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Hours:</div>
+          <div class="detail-value">17:00 - 24:30 (Mon-Sat)<br>17:00 - 22:00 (Sun & Holidays)<br>No regular holidays</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Price Range:</div>
+          <div class="detail-value">¥5,000 - ¥7,000 ($35-50) per person</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Cuisine:</div>
+          <div class="detail-value">Premium Yakiniku, Wagyu Beef</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Reservations:</div>
+          <div class="detail-value">Recommended, especially for weekends</div>
+        </div>
+        
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">How to Get There</h3>
+        <p>From Sakuragawa Station:</p>
+        <ul style="margin-bottom: 1rem; padding-left: 1.5rem;">
+          <li>3 minute walk from Sakuragawa Station</li>
+          <li>5 minute walk from Nishinagahori Station</li>
+          <li>Located in the Kitahorie district of Nishi-ku</li>
+        </ul>
+      </div>
+      
+      <div class="map-container">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3281.0123456789!2d135.4967890!3d34.6777780!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzTCsDQwJzQwLjAiTiAxMzXCsDI5JzQ4LjQiRQ!5e0!3m2!1sen!2sus!4v1234567890123!5m2!1sen!2sus" 
+        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+
+    <div class="content-text">
+      <div class="highlight-box">
+        <h2><i class="fas fa-star"></i> 70 Years of Butcher Excellence</h2>
+        <p>Takiman Kitahorie represents seven decades of meat expertise, where a traditional butcher shop has evolved into one of Osaka's premier yakiniku destinations. This isn't just a restaurant—it's a testament to the art of selecting, aging, and preparing the finest Kuroge Wagyu beef.</p>
+      </div>
+
+      <h2>The Takiman Legacy</h2>
+      
+      <p>What sets Takiman apart is not just the quality of the meat, but the story behind it. For 70 years, this family-run butcher shop has been perfecting the art of meat selection and preparation. The restaurant represents the culmination of this expertise, where diners can experience the difference that comes from true craftsmanship.</p>
+      
+      <p>The atmosphere is warm and inviting, with both table seating and private rooms available. The staff's knowledge of each cut and its optimal preparation method ensures that every piece of meat is cooked to perfection, allowing the natural flavors of the premium wagyu to shine through.</p>
+      
+      <div class="photos-container">
+        <div class="photo-item">
+          <img src="https://media-cdn.tripadvisor.com/media/photo-s/10/e0/04/76/photo0jpg.jpg" alt="Takiman Interior">
+        </div>
+        <div class="photo-item">
+          <img src="https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80" alt="Premium Wagyu">
+        </div>
+        <div class="photo-item">
+          <img src="https://images.unsplash.com/photo-1546833999-b9f581a1996d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80" alt="Yakiniku Grill">
+        </div>
+        <div class="photo-item">
+          <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80" alt="Restaurant Atmosphere">
+        </div>
+      </div>
+      
+      <h2>Signature Specialties</h2>
+      <div class="specialty-grid">
+        <div class="specialty-card">
+          <i class="fas fa-crown"></i>
+          <h3>Premium Kuroge Wagyu</h3>
+          <p>Carefully selected A4-grade and above black wagyu beef, showcasing the perfect balance of marbling and flavor that only comes from decades of expertise.</p>
+        </div>
+        <div class="specialty-card">
+          <i class="fas fa-cut"></i>
+          <h3>Rare Cuts Selection</h3>
+          <p>Access to exclusive cuts and rare parts that are only available through direct butcher relationships, offering a unique dining experience.</p>
+        </div>
+        <div class="specialty-card">
+          <i class="fas fa-fire"></i>
+          <h3>Traditional Preparation</h3>
+          <p>Time-honored techniques passed down through three generations, ensuring each cut is prepared to perfection with optimal aging and seasoning.</p>
+        </div>
+      </div>
+
+      <section class="menu-section">
+        <h2>Featured Menu Items</h2>
+        <div class="menu-item">
+          <div>
+            <div class="menu-item-name">Premium Wagyu Assortment (2 servings)</div>
+            <div class="menu-item-description">Selection of the finest cuts including rare parts, harami center, sirloin shabu-shabu style, premium kalbi, and premium lean meat</div>
+          </div>
+          <div class="menu-item-price">¥5,060</div>
+        </div>
+        <div class="menu-item">
+          <div>
+            <div class="menu-item-name">Takiman Special Yakiniku</div>
+            <div class="menu-item-description">Premium marbled beef served sukiyaki-style with egg, best enjoyed over steaming rice with garlic</div>
+          </div>
+          <div class="menu-item-price">¥1,639</div>
+        </div>
+        <div class="menu-item">
+          <div>
+            <div class="menu-item-name">Tsukimi Yukke-style</div>
+            <div class="menu-item-description">Rare steak cut into strips, mixed with traditional yukke sauce and topped with moon-viewing egg</div>
+          </div>
+          <div class="menu-item-price">¥968</div>
+        </div>
+        <div class="menu-item">
+          <div>
+            <div class="menu-item-name">Red Senmai (Fourth Stomach)</div>
+            <div class="menu-item-description">Premium offal with rich flavor and sweet fat, excellent texture. Available in miso or salt preparation</div>
+          </div>
+          <div class="menu-item-price">¥528</div>
+        </div>
+      </section>
+      
+      <h2>The Dining Experience</h2>
+      
+      <p>Whether you're a yakiniku enthusiast or new to premium Japanese beef, Takiman offers an educational and delicious journey through the world of high-quality wagyu, backed by generations of expertise and passion for excellence.</p>
+      
+      <p>The restaurant features both table seating and private rooms, making it perfect for intimate dinners, family gatherings, or corporate events. The knowledgeable staff can guide you through the menu, explaining the origin of each cut and the best cooking methods to maximize flavor.</p>
+      
+      <div class="content-quote">
+        "The kalbi and mino were absolutely delicious. The service was attentive and the private room setup was perfect for avoiding contact with other diners." - Customer Review
+      </div>
+      
+      <h2>Dining Features</h2>
+      
+      <ul>
+        <li><strong>Perfect for family dining</strong> - Welcoming atmosphere suitable for all ages</li>
+        <li><strong>Corporate banquet friendly</strong> - Private rooms available for business meetings</li>
+        <li><strong>All-you-can-drink options</strong> - Extensive beverage menu including sake and beer</li>
+        <li><strong>Credit cards accepted</strong> - Multiple payment options available</li>
+        <li><strong>Electronic payments accepted</strong> - Modern payment convenience</li>
+      </ul>
+      
+      <h2>Tips for Visitors</h2>
+      
+      <ul>
+        <li>Reservations are highly recommended, especially for weekend dining and private rooms</li>
+        <li>Try the Premium Wagyu Assortment to experience the full range of cuts available</li>
+        <li>Ask your server about the origin of specific cuts - the staff's knowledge is impressive</li>
+        <li>Don't miss the Takiman Special Yakiniku served sukiyaki-style with egg</li>
+        <li>The restaurant is easily accessible from both Sakuragawa and Nishinagahori stations</li>
+      </ul>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="../script.js"></script>
+</body>
+</html> 

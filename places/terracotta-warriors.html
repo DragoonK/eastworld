@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terracotta Warriors - Eastworld Wonders</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Wonder page specific styles */
+    .wonder-hero {
+      height: 70vh;
+      background-image: url('https://images.unsplash.com/photo-1549867499-c530333a6881?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+    }
+    
+    .wonder-hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+    }
+    
+    .wonder-hero-content {
+      position: relative;
+      z-index: 2;
+      padding: 3rem;
+      width: 100%;
+      color: white;
+    }
+    
+    .wonder-title {
+      font-size: 3.5rem;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+    
+    .wonder-location {
+      display: flex;
+      align-items: center;
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+    }
+    
+    .wonder-location i {
+      margin-right: 0.5rem;
+    }
+    
+    .wonder-meta {
+      display: flex;
+      gap: 2rem;
+      margin-top: 1.5rem;
+    }
+    
+    .wonder-meta-item {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .meta-label {
+      font-size: 0.9rem;
+      opacity: 0.8;
+      margin-bottom: 0.3rem;
+    }
+    
+    .meta-value {
+      font-size: 1.2rem;
+      font-weight: 500;
+    }
+    
+    .wonder-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+    
+    .wonder-section {
+      margin-bottom: 4rem;
+    }
+    
+    .section-title {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .section-content {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      color: #333;
+    }
+    
+    .section-content p {
+      margin-bottom: 1.5rem;
+    }
+
+    /* Gallery styles */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .gallery-item {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .gallery-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+    }
+    
+    .gallery-item img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      display: block;
+    }
+    
+    /* Visitor information */
+    .practical-info {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .info-card {
+      background: #f9f9f9;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    
+    .info-card-title {
+      font-size: 1.2rem;
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+    }
+    
+    .info-card-title i {
+      margin-right: 0.5rem;
+      color: #e74c3c;
+    }
+    
+    .info-list, .tips-list {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .info-list li {
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .info-list li:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    
+    .info-label {
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      color: #444;
+    }
+    
+    .tips-list li {
+      margin-bottom: 0.8rem;
+      padding-left: 1.5rem;
+      position: relative;
+    }
+    
+    .tips-list li:before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: #e74c3c;
+      font-weight: bold;
+    }
+    
+    .map-container {
+      margin-top: 2rem;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    /* Related wonders section */
+    .related-wonders {
+      background: #f9f9f9;
+      padding: 3rem 1.5rem;
+    }
+    
+    .related-wonders-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .wonder-card {
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      text-decoration: none;
+      color: inherit;
+    }
+    
+    .wonder-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+    }
+    
+    .wonder-card-img {
+      height: 200px;
+      overflow: hidden;
+    }
+    
+    .wonder-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    
+    .wonder-card:hover .wonder-card-img img {
+      transform: scale(1.05);
+    }
+    
+    .wonder-card-content {
+      padding: 1.5rem;
+    }
+    
+    .wonder-card-category {
+      font-size: 0.8rem;
+      color: #e74c3c;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+    
+    .wonder-card-title {
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .wonder-card-description {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 1rem;
+    }
+    
+    .wonder-card-location {
+      font-size: 0.9rem;
+      color: #888;
+      display: flex;
+      align-items: center;
+    }
+    
+    .wonder-card-location i {
+      margin-right: 0.5rem;
+      font-size: 0.8rem;
+    }
+    
+    /* Facts grid */
+    .facts-container {
+      background: #f9f9f9;
+      padding: 2rem;
+      border-radius: 8px;
+      margin-bottom: 4rem;
+    }
+    
+    .facts-title {
+      font-size: 1.8rem;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    .facts-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    
+    .fact-item {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      transition: transform 0.3s ease;
+    }
+    
+    .fact-item:hover {
+      transform: translateY(-5px);
+    }
+    
+    .fact-icon {
+      font-size: 2rem;
+      color: #e74c3c;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    
+    .fact-title {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+    
+    .fact-text {
+      font-size: 0.95rem;
+      color: #555;
+      line-height: 1.5;
+    }
+    
+    /* Responsive fixes */
+    @media (max-width: 768px) {
+      .wonder-meta {
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+      
+      .wonder-meta-item {
+        flex-basis: calc(50% - 1rem);
+      }
+      
+      .facts-grid,
+      .gallery,
+      .practical-info,
+      .related-wonders-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .wonder-hero-content {
+        padding: 2rem 1.5rem;
+      }
+      
+      .wonder-title {
+        font-size: 2.5rem;
+      }
+      
+      .facts-grid,
+      .gallery,
+      .practical-info,
+      .related-wonders-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../food.html" class="nav-item">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../places.html" class="nav-item active">PLACES</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <div class="wonder-hero">
+      <div class="wonder-hero-content">
+        <h1 class="wonder-title">Terracotta Warriors</h1>
+        <div class="wonder-location">
+          <i class="fas fa-map-marker-alt"></i> Xi'an, China
+        </div>
+        <p>The silent army guarding China's first emperor for over 2,000 years</p>
+        <div class="wonder-meta">
+          <div class="wonder-meta-item">
+            <span class="meta-label">CATEGORY</span>
+            <span class="meta-value">Archaeological</span>
+          </div>
+          <div class="wonder-meta-item">
+            <span class="meta-label">CREATED</span>
+            <span class="meta-value">210-209 BCE</span>
+          </div>
+          <div class="wonder-meta-item">
+            <span class="meta-label">DISCOVERED</span>
+            <span class="meta-value">1974</span>
+          </div>
+          <div class="wonder-meta-item">
+            <span class="meta-label">UNESCO STATUS</span>
+            <span class="meta-value">World Heritage Site</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wonder-content">
+      <section class="wonder-section">
+        <h2 class="section-title">Overview</h2>
+        <div class="section-content">
+          <p>The Terracotta Army is a collection of terracotta sculptures depicting the armies of Qin Shi Huang, the first Emperor of China. It is a form of funerary art buried with the emperor in 210–209 BCE with the purpose of protecting the emperor in his afterlife. The figures, dating from approximately the late third century BCE, were discovered in 1974 by local farmers in Lintong County, outside Xi'an, Shaanxi, China.</p>
+          
+          <p>This incredible archaeological find includes more than 8,000 soldiers, 130 chariots with 520 horses, and 150 cavalry horses, the majority of which remain buried in the pits near Qin Shi Huang's mausoleum. Other terracotta non-military figures were found in other pits, including officials, acrobats, strongmen, and musicians. What makes these figures particularly remarkable is that each soldier appears to have unique facial features, suggesting they were modeled after real individuals from the Qin army.</p>
+          
+          <p>Today, the Terracotta Warriors are housed in the Emperor Qin Shi Huang's Mausoleum Site Museum, one of the most significant archaeological museums in China and a UNESCO World Heritage Site that attracts visitors from around the world who come to marvel at this extraordinary testament to ancient Chinese craftsmanship and imperial power.</p>
+        </div>
+      </section>
+      
+      <section class="wonder-section">
+        <h2 class="section-title">History</h2>
+        <div class="section-content">
+          <p>The story of the Terracotta Army begins with Emperor Qin Shi Huang, who unified China in 221 BCE, establishing the Qin Dynasty and becoming China's first emperor. Obsessed with immortality and the afterlife, he ordered construction of a massive mausoleum protected by a life-sized terracotta army shortly after his ascension to the throne.</p>
+          
+          <p>According to historical records, particularly the account of Sima Qian (c. 145–86 BCE), the project involved over 700,000 workers and craftsmen from across China. The construction of this vast necropolis began when Emperor Qin was just 13 years old and continued throughout his reign. When he died in 210 BCE at the age of 49, he was buried with the warriors that would guard him for eternity.</p>
+          
+          <p>For over 2,000 years, the Terracotta Army remained hidden under layers of soil, mentioned only in historical texts. Their existence faded into legend until March 29, 1974, when a group of farmers digging a well approximately 1.5 kilometers east of the Emperor's tomb mound discovered fragments of terracotta figures. This accidental discovery led to archaeologists excavating the site, revealing the first of several pits containing thousands of life-sized warriors.</p>
+          
+          <p>The excavation work has continued for decades since the initial discovery, with archaeologists carefully unearthing and restoring the warriors, many of which were damaged when the wooden roofs of the burial pits collapsed and the site was looted following the fall of the Qin Dynasty. Today, four major pits have been partially excavated, three of which are now open to the public. Experts estimate that many more warriors remain buried, with ongoing archaeological work continuing to reveal new discoveries about this remarkable site.</p>
+          
+          <div class="wonder-image-container">
+            <img src="https://images.unsplash.com/photo-1591107408044-abbcae132ee8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="Rows of Terracotta Warriors in formation" class="wonder-image">
+            <p class="caption">Rows of life-sized terracotta soldiers stand in their original formation, each with unique facial features and details.</p>
+          </div>
+          
+          <p>Perhaps the most fascinating aspect of the Terracotta Army's history is that when the sculptures were new, they were painted in bright colors. Traces of pink, red, blue, green, white, black, brown, and yellow pigments have been found on warriors, horses, and weapons. However, most of the color has faded or flaked off during excavation due to oxidation when exposed to air, a challenge that continues to confront archaeologists working at the site.</p>
+        </div>
+      </section>
+      
+      <div class="facts-container">
+        <h3 class="facts-title">Fascinating Facts About the Terracotta Warriors</h3>
+        <div class="facts-grid">
+          <div class="fact-item">
+            <div class="fact-icon"><i class="fas fa-fingerprint"></i></div>
+            <h4 class="fact-title">Unique Faces</h4>
+            <p class="fact-text">Each of the over 8,000 terracotta soldiers has a unique face, suggesting they were modeled after real soldiers in Emperor Qin's army.</p>
+          </div>
+          
+          <div class="fact-item">
+            <div class="fact-icon"><i class="fas fa-paint-brush"></i></div>
+            <h4 class="fact-title">Originally Painted</h4>
+            <p class="fact-text">When newly created, all warriors were painted in vibrant colors including purple, red, blue, white, and green, creating a far more colorful army than what we see today.</p>
+          </div>
+          
+          <div class="fact-item">
+            <div class="fact-icon"><i class="fas fa-industry"></i></div>
+            <h4 class="fact-title">Mass Production</h4>
+            <p class="fact-text">The figures were created using an early form of assembly line production. Bodies, limbs, and heads were created separately before being assembled and customized.</p>
+          </div>
+          
+          <div class="fact-item">
+            <div class="fact-icon"><i class="fas fa-bullseye"></i></div>
+            <h4 class="fact-title">Working Weapons</h4>
+            <p class="fact-text">Many of the warriors originally held real weapons including bronze swords, spears, and crossbows. Some recovered weapons are still sharp after 2,000 years.</p>
+          </div>
+          
+          <div class="fact-item">
+            <div class="fact-icon"><i class="fas fa-ruler"></i></div>
+            <h4 class="fact-title">Taller Than Life</h4>
+            <p class="fact-text">The warriors stand between 1.8-2.0 meters tall (5'11"-6'7"), substantially taller than the average man in China during the Qin Dynasty, who stood about 1.6 meters (5'3").</p>
+          </div>
+          
+          <div class="fact-item">
+            <div class="fact-icon"><i class="fas fa-mountain"></i></div>
+            <h4 class="fact-title">Undiscovered Wonders</h4>
+            <p class="fact-text">Archaeologists estimate that the majority of Emperor Qin's tomb complex, including his actual burial chamber, remains unexcavated, possibly containing many more treasures and mysteries.</p>
+          </div>
+        </div>
+      </div>
+      
+      <section class="wonder-section">
+        <h2 class="section-title">The Warriors in Detail</h2>
+        <div class="section-content">
+          <p>The Terracotta Army represents one of the most remarkable achievements in ancient military replication, with extraordinary attention to detail that has astounded modern archaeologists. Each warrior stands at a height between 1.8-2.0 meters (5'11"-6'7"), significantly taller than the average height of men during the Qin Dynasty, symbolizing their imposing stature as imperial guards.</p>
+          
+          <p>The army is organized into distinct military units, each with specific roles. The excavated pits reveal carefully arranged battle formations: infantry soldiers forming the front lines, followed by ranks of archers, and finally charioteers and cavalry. This strategic organization reflects the sophisticated military tactics of the Qin Dynasty, which enabled Emperor Qin to unify China.</p>
+          
+          <h3 style="font-size: 1.5rem; margin: 1.5rem 0 0.5rem 0;">Ranks and Types</h3>
+          <p>The warriors can be categorized into several distinct types based on their uniforms, hairstyles, and poses, which indicate their military ranks and roles:</p>
+          
+          <ul>
+            <li><strong>Armored Generals</strong>: Distinguished by their elaborate armor and tall caps, these high-ranking officers command the army.</li>
+            <li><strong>Middle-Ranking Officers</strong>: Wearing armor with distinctive square patterns and "pheasant tail" caps.</li>
+            <li><strong>Armored Soldiers</strong>: The most numerous type, wearing protective armor and prepared for close combat.</li>
+            <li><strong>Unarmored Infantry</strong>: Lighter-equipped soldiers designed for greater mobility.</li>
+            <li><strong>Kneeling Archers</strong>: Positioned to fire crossbows from a stable position.</li>
+            <li><strong>Standing Archers</strong>: Ready to fire their weapons while standing.</li>
+            <li><strong>Charioteers</strong>: Positioned with their wooden chariots (now decayed) and terracotta horses.</li>
+            <li><strong>Cavalry</strong>: Mounted warriors representing the elite mobile forces of the Qin army.</li>
+          </ul>
+          
+          <div class="wonder-image-container">
+            <img src="https://images.unsplash.com/photo-1594394489098-ec5fb67b3879?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="Close-up of Terracotta Warrior faces" class="wonder-image">
+            <p class="caption">Close-up detail of warrior faces showing the remarkable individuality given to each figure, suggesting they were modeled after real soldiers.</p>
+          </div>
+          
+          <h3 style="font-size: 1.5rem; margin: 1.5rem 0 0.5rem 0;">Construction Techniques</h3>
+          <p>The creation of such a vast army required sophisticated manufacturing techniques that were revolutionary for their time. Archaeologists have determined that the figures were produced in workshops by government laborers and local craftsmen using molds and an assembly line production method:</p>
+          
+          <p>The warriors' bodies were first created using clay coils, similar to making pottery. The heads, arms, and hands were created separately using molds. Once the basic form was complete, artisans would add individual features to each figure's face, apply detailed armor patterns, and shape the hairstyles according to rank. Finally, they were covered with lacquer and painted. The entire process represented an extraordinary feat of organization, craftsmanship, and artistic vision.</p>
+          
+          <p>The warriors' weapons were actual functioning armaments made primarily of bronze. Many swords recovered from the pits were treated with chromium oxide, an anti-rust technology that wasn't developed in Europe until the 20th century. This advanced metallurgical understanding allowed the weapons to remain sharp and uncorroded for over two millennia.</p>
+        </div>
+      </section>
+      
+      <section class="wonder-section">
+        <h2 class="section-title">Gallery</h2>
+        <div class="gallery">
+          <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1588614311697-1b41cdd517a7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="Overview of Pit 1 showing rows of warriors">
+          </div>
+          <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1588614264760-8174fe391b96?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="Terracotta Army soldiers in formation">
+          </div>
+          <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1574683756812-92971f9346d4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="Kneeling archer figure">
+          </div>
+          <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1559686048-301e8a6b7ab8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="Terracotta horse and chariot">
+          </div>
+          <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1587148981711-5bbd53d2d777?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="Restoration work on warriors">
+          </div>
+          <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1591107509729-e8877e6aecdf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="Close-up of warrior's detailed armor">
+          </div>
+        </div>
+      </section>
+      
+      <section class="wonder-section">
+        <h2 class="section-title">Visitor Information</h2>
+        <div class="practical-info">
+          <div class="info-card">
+            <h3 class="info-card-title"><i class="fas fa-info-circle"></i> Essential Information</h3>
+            <ul class="info-list">
+              <li>
+                <div class="info-label">Opening Hours</div>
+                <div class="info-value">March to November: 8:30 AM - 6:00 PM<br>December to February: 8:30 AM - 5:30 PM</div>
+              </li>
+              <li>
+                <div class="info-label">Admission Fee</div>
+                <div class="info-value">Peak Season (Mar-Nov): ¥150 ($23 USD)<br>Low Season (Dec-Feb): ¥120 ($18 USD)</div>
+              </li>
+              <li>
+                <div class="info-label">Location</div>
+                <div class="info-value">Lintong District, Xi'an, Shaanxi Province, about 40km east of Xi'an city center</div>
+              </li>
+              <li>
+                <div class="info-label">Recommended Duration</div>
+                <div class="info-value">2-4 hours (full museum complex)</div>
+              </li>
+              <li>
+                <div class="info-label">Photography</div>
+                <div class="info-value">Allowed without flash</div>
+              </li>
+            </ul>
+          </div>
+          
+          <div class="info-card">
+            <h3 class="info-card-title"><i class="fas fa-lightbulb"></i> Travel Tips</h3>
+            <ul class="tips-list">
+              <li>Visit early in the morning or late afternoon to avoid the largest crowds, especially if traveling during peak Chinese holiday periods.</li>
+              <li>Hire a knowledgeable guide or rent an audio guide (available in multiple languages) to fully appreciate the historical significance of what you're seeing.</li>
+              <li>Start with Pit 1 (the largest) and work your way through Pits 2 and 3 to understand the progression of discoveries.</li>
+              <li>Visit the on-site museum to see some of the best-preserved figures and learn about the ongoing archaeological work.</li>
+              <li>Combine your visit with the nearby Qin Shi Huang Mausoleum (the actual tomb mound) for a complete understanding of the complex.</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="map-container">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3371.9746370383085!2d109.25978267582388!3d34.382002273412836!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x366378e62a0af631%3A0x4cefc0519c6eb0aa!2sTerracotta%20Army!5e0!3m2!1sen!2sus!4v1704486486368!5m2!1sen!2sus" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+      </section>
+    </div>
+    
+    <section class="related-wonders">
+      <h2 class="section-title" style="text-align: center; margin-bottom: 2rem;">Other Chinese Wonders You Might Like</h2>
+      <div class="related-wonders-grid">
+        <a href="great-wall.html" class="wonder-card">
+          <div class="wonder-card-img">
+            <img src="https://images.unsplash.com/photo-1508804185872-d7badad00f7d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80" alt="Great Wall of China">
+          </div>
+          <div class="wonder-card-content">
+            <div class="wonder-card-category">HISTORICAL</div>
+            <h3 class="wonder-card-title">Great Wall of China</h3>
+            <p class="wonder-card-description">Ancient defensive structure spanning thousands of miles.</p>
+            <div class="wonder-card-location"><i class="fas fa-map-marker-alt"></i> Beijing, China</div>
+          </div>
+        </a>
+        
+        <a href="forbidden-city.html" class="wonder-card">
+          <div class="wonder-card-img">
+            <img src="https://images.unsplash.com/photo-1599707254554-027aeb4deacd?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80" alt="Forbidden City">
+          </div>
+          <div class="wonder-card-content">
+            <div class="wonder-card-category">HISTORICAL</div>
+            <h3 class="wonder-card-title">Forbidden City</h3>
+            <p class="wonder-card-description">Imperial palace complex of the Ming and Qing dynasties.</p>
+            <div class="wonder-card-location"><i class="fas fa-map-marker-alt"></i> Beijing, China</div>
+          </div>
+        </a>
+        
+        <a href="../guides/beijing-guide.html" class="wonder-card">
+          <div class="wonder-card-img">
+            <img src="https://images.unsplash.com/photo-1548013146-72479768bada?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1976&q=80" alt="Summer Palace">
+          </div>
+          <div class="wonder-card-content">
+            <div class="wonder-card-category">IMPERIAL</div>
+            <h3 class="wonder-card-title">Xi'an City Guide</h3>
+            <p class="wonder-card-description">Explore more wonders in the ancient imperial capital of China.</p>
+            <div class="wonder-card-location"><i class="fas fa-map-marker-alt"></i> Xi'an, China</div>
+          </div>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="../script.js"></script>
+</body>
+</html> 

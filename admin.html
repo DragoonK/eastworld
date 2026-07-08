@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Write a Post - Eastworld</title>
+  <link rel="stylesheet" href="home.css">
+</head>
+<body>
+
+  <header>
+    <nav class="main-nav">
+      <div class="nav-links">
+        <a href="index.html">&#8592; BACK TO SITE</a>
+      </div>
+      <a href="index.html" class="logo">EASTWORLD</a>
+      <div class="nav-links">
+        <span style="font-size:0.8rem;font-weight:600;color:#999;">ADMIN</span>
+      </div>
+    </nav>
+  </header>
+
+  <main class="admin-page">
+    <h1>Write a New Post</h1>
+    <p class="admin-hint">Fields marked * are required. The post appears on the homepage the moment it's published.</p>
+
+    <form id="post-form">
+      <label>
+        Admin password *
+        <input type="password" name="password" required autocomplete="current-password">
+      </label>
+
+      <label>
+        Title *
+        <input type="text" name="title" required maxlength="120" placeholder="e.g. Tokyo's Best Standing Sushi Bars">
+      </label>
+
+      <label>
+        Category *
+        <input type="text" name="category" required maxlength="30" placeholder="e.g. FOOD, CULTURE, MUSIC" style="text-transform:uppercase">
+      </label>
+
+      <label>
+        Excerpt (the teaser on the homepage card; auto-generated if left empty)
+        <input type="text" name="excerpt" maxlength="200" placeholder="One sentence that makes people click.">
+      </label>
+
+      <label>
+        Content * (leave a blank line between paragraphs)
+        <textarea name="content" required rows="14" placeholder="Write your story here...&#10;&#10;A blank line starts a new paragraph."></textarea>
+      </label>
+
+      <label>
+        Cover image (upload a file...)
+        <input type="file" name="image" accept=".png,.jpg,.jpeg,.gif,.webp">
+      </label>
+      <img id="image-preview" alt="" hidden>
+
+      <label>
+        ...or paste an image URL
+        <input type="url" name="image_url" placeholder="https://...">
+      </label>
+
+      <button type="submit" id="publish-btn">PUBLISH POST</button>
+      <p id="form-status"></p>
+    </form>
+  </main>
+
+  <script>
+    const form = document.getElementById('post-form');
+    const statusEl = document.getElementById('form-status');
+    const publishBtn = document.getElementById('publish-btn');
+    const preview = document.getElementById('image-preview');
+
+    // Show a preview of the chosen image before uploading
+    form.image.addEventListener('change', () => {
+      const file = form.image.files[0];
+      if (file) {
+        preview.src = URL.createObjectURL(file);
+        preview.hidden = false;
+      } else {
+        preview.hidden = true;
+      }
+    });
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      publishBtn.disabled = true;
+      statusEl.textContent = 'Publishing…';
+      statusEl.className = '';
+
+      try {
+        // FormData packages all fields INCLUDING the file
+        const response = await fetch('/api/posts', {
+          method: 'POST',
+          body: new FormData(form),
+        });
+        const result = await response.json();
+
+        if (!response.ok) {
+          throw new Error(result.error || `Server returned ${response.status}`);
+        }
+
+        statusEl.className = 'ok';
+        statusEl.innerHTML =
+          `Published! <a href="post.html?id=${result.id}">View your post</a> ` +
+          `or <a href="index.html">see it on the homepage</a>.`;
+        form.reset();
+        preview.hidden = true;
+      } catch (err) {
+        statusEl.className = 'error';
+        statusEl.textContent = `Couldn't publish: ${err.message}`;
+      } finally {
+        publishBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

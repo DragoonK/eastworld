@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EASTWORLD - Osaka City Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* City Guide specific styles */
+    .guide-hero {
+      height: 500px;
+      background-image: url('https://www.intrepidtravel.com/adventures/wp-content/uploads/2023/03/Intrepid-Travel-japan_osaka_aerial-view-of-dotonbori.jpg');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 3rem;
+    }
+    
+    .guide-hero-content {
+      text-align: center;
+      color: white;
+      position: relative;
+      z-index: 2;
+      padding: 2rem;
+      max-width: 800px;
+      background-color: rgba(0, 0, 0, 0.6);
+    }
+    
+    .guide-hero::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(0deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.2) 100%);
+    }
+    
+    .guide-hero h1 {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      letter-spacing: 3px;
+    }
+    
+    .guide-hero p {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    
+    .guide-intro {
+      max-width: 800px;
+      margin: 0 auto 3rem;
+      padding: 0 1rem;
+      line-height: 1.8;
+    }
+    
+    .guide-section {
+      margin-bottom: 4rem;
+    }
+    
+    .guide-section-title {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: 2.2rem;
+      letter-spacing: 1px;
+    }
+    
+    .guide-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+    
+    .guide-card {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+    
+    .guide-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .guide-card-img {
+      height: 200px;
+      overflow: hidden;
+    }
+    
+    .guide-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    
+    .guide-card:hover .guide-card-img img {
+      transform: scale(1.05);
+    }
+    
+    .guide-card-content {
+      padding: 1.5rem;
+    }
+    
+    .guide-card h3 {
+      margin-bottom: 0.5rem;
+      font-size: 1.2rem;
+    }
+    
+    .guide-card-meta {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      color: #666;
+    }
+    
+    .guide-card-meta i {
+      margin-right: 0.3rem;
+    }
+    
+    .guide-card-meta span {
+      margin-right: 1rem;
+    }
+    
+    .guide-card p {
+      color: #555;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    
+    .guide-map {
+      width: 100%;
+      height: 400px;
+      border: none;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+    }
+    
+    .guide-tips {
+      background-color: #f8f8f8;
+      padding: 2rem;
+      border-radius: 8px;
+      margin-bottom: 3rem;
+    }
+    
+    .guide-tips h3 {
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+    
+    .guide-tips-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+    
+    .guide-tip-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+    }
+    
+    .guide-tip-item i {
+      margin-right: 0.5rem;
+      color: #000;
+      margin-top: 0.25rem;
+    }
+    
+    .guide-download {
+      text-align: center;
+      margin: 3rem 0;
+      padding: 2rem;
+      background-color: #f0f0f0;
+      border-radius: 8px;
+    }
+    
+    .guide-download h3 {
+      margin-bottom: 1rem;
+      font-size: 1.8rem;
+    }
+    
+    .guide-download-btn {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 1rem 2rem;
+      background-color: #000;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+    
+    .guide-download-btn:hover {
+      background-color: #333;
+    }
+    
+    @media (max-width: 768px) {
+      .guide-hero h1 {
+        font-size: 3rem;
+      }
+      
+      .guide-hero p {
+        font-size: 1rem;
+      }
+      
+      .guide-section-title {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../food.html" class="nav-item">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../login.html" class="nav-item">LOGIN</a>
+        <a href="../register.html" class="nav-item">REGISTER</a>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="guide-hero">
+      <div class="guide-hero-content">
+        <h1>OSAKA</h1>
+        <p>Japan's vibrant kitchen and entertainment capital where food, fun, and friendly locals create an unforgettable urban experience.</p>
+      </div>
+    </section>
+    
+    <section class="guide-intro">
+      <p>Osaka, Japan's third-largest city, has earned its nickname "The Nation's Kitchen" not just for its incredible food scene but for its historical role as a center for rice trading. This vibrant metropolis embraces a character distinctly different from Tokyo or Kyoto, with locals known for their outgoing nature, humor, and passion for good food and good times.</p>
+      
+      <p>From the neon-lit entertainment district of Dotonbori to the historic Osaka Castle, the city offers a perfect blend of modernity and tradition. What truly sets Osaka apart is its unique approach to life—less formal and more focused on enjoying the present moment, epitomized in the local phrase "kuidaore" (eat until you drop).</p>
+    </section>
+    
+    <section class="guide-section">
+      <h2 class="guide-section-title">TOP ATTRACTIONS</h2>
+      
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://www.japan-guide.com/g18/4000_01.jpg" alt="Osaka Castle">
+          </div>
+          <div class="guide-card-content">
+            <h3>Osaka Castle</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Chuo Ward</span>
+              <i class="far fa-clock"></i><span>9:00-17:00</span>
+            </div>
+            <p>One of Japan's most famous landmarks, the castle grounds include a museum, beautiful gardens, and impressive stone walls, particularly stunning during cherry blossom season.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://www.japan-guide.com/g18/4001_01.jpg" alt="Dotonbori">
+          </div>
+          <div class="guide-card-content">
+            <h3>Dotonbori</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Namba</span>
+              <i class="far fa-clock"></i><span>Always open</span>
+            </div>
+            <p>The heart of Osaka's entertainment district with dazzling neon signs, restaurants, street food stalls, and the iconic Glico Running Man sign. Best experienced at night.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://www.japan-guide.com/g18/4023_01.jpg" alt="Universal Studios Japan">
+          </div>
+          <div class="guide-card-content">
+            <h3>Universal Studios Japan</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Konohana Ward</span>
+              <i class="far fa-clock"></i><span>9:00-21:00 (varies)</span>
+            </div>
+            <p>One of Japan's most popular theme parks featuring rides and attractions based on movies like Harry Potter, Jurassic Park, and Super Nintendo World.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://www.japan-guide.com/g18/4004_01.jpg" alt="Shitennoji Temple">
+          </div>
+          <div class="guide-card-content">
+            <h3>Shitennoji Temple</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Tennoji Ward</span>
+              <i class="far fa-clock"></i><span>8:30-16:30</span>
+            </div>
+            <p>Founded in 593 AD, this is one of Japan's oldest temples. Despite being rebuilt several times, it maintains its original layout with impressive pagodas and peaceful gardens.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://www.japan-guide.com/g18/4800_01.jpg" alt="Osaka Aquarium Kaiyukan">
+          </div>
+          <div class="guide-card-content">
+            <h3>Osaka Aquarium Kaiyukan</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Tempozan Harbor Village</span>
+              <i class="far fa-clock"></i><span>10:00-20:00</span>
+            </div>
+            <p>One of the world's largest aquariums, featuring marine life from the Pacific Rim in massive tanks, including whale sharks, manta rays, and various other sea creatures.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://www.japan-guide.com/g18/4006_02.jpg" alt="Umeda Sky Building">
+          </div>
+          <div class="guide-card-content">
+            <h3>Umeda Sky Building</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Kita Ward</span>
+              <i class="far fa-clock"></i><span>9:30-22:30</span>
+            </div>
+            <p>Two 40-story towers connected by a "Floating Garden Observatory" offering 360-degree views of Osaka from 173 meters above ground.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="guide-section">
+      <h2 class="guide-section-title">WHERE TO EAT</h2>
+      
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://soranews24.com/wp-content/uploads/sites/3/2022/05/OM-1.jpg" alt="Okonomiyaki Mizuno">
+          </div>
+          <div class="guide-card-content">
+            <h3>Okonomiyaki Mizuno</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Dotonbori</span>
+              <i class="fas fa-yen-sign"></i><span>¥¥</span>
+            </div>
+            <p>Serving Osaka's signature savory pancake since 1945, this legendary establishment often has lines but is worth the wait for authentic Osaka-style okonomiyaki.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://www.osaka-info.jp/en/wp-content/uploads/sites/2/2021/04/0a13da8f0b06cf5809d1f3a32b8dcce4-1.jpg" alt="Kani Doraku">
+          </div>
+          <div class="guide-card-content">
+            <h3>Kani Doraku</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Dotonbori</span>
+              <i class="fas fa-yen-sign"></i><span>¥¥¥</span>
+            </div>
+            <p>Famous for its giant mechanical crab sign, this restaurant specializes in crab dishes including crab sushi, tempura, and hotpot.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://media-cdn.tripadvisor.com/media/photo-s/13/dd/d0/a0/kinryu-ramen.jpg" alt="Kinryu Ramen">
+          </div>
+          <div class="guide-card-content">
+            <h3>Kinryu Ramen</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Dotonbori</span>
+              <i class="fas fa-yen-sign"></i><span>¥</span>
+            </div>
+            <p>Recognizable by its giant dragon sign, this 24-hour ramen shop offers affordable, delicious tonkotsu ramen with open-air counter seating.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://media-cdn.tripadvisor.com/media/photo-s/15/82/9e/c1/caption.jpg" alt="Kushikatsu Daruma">
+          </div>
+          <div class="guide-card-content">
+            <h3>Kushikatsu Daruma</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Shinsekai</span>
+              <i class="fas fa-yen-sign"></i><span>¥¥</span>
+            </div>
+            <p>A Shinsekai institution serving Osaka's famous deep-fried skewers. Remember their famous rule: "No double dipping" in the communal sauce!</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="guide-section">
+      <h2 class="guide-section-title">WHERE TO STAY</h2>
+      
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/153270000.jpg?k=a38ffd0d106f567b0e70c26c11414a4b7af7432ac70d19bd24a4c81e0e50b0bd&o=&hp=1" alt="Conrad Osaka">
+          </div>
+          <div class="guide-card-content">
+            <h3>Conrad Osaka</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Nakanoshima</span>
+              <i class="fas fa-star"></i><span>5-star luxury</span>
+            </div>
+            <p>Luxury hotel occupying the upper floors of a skyscraper with stunning city views, spa facilities, and multiple fine dining options.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/358743223.jpg?k=7c6a532c7ac5ad6aa9fa39ee43114782f671fa8f9989d5e7b6a4cc58c4baa0cf&o=&hp=1" alt="Hotel Royal Classic Osaka">
+          </div>
+          <div class="guide-card-content">
+            <h3>Hotel Royal Classic Osaka</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Near Osaka Castle</span>
+              <i class="fas fa-star"></i><span>4-star</span>
+            </div>
+            <p>Modern hotel designed by renowned architect Kengo Kuma, featuring rooms with castle views and an excellent location for sightseeing.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/247153885.jpg?k=b02f6f4e3986553f0ea191de3b81e367a8fa4df146f6e2f778345634f87aa23c&o=&hp=1" alt="First Cabin Nishi-Umeda">
+          </div>
+          <div class="guide-card-content">
+            <h3>First Cabin Nishi-Umeda</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Umeda</span>
+              <i class="fas fa-star"></i><span>Capsule hotel</span>
+            </div>
+            <p>Upscale capsule hotel offering comfortable sleeping cabins, clean shower facilities, and a convenient location for a budget-friendly stay.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/214287230.jpg?k=ee13b97ce19816a0f452f224f1c765c40cb4351cc6bb3b13e97bb34e877083ea&o=&hp=1" alt="Hotel Ichiei">
+          </div>
+          <div class="guide-card-content">
+            <h3>Hotel Ichiei</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Shinsaibashi</span>
+              <i class="fas fa-star"></i><span>3-star ryokan</span>
+            </div>
+            <p>Traditional Japanese ryokan in the heart of the city offering tatami rooms, onsen baths, and optional kaiseki cuisine for an authentic experience.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="guide-section">
+      <h2 class="guide-section-title">GETTING AROUND</h2>
+      
+      <div class="guide-map">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d104914.94314990087!2d135.4223983753377!3d34.69974928312102!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6000e6553406e2e1%3A0xc55bc16ee46a2fe7!2sOsaka%2C%20Japan!5e0!3m2!1sen!2sus!4v1693365279937!5m2!1sen!2sus" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+      
+      <div class="guide-tips">
+        <h3>Local Transportation Tips</h3>
+        <div class="guide-tips-list">
+          <div class="guide-tip-item">
+            <i class="fas fa-subway"></i>
+            <p>The Osaka Metro and JR lines cover most of the city. Consider the Osaka Amazing Pass for unlimited travel and free entry to many attractions.</p>
+          </div>
+          
+          <div class="guide-tip-item">
+            <i class="fas fa-train"></i>
+            <p>The Midosuji Line (red line) is the main subway artery running north-south through the city, connecting major areas like Umeda and Namba.</p>
+          </div>
+          
+          <div class="guide-tip-item">
+            <i class="fas fa-walking"></i>
+            <p>Many of Osaka's attractions within districts like Namba, Shinsaibashi, and Dotonbori are easily walkable and best explored on foot.</p>
+          </div>
+          
+          <div class="guide-tip-item">
+            <i class="fas fa-bus"></i>
+            <p>Osaka has an extensive bus network, but it can be confusing for visitors. Stick to the subway unless you're heading to off-the-beaten-path locations.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="guide-download">
+      <h3>Download the Complete Osaka City Guide</h3>
+      <p>Get our comprehensive 35-page guide to Osaka with detailed itineraries, maps, food recommendations and insider tips.</p>
+      <p>Available as a PDF for your convenience - take it with you offline!</p>
+      <a href="#" class="guide-download-btn">Download Guide (PDF) - $9.99</a>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+  
+  <script src="../script.js"></script>
+</body>
+</html> 

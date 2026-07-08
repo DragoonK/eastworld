@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kitano Cafe - Eastworld Restaurant Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Additional styles specific to restaurant reviews */
+    .restaurant-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+      .restaurant-info {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .restaurant-details {
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .detail-row {
+      display: flex;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+    }
+    
+    .detail-label {
+      font-weight: 600;
+      min-width: 120px;
+      color: #333;
+    }
+    
+    .detail-value {
+      flex: 1;
+      color: #555;
+    }
+    
+    .rating {
+      margin-bottom: 1rem;
+    }
+    
+    .star {
+      color: #ddd;
+      font-size: 1.5rem;
+    }
+    
+    .star.filled {
+      color: #FFD700;
+    }
+    
+    .half-star {
+      position: relative;
+    }
+    
+    .half-star .fas.fa-star-half {
+      color: #FFD700;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    
+    .score-label {
+      margin-left: 0.5rem;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .map-container {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .map-container iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+    }
+    
+    .photos-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .photo-item {
+      border-radius: 8px;
+      overflow: hidden;
+      height: 150px;
+    }
+    
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .photo-item img:hover {
+      transform: scale(1.05);
+    }
+    
+    .review-section {
+      margin: 2rem 0;
+      padding: 2rem;
+      background: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    /* Booking button styles */
+    .booking-button {
+      display: block;
+      background-color: #ff4d4d;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      margin: 1.5rem 0;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    
+    .booking-button:hover {
+      background-color: #e63939;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    /* Review carousel styles */
+    .review-carousel {
+      position: relative;
+      margin: 2rem 0;
+      overflow: hidden;
+      padding: 1rem 0;
+    }
+    
+    .review-slides {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    
+    .review-slide {
+      min-width: 100%;
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .reviewer-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #f0f0f0;
+      padding-bottom: 0.8rem;
+    }
+    
+    .reviewer-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 0.8rem;
+    }
+    
+    .reviewer-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding-top: 0.2rem;
+    }
+    
+    .review-date {
+      color: #888;
+      font-size: 0.75rem;
+      margin-top: 0.1rem;
+    }
+    
+    .review-rating {
+      display: flex;
+      margin-top: 0.2rem;
+    }
+    
+    .review-rating i {
+      font-size: 0.8rem;
+      margin-right: 2px;
+    }
+    
+    .carousel-nav {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+    
+    .carousel-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ddd;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .carousel-dot.active {
+      background: #ff4d4d;
+    }
+    
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.7);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+    
+    .carousel-prev {
+      left: 10px;
+    }
+    
+    .carousel-next {
+      right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../food.html" class="nav-item active">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="content-container">
+    <div class="content-header">
+      <span class="content-category">CAFÉ</span>
+      <h1 class="content-title">Kitano Cafe - Charming Café in Historic Kobe District</h1>
+      
+      <!-- Rating Section -->
+      <div class="rating">
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star half-star">
+          <i class="far fa-star"></i>
+          <i class="fas fa-star-half"></i>
+        </span>
+        <span class="score-label">4.5/5.0</span>
+      </div>
+    </div>
+    
+    <div class="hero-container">
+      <img class="content-hero" src="https://kobekitano-nosta.jp/wp-content/uploads/2024/03/5.jpg" alt="Kobe Kitano Nosta Cafe" 
+      onerror="this.onerror=null; 
+      this.parentElement.innerHTML = '<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#333;color:white;font-size:1.5rem;text-align:center;padding:2rem;\'>Kitano Cafe</div>';">
+    </div>
+    
+    <!-- Booking Button -->
+    <a href="#visitor-info" class="booking-button">
+      <i class="fas fa-info-circle"></i> VISITOR INFORMATION
+    </a>
+    
+    <!-- Restaurant Information Section -->
+    <div class="restaurant-info">
+      <div class="restaurant-details">
+        <h2>Restaurant Details</h2>
+        
+        <div class="detail-row">
+          <div class="detail-label">Address:</div>
+          <div class="detail-value">3-17-1 Nakayamate-dori, Chuo Ward, Kobe 650-0004, Japan</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Hours:</div>
+          <div class="detail-value">10:00 AM - 6:00 PM<br>Open daily (Closed during New Year holidays)</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Phone:</div>
+          <div class="detail-value">+81 78-891-6442</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Price Range:</div>
+          <div class="detail-value">¥1,000-2,500 ($7-18) per person</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Cuisine:</div>
+          <div class="detail-value">Café, Western-inspired Japanese, Desserts</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Reservations:</div>
+          <div class="detail-value">Walk-ins welcome (No reservations accepted)</div>
+        </div>
+        
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">About the Location</h3>
+        <p>Kitano Cafe is located within the Kobe Kitano Nosta complex, a unique culinary destination housed in a former elementary school building. The facility opened in 2023 as part of the revitalization of the historic Kitano district, showcasing Kobe's rich food culture under the concept of "ONE TABLE" - bringing together locals and tourists to enjoy Kobe's culinary treasures.</p>
+      </div>
+      
+      <div class="map-container">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3280.4175902607154!2d135.18723007617892!3d34.69908797288219!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60008ee3b230bdfd%3A0xe3d42a7e2a9da87e!2sKOBE%20KITANO%20NOSTA!5e0!3m2!1sen!2sus!4v1697909090086!5m2!1sen!2sus" 
+        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+    
+    <div class="content-text">
+      <h2>A Culinary Destination in Historic Kitano</h2>
+      
+      <p>Kitano Cafe occupies a special place within Kobe Kitano Nosta, a unique culinary complex established in a beautifully repurposed former elementary school building. Located in the charming Kitano district, famous for its historic foreign residences, this cafe embodies the perfect fusion of Kobe's international influences and Japanese hospitality.</p>
+      
+      <p>The cafe is part of the "ONE TABLE" concept that defines the entire Nosta complex - creating a space where both locals and tourists can gather to enjoy Kobe's renowned food culture. With its bright, airy interior that preserves elements of the building's scholastic past while incorporating modern design touches, Kitano Cafe offers a distinctive setting that captures the essence of Kobe's cosmopolitan character.</p>
+      
+      <div class="photos-container">
+        <div class="photo-item">
+          <img src="https://kobekitano-nosta.jp/wp-content/uploads/2023/11/01-1.jpg" alt="Kitano Nosta entrance">
+        </div>
+        <div class="photo-item">
+          <img src="https://kobekitano-nosta.jp/wp-content/uploads/2023/06/01-1.jpg" alt="Cafe interior">
+        </div>
+        <div class="photo-item">
+          <img src="https://kobekitano-nosta.jp/wp-content/uploads/2023/06/20230304_GL88_IIJIMA_38.jpg" alt="Cafe terrace">
+        </div>
+        <div class="photo-item">
+          <img src="https://kobekitano-nosta.jp/wp-content/uploads/2024/02/cafe-special.jpg" alt="Seasonal dessert">
+        </div>
+      </div>
+      
+      <h2>Creative Cuisine with a View of Historic Kitano</h2>
+      
+      <p>Kitano Cafe stands out for its thoughtfully crafted menu that showcases fresh local ingredients while drawing inspiration from Kobe's unique position as a historic port city with international influences. The cafe particularly excels at seasonal specials that highlight the best produce of each season, from spring cherry blossoms and strawberries to autumn chestnuts and winter citrus.</p>
+      
+      <p>The establishment offers a perfect respite for visitors exploring the nearby Kitano Ijinkan (foreign residences) district. The cafe's terrace seating provides beautiful views of the surrounding historic neighborhood, allowing guests to soak in the atmosphere of this unique part of Kobe that blends Japanese and Western architectural influences.</p>
+      
+      <div class="content-quote">
+        "We created Kitano Cafe as part of the NOSTA complex to showcase Kobe's unique food culture - a place where both locals and visitors can enjoy quality food and drinks in a setting that honors the history of Kitano while looking toward the future." - Kobe Kitano Nosta Management
+      </div>
+      
+      <!-- User Reviews Carousel -->
+      <h2>Customer Reviews</h2>
+      
+      <div class="review-carousel">
+        <div class="carousel-arrow carousel-prev">
+          <i class="fas fa-chevron-left"></i>
+        </div>
+        
+        <div class="review-slides">
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Sarah K.</div>
+                <div class="review-date">Visited March 2024</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"What a delightful discovery! After spending the morning exploring the Kitano Ijinkan district, we stumbled upon this cafe in the transformed school building. The spring menu featuring sakura and strawberry desserts was absolutely stunning - both visually and in flavor. I loved how they preserved elements of the old school in the design. The staff was incredibly welcoming, and their English menu made ordering easy. The terrace seating with views of the historic neighborhood was the perfect setting to rest our feet while enjoying excellent coffee and treats."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Takumi M.</div>
+                <div class="review-date">Visited February 2024</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star-half-alt" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"As a Kobe resident, I've been watching the transformation of the old Kitano Elementary School with interest. The cafe has become one of my regular spots when I'm in the neighborhood. Their seasonal menu keeps things interesting, and the quality is consistently high. I appreciate that they've created a space that appeals to both locals and tourists without feeling too commercialized. The only small drawback is that it can get quite busy on weekends when many tourists visit the Kitano area, but weekday mornings are perfect for a quiet coffee and light meal."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Michael T.</div>
+                <div class="review-date">Visited January 2024</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="far fa-star" style="color: #ddd;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"We visited Kitano Cafe during our exploration of Kobe's historic districts. The setting is quite unique - you can still see elements of the old school building while enjoying modern cafe comforts. I tried their signature Kitano blend coffee and a seasonal dessert plate, both of which were excellent. The staff provided helpful recommendations on which Ijinkan houses to visit afterward. It's a bit of a walk up the hill from Sannomiya Station, but the cafe's location makes it a perfect stopping point during a day of sightseeing in the area. Free WiFi was a plus for planning the rest of our route."</p>
+          </div>
+        </div>
+        
+        <div class="carousel-arrow carousel-next">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+        
+        <div class="carousel-nav">
+          <div class="carousel-dot active"></div>
+          <div class="carousel-dot"></div>
+          <div class="carousel-dot"></div>
+        </div>
+      </div>
+      
+      <h2>Menu Highlights</h2>
+      
+      <p>Kitano Cafe's menu changes seasonally, showcasing fresh local ingredients and Kobe specialties. Here are some standout offerings:</p>
+      
+      <ul>
+        <li><strong>Kitano Breakfast Set (¥1,500)</strong> - A hearty morning offering featuring freshly baked bread from the in-house bakery, eggs prepared to your preference, seasonal fruit, and Kobe coffee</li>
+        <li><strong>Seasonal Afternoon Tea Set (¥2,400)</strong> - A selection of sweet and savory items that showcase the flavors of the season, arranged beautifully on a tiered stand</li>
+        <li><strong>Kobe Beef Mini Sandwich (¥1,800)</strong> - A small but luxurious taste of Kobe's famous beef, served with light accompaniments and truffle salt</li>
+        <li><strong>Homemade Seasonal Tart (¥680)</strong> - Featuring the best fruits of the season in a buttery, perfectly baked crust</li>
+        <li><strong>Nosta Blend Coffee (¥580)</strong> - A custom blend created specifically for the cafe by local roasters</li>
+        <li><strong>Kitano Sunset (¥980)</strong> - A signature non-alcoholic cocktail that changes its recipe seasonally</li>
+      </ul>
+      
+      <div class="review-section">
+        <h2>Eastworld's Review</h2>
+        
+        <h3>Food Quality: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>Kitano Cafe excels with a thoughtfully prepared menu that balances quality with accessibility. While not pushing culinary boundaries, they execute their offerings with precision and attention to detail. Seasonal specials are particularly noteworthy for their fresh flavors and beautiful presentation.</p>
+        
+        <h3>Atmosphere: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>The cafe's setting in a repurposed historic school building creates a unique atmosphere that perfectly complements the Kitano district's character. The preservation of architectural elements alongside modern design touches strikes an ideal balance, while terrace seating offers lovely views of the surrounding area.</p>
+        
+        <h3>Service: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>Staff are attentive and knowledgeable about both the menu and the surrounding area, making them valuable resources for tourists. English menus and some English-speaking staff make this an accessible option for international visitors. Service can slow slightly during peak tourist times.</p>
+        
+        <h3>Value: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>While prices reflect the cafe's prime location in a tourist area, the quality and setting justify the cost. The afternoon tea set in particular offers excellent value considering the quantity and quality of items included.</p>
+        
+        <h3>Location: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Situated perfectly for visitors exploring the Kitano Ijinkan district, the cafe provides an ideal rest stop during sightseeing. Its position within the larger Nosta complex allows visitors to experience multiple aspects of Kobe's food culture in one location.</p>
+        
+        <h3>Overall: <span style="color: #FFD700;">★★★★½</span></h3>
+        <p>Kitano Cafe offers a quintessential Kobe experience, blending the city's international influences with Japanese hospitality in a historically significant setting. For visitors to the Kitano district, it provides not just refreshment but an attraction in its own right as part of the innovative Nosta complex.</p>
+      </div>
+      
+      <h2>Tips for Visitors</h2>
+      
+      <ul>
+        <li>Visit on weekday mornings for a quieter experience with minimal wait times</li>
+        <li>The cafe can be reached via a 15-minute uphill walk from Sannomiya Station or a 10-minute walk from Shin-Kobe Station</li>
+        <li>Consider visiting as part of a broader exploration of the Kitano Ijinkan district, which features historic foreign residences</li>
+        <li>The terrace seating is particularly pleasant during spring and autumn months</li>
+        <li>Free WiFi is available, making this a good spot to plan the rest of your Kobe itinerary</li>
+        <li>If you're driving, parking is available on-site with validation for cafe customers (30 minutes free with purchases over ¥500, 1 hour free with purchases over ¥3,000)</li>
+        <li>While the cafe doesn't accept reservations, visiting before 11 AM or after 3 PM typically means shorter wait times</li>
+        <li>The entire facility is wheelchair accessible with elevator access to all levels</li>
+      </ul>
+      
+      <!-- Visitor Information -->
+      <div id="visitor-info" class="review-section">
+        <h2>Visitor Information</h2>
+        <p>Here's what you need to know when planning your visit to Kitano Cafe:</p>
+        
+        <h3>Location & Access:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Address: 3-17-1 Nakayamate-dori, Chuo Ward, Kobe 650-0004, Japan</li>
+          <li>Located within the Kobe Kitano Nosta complex (former Kitano Elementary School)</li>
+          <li>15-minute walk from Sannomiya Station or 10-minute walk from Shin-Kobe Station</li>
+          <li>City buses also stop nearby at "Kitano Ijinkan-mae" bus stop</li>
+        </ul>
+        
+        <h3>Hours of Operation:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Open daily from 10:00 AM to 6:00 PM</li>
+          <li>Closed during New Year holidays</li>
+          <li>Last orders are typically taken 30 minutes before closing</li>
+        </ul>
+        
+        <h3>Facilities:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Wheelchair accessible with elevator access</li>
+          <li>Free WiFi available throughout the cafe</li>
+          <li>High chairs available for young children</li>
+          <li>Baby changing facilities in restrooms</li>
+          <li>Parking available (fees apply with validation options)</li>
+          <li>Terrace seating available (weather permitting)</li>
+          <li>Pet-friendly only in terrace areas</li>
+        </ul>
+        
+        <h3>Additional Information:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>No reservations accepted (walk-in only)</li>
+          <li>English menus available</li>
+          <li>Credit cards accepted</li>
+          <li>The cafe is non-smoking (including terrace areas)</li>
+          <li>Official website: <a href="https://kobekitano-nosta.jp/" target="_blank" style="color: #ff4d4d;">https://kobekitano-nosta.jp/</a></li>
+        </ul>
+        
+        <p>After enjoying Kitano Cafe, we recommend exploring the surrounding Kitano Ijinkan district, home to beautifully preserved foreign residences that showcase Kobe's international heritage. The picturesque area offers stunning views of the city and port, particularly from the higher points in the neighborhood.</p>
+      </div>
+      
+      <a href="../food.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Food Guide</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Review carousel functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const slides = document.querySelector('.review-slides');
+      const dots = document.querySelectorAll('.carousel-dot');
+      const prevBtn = document.querySelector('.carousel-prev');
+      const nextBtn = document.querySelector('.carousel-next');
+      let currentSlide = 0;
+      const totalSlides = document.querySelectorAll('.review-slide').length;
+      
+      // Function to update slide position
+      function showSlide(index) {
+        if (index < 0) index = totalSlides - 1;
+        if (index >= totalSlides) index = 0;
+        
+        currentSlide = index;
+        slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+        
+        // Update active dot
+        dots.forEach((dot, i) => {
+          dot.classList.toggle('active', i === currentSlide);
+        });
+      }
+      
+      // Set up event listeners for dots
+      dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => showSlide(i));
+      });
+      
+      // Set up event listeners for arrows
+      prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
+      nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
+      
+      // Auto-rotate slides every 5 seconds
+      setInterval(() => {
+        showSlide(currentSlide + 1);
+      }, 5000);
+    });
+  </script>
+  
+  <script src="../script.js"></script>
+</body>
+</html> 

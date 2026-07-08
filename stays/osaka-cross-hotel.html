@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cross Hotel Osaka - Eastworld Hotel Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Additional styles specific to hotel reviews */
+    .hotel-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+      .hotel-info {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .hotel-details {
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .detail-row {
+      display: flex;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+    }
+    
+    .detail-label {
+      font-weight: 600;
+      min-width: 120px;
+      color: #333;
+    }
+    
+    .detail-value {
+      flex: 1;
+      color: #555;
+    }
+    
+    .rating {
+      margin-bottom: 1rem;
+    }
+    
+    .star {
+      color: #ddd;
+      font-size: 1.5rem;
+    }
+    
+    .star.filled {
+      color: #FFD700;
+    }
+    
+    .half-star {
+      position: relative;
+    }
+    
+    .half-star .fas.fa-star-half {
+      color: #FFD700;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    
+    .score-label {
+      margin-left: 0.5rem;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .map-container {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .map-container iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+    }
+    
+    .photos-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .photo-item {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .photo-item img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+    }
+    
+    /* Review Categories - NEW FEATURE */
+    .review-categories {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      border-bottom: 2px solid #eee;
+    }
+    
+    .category-tab {
+      padding: 1rem 2rem;
+      background: #f5f5f5;
+      border: none;
+      border-radius: 8px 8px 0 0;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      color: #666;
+    }
+    
+    .category-tab.active {
+      background: #ff4d4d;
+      color: white;
+      transform: translateY(2px);
+    }
+    
+    .category-tab:hover:not(.active) {
+      background: #e0e0e0;
+    }
+    
+    .review-content {
+      display: none;
+    }
+    
+    .review-content.active {
+      display: block;
+    }
+    
+    .category-intro {
+      background: linear-gradient(135deg, #ff4d4d, #ff6b6b);
+      color: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+    
+    .category-intro h3 {
+      margin: 0 0 0.5rem 0;
+      font-size: 1.3rem;
+    }
+    
+    .category-intro p {
+      margin: 0;
+      opacity: 0.9;
+    }
+    
+    .review-carousel {
+      position: relative;
+      overflow: hidden;
+      margin: 2rem 0;
+    }
+    
+    .review-slides {
+      display: flex;
+      transition: transform 0.3s ease;
+    }
+    
+    .review-slide {
+      min-width: 100%;
+      padding: 2rem;
+      background: #fafafa;
+      border-radius: 8px;
+      margin-right: 1rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .reviewer-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      gap: 1rem;
+    }
+    
+    .reviewer-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ff4d4d, #ff6b6b);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+    
+    .reviewer-name {
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: #333;
+    }
+    
+    .review-date {
+      color: #888;
+      font-size: 0.9rem;
+    }
+    
+    .review-rating {
+      margin-top: 0.25rem;
+    }
+    
+    .review-rating i {
+      font-size: 0.8rem;
+      margin-right: 2px;
+    }
+    
+    .carousel-nav {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+    
+    .carousel-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ddd;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .carousel-dot.active {
+      background: #ff4d4d;
+    }
+    
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.7);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+    
+    .carousel-prev {
+      left: 10px;
+    }
+    
+    .carousel-next {
+      right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../food.html" class="nav-item">FOOD</a>
+        <a href="../stays.html" class="nav-item active">STAYS</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="content-container">
+    <div class="content-header">
+      <span class="content-category">DESIGN HOTEL</span>
+      <h1 class="content-title">Cross Hotel Osaka - Trendy Design in Dotonbori</h1>
+      
+      <!-- Rating Section -->
+      <div class="rating">
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star half-star">
+          <i class="far fa-star"></i>
+          <i class="fas fa-star-half"></i>
+        </span>
+        <span class="score-label">4.3/5.0</span>
+      </div>
+    </div>
+    
+    <div class="hero-container">
+      <img class="content-hero" src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1a/f6/e4/35/cross-hotel-osaka.jpg" alt="Cross Hotel Osaka Exterior" 
+      onerror="this.onerror=null; 
+      this.parentElement.innerHTML = '<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#333;color:white;font-size:1.5rem;text-align:center;padding:2rem;\'>Cross Hotel Osaka</div>';">
+    </div>
+    
+    <!-- Booking Button -->
+    <a href="#booking-form" class="booking-button">
+      <i class="fas fa-calendar-alt"></i> BOOK YOUR STAY
+    </a>
+    
+    <!-- Hotel Information Section -->
+    <div class="hotel-info">
+      <div class="hotel-details">
+        <h2>Hotel Details</h2>
+        
+        <div class="detail-row">
+          <div class="detail-label">Address:</div>
+          <div class="detail-value">2-5-15 Shinsaibashi-suji, Chuo-ku, Osaka 542-0085, Japan</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Check-in:</div>
+          <div class="detail-value">3:00 PM</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Check-out:</div>
+          <div class="detail-value">11:00 AM</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Phone:</div>
+          <div class="detail-value">+81 6-6213-8281</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Price Range:</div>
+          <div class="detail-value">$140-220 per night</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Style:</div>
+          <div class="detail-value">Contemporary Design Hotel</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Amenities:</div>
+          <div class="detail-value">Free WiFi, Fitness Center, Restaurant, Bar, Concierge</div>
+        </div>
+        
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">How to Get There</h3>
+        <p>From Kansai Airport:</p>
+        <ul style="margin-bottom: 1rem; padding-left: 1.5rem;">
+          <li>Take Airport Express to Namba Station (45 minutes)</li>
+          <li>Walk 5 minutes to Shinsaibashi</li>
+          <li>Hotel is directly connected to Shinsaibashi Station (Exit 7)</li>
+        </ul>
+      </div>
+      
+      <div class="map-container">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3281.0983661234567!2d135.49827531525!3d34.668344780422!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6000e713729ba5df%3A0x234567890abcdef!2sCross%20Hotel%20Osaka!5e0!3m2!1sen!2sjp!4v1693320290086!5m2!1sen!2sjp" 
+        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+    
+    <div class="content-text">
+      <h2>Contemporary Design Meets Osaka Energy</h2>
+      
+      <p>Cross Hotel Osaka epitomizes the vibrant energy of modern Osaka with its sleek, contemporary design and prime location in the heart of Dotonbori. Opened in 2019, this design-forward hotel has quickly established itself as a favorite among travelers seeking style, comfort, and authenticity in Japan's kitchen.</p>
+      
+      <p>The hotel's architecture reflects Osaka's dynamic spirit through its bold geometric forms and striking use of natural materials. Each of the 285 rooms features floor-to-ceiling windows offering panoramic views of the bustling city below, while the interior design seamlessly blends Japanese aesthetics with international sophistication.</p>
+      
+      <div class="photos-container">
+        <div class="photo-item">
+          <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1a/f6/e4/40/cross-hotel-osaka-room.jpg" alt="Cross Hotel Osaka Room">
+        </div>
+        <div class="photo-item">
+          <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1a/f6/e4/45/cross-hotel-osaka-lobby.jpg" alt="Cross Hotel Osaka Lobby">
+        </div>
+        <div class="photo-item">
+          <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1a/f6/e4/50/cross-hotel-osaka-restaurant.jpg" alt="Cross Hotel Osaka Restaurant">
+        </div>
+        <div class="photo-item">
+          <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1a/f6/e4/55/cross-hotel-osaka-bar.jpg" alt="Cross Hotel Osaka Bar">
+        </div>
+      </div>
+      
+      <h2>In the Heart of Dotonbori</h2>
+      
+      <p>The hotel's location is unbeatable for experiencing authentic Osaka culture. Situated directly above Shinsaibashi Station, guests have immediate access to the city's extensive subway network while being steps away from the iconic Dotonbori district with its neon-lit entertainment quarter, street food vendors, and historic landmarks.</p>
+      
+      <p>The property features multiple dining options, including a signature restaurant showcasing modern Japanese cuisine and a rooftop bar offering stunning city views. The hotel's spa and fitness facilities provide a peaceful retreat from the bustling streets below, while the concierge team excels at helping guests discover both popular attractions and hidden local gems.</p>
+      
+      <div class="content-quote">
+        "We designed Cross Hotel Osaka to be more than just accommodation—it's a gateway to experiencing the authentic energy and culture of our incredible city." - Hotel Management
+      </div>
+      
+      <!-- REVIEWS WITH LOCAL VS TOURIST CATEGORIES -->
+      <h2>Guest Reviews</h2>
+      
+      <div class="review-categories">
+        <button class="category-tab active" onclick="showCategory('locals')">
+          <i class="fas fa-home"></i> Local Reviews
+        </button>
+        <button class="category-tab" onclick="showCategory('tourists')">
+          <i class="fas fa-plane"></i> Tourist Reviews
+        </button>
+      </div>
+      
+      <!-- LOCAL REVIEWS -->
+      <div id="locals" class="review-content active">
+        <div class="category-intro">
+          <h3><i class="fas fa-home"></i> Local Perspective</h3>
+          <p>Reviews from Osaka residents and frequent Japan travelers who know the city intimately</p>
+        </div>
+        
+        <div class="review-carousel" id="locals-carousel">
+          <div class="carousel-arrow carousel-prev" onclick="prevSlide('locals')">
+            <i class="fas fa-chevron-left"></i>
+          </div>
+          
+          <div class="review-slides">
+            <div class="review-slide">
+              <div class="reviewer-info">
+                <div class="reviewer-avatar">KT</div>
+                <div>
+                  <div class="reviewer-name">Kenji T. - Osaka Resident</div>
+                  <div class="review-date">Stayed December 2023</div>
+                  <div class="review-rating">
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="far fa-star" style="color: #ddd;"></i>
+                  </div>
+                </div>
+              </div>
+              <p>"As someone who's lived in Osaka for 15 years, I was skeptical about staying at a hotel in my own city, but Cross Hotel really impressed me. The location is perfect—I could walk to work in Namba, yet it felt like a complete escape from daily routine. The staff's knowledge of local spots was exceptional; they recommended a hidden yakitori place in Shinsekai that even I didn't know about. The soundproofing is remarkable considering you're literally above one of the busiest shopping districts. Only downside is the breakfast gets repetitive if you're staying longer than 3 days."</p>
+            </div>
+            
+            <div class="review-slide">
+              <div class="reviewer-info">
+                <div class="reviewer-avatar">MS</div>
+                <div>
+                  <div class="reviewer-name">Miyuki S. - Kyoto Resident</div>
+                  <div class="review-date">Stayed November 2023</div>
+                  <div class="review-rating">
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                  </div>
+                </div>
+              </div>
+              <p>"I frequently visit Osaka for business and have stayed at most hotels in the area. Cross Hotel offers the best balance of modern amenities and authentic local access. The direct station connection is a game-changer during busy periods or bad weather. The concierge team actually consists of locals who provide genuinely useful recommendations, not just tourist traps. Room design is thoughtful—great work space, excellent lighting, and the bathroom amenities are top-notch. The rooftop bar has become my go-to spot for client meetings."</p>
+            </div>
+            
+            <div class="review-slide">
+              <div class="reviewer-info">
+                <div class="reviewer-avatar">HN</div>
+                <div>
+                  <div class="reviewer-name">Hiroshi N. - Tokyo Business Traveler</div>
+                  <div class="review-date">Stayed October 2023</div>
+                  <div class="review-rating">
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star-half-alt" style="color: #FFD700;"></i>
+                  </div>
+                </div>
+              </div>
+              <p>"Having stayed at Cross Hotels in other cities, I had high expectations, and this location delivers. The integration with Shinsaibashi Station is seamless—crucial for my tight business schedule. What impressed me most was how the hotel balances catering to international guests while maintaining authentic Japanese service standards. The fitness center is small but well-equipped. The only minor issue is that some rooms facing the main street can be noisy during peak hours, despite the soundproofing."</p>
+            </div>
+          </div>
+          
+          <div class="carousel-arrow carousel-next" onclick="nextSlide('locals')">
+            <i class="fas fa-chevron-right"></i>
+          </div>
+          
+          <div class="carousel-nav">
+            <div class="carousel-dot active"></div>
+            <div class="carousel-dot"></div>
+            <div class="carousel-dot"></div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- TOURIST REVIEWS -->
+      <div id="tourists" class="review-content">
+        <div class="category-intro">
+          <h3><i class="fas fa-plane"></i> Tourist Experience</h3>
+          <p>Reviews from international visitors experiencing Osaka for the first time</p>
+        </div>
+        
+        <div class="review-carousel" id="tourists-carousel">
+          <div class="carousel-arrow carousel-prev" onclick="prevSlide('tourists')">
+            <i class="fas fa-chevron-left"></i>
+          </div>
+          
+          <div class="review-slides">
+            <div class="review-slide">
+              <div class="reviewer-info">
+                <div class="reviewer-avatar">AM</div>
+                <div>
+                  <div class="reviewer-name">Alex M. - First-time Japan Visitor</div>
+                  <div class="review-date">Stayed January 2024</div>
+                  <div class="review-rating">
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                  </div>
+                </div>
+              </div>
+              <p>"Cross Hotel made our first trip to Japan absolutely magical! The location couldn't be better—we were literally in the center of everything. Walking out the front door, we were immediately immersed in the incredible energy of Dotonbori with all the neon signs, street food, and atmosphere we'd dreamed about. The staff was incredibly patient with our limited Japanese and provided excellent recommendations. The rooms are sleek and modern while still feeling authentically Japanese. The rooftop bar gave us amazing city views and great photo opportunities. Already planning our return stay!"</p>
+            </div>
+            
+            <div class="review-slide">
+              <div class="reviewer-info">
+                <div class="reviewer-avatar">SF</div>
+                <div>
+                  <div class="reviewer-name">Sarah F. - Solo Female Traveler</div>
+                  <div class="review-date">Stayed December 2023</div>
+                  <div class="review-rating">
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="far fa-star" style="color: #ddd;"></i>
+                  </div>
+                </div>
+              </div>
+              <p>"As a solo female traveler, I felt completely safe and comfortable at Cross Hotel. The location is perfect for exploring Osaka—everything is walkable, and the subway access makes day trips super easy. The concierge helped me book experiences I never would have found on my own, including a cooking class and a traditional tea ceremony. The room design is Instagram-worthy, and the amenities made me feel pampered. My only minor complaint is that the restaurant gets quite busy during breakfast hours, so I'd recommend eating early or late to avoid crowds."</p>
+            </div>
+            
+            <div class="review-slide">
+              <div class="reviewer-info">
+                <div class="reviewer-avatar">TR</div>
+                <div>
+                  <div class="reviewer-name">Tom & Rachel - Honeymoon Couple</div>
+                  <div class="review-date">Stayed November 2023</div>
+                  <div class="review-rating">
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star-half-alt" style="color: #FFD700;"></i>
+                  </div>
+                </div>
+              </div>
+              <p>"Cross Hotel was the perfect base for our Japan honeymoon! The modern, stylish rooms created a romantic atmosphere, and having Dotonbori right outside our window was like staying inside a movie. We loved being able to explore the street food scene at night and then retreat to the sophisticated hotel environment. The staff went above and beyond to make our stay special—they even helped us book last-minute dinner reservations at exclusive restaurants. The hotel perfectly balances contemporary luxury with authentic Japanese hospitality. We'll definitely be back for our anniversary!"</p>
+            </div>
+          </div>
+          
+          <div class="carousel-arrow carousel-next" onclick="nextSlide('tourists')">
+            <i class="fas fa-chevron-right"></i>
+          </div>
+          
+          <div class="carousel-nav">
+            <div class="carousel-dot active"></div>
+            <div class="carousel-dot"></div>
+            <div class="carousel-dot"></div>
+          </div>
+        </div>
+      </div>
+      
+      <h2>Room Categories</h2>
+      
+      <p>Cross Hotel Osaka offers thoughtfully designed accommodations across multiple categories:</p>
+      
+      <ul>
+        <li><strong>Cross Standard ($140-180/night)</strong> - Modern 25m² rooms with city views and contemporary Japanese design elements</li>
+        <li><strong>Cross Superior ($160-200/night)</strong> - Spacious 28m² rooms on higher floors with enhanced city panoramas</li>
+        <li><strong>Cross Deluxe ($180-220/night)</strong> - Premium 30m² corner rooms featuring extra seating area and panoramic windows</li>
+        <li><strong>Cross Suite ($280-350/night)</strong> - Luxurious 45m² suites with separate living area and exclusive amenities</li>
+      </ul>
+      
+      <div class="review-section">
+        <h2>Eastworld's Review</h2>
+        
+        <h3>Location: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Unbeatable location directly connected to Shinsaibashi Station and in the heart of Dotonbori. Perfect access to transportation, dining, and entertainment.</p>
+        
+        <h3>Design & Comfort: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Exceptional contemporary design that balances modern sophistication with Japanese aesthetics. Rooms are well-appointed with thoughtful details and premium amenities.</p>
+        
+        <h3>Service: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>Professional, knowledgeable staff with excellent local expertise. Concierge service excels at both tourist attractions and hidden local gems.</p>
+        
+        <h3>Facilities: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>Well-equipped fitness center, excellent dining options, and impressive rooftop bar. Facilities are modern and well-maintained, though not extensive.</p>
+        
+        <h3>Value: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>Excellent value considering the prime location and quality of accommodations. Pricing is competitive for the level of service and amenities provided.</p>
+        
+        <h3>Overall: <span style="color: #FFD700;">★★★★☆</span></h3>
+        <p>Cross Hotel Osaka successfully delivers a premium design hotel experience in one of Japan's most vibrant destinations. The perfect choice for travelers seeking modern comfort with authentic cultural immersion.</p>
+      </div>
+      
+      <h2>Tips for Guests</h2>
+      
+      <ul>
+        <li>Book rooms on higher floors for better views and reduced street noise</li>
+        <li>Take advantage of the direct station connection during busy periods</li>
+        <li>Visit the rooftop bar during sunset for stunning city views</li>
+        <li>Ask concierge for local restaurant recommendations beyond typical tourist spots</li>
+        <li>The hotel provides excellent maps and area guides in multiple languages</li>
+        <li>Early morning or late evening are best times to explore Dotonbori with fewer crowds</li>
+        <li>Consider the breakfast buffet—it offers both Western and Japanese options</li>
+      </ul>
+      
+      <!-- Booking Form -->
+      <div id="booking-form" class="review-section">
+        <h2>Booking Information</h2>
+        <p>Reserve your stay at Cross Hotel Osaka through multiple convenient options:</p>
+        
+        <h3>Direct Booking:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Phone: +81 6-6213-8281</li>
+          <li>Email: <a href="mailto:info@crosshotel-osaka.com" style="color: #ff4d4d;">info@crosshotel-osaka.com</a></li>
+          <li>Website: <a href="https://www.crosshotel-osaka.com" target="_blank" style="color: #ff4d4d;">www.crosshotel-osaka.com</a></li>
+        </ul>
+        
+        <h3>Online Booking Platforms:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Hotel's official website (best rates guarantee)</li>
+          <li>Major booking platforms with competitive pricing</li>
+          <li>Eastworld partner booking (exclusive member rates)</li>
+        </ul>
+        
+        <p>For assistance with reservations or special requests, contact the Eastworld concierge service at <a href="mailto:concierge@eastworld.com" style="color: #ff4d4d;">concierge@eastworld.com</a>.</p>
+      </div>
+      
+      <a href="../stays.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Stays Guide</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Review category switching
+    function showCategory(category) {
+      // Hide all content
+      document.querySelectorAll('.review-content').forEach(content => {
+        content.classList.remove('active');
+      });
+      
+      // Remove active from all tabs
+      document.querySelectorAll('.category-tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      
+      // Show selected content
+      document.getElementById(category).classList.add('active');
+      
+      // Add active to selected tab
+      event.target.classList.add('active');
+    }
+
+    // Carousel functionality for each category
+    const carousels = {
+      locals: { currentSlide: 0, totalSlides: 3 },
+      tourists: { currentSlide: 0, totalSlides: 3 }
+    };
+
+    function showSlide(category, index) {
+      const carousel = carousels[category];
+      if (index < 0) index = carousel.totalSlides - 1;
+      if (index >= carousel.totalSlides) index = 0;
+      
+      carousel.currentSlide = index;
+      const slides = document.querySelector(`#${category}-carousel .review-slides`);
+      slides.style.transform = `translateX(-${carousel.currentSlide * 100}%)`;
+      
+      // Update active dot
+      const dots = document.querySelectorAll(`#${category}-carousel .carousel-dot`);
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === carousel.currentSlide);
+      });
+    }
+
+    function prevSlide(category) {
+      showSlide(category, carousels[category].currentSlide - 1);
+    }
+
+    function nextSlide(category) {
+      showSlide(category, carousels[category].currentSlide + 1);
+    }
+
+    // Set up event listeners for dots
+    document.addEventListener('DOMContentLoaded', function() {
+      ['locals', 'tourists'].forEach(category => {
+        const dots = document.querySelectorAll(`#${category}-carousel .carousel-dot`);
+        dots.forEach((dot, i) => {
+          dot.addEventListener('click', () => showSlide(category, i));
+        });
+      });
+    });
+  </script>
+  
+  <script src="../script.js"></script>
+</body>
+</html> 

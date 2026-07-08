@@ -1,0 +1,12 @@
+{
+  "name": "eastworld-v1",
+  "version": "1.0.0",
+  "description": "Eastworld travel and lifestyle platform - Frontend only",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["travel", "asia", "eastworld"],
+  "author": "",
+  "license": "ISC"
+}

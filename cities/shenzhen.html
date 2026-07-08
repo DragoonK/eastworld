@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shenzhen - Innovation Hub of China | Eastworld</title>
+  <meta name="description" content="Explore Shenzhen, China's Silicon Valley and innovation powerhouse. Discover tech tourism, cultural attractions, shopping, and dining in this modern megacity.">
+  
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Inline CSS - All styles are included here -->
+  <style>
+    /* Reset and Base Styles */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px; /* Base font size */
+    }
+
+    :root {
+      --primary-color: #ff4d4d;
+      --secondary-color: #2b88d9;
+      --text-color-light: #333;
+      --bg-color-light: #fff;
+      --card-bg-light: #fff;
+      --header-bg-light: rgba(255, 255, 255, 0.9);
+      --section-bg-light: #f8f9fa;
+      --section-alt-bg-light: #fff;
+      --border-color-light: #eaeaea;
+      --shadow-color-light: rgba(0, 0, 0, 0.1);
+
+      --text-color-dark: #f0f0f0;
+      --bg-color-dark: #121212;
+      --card-bg-dark: #1e1e1e;
+      --header-bg-dark: rgba(18, 18, 18, 0.9);
+      --section-bg-dark: #1a1a1a;
+      --section-alt-bg-dark: #242424;
+      --border-color-dark: #333;
+      --shadow-color-dark: rgba(0, 0, 0, 0.4);
+      
+      --transition-speed: 0.3s ease;
+      --scroll-padding-top: 80px; /* Offset for fixed header/nav */
+      
+      /* Default to light mode variables */
+      --text-color: var(--text-color-light);
+      --bg-color: var(--bg-color-light);
+      --card-bg: var(--card-bg-light);
+      --header-bg: var(--header-bg-light);
+      --section-bg: var(--section-bg-light);
+      --section-alt-bg: var(--section-alt-bg-light);
+      --border-color: var(--border-color-light);
+      --shadow-color: var(--shadow-color-light);
+    }
+
+    html {
+        scroll-padding-top: var(--scroll-padding-top);
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: var(--text-color);
+      background-color: var(--bg-color);
+      line-height: 1.6;
+      transition: background-color var(--transition-speed), color var(--transition-speed);
+      padding-top: 60px; /* Space for the fixed nav */
+      overflow-x: hidden; /* Prevent horizontal scroll */
+    }
+
+    body.dark-mode {
+      --text-color: var(--text-color-dark);
+      --bg-color: var(--bg-color-dark);
+      --card-bg: var(--card-bg-dark);
+      --header-bg: var(--header-bg-dark);
+      --section-bg: var(--section-bg-dark);
+      --section-alt-bg: var(--section-alt-bg-dark);
+      --border-color: var(--border-color-dark);
+      --shadow-color: var(--shadow-color-dark);
+    }
+    
+    img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    /* --- Main Navigation (Copied from potential global style.css) --- */
+    .main-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 2rem;
+      height: 60px;
+      background-color: var(--header-bg);
+      border-bottom: 1px solid var(--border-color);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1001;
+      transition: background-color var(--transition-speed), border-color var(--transition-speed);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .nav-left, .nav-right { display: flex; align-items: center; gap: 0.7rem; }
+    .nav-item { color: var(--text-color); text-decoration: none; font-weight: 500; font-size: 0.85rem; letter-spacing: 0.05em; transition: color var(--transition-speed); padding: 0.3rem 0; }
+    .nav-item:hover { color: var(--primary-color); }
+    .logo { text-align: center; }
+    .logo a { text-decoration: none; }
+    .logo h1 { margin: 0; font-size: 1.2rem; letter-spacing: 0.1em; color: var(--text-color); transition: color var(--transition-speed); }
+    .logo a:hover h1 { color: var(--primary-color); }
+    .nav-divider { height: 20px; width: 1px; background-color: var(--border-color); transition: background-color var(--transition-speed); }
+    .login-register-stack { display: flex; gap: 0.7rem; }
+    .pyt-ai-btn { font-weight: 600; color: var(--primary-color) !important; }
+    .nav-item.active { font-weight: 700; color: var(--primary-color); border-bottom: 2px solid var(--primary-color); padding-bottom: calc(0.3rem - 2px); }
+    .search-icon i { font-size: 1rem; }
+    /* --- End Main Navigation --- */
+
+
+    /* Shenzhen guide specific styling */
+    .shenzhen-guide {
+      position: relative;
+    }
+
+    /* Hero header with parallax effect */
+    .hero-header {
+      height: calc(100vh - 60px); /* Adjust height for fixed nav */
+      min-height: 500px;
+      position: relative; /* Crucial for absolute positioning of children */
+      overflow: hidden; /* Prevent content spill */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #333; /* Fallback background */
+    }
+
+    .hero-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1; /* Behind content */
+      /* Parallax transform applied by JS */
+    }
+
+    .hero-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* Cover the area, might crop */
+      filter: brightness(0.7);
+      display: block; /* Remove potential space below image */
+    }
+
+    .hero-content {
+      position: relative; /* Needs to be relative or absolute to use z-index */
+      z-index: 2; /* Above image */
+      text-align: center;
+      color: white;
+      padding: 2rem;
+      max-width: 90%; /* Use percentage for responsiveness */
+      width: 800px; /* Max width */
+      text-shadow: 1px 1px 8px rgba(0, 0, 0, 0.7); /* Adjusted shadow */
+      /* Parallax transform and opacity applied by JS */
+    }
+
+    .hero-content h1 {
+      font-size: clamp(2.5rem, 8vw, 5rem); /* Responsive font size */
+      margin-bottom: 1rem;
+      letter-spacing: 0.05em; /* Slightly reduced spacing */
+      font-weight: 800;
+    }
+
+    .hero-content p {
+      font-size: clamp(1.1rem, 4vw, 1.5rem); /* Responsive font size */
+      font-weight: 300;
+    }
+
+    /* Dark mode toggle */
+    .dark-mode-toggle {
+      position: fixed;
+      top: 80px; 
+      right: 20px;
+      z-index: 1000; 
+      width: 45px; 
+      height: 45px;
+      border-radius: 50%;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color); 
+      box-shadow: 0 2px 10px var(--shadow-color);
+      color: var(--text-color);
+      font-size: 1.3rem; 
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color var(--transition-speed), color var(--transition-speed), border-color var(--transition-speed), transform var(--transition-speed);
+    }
+    .dark-mode-toggle:hover { transform: scale(1.1); background-color: var(--section-bg); }
+
+    /* Quick navigation */
+    .quick-nav {
+      position: sticky;
+      top: 60px; 
+      z-index: 100; 
+      background-color: var(--header-bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      padding: 0.8rem 1rem; /* Adjusted padding */
+      box-shadow: 0 2px 10px var(--shadow-color);
+      transition: background-color var(--transition-speed);
+      border-bottom: 1px solid var(--border-color);
+    }
+    .quick-nav a { color: var(--text-color); text-decoration: none; margin: 0.3rem 0.8rem; padding: 0.4rem 0.9rem; border-radius: 20px; font-weight: 500; font-size: 0.9rem; transition: all var(--transition-speed); display: flex; align-items: center; gap: 0.5rem; border: 1px solid transparent; }
+    .quick-nav a:hover { background-color: var(--primary-color); color: white; border-color: var(--primary-color); transform: translateY(-2px); }
+    .quick-nav a i { font-size: 0.8em; }
+
+    /* Main content container */
+    .content-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem; 
+    }
+
+    /* Section styling */
+    .content-section {
+      margin-bottom: 4rem; 
+      opacity: 0; /* Start hidden for animation */
+      transform: translateY(30px); /* Start slightly lower for animation */
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+      visibility: hidden; /* Hide until visible */
+    }
+    .content-section.visible {
+      opacity: 1;
+      transform: translateY(0);
+      visibility: visible; /* Make visible */
+    }
+    .section-inner { background-color: var(--section-bg); border-radius: 16px; padding: clamp(1.5rem, 5vw, 3rem); box-shadow: 0 8px 25px var(--shadow-color); transition: background-color var(--transition-speed), box-shadow var(--transition-speed); border: 1px solid var(--border-color); }
+    .section-inner h2 { font-size: clamp(1.8rem, 6vw, 2.5rem); margin-bottom: 2rem; padding-bottom: 0.5rem; position: relative; display: inline-block; font-weight: 700; }
+    .section-inner h2:after { content: ''; position: absolute; bottom: 0; left: 0; width: 60px; height: 3px; background-color: var(--primary-color); }
+    .section-intro { font-size: clamp(1rem, 3vw, 1.1rem); margin-bottom: 2.5rem; max-width: 800px; color: var(--text-color); opacity: 0.9; }
+
+    /* Two column layout */
+    .two-column { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 2.5rem; align-items: start; }
+
+    /* Stats styling */
+    .stats-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1.5rem; }
+    .stat-item { background-color: var(--card-bg); padding: 1.2rem; border-radius: 12px; text-align: center; box-shadow: 0 4px 15px var(--shadow-color); transition: transform var(--transition-speed), background-color var(--transition-speed), box-shadow var(--transition-speed); border: 1px solid var(--border-color); }
+    .stat-item:hover { transform: translateY(-5px); box-shadow: 0 8px 20px var(--shadow-color); }
+    .stat-item h3 { font-size: clamp(1.5rem, 5vw, 2rem); color: var(--primary-color); margin: 0 0 0.3rem 0; font-weight: 700; }
+    .stat-item p { margin: 0; font-size: 0.9rem; opacity: 0.8; }
+
+    /* --- Card Styles (Districts, Food, Attractions, Tech) --- */
+    .districts-grid, .food-grid, .attractions-slider, .tech-companies-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.5rem; }
+    .food-grid { grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr)); } /* Food card specific adjustment */
+    .tech-companies-grid { grid-template-columns: repeat(auto-fill, minmax(min(250px, 100%), 1fr)); }
+    
+    .district-card, .food-card, .attraction-card, .tech-company-card { background-color: var(--card-bg); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px var(--shadow-color); transition: transform var(--transition-speed), box-shadow var(--transition-speed), background-color var(--transition-speed); display: flex; flex-direction: column; border: 1px solid var(--border-color); }
+    .district-card:hover, .food-card:hover, .attraction-card:hover, .tech-company-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px var(--shadow-color); }
+    
+    /* Card Content */
+    .district-card h3, .food-card h3, .attraction-card h3, .tech-company-card h4 { padding: 1rem 1.5rem 0.5rem; font-size: 1.3rem; margin: 0; font-weight: 600; }
+    .tech-company-card h4 { font-size: 1.2rem; } /* Slightly smaller */
+    .district-card p, .food-card p, .attraction-card p, .tech-company-card p { padding: 0 1.5rem 1.5rem; color: var(--text-color); opacity: 0.9; margin: 0; font-size: 0.95rem; flex-grow: 1; }
+
+    /* Image hover effects */
+    .hover-image-container { position: relative; overflow: hidden; aspect-ratio: 16 / 10; background-color: var(--section-alt-bg); }
+    .hover-image-container img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease-out; }
+    .hover-image-container:hover img { transform: scale(1.08); }
+    .image-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 40%, rgba(0,0,0,0) 100%); opacity: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 1rem; transition: opacity 0.4s ease-out; color: white; text-shadow: 1px 1px 3px rgba(0,0,0,0.7); }
+    .hover-image-container:hover .image-overlay { opacity: 1; }
+    .image-overlay ul { list-style: none; padding: 0; margin: 0; }
+    .image-overlay ul li { margin-bottom: 0.3rem; font-size: 0.85rem; line-height: 1.3; }
+    .image-overlay ul li:last-child { margin-bottom: 0; }
+    .image-overlay p { color: white; margin: 0; padding: 0; font-size: 0.9rem; font-weight: 500; }
+    .image-overlay p i { margin-right: 0.3em; }
+    /* --- End Card Styles --- */
+
+
+    /* Transport section */
+    .transport-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 2rem; align-items: center; }
+    .transport-image { border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px var(--shadow-color); aspect-ratio: 16/10; }
+    .transport-image img { width: 100%; height: 100%; object-fit: cover; }
+    .transport-info { display: flex; flex-direction: column; gap: 1rem; } /* Reduced gap */
+    .transport-method { background-color: var(--card-bg); padding: 1rem 1.2rem; border-radius: 8px; border: 1px solid var(--border-color); transition: background-color var(--transition-speed), border-color var(--transition-speed); }
+    .transport-method h3 { display: flex; align-items: center; gap: 0.6rem; margin: 0 0 0.5rem 0; font-size: 1.1rem; color: var(--primary-color); font-weight: 600; }
+    .transport-method p { margin: 0; font-size: 0.95rem; opacity: 0.9; }
+
+    /* Local Dishes */
+    .food-section { margin-bottom: 3rem; } /* Add margin below food cards */
+    .local-dishes { background-color: var(--card-bg); border-radius: 12px; padding: 2rem; box-shadow: 0 4px 15px var(--shadow-color); transition: background-color var(--transition-speed); border: 1px solid var(--border-color); margin-top: 2rem; }
+    .local-dishes h3 { margin: 0 0 1.5rem 0; font-size: 1.5rem; font-weight: 600; }
+    .dishes-list { list-style-position: inside; padding: 0; margin: 0; columns: 2; gap: 2rem; }
+    .dishes-list li { margin-bottom: 0.8rem; font-size: 0.95rem; }
+    .dishes-list li strong { font-weight: 600; }
+
+    /* Tech Tourism */
+    .tech-tourism { margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border-color); }
+    .tech-tourism h3 { font-size: 1.5rem; margin: 0 0 1rem 0; font-weight: 600; }
+    .tech-tourism > p { margin: 0 0 2rem 0; font-size: 1.1rem; opacity: 0.9; }
+
+    /* Shopping section */
+    .shopping-areas { display: flex; flex-direction: column; gap: 2rem; }
+    .shopping-area { display: grid; grid-template-columns: 1fr 2fr; gap: 1.5rem; background-color: var(--card-bg); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px var(--shadow-color); transition: background-color var(--transition-speed), border-color var(--transition-speed); border: 1px solid var(--border-color); }
+    .shopping-area img { width: 100%; height: 100%; object-fit: cover; }
+    .shopping-info { padding: 1.5rem; }
+    .shopping-info h3 { margin: 0 0 1rem 0; font-size: 1.3rem; font-weight: 600; }
+    .shopping-info p { margin: 0 0 1rem 0; font-size: 0.95rem; opacity: 0.9; }
+    .shopping-info p:last-child { margin-bottom: 0; }
+    .shopping-info p strong { font-weight: 600; }
+
+    /* Accommodation section */
+    .accommodation-options { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr)); gap: 1.5rem; }
+    .accommodation-category { background-color: var(--card-bg); border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 15px var(--shadow-color); transition: background-color var(--transition-speed), border-color var(--transition-speed); border: 1px solid var(--border-color); }
+    .accommodation-category h3 { margin: 0 0 1rem 0; font-size: 1.3rem; color: var(--primary-color); font-weight: 600; }
+    .accommodation-category ul { list-style: none; padding: 0; margin: 0; }
+    .accommodation-category li { margin-bottom: 1rem; font-size: 0.95rem; padding-left: 1.5em; position: relative; }
+    .accommodation-category li::before { content: '\f005'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; left: 0; top: 0.1em; color: var(--primary-color); font-size: 0.8em; }
+    .accommodation-category li strong { font-weight: 600; display: block; margin-bottom: 0.2em; }
+    .accommodation-category li:last-child { margin-bottom: 0; }
+    .accommodation-tips { grid-column: 1 / -1; background-color: var(--section-alt-bg); border-radius: 12px; padding: 1.5rem; margin-top: 1.5rem; box-shadow: 0 4px 15px var(--shadow-color); transition: background-color var(--transition-speed), border-color var(--transition-speed); border: 1px solid var(--border-color); }
+    .accommodation-tips h4 { margin: 0 0 1rem 0; font-size: 1.2rem; color: var(--primary-color); font-weight: 600; }
+    .accommodation-tips ul { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 1rem; list-style: none; padding: 0; margin: 0; }
+    .accommodation-tips li { font-size: 0.95rem; padding-left: 1.5em; position: relative; margin-bottom: 0.5rem; } /* Added margin */
+    .accommodation-tips li::before { content: '\f058'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; left: 0; top: 0.1em; color: var(--secondary-color); font-size: 0.9em; }
+    .accommodation-tips li strong { font-weight: 600; }
+    .accommodation-tips li:last-child { margin-bottom: 0; }
+
+
+    /* Practical info section */
+    .practical-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr)); gap: 1.5rem; }
+    .practical-item { background-color: var(--card-bg); border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 15px var(--shadow-color); transition: background-color var(--transition-speed), border-color var(--transition-speed); border: 1px solid var(--border-color); }
+    .practical-item h3 { margin: 0 0 1rem 0; font-size: 1.3rem; color: var(--primary-color); font-weight: 600; }
+    .practical-item p { margin: 0; font-size: 0.95rem; opacity: 0.9; }
+
+    /* Newsletter section */
+    .newsletter-container { background: linear-gradient(135deg, var(--primary-color) 0%, #ff8400 100%); padding: clamp(3rem, 8vw, 4rem) 2rem; margin: 5rem 0 0 0; color: white; border-radius: 16px; text-align: center; }
+    .newsletter-content { max-width: 600px; margin: 0 auto; }
+    .newsletter-content h3 { font-size: clamp(1.5rem, 5vw, 2rem); margin: 0 0 1rem 0; font-weight: 700; }
+    .newsletter-content p { margin: 0 0 2rem 0; font-size: clamp(1rem, 3vw, 1.1rem); opacity: 0.9; }
+    .newsletter-form { display: flex; gap: 0.8rem; flex-wrap: wrap; justify-content: center; }
+    .newsletter-form input { flex-grow: 1; min-width: 200px; padding: 0.8rem 1rem; border: none; border-radius: 8px; font-size: 1rem; background-color: rgba(255,255,255,0.9); color: #333; }
+    .newsletter-form input::placeholder { color: #666; }
+    .newsletter-form button { background-color: #333; color: white; border: none; border-radius: 8px; padding: 0.8rem 1.5rem; cursor: pointer; font-size: 1rem; font-weight: 600; transition: background-color 0.2s ease-out; }
+    .newsletter-form button:hover { background-color: #000; }
+
+    /* Footer styling */
+    .guide-footer { background-color: var(--section-bg); padding: 3rem 2rem 1.5rem; margin-top: 4rem; border-top: 1px solid var(--border-color); transition: background-color var(--transition-speed), border-color var(--transition-speed); }
+    .footer-content { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-bottom: 2.5rem; }
+    .footer-column h4 { margin: 0 0 1rem 0; font-size: 1.1rem; font-weight: 600; }
+    .footer-column p { margin: 0; font-size: 0.95rem; opacity: 0.9; }
+    .footer-column ul { list-style: none; padding: 0; margin: 0; }
+    .footer-column ul li { margin-bottom: 0.5rem; }
+    .footer-column ul li:last-child { margin-bottom: 0; }
+    .footer-column ul li a { color: var(--text-color); text-decoration: none; font-size: 0.95rem; transition: color var(--transition-speed); }
+    .footer-column ul li a:hover { color: var(--primary-color); text-decoration: underline; }
+    .social-links { display: flex; gap: 1rem; font-size: 1.3rem; }
+    .social-links a { color: var(--text-color); transition: color var(--transition-speed), transform var(--transition-speed); }
+    .social-links a:hover { color: var(--primary-color); transform: scale(1.1); }
+    .footer-bottom { max-width: 1200px; margin: 0 auto; border-top: 1px solid var(--border-color); padding-top: 1.5rem; text-align: center; font-size: 0.9rem; color: var(--text-color); opacity: 0.7; transition: border-color var(--transition-speed); }
+
+    /* Media queries */
+    @media (max-width: 1024px) {
+      .main-nav { padding: 0 1rem; }
+      .nav-left, .nav-right { gap: 0.5rem; }
+      .nav-item { font-size: 0.8rem; }
+    }
+    @media (max-width: 768px) {
+      body { padding-top: 50px; } 
+      .main-nav { height: 50px; }
+      .quick-nav { top: 50px; }
+      .hero-header { height: calc(80vh - 50px); } 
+      .dark-mode-toggle { top: 70px; width: 40px; height: 40px; font-size: 1.2rem; }
+      .quick-nav { padding: 0.5rem 0; overflow-x: auto; justify-content: flex-start; white-space: nowrap; }
+      .quick-nav a { margin: 0 0.5rem; font-size: 0.85rem; }
+      .two-column, .transport-content, .shopping-area { grid-template-columns: 1fr; }
+      .stats-container { grid-template-columns: 1fr 1fr; }
+      .dishes-list { columns: 1; }
+      .shopping-area img { height: 250px; } /* Slightly taller fixed height */
+      .newsletter-form { flex-direction: column; }
+      .newsletter-form button { width: 100%; }
+      .footer-content { grid-template-columns: 1fr; text-align: center; }
+      .social-links { justify-content: center; }
+    }
+    @media (max-width: 480px) {
+      .main-nav { display: none; } /* Hide complex nav */
+      body { padding-top: 0; }
+      .quick-nav { top: 0; border-radius: 0; } /* Stick quicknav to top */
+      .dark-mode-toggle { top: 70px; } 
+      .hero-header { height: 60vh; } 
+      .hero-content h1 { font-size: 2.2rem; } /* Smaller heading */
+      .hero-content p { font-size: 1rem; }
+      .stats-container { grid-template-columns: 1fr; }
+      .accommodation-tips ul { grid-template-columns: 1fr; }
+      .dishes-list { columns: 1; } /* Ensure single column */
+    }
+
+    /* Scrollbar styling */
+    ::-webkit-scrollbar { width: 10px; height: 10px; }
+    ::-webkit-scrollbar-track { background: var(--bg-color); }
+    ::-webkit-scrollbar-thumb { background: var(--primary-color); border-radius: 5px; border: 2px solid var(--bg-color); }
+    ::-webkit-scrollbar-thumb:hover { background: #e64040; }
+    
+  </style>
+</head>
+<body>
+  <!-- Navigation from main site -->
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../food.html" class="nav-item">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item active">CITIES</a> 
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item"><h1>EASTWORLD</h1></a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <div class="shenzhen-guide">
+    <!-- Header with parallax hero image -->
+    <header class="hero-header">
+      <div class="hero-image">
+        <!-- Using a reliable Unsplash image URL -->
+        <img src="https://images.unsplash.com/photo-1593902388136-46663d3b0675?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80" 
+             alt="Shenzhen Cityscape at Night" id="hero-bg-image" />
+      </div>
+      <div class="hero-content" id="hero-text-content">
+        <h1>SHENZHEN</h1>
+        <p>China's Silicon Valley & Innovation Hub</p>
+      </div>
+    </header>
+    
+    <!-- Dark mode toggle -->
+    <button class="dark-mode-toggle" id="darkModeToggleBtn" aria-label="Toggle Dark Mode">
+      <i class="fas fa-moon" id="theme-icon"></i>
+    </button>
+    
+    <!-- Quick nav -->
+    <nav class="quick-nav" id="quickNavMenu">
+      <a href="#intro"><i class="fas fa-info-circle"></i> Intro</a>
+      <a href="#districts"><i class="fas fa-map-marker-alt"></i> Districts</a>
+      <a href="#transport"><i class="fas fa-subway"></i> Transport</a>
+      <a href="#food"><i class="fas fa-utensils"></i> Food</a>
+      <a href="#attractions"><i class="fas fa-landmark"></i> Attractions</a>
+      <a href="#shopping"><i class="fas fa-shopping-bag"></i> Shopping</a>
+      <a href="#stay"><i class="fas fa-bed"></i> Stay</a>
+      <a href="#practical"><i class="fas fa-briefcase"></i> Practical</a>
+    </nav>
+    
+    <!-- Main content container -->
+    <main class="content-container">
+      <!-- Introduction section -->
+      <section id="intro" class="content-section intro-section">
+        <div class="section-inner">
+          <h2>The Rise of a Megacity</h2>
+          <div class="two-column">
+            <div>
+              <p class="section-intro"> 
+                Once a small fishing village, Shenzhen has transformed into a global technology hub and innovation center in just four decades. Designated as China's first Special Economic Zone in 1980, the city has experienced unprecedented growth.
+              </p>
+              <p>
+                Today, Shenzhen is known as China's "Silicon Valley," home to tech giants like Tencent, Huawei, and DJI. The city represents China's remarkable economic transformation and serves as a window into the country's future innovation landscape.
+              </p>
+              <p>
+                With its modern architecture, efficient public transportation, vibrant cultural scene, and proximity to Hong Kong, Shenzhen offers visitors a glimpse into China's rapid modernization while retaining elements of Cantonese culture and tradition.
+              </p>
+            </div>
+            <div class="stats-container">
+              <div class="stat-item"><h3>17.56M</h3><p>Population</p></div>
+              <div class="stat-item"><h3>1,997 km²</h3><p>Area</p></div>
+              <div class="stat-item"><h3>1980</h3><p>SEZ Est.</p></div>
+              <div class="stat-item"><h3>$403B</h3><p>GDP (2021)</p></div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Districts section -->
+      <section id="districts" class="content-section districts-section">
+        <div class="section-inner">
+          <h2>Districts Worth Exploring</h2>
+          <div class="districts-grid">
+            <!-- Futian -->
+            <div class="district-card">
+              <div class="hover-image-container">
+                <img src="https://images.unsplash.com/photo-1593903133792-8b6e86381a96?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="Futian District Skyline" loading="lazy">
+                <div class="image-overlay"><ul><li>Ping An Finance Center</li><li>Civic Center</li><li>Lianhuashan Park</li></ul></div>
+              </div>
+              <h3>Futian</h3><p>The modern CBD with skyscrapers and shopping malls</p>
+            </div>
+            <!-- Nanshan -->
+            <div class="district-card">
+              <div class="hover-image-container">
+                <img src="https://images.unsplash.com/photo-1611062683834-526f96467feb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="Nanshan Coastal City Area" loading="lazy">
+                <div class="image-overlay"><ul><li>Window of the World</li><li>OCT Harbour</li><li>Shenzhen Bay Park</li></ul></div>
+              </div>
+              <h3>Nanshan</h3><p>Tech hub housing many startups and major companies</p>
+            </div>
+            <!-- Luohu -->
+            <div class="district-card">
+              <div class="hover-image-container">
+                <img src="https://images.unsplash.com/photo-1568663102373-6401d954c6a2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="Luohu District View" loading="lazy">
+                <div class="image-overlay"><ul><li>Dongmen Pedestrian Street</li><li>Luohu Commercial City</li><li>Diwang Building</li></ul></div>
+              </div>
+              <h3>Luohu</h3><p>The original SEZ area, known for shopping and border crossing</p>
+            </div>
+            <!-- Bao'an -->
+            <div class="district-card">
+              <div class="hover-image-container">
+                 <img src="https://images.unsplash.com/photo-1559939018-e6bc09799994?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="Bao'an Airport Terminal" loading="lazy">
+                <div class="image-overlay"><ul><li>International Airport (SZX)</li><li>Waterlands Resort</li><li>Phoenix Mountain</li></ul></div>
+              </div>
+              <h3>Bao'an</h3><p>Home to the airport and expanding industrial zones</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Transportation section -->
+      <section id="transport" class="content-section transport-section">
+        <div class="section-inner">
+          <h2>Getting Around</h2>
+          <div class="transport-content">
+            <div class="transport-image">
+              <img src="https://images.unsplash.com/photo-1621214048241-3b7931c1f19e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80" alt="Shenzhen Metro Train Interior" loading="lazy">
+            </div>
+            <div class="transport-info">
+              <div class="transport-method"><h3><i class="fas fa-subway"></i> Metro</h3><p>Shenzhen's modern metro system covers most areas. Clean, efficient, and with English signage, it's the best way to navigate. Fares: ¥2-10.</p></div>
+              <div class="transport-method"><h3><i class="fas fa-bus"></i> Buses</h3><p>An extensive bus network serves areas not covered by the metro. Fares start at ¥2. Use a Shenzhen Tong card for convenience.</p></div>
+              <div class="transport-method"><h3><i class="fas fa-taxi"></i> Taxis</h3><p>Readily available and affordable. Flag fall ¥10 + ¥2.4/km. Have destinations written in Chinese or use a map.</p></div>
+              <div class="transport-method"><h3><i class="fas fa-mobile-alt"></i> Ride-Sharing</h3><p>DiDi is the dominant app. The English version is available and integrates with international cards.</p></div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Food section -->
+      <section id="food" class="content-section food-section">
+        <div class="section-inner">
+          <h2>Culinary Experiences</h2>
+          <p class="section-intro">Shenzhen's food scene blends traditional Cantonese cuisine with influences from across China and beyond, reflecting its dynamic population.</p>
+          <div class="food-grid">
+            <!-- Dongmen -->
+            <div class="food-card">
+              <div class="hover-image-container">
+                <img src="https://images.unsplash.com/photo-1517282087418-72506e38119a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="Dim Sum Selection" loading="lazy">
+                <div class="image-overlay"><p>Specialty: Dim Sum, Street Snacks</p></div>
+              </div>
+              <h3>Dongmen Food Street</h3><p>Bustling area in Luohu with countless local Cantonese delicacies and snacks.</p>
+            </div>
+            <!-- Sea World -->
+            <div class="food-card">
+              <div class="hover-image-container">
+                <img src="https://images.unsplash.com/photo-1551887001-bdbb3c5813e1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="Sea World Plaza and Ship" loading="lazy">
+                <div class="image-overlay"><p>Specialty: Seafood, International</p></div>
+              </div>
+              <h3>Sea World Food Area</h3><p>Wide range of international dining options in a lively entertainment complex in Shekou.</p>
+            </div>
+            <!-- OCT Loft / Upscale -->
+             <div class="food-card">
+              <div class="hover-image-container">
+                <img src="https://images.unsplash.com/photo-1552566626-52f8b828add9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="Modern Cafe Interior" loading="lazy">
+                <div class="image-overlay"><p>Specialty: Cafes, Fusion</p></div>
+              </div>
+              <h3>OCT Loft & Creative Cafes</h3><p>Areas like OCT Loft offer creative cafes, design shops, and unique dining experiences.</p>
+            </div>
+          </div>
+          <div class="local-dishes">
+            <h3>Must-Try Local Dishes</h3>
+            <ul class="dishes-list">
+              <li><strong>Shajing Oysters</strong> - Fresh oysters from nearby Shajing</li>
+              <li><strong>Cantonese Dim Sum</strong> - Essential morning/lunch ritual</li>
+              <li><strong>Hakka Stuffed Tofu</strong> - Regional specialty with savory filling</li>
+              <li><strong>Salt-baked Chicken</strong> - Tender chicken slow-baked in salt</li>
+              <li><strong>Wonton Noodles</strong> - Classic Cantonese noodle soup</li>
+              <li><strong>Claypot Rice</strong> - Rice cooked in clay pot with various toppings</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Shopping section -->
+      <section id="shopping" class="content-section shopping-section">
+        <div class="section-inner">
+          <h2>Shopping Experiences</h2>
+          <p class="section-intro">From sprawling electronics markets to luxury malls, Shenzhen caters to every shopper.</p>
+          <div class="shopping-areas">
+            <!-- Huaqiangbei -->
+            <div class="shopping-area">
+              <img src="https://images.unsplash.com/photo-1578616096212-65e4e1ff54f2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="Huaqiangbei Electronics Market" loading="lazy">
+              <div class="shopping-info">
+                <h3>Huaqiangbei Electronics Market</h3><p>The world's largest electronics market. Find everything from components to finished gadgets. A paradise for tech enthusiasts.</p><p><strong>Tip:</strong> Bargaining is common. Check prices at multiple stalls.</p>
+              </div>
+            </div>
+            <!-- Dongmen -->
+            <div class="shopping-area">
+               <img src="https://images.unsplash.com/photo-1546213290-e1b492ab3eee?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="Dongmen Pedestrian Street Shopping" loading="lazy">
+              <div class="shopping-info">
+                <h3>Dongmen Pedestrian Street</h3><p>One of Shenzhen's oldest and busiest shopping areas. Hundreds of fashion stores, local brands, and street food vendors.</p>
+              </div>
+            </div>
+            <!-- MixC / Coastal City -->
+            <div class="shopping-area">
+              <img src="https://images.unsplash.com/photo-1568736772261-f963a359fa91?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="Luxury Shopping Mall Interior" loading="lazy">
+              <div class="shopping-info">
+                <h3>MixC & Coastal City Malls</h3><p>Upscale malls offering international luxury brands, gourmet dining, cinemas, and entertainment facilities.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Accommodation section -->
+      <section id="stay" class="content-section stay-section">
+        <div class="section-inner">
+          <h2>Where to Stay</h2>
+          <p class="section-intro">Shenzhen offers a wide range of accommodation, from luxury hotels in Futian and Nanshan to budget options near transport hubs.</p>
+          <div class="accommodation-options">
+            <div class="accommodation-category">
+              <h3>Luxury (¥1500+)</h3>
+              <ul>
+                <li><strong>Futian Shangri-La:</strong> Central CBD location, excellent city views.</li>
+                <li><strong>The St. Regis Shenzhen:</strong> High-floor luxury with panoramic vistas.</li>
+                <li><strong>Four Seasons Hotel Shenzhen:</strong> Sophisticated comfort in the CBD.</li>
+              </ul>
+            </div>
+            <div class="accommodation-category">
+              <h3>Mid-Range (¥500-¥1500)</h3>
+              <ul>
+                <li><strong>Courtyard by Marriott Shenzhen Bay:</strong> Comfortable rooms near tech parks.</li>
+                <li><strong>Hilton Garden Inn Shenzhen Bao'an:</strong> Good value near the airport.</li>
+                <li><strong>Vienna Hotel (Various):</strong> Reliable local chain with many locations.</li>
+              </ul>
+            </div>
+            <div class="accommodation-category">
+              <h3>Budget (< ¥500)</h3>
+              <ul>
+                <li><strong>Lazy Snail Hostel:</strong> Popular hostel near Window of the World.</li>
+                <li><strong>7 Days Inn / Hanting Express:</strong> Basic but clean budget chains widely available.</li>
+                <li><strong>Local Guesthouses:</strong> Found in areas like Dafen or near metro lines.</li>
+              </ul>
+            </div>
+            <div class="accommodation-tips">
+              <h4>Accommodation Tips:</h4>
+              <ul>
+                <li><strong>Futian & Nanshan:</strong> Best for business and convenient access to attractions.</li>
+                <li><strong>Luohu:</strong> Ideal for shopping and easy access to Hong Kong border crossings.</li>
+                <li><strong>Booking:</strong> Use apps like Ctrip (Trip.com), Booking.com. Book ahead during major holidays or trade fairs.</li>
+                <li><strong>Transport:</strong> Choose hotels near metro stations for easy navigation.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Practical info section -->
+      <section id="practical" class="content-section practical-section">
+        <div class="section-inner">
+          <h2>Practical Information</h2>
+          <div class="practical-grid">
+            <div class="practical-item"><h3>Visa</h3><p>Most nationalities need a visa for mainland China. Check specific requirements. 144-hour visa-free transit may apply.</p></div>
+            <div class="practical-item"><h3>Weather</h3><p>Subtropical climate. Hot, humid summers (Jun-Sep) with typhoons possible. Mild, drier winters (Dec-Feb). Best time: Oct-Nov & Mar-May.</p></div>
+            <div class="practical-item"><h3>Internet & Apps</h3><p>Great Firewall blocks many sites (Google, FB, IG, etc.). Use a VPN. WeChat is essential for communication and payments.</p></div>
+            <div class="practical-item"><h3>Currency & Payments</h3><p>Chinese Yuan (CNY/RMB). Mobile payments (WeChat Pay, Alipay) dominate. Credit cards accepted in hotels/malls. ATMs available.</p></div>
+            <div class="practical-item"><h3>Language</h3><p>Mandarin is official; Cantonese widely spoken. English used in tourist areas/metro, less common elsewhere. Translation apps are helpful.</p></div>
+            <div class="practical-item"><h3>Hong Kong Connection</h3><p>Multiple border crossings (Luohu, Futian, Shenzhen Bay). Futian/Lok Ma Chau offers direct metro links on both sides.</p></div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Newsletter signup -->
+      <section class="content-section newsletter-section">
+        <div class="newsletter-container">
+          <div class="newsletter-content">
+            <h3>Stay Updated on Shenzhen</h3>
+            <p>Subscribe for the latest news, events, and travel tips about China's innovation hub.</p>
+            <form class="newsletter-form" action="#" method="post"> 
+              <input type="email" placeholder="Your email address" required>
+              <button type="submit">Subscribe</button>
+            </form>
+          </div>
+        </div>
+     </section>
+
+    </main> <!-- End Content Container -->
+    
+    <!-- Footer -->
+    <footer class="guide-footer">
+      <div class="footer-content">
+        <div class="footer-column"><h4>About Eastworld</h4><p>Your premier guide to Asian culture, travel, and lifestyle.</p></div>
+        <div class="footer-column"><h4>More City Guides</h4><ul><li><a href="../cities/tokyo.html">Tokyo</a></li><li><a href="../cities/seoul.html">Seoul</a></li><li><a href="../cities/bangkok.html">Bangkok</a></li><li><a href="../cities/shanghai.html">Shanghai</a></li></ul></div>
+        <div class="footer-column"><h4>Follow Us</h4><div class="social-links"><a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a><a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a><a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a><a href="#" aria-label="WeChat"><i class="fab fa-weixin"></i></a></div></div>
+      </div>
+      <div class="footer-bottom"><p>&copy; 2024 Eastworld. All rights reserved.</p></div>
+    </footer>
+  </div> <!-- End Shenzhen Guide -->
+
+  <!-- Inline JavaScript for functionality -->
+  <script>
+    // Wrap in a function to avoid polluting global scope
+    (function() {
+      // Wait for the DOM to be fully loaded
+      document.addEventListener('DOMContentLoaded', function() {
+        console.log("DOM Loaded. Initializing Shenzhen Guide scripts...");
+
+        // --- Element Selectors ---
+        const body = document.body;
+        const darkModeToggle = document.getElementById('darkModeToggleBtn');
+        const themeIcon = document.getElementById('theme-icon');
+        const heroImage = document.getElementById('hero-bg-image');
+        const heroContent = document.getElementById('hero-text-content');
+        const sections = document.querySelectorAll('.content-section');
+        const quickNavLinks = document.querySelectorAll('.quick-nav a[href^="#"]');
+
+        // --- Dark Mode ---
+        if (darkModeToggle && themeIcon) {
+          const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+
+          const applyTheme = (isDark) => {
+            body.classList.toggle('dark-mode', isDark);
+            themeIcon.classList.toggle('fa-sun', isDark);
+            themeIcon.classList.toggle('fa-moon', !isDark);
+            console.log(`Theme applied: ${isDark ? 'Dark' : 'Light'}`);
+          };
+
+          const savedTheme = localStorage.getItem('theme');
+          if (savedTheme) {
+            applyTheme(savedTheme === 'dark');
+          } else {
+            applyTheme(prefersDark.matches);
+          }
+
+          darkModeToggle.addEventListener('click', function() {
+            const isDarkMode = body.classList.toggle('dark-mode');
+            applyTheme(isDarkMode);
+            localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+            console.log(`Dark mode toggled. New state: ${isDarkMode ? 'Dark' : 'Light'}`);
+          });
+
+          prefersDark.addEventListener('change', (e) => {
+             if (!localStorage.getItem('theme')) {
+                applyTheme(e.matches);
+             }
+          });
+          console.log("Dark mode initialized.");
+        } else {
+           console.error("Dark mode toggle button or theme icon not found.");
+        }
+        
+        // --- Intersection Observer for Scroll Animations ---
+        if (sections.length > 0 && 'IntersectionObserver' in window) {
+          const observerOptions = {
+            root: null, 
+            rootMargin: '0px',
+            threshold: 0.1 
+          };
+
+          const observerCallback = (entries, observer) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                 console.log(`Section ${entry.target.id || 'Unnamed'} became visible.`);
+                 // Optional: unobserve after first time
+                 // observer.unobserve(entry.target);
+              } else {
+                 // Optional: remove class if you want fade-out
+                 // entry.target.classList.remove('visible');
+              }
+            });
+          };
+          
+          const observer = new IntersectionObserver(observerCallback, observerOptions);
+          sections.forEach(section => observer.observe(section));
+          console.log(`Intersection Observer initialized for ${sections.length} sections.`);
+        } else if (!('IntersectionObserver' in window)) {
+            console.warn("Intersection Observer not supported. Animations disabled.");
+            // Fallback: Make all sections visible immediately if IO not supported
+            sections.forEach(section => section.classList.add('visible'));
+        } else {
+            console.warn("No sections found for Intersection Observer.");
+        }
+        
+        // --- Parallax Effect for Hero Image ---
+        if (heroImage && heroContent) {
+            let ticking = false; // Optimization flag
+
+            const handleScroll = () => {
+                const scrollPosition = window.scrollY;
+                const windowHeight = window.innerHeight;
+                
+                // Only calculate if hero is roughly in view
+                if (scrollPosition < windowHeight * 1.5) { 
+                  const imageParallaxSpeed = 0.4; 
+                  const contentParallaxSpeed = 0.2; 
+                  const opacityFactor = 1 - (scrollPosition / (windowHeight * 0.7)); 
+
+                  heroImage.style.transform = `translateY(${scrollPosition * imageParallaxSpeed}px)`;
+                  heroContent.style.transform = `translateY(${scrollPosition * contentParallaxSpeed * -1}px)`; 
+                  heroContent.style.opacity = Math.max(0, Math.min(1, opacityFactor)); // Clamp opacity 0-1
+                }
+                ticking = false; // Reset flag
+            };
+
+            window.addEventListener('scroll', function() {
+              if (!ticking) {
+                window.requestAnimationFrame(handleScroll);
+                ticking = true;
+              }
+            }, { passive: true }); 
+            console.log("Parallax effect initialized.");
+        } else {
+            console.error("Hero image or hero content element not found for parallax.");
+        }
+        
+        // --- Smooth Scrolling for Quick Nav Anchor Links ---
+        if (quickNavLinks.length > 0) {
+            quickNavLinks.forEach(anchor => {
+              anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                try {
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                      console.log(`Scrolling to ${targetId}`);
+                      // Use scrollIntoView - scroll-padding-top in CSS handles the offset
+                      targetElement.scrollIntoView({ behavior: 'smooth' });
+                    } else {
+                        console.warn(`Target element not found for selector: ${targetId}`);
+                    }
+                } catch (error) {
+                    console.error(`Invalid selector or scroll error for ${targetId}:`, error);
+                }
+              });
+            });
+            console.log("Smooth scroll initialized for quick nav.");
+        } else {
+            console.warn("No quick nav links found for smooth scroll.");
+        }
+
+        console.log("Shenzhen Guide scripts initialization complete.");
+      }); // End DOMContentLoaded
+    })(); // End IIFE
+  </script>
+</body>
+</html> 

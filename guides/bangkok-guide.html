@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EASTWORLD - Bangkok City Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css' rel='stylesheet' />
+  <style>
+    /* City Guide specific styles */
+    .guide-hero {
+      height: 550px;
+      background-image: url('https://images.unsplash.com/photo-1508009603885-50cf7c8dd0d5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 3rem;
+    }
+    
+    .guide-hero-content {
+      text-align: center;
+      color: white;
+      position: relative;
+      z-index: 2;
+      padding: 2rem;
+      max-width: 800px;
+      background-color: rgba(0, 0, 0, 0.6);
+      border-radius: 8px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      backdrop-filter: blur(5px);
+    }
+    
+    .guide-hero::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(0deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.2) 100%);
+    }
+    
+    .guide-hero h1 {
+      font-size: 4.5rem;
+      margin-bottom: 1rem;
+      letter-spacing: 3px;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
+    }
+    
+    .guide-hero p {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    
+    .guide-intro {
+      max-width: 800px;
+      margin: 0 auto 3rem;
+      padding: 0 1rem;
+      line-height: 1.8;
+    }
+    
+    .guide-section {
+      margin-bottom: 4rem;
+    }
+    
+    .guide-section-title {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: 2.2rem;
+      letter-spacing: 1px;
+      position: relative;
+      display: inline-block;
+      width: 100%;
+    }
+    
+    .guide-section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background-color: #ff4d4d;
+    }
+    
+    .guide-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+    
+    .guide-card {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+      background-color: white;
+    }
+    
+    .guide-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+    }
+    
+    .guide-card-img {
+      height: 200px;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .guide-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.8s ease;
+    }
+    
+    .guide-card:hover .guide-card-img img {
+      transform: scale(1.05);
+    }
+    
+    .guide-card-content {
+      padding: 1.5rem;
+    }
+    
+    .guide-card h3 {
+      margin-bottom: 0.8rem;
+      font-size: 1.3rem;
+      line-height: 1.3;
+    }
+    
+    .guide-card-meta {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.8rem;
+      font-size: 0.9rem;
+      color: #666;
+      flex-wrap: wrap;
+    }
+    
+    .guide-card-meta i {
+      margin-right: 0.3rem;
+      color: #ff4d4d;
+    }
+    
+    .guide-card-meta span {
+      margin-right: 1rem;
+      margin-bottom: 0.3rem;
+    }
+    
+    .guide-card p {
+      color: #555;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    
+    .guide-map {
+      width: 100%;
+      height: 500px;
+      border: none;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+      overflow: hidden;
+    }
+    
+    .guide-tips {
+      background-color: #f8f8f8;
+      padding: 2.5rem;
+      border-radius: 12px;
+      margin-bottom: 3rem;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+    
+    .guide-tips h3 {
+      margin-bottom: 1.5rem;
+      font-size: 1.6rem;
+      color: #333;
+      text-align: center;
+      position: relative;
+      display: inline-block;
+      width: 100%;
+    }
+    
+    .guide-tips h3::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 2px;
+      background-color: #ff4d4d;
+    }
+    
+    .guide-tips-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+    
+    .guide-tip-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+      background-color: white;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+      transition: transform 0.3s ease;
+    }
+    
+    .guide-tip-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .guide-tip-item i {
+      margin-right: 0.8rem;
+      color: #ff4d4d;
+      margin-top: 0.25rem;
+      font-size: 1.2rem;
+    }
+    
+    .guide-download {
+      text-align: center;
+      margin: 3rem 0;
+      padding: 3rem 2rem;
+      background-color: #f0f0f0;
+      border-radius: 12px;
+      background-image: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)), url('https://images.unsplash.com/photo-1544550581-5f7ceaf7f992?ixlib=rb-4.0.3');
+      background-size: cover;
+      background-position: center;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+    
+    .guide-download h3 {
+      margin-bottom: 1rem;
+      font-size: 1.8rem;
+      color: #333;
+    }
+    
+    .guide-download-btn {
+      display: inline-block;
+      margin-top: 1.5rem;
+      padding: 1rem 2.5rem;
+      background-color: #ff4d4d;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(255,77,77,0.3);
+    }
+    
+    .guide-download-btn:hover {
+      background-color: #e53e3e;
+      transform: translateY(-3px);
+      box-shadow: 0 6px 15px rgba(255,77,77,0.4);
+    }
+    
+    @media (max-width: 768px) {
+      .guide-hero h1 {
+        font-size: 3rem;
+      }
+      
+      .guide-hero p {
+        font-size: 1rem;
+      }
+      
+      .guide-section-title {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../food.html" class="nav-item">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="content-container">
+    <section class="guide-hero">
+      <div class="guide-hero-content">
+        <h1>BANGKOK</h1>
+        <p>Discover Thailand's vibrant capital where ancient temples, bustling markets, and modern skyscrapers create a fascinating cultural mosaic.</p>
+      </div>
+    </section>
+    
+    <section class="guide-intro">
+      <p>Bangkok, the heart of Thailand, is a city of contrasts—where the serene golden spires of Buddhist temples rise alongside sleek skyscrapers, and traditional long-tail boats navigate the Chao Phraya River past luxury hotels. Known to locals as Krung Thep (City of Angels), Bangkok captivates visitors with its dynamic energy, rich cultural heritage, and renowned hospitality.</p>
+      
+      <p>The city's labyrinthine streets buzz with activity, from floating markets to vibrant night bazaars, while its world-class street food scene offers a sensory feast of aromatic spices and bold flavors. With over 400 temples, sprawling palaces, and diverse neighborhoods each with their own character, Bangkok rewards explorers with unexpected discoveries around every corner.</p>
+    </section>
+    
+    <section class="guide-section">
+      <h2 class="guide-section-title">TOP ATTRACTIONS</h2>
+      
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://images.unsplash.com/photo-1535632066274-24f753de3b7e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80" alt="Grand Palace">
+          </div>
+          <div class="guide-card-content">
+            <h3>The Grand Palace & Wat Phra Kaew</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Phra Nakhon</span>
+              <i class="far fa-clock"></i><span>8:30-15:30 (Daily)</span>
+            </div>
+            <p>The former royal residence and home to the sacred Emerald Buddha, this dazzling complex showcases intricate Thai craftsmanship with its gilded stupas, colorful mosaics, and elaborate architecture. The site remains Thailand's most revered landmark and spiritual heart.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://images.unsplash.com/photo-1570168007204-dfb528c6958f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80" alt="Wat Arun">
+          </div>
+          <div class="guide-card-content">
+            <h3>Wat Arun (Temple of Dawn)</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Bangkok Yai</span>
+              <i class="far fa-clock"></i><span>8:00-18:00</span>
+            </div>
+            <p>Rising majestically alongside the Chao Phraya River, this distinctive temple is adorned with colorful porcelain and seashell mosaics. Climb the steep steps of its central prang for panoramic views across the river to the Grand Palace and Wat Pho.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://images.unsplash.com/photo-1598935888738-7c75a92cfe2c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80" alt="Wat Pho">
+          </div>
+          <div class="guide-card-content">
+            <h3>Wat Pho (Temple of the Reclining Buddha)</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Phra Nakhon</span>
+              <i class="far fa-clock"></i><span>8:00-18:30</span>
+            </div>
+            <p>Home to the magnificent 46-meter long gold-plated reclining Buddha, this temple complex is also Thailand's oldest center for traditional medicine and massage. Explore its tranquil courtyards filled with hundreds of Buddha images and ornate stupas.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://images.unsplash.com/photo-1612177343582-665b93b34403?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80" alt="Chatuchak Market">
+          </div>
+          <div class="guide-card-content">
+            <h3>Chatuchak Weekend Market</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Chatuchak</span>
+              <i class="far fa-clock"></i><span>9:00-18:00 (Weekends)</span>
+            </div>
+            <p>One of the world's largest outdoor markets with over 15,000 stalls spread across 35 acres. Find everything from vintage clothing and handcrafted furniture to exotic pets and street food. A shoppers' paradise that attracts 200,000+ visitors every weekend.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://images.unsplash.com/photo-1617175581263-d8932990ca0f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80" alt="Jim Thompson House">
+          </div>
+          <div class="guide-card-content">
+            <h3>Jim Thompson House</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Pathum Wan</span>
+              <i class="far fa-clock"></i><span>9:00-18:00</span>
+            </div>
+            <p>The former home of American entrepreneur Jim Thompson, who revitalized Thailand's silk industry before his mysterious disappearance. This elegant complex of traditional Thai houses displays his exquisite collection of Southeast Asian art and antiques.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://images.unsplash.com/photo-1569383746724-63e4bbc79e40?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80" alt="Chinatown">
+          </div>
+          <div class="guide-card-content">
+            <h3>Yaowarat (Chinatown)</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Samphanthawong</span>
+              <i class="far fa-clock"></i><span>Open 24 hours</span>
+            </div>
+            <p>Bangkok's vibrant Chinatown is a sensory overload of bright neon signs, ornate shrines, bustling alleyways, and some of the city's most celebrated street food. By day, explore gold shops and traditional medicine stores; by night, feast at food stalls lining Yaowarat Road.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="guide-section">
+      <h2 class="guide-section-title">WHERE TO EAT</h2>
+      
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://media.timeout.com/images/105761718/image.jpg" alt="Jay Fai">
+          </div>
+          <div class="guide-card-content">
+            <h3>Jay Fai</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Maha Chai Road</span>
+              <i class="fas fa-dollar-sign"></i><span>$$$</span>
+            </div>
+            <p>The legendary Michelin-starred street food stall run by goggle-wearing chef Supinya "Jay Fai" Junsuta. Famous for her crab omelette, drunken noodles, and tom yum soup, each dish is meticulously prepared by the chef herself over charcoal fires.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://live.staticflickr.com/8071/29097045590_d1c0e9a52d_b.jpg" alt="Thipsamai Pad Thai">
+          </div>
+          <div class="guide-card-content">
+            <h3>Thipsamai Pad Thai</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Maha Chai Road</span>
+              <i class="fas fa-dollar-sign"></i><span>$</span>
+            </div>
+            <p>Bangkok's most famous pad thai restaurant, serving this iconic dish since 1966. Their signature "Superb Pad Thai" is wrapped in a thin egg wrapper and cooked over charcoal for a distinctive smoky flavor. Prepare for long queues, especially in the evening.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://10619-2.s.cdn12.com/rests/original/320_508766139.jpg" alt="Gaggan Anand">
+          </div>
+          <div class="guide-card-content">
+            <h3>Gaggan Anand</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Sukhumvit</span>
+              <i class="fas fa-dollar-sign"></i><span>$$$$</span>
+            </div>
+            <p>Chef Gaggan Anand's innovative restaurant offers a theatrical culinary experience that reimagines Indian cuisine with modern techniques. The emoji-only menu hints at the playful, boundary-pushing dishes that have earned the restaurant international acclaim.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://images.otstatic.com/prod1/49192159/3/medium.jpg" alt="Err Urban Rustic Thai">
+          </div>
+          <div class="guide-card-content">
+            <h3>Err Urban Rustic Thai</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Phra Nakhon</span>
+              <i class="fas fa-dollar-sign"></i><span>$$</span>
+            </div>
+            <p>A casual riverside spot by chefs from the acclaimed Bo.lan, serving creative takes on Thai street food and bar snacks using quality ingredients. Pair dishes like grilled pork neck and fermented sausages with their craft cocktails infused with Thai herbs.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="guide-section">
+      <h2 class="guide-section-title">WHERE TO STAY</h2>
+      
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/187120043.jpg?k=ad87a3c87e8d33de5706be000769e30d1f7c127b20fcb3e4caf36ca02882c505&o=&hp=1" alt="Mandarin Oriental">
+          </div>
+          <div class="guide-card-content">
+            <h3>Mandarin Oriental Bangkok</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Riverside</span>
+              <i class="fas fa-star"></i><span>5-star luxury</span>
+            </div>
+            <p>This legendary hotel has hosted royalty and literary icons since 1876. Set on the banks of the Chao Phraya River, it offers colonial-style elegance, impeccable service, nine restaurants and bars, a spa, and its own private boat shuttle to key attractions.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/85824483.jpg?k=fcc561cf1ffce3e0dc42ca7b4433b20c46f7c8a675918c8bab7e26f574461ad0&o=&hp=1" alt="The Siam">
+          </div>
+          <div class="guide-card-content">
+            <h3>The Siam</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Dusit</span>
+              <i class="fas fa-star"></i><span>5-star luxury</span>
+            </div>
+            <p>An urban luxury resort on the riverside, designed by architect Bill Bensley with Art Deco influences and Thai antiques. The 39-room property features private pool villas, a Muay Thai boxing ring, spa, screening room, and vintage restaurant boats.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/290815968.jpg?k=1f3c440202cf8e4daec5faefe401ae57b02afb257e1d96bc3f64d4e9a0b22a80&o=&hp=1" alt="Ariyasom Villa">
+          </div>
+          <div class="guide-card-content">
+            <h3>Ariyasom Villa</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Sukhumvit</span>
+              <i class="fas fa-star"></i><span>Boutique hotel</span>
+            </div>
+            <p>A hidden oasis in central Bangkok, this family-owned 1940s Thai house offers 24 rooms set around a tropical garden and pool. The vegetarian restaurant Na Aroon serves organic Thai cuisine, and the property provides a tranquil retreat from the city's bustle.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/51246252.jpg?k=5c9f6d79f371e7b7a0c4084eedf0b101f0bbc35a7d51b90da7b6391ecccee832&o=&hp=1" alt="SO Sofitel">
+          </div>
+          <div class="guide-card-content">
+            <h3>SO Sofitel Bangkok</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Sathorn</span>
+              <i class="fas fa-star"></i><span>5-star design hotel</span>
+            </div>
+            <p>A design-forward hotel overlooking Lumpini Park, with rooms themed around the elements (water, earth, wood, metal) created by Thai designers under Christian Lacroix's direction. Features include an infinity pool with panoramic views and the popular HI-SO rooftop bar.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="guide-section">
+      <h2 class="guide-section-title">GETTING AROUND</h2>
+      
+      <div class="guide-map" id="bangkokMap"></div>
+      
+      <div class="guide-tips">
+        <h3>Local Transportation Tips</h3>
+        <div class="guide-tips-list">
+          <div class="guide-tip-item">
+            <i class="fas fa-subway"></i>
+            <p>The BTS Skytrain and MRT subway systems offer fast, air-conditioned travel above Bangkok's traffic. Buy a Rabbit Card or day pass for multiple journeys. Fares range from 16-59 baht depending on distance.</p>
+          </div>
+          
+          <div class="guide-tip-item">
+            <i class="fas fa-ship"></i>
+            <p>River boats and express boats on the Chao Phraya River connect many major attractions. The orange-flag tourist boat costs 20 baht per trip, while the Chao Phraya Express Boat offers local routes from 10-40 baht.</p>
+          </div>
+          
+          <div class="guide-tip-item">
+            <i class="fas fa-taxi"></i>
+            <p>Metered taxis are plentiful and affordable, with a starting fare of 35 baht. Insist on using the meter and have your destination written in Thai. During rush hour, consider using public transport instead.</p>
+          </div>
+          
+          <div class="guide-tip-item">
+            <i class="fas fa-motorcycle"></i>
+            <p>Motorcycle taxis (wearing numbered vests) navigate traffic quickly for short distances. Prices are negotiated in advance, typically 20-100 baht depending on distance. Helmets are rarely provided.</p>
+          </div>
+          
+          <div class="guide-tip-item">
+            <i class="fas fa-car"></i>
+            <p>Grab (Southeast Asia's Uber) offers convenient rides with fixed prices, avoiding language barriers and meter refusal issues. Download the app before arrival for easy transportation throughout the city.</p>
+          </div>
+          
+          <div class="guide-tip-item">
+            <i class="fas fa-tuk-tuk"></i>
+            <p>Tuk-tuks offer a quintessential Bangkok experience but typically cost more than taxis. Always negotiate fares before boarding (100-200 baht for short trips) and be wary of drivers offering unusually low prices or free rides with shopping stops.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="guide-download">
+      <h3>Download the Complete Bangkok City Guide</h3>
+      <p>Get our comprehensive 60-page guide to Bangkok with detailed itineraries, cultural insights, language essentials, and off-the-beaten-path recommendations.</p>
+      <p>Available as a PDF for your convenience - take it with you offline!</p>
+      <a href="#" class="guide-download-btn">Download Guide (PDF) - $12.99</a>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+  
+  <script src='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js'></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize Mapbox for Bangkok
+      mapboxgl.accessToken = 'pk.eyJ1IjoiZWFzdHdvcmxkIiwiYSI6ImNscDg5c3dsaDBrN3YyanBsZzV1dmg0OG0ifQ.9h-PyeATCU2zO9L43WHBEw';
+      const map = new mapboxgl.Map({
+        container: 'bangkokMap',
+        style: 'mapbox://styles/mapbox/streets-v12',
+        center: [100.5018, 13.7563], // Bangkok coordinates
+        zoom: 12,
+        pitch: 60, // Add 3D perspective
+        bearing: 30
+      });
+      
+      // Add 3D buildings layer
+      map.on('load', function() {
+        // Add 3D buildings layer
+        const layers = map.getStyle().layers;
+        
+        // Find the index of the first symbol layer
+        let firstSymbolId;
+        for (const layer of layers) {
+          if (layer.type === 'symbol') {
+            firstSymbolId = layer.id;
+            break;
+          }
+        }
+        
+        // Add 3D buildings
+        map.addLayer({
+          'id': '3d-buildings',
+          'source': 'composite',
+          'source-layer': 'building',
+          'filter': ['==', 'extrude', 'true'],
+          'type': 'fill-extrusion',
+          'minzoom': 15,
+          'paint': {
+            'fill-extrusion-color': '#aaa',
+            'fill-extrusion-height': [
+              'interpolate', ['linear'], ['zoom'],
+              15, 0,
+              15.05, ['get', 'height']
+            ],
+            'fill-extrusion-base': [
+              'interpolate', ['linear'], ['zoom'],
+              15, 0,
+              15.05, ['get', 'min_height']
+            ],
+            'fill-extrusion-opacity': 0.6
+          }
+        }, firstSymbolId);
+        
+        // Add navigation controls
+        map.addControl(new mapboxgl.NavigationControl());
+        
+        // Add key attraction markers
+        const attractions = [
+          { name: 'Grand Palace', coordinates: [100.4910, 13.7500], description: 'Royal complex with Emerald Buddha' },
+          { name: 'Wat Arun', coordinates: [100.4882, 13.7443], description: 'Temple of Dawn' },
+          { name: 'Wat Pho', coordinates: [100.4930, 13.7465], description: 'Temple of the Reclining Buddha' },
+          { name: 'Chatuchak Market', coordinates: [100.5502, 13.7999], description: 'Huge weekend market' },
+          { name: 'Jim Thompson House', coordinates: [100.5286, 13.7512], description: 'Historic Thai house museum' },
+          { name: 'Chinatown', coordinates: [100.5097, 13.7394], description: 'Vibrant street food district' }
+        ];
+        
+        attractions.forEach(spot => {
+          // Create popup content
+          const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(
+            `<strong>${spot.name}</strong><br>${spot.description}`
+          );
+          
+          // Create a custom marker with animation
+          const el = document.createElement('div');
+          el.className = 'marker';
+          el.style.backgroundImage = 'url(https://docs.mapbox.com/mapbox-gl-js/assets/custom_marker.png)';
+          el.style.width = '32px';
+          el.style.height = '40px';
+          el.style.backgroundSize = 'cover';
+          el.style.cursor = 'pointer';
+          
+          // Add marker and popup
+          new mapboxgl.Marker({ color: '#ff4d4d' })
+            .setLngLat(spot.coordinates)
+            .setPopup(popup)
+            .addTo(map);
+        });
+        
+        // Start with a fly-to animation
+        map.flyTo({
+          center: [100.4910, 13.7500], // Grand Palace
+          zoom: 14,
+          pitch: 65,
+          bearing: 45,
+          duration: 5000
+        });
+        
+        // Add animated effect when the map comes into view
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              map.flyTo({
+                center: [100.5018, 13.7563],
+                zoom: 12,
+                pitch: 60,
+                bearing: 30,
+                duration: 3000
+              });
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.1 });
+        
+        observer.observe(document.getElementById('bangkokMap'));
+      });
+    });
+  </script>
+  <script src="../script.js"></script>
+</body>
+</html> 

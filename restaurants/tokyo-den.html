@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Den - Innovative Japanese Cuisine in Tokyo | EASTWORLD</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Additional styles specific to restaurant reviews */
+    .restaurant-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+      .restaurant-info {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .restaurant-details {
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .detail-row {
+      display: flex;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+    }
+    
+    .detail-label {
+      font-weight: 600;
+      min-width: 120px;
+      color: #333;
+    }
+    
+    .detail-value {
+      flex: 1;
+      color: #555;
+    }
+    
+    .rating {
+      margin-bottom: 1rem;
+    }
+    
+    .star {
+      color: #ddd;
+      font-size: 1.5rem;
+    }
+    
+    .star.filled {
+      color: #FFD700;
+    }
+    
+    .score-label {
+      margin-left: 0.5rem;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .map-container {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .map-container iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+    }
+    
+    .photos-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .photo-item {
+      border-radius: 8px;
+      overflow: hidden;
+      height: 150px;
+    }
+    
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .photo-item:hover img {
+      transform: scale(1.05);
+    }
+    
+    .specialty-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+    
+    .specialty-card {
+      background: #f8f9fa;
+      padding: 1.5rem;
+      border-radius: 8px;
+      text-align: center;
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+    }
+    
+    .specialty-card:hover {
+      border-color: #ff6b6b;
+      transform: translateY(-5px);
+    }
+    
+    .specialty-card i {
+      font-size: 2rem;
+      color: #ff6b6b;
+      margin-bottom: 1rem;
+    }
+    
+    /* Booking button styles */
+    .booking-button {
+      display: block;
+      background-color: #ff6b6b;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      margin: 1.5rem 0;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    
+    .booking-button:hover {
+      background-color: #ff5252;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../food.html" class="nav-item active">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="content-container">
+    <div class="content-header">
+      <span class="content-category">INNOVATIVE JAPANESE</span>
+      <h1 class="content-title">Den - Playful Innovation Meets Japanese Tradition</h1>
+      
+      <!-- Rating Section -->
+      <div class="rating">
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="score-label">4.8/5.0</span>
+      </div>
+    </div>
+    
+    <div class="hero-container">
+      <img class="content-hero" src="https://media.timeout.com/images/105741936/750/422/image.jpg" alt="Den Restaurant Interior" 
+      onerror="this.onerror=null; 
+      this.parentElement.innerHTML = '<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#333;color:white;font-size:1.5rem;text-align:center;padding:2rem;\'>Den Tokyo</div>';">
+    </div>
+    
+    <!-- Booking Button -->
+    <a href="#" class="booking-button">
+      <i class="fas fa-calendar-alt"></i> MAKE RESERVATION
+    </a>
+    
+    <!-- Restaurant Information Section -->
+    <div class="restaurant-info">
+      <div class="restaurant-details">
+        <h2>Restaurant Details</h2>
+        
+        <div class="detail-row">
+          <div class="detail-label">Address:</div>
+          <div class="detail-value">2-3-18 Jingumae, Shibuya City, Tokyo 150-0001</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Hours:</div>
+          <div class="detail-value">Dinner: 6:00 PM - 11:00 PM<br>Closed Sundays and Mondays</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Price Range:</div>
+          <div class="detail-value">¥25,000 - ¥35,000 ($180-250) per person</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Cuisine:</div>
+          <div class="detail-value">Innovative Japanese, Contemporary Kaiseki</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Reservations:</div>
+          <div class="detail-value">Essential, book 2-3 months in advance</div>
+        </div>
+        
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">How to Get There</h3>
+        <p>From Harajuku Station:</p>
+        <ul style="margin-bottom: 1rem; padding-left: 1.5rem;">
+          <li>5 minute walk from JR Harajuku Station</li>
+          <li>3 minute walk from Meiji-jingumae Station (Tokyo Metro)</li>
+          <li>Located in the trendy Jingumae district</li>
+        </ul>
+      </div>
+      
+      <div class="map-container">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3241.123456789!2d139.7025!3d35.6695!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzXCsDQwJzEwLjIiTiAxMznCsDQyJzA5LjAiRQ!5e0!3m2!1sen!2sus!4v1234567890123!5m2!1sen!2sus" 
+        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+
+    <div class="content-text">
+      <h2>Where Playfulness Meets Perfection</h2>
+      
+      <p>Den, helmed by the charismatic chef Zaiyu Hasegawa, represents a revolutionary approach to Japanese fine dining. This two-Michelin-starred restaurant has consistently ranked among the World's 50 Best Restaurants, earning acclaim for its innovative interpretation of traditional Japanese cuisine infused with unexpected playfulness and creativity.</p>
+      
+      <p>Chef Hasegawa's philosophy centers on "fun" - a concept rarely associated with high-end Japanese dining. His menu features whimsical presentations and surprising flavor combinations that challenge preconceptions while maintaining the highest standards of technique and ingredient quality. The result is an unforgettable dining experience that delights both the palate and the imagination.</p>
+      
+      <div class="photos-container">
+        <div class="photo-item">
+          <img src="https://media.timeout.com/images/105741936/750/422/image.jpg" alt="Den Interior">
+        </div>
+        <div class="photo-item">
+          <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80" alt="Innovative Presentation">
+        </div>
+        <div class="photo-item">
+          <img src="https://images.unsplash.com/photo-1556740738-b6a63e27c4df?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Seasonal Ingredients">
+        </div>
+        <div class="photo-item">
+          <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80" alt="Chef's Creativity">
+        </div>
+      </div>
+      
+      <h2>Signature Innovations</h2>
+      <div class="specialty-grid">
+        <div class="specialty-card">
+          <i class="fas fa-magic"></i>
+          <h3>Playful Presentations</h3>
+          <p>Dishes that surprise and delight, featuring unexpected elements like edible flowers, creative plating, and interactive components.</p>
+        </div>
+        <div class="specialty-card">
+          <i class="fas fa-leaf"></i>
+          <h3>Seasonal Perfection</h3>
+          <p>Menus that change with Japan's seasons, showcasing the finest ingredients at their peak with innovative preparation techniques.</p>
+        </div>
+        <div class="specialty-card">
+          <i class="fas fa-heart"></i>
+          <h3>Emotional Connection</h3>
+          <p>Food that tells stories and creates memories, combining technical excellence with genuine warmth and hospitality.</p>
+        </div>
+      </div>
+      
+      <h2>The Den Experience</h2>
+      
+      <p>Dining at Den is more than a meal - it's a journey through Chef Hasegawa's creative mind. The omakase menu typically features 10-12 courses, each designed to evoke emotion and surprise. Signature dishes might include his famous "Dentucky Fried Chicken" - a playful take on karaage that has become legendary among food enthusiasts.</p>
+      
+      <p>The restaurant's intimate setting, with just 20 seats, ensures personalized attention from the chef and his team. Chef Hasegawa often interacts directly with guests, explaining his inspirations and techniques with infectious enthusiasm that makes every dinner feel like a private cooking show.</p>
+      
+      <div class="content-quote">
+        "At Den, we believe that food should make people happy. When guests smile and laugh while eating our food, that's when we know we've succeeded." - Chef Zaiyu Hasegawa
+      </div>
+      
+      <h2>Culinary Philosophy</h2>
+      
+      <p>Chef Hasegawa's approach to cuisine is deeply rooted in Japanese tradition but fearlessly innovative in execution. He sources the finest seasonal ingredients from across Japan, then applies both classical techniques and modern creativity to create dishes that are simultaneously familiar and surprising.</p>
+      
+      <p>The restaurant's commitment to sustainability and local sourcing is evident in every dish. Chef Hasegawa works closely with farmers, fishermen, and artisans to ensure that each ingredient meets his exacting standards while supporting local communities.</p>
+      
+      <h2>Awards and Recognition</h2>
+      
+      <ul>
+        <li><strong>Two Michelin Stars</strong> - Consistently maintained since 2017</li>
+        <li><strong>World's 50 Best Restaurants</strong> - Ranked #17 in 2023</li>
+        <li><strong>Asia's 50 Best Restaurants</strong> - Multiple appearances in top 10</li>
+        <li><strong>Tabelog Gold Award</strong> - Japan's premier restaurant rating system</li>
+        <li><strong>International acclaim</strong> - Featured in major food publications worldwide</li>
+      </ul>
+      
+      <h2>Tips for Visitors</h2>
+      
+      <ul>
+        <li>Reservations are extremely difficult to secure - book as far in advance as possible</li>
+        <li>Come with an open mind and appetite for adventure</li>
+        <li>Don't hesitate to interact with Chef Hasegawa if he approaches your table</li>
+        <li>Consider the sake pairing to complement the innovative flavors</li>
+        <li>Arrive on time - the experience is carefully choreographed</li>
+        <li>Dress code is smart casual - no need for formal attire</li>
+      </ul>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="../script.js"></script>
+</body>
+</html> 

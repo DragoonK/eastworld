@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Duck de Chine - Eastworld Beijing Restaurant Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Restaurant-specific styles */
+    .restaurant-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+      .restaurant-info {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .restaurant-details {
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .detail-row {
+      display: flex;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+    }
+    
+    .detail-label {
+      font-weight: 600;
+      min-width: 120px;
+      color: #333;
+    }
+    
+    .detail-value {
+      flex: 1;
+      color: #555;
+    }
+    
+    .map-container {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .map-container iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+    }
+    
+    .duck-comparison {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+    
+    @media (max-width: 768px) {
+      .duck-comparison {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .duck-style {
+      padding: 1.5rem;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      transition: transform 0.3s ease;
+    }
+    
+    .duck-style:hover {
+      transform: translateY(-5px);
+    }
+    
+    .duck-style h3 {
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.8rem;
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+    }
+    
+    .photos-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .photo-item {
+      border-radius: 8px;
+      overflow: hidden;
+      height: 150px;
+    }
+    
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .photo-item img:hover {
+      transform: scale(1.05);
+    }
+    
+    .sauce-bar {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin: 2rem 0;
+      text-align: center;
+    }
+    
+    .sauce-item {
+      padding: 1.5rem;
+      border-radius: 8px;
+      background: #f9f9f9;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .sauce-item h3 {
+      margin-bottom: 0.8rem;
+      font-size: 1.1rem;
+    }
+    
+    .sauce-item img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 4px;
+      margin-bottom: 1rem;
+    }
+    
+    .review-section {
+      margin: 2rem 0;
+      padding: 2rem;
+      background: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .booking-button {
+      display: block;
+      background-color: #ff4d4d;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      margin: 1.5rem 0;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    
+    .booking-button:hover {
+      background-color: #e63939;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    .content-quote {
+      font-style: italic;
+      padding: 1.5rem;
+      background: #f5f5f5;
+      border-left: 4px solid #ff4d4d;
+      margin: 1.5rem 0;
+      line-height: 1.6;
+    }
+    
+    .preparation-stages {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 2rem 0;
+      position: relative;
+    }
+    
+    .preparation-stages::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: #ddd;
+      z-index: 1;
+    }
+    
+    .stage {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: #fff;
+      border: 2px solid #2F4F4F;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    
+    .stage-number {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #2F4F4F;
+      margin-bottom: 0.2rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../food.html" class="nav-item active">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="content-container">
+    <div class="content-header">
+      <span class="content-category">PEKING DUCK</span>
+      <h1 class="content-title">Duck de Chine - French-Chinese Duck Innovation</h1>
+      <div class="rating">
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="score-label">4.8/5.0</span>
+      </div>
+    </div>
+
+    <div class="hero-container">
+      <img class="content-hero" src="https://www.cityweekend.com.cn/storage/photos/shares/blogs/restaurants/Duck%20de%20Chine%20panorama.jpg" alt="Duck de Chine signature dish" 
+      onerror="this.onerror=null;this.parentElement.innerHTML='<div style=\'background:#2F4F4F; color:white; padding:2rem; text-align:center\'>Duck de Chine</div>';">
+    </div>
+    
+    <!-- Booking Button -->
+    <a href="#visitor-info" class="booking-button">
+      <i class="fas fa-info-circle"></i> VISITOR INFORMATION
+    </a>
+
+    <div class="restaurant-info">
+      <div class="restaurant-details">
+        <h2>Restaurant Details</h2>
+        <div class="detail-row">
+          <div class="detail-label">Address:</div>
+          <div class="detail-value">1949 – The Hidden City, Courtyard 4, Gongti Bei Lu, Chaoyang District, Beijing</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Hours:</div>
+          <div class="detail-value">11:30 AM - 2:30 PM, 5:30 PM - 10:00 PM (Daily)</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Phone:</div>
+          <div class="detail-value">+86 10-6501-8881</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Price Range:</div>
+          <div class="detail-value">¥300-500 ($45-75) per person</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Cuisine:</div>
+          <div class="detail-value">Chinese, French-inspired Peking Duck</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Reservations:</div>
+          <div class="detail-value">Essential, especially for dinner</div>
+        </div>
+        
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">How to Get There</h3>
+        <p>From Sanlitun:</p>
+        <ul style="margin-bottom: 1rem; padding-left: 1.5rem;">
+          <li>Walk west from Sanlitun Village towards Workers' Stadium (Gongti)</li>
+          <li>Duck de Chine is located in the 1949 - The Hidden City complex</li>
+          <li>Follow signs for courtyard 4 within the complex</li>
+        </ul>
+      </div>
+      <div class="map-container">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3055.325430879693!2d116.45658931536389!3d39.9411919794216!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x35f1a8d9e5a24c67%3A0x7b10c7c77f7474ca!2sDuck%20de%20Chine!5e0!3m2!1sen!2sus!4v1693230090086!5m2!1sen!2sus" allowfullscreen loading="lazy"></iframe>
+      </div>
+    </div>
+
+    <div class="content-text">
+      <h2>French Elegance Meets Beijing Tradition</h2>
+      
+      <p>In a city filled with Peking duck restaurants, Duck de Chine stands apart by masterfully blending Chinese culinary heritage with French elegance. Nestled within the stylishly restored factory complex known as "1949 - The Hidden City," this establishment has elevated Beijing's most famous dish to new gastronomic heights since its opening in 2008.</p>
+      
+      <p>The restaurant's setting itself is a statement of sophisticated fusion: housed in a renovated industrial building with soaring ceilings, exposed brick walls, and sleek contemporary furnishings. Unlike the often brightly lit traditional duck restaurants in Beijing, Duck de Chine offers a more refined ambiance with subtle lighting, comfortable seating, and thoughtful spacing between tables that provides both privacy and atmosphere.</p>
+      
+      <div class="photos-container">
+        <div class="photo-item">
+          <img src="https://media-cdn.tripadvisor.com/media/photo-s/0e/b4/dc/86/peking-duck-and-special.jpg" alt="Sliced Peking duck">
+        </div>
+        <div class="photo-item">
+          <img src="https://media-cdn.tripadvisor.com/media/photo-s/06/13/ca/c7/duck-de-chine.jpg" alt="Duck carving station">
+        </div>
+        <div class="photo-item">
+          <img src="https://media-cdn.tripadvisor.com/media/photo-s/0b/8f/ea/20/photo5jpg.jpg" alt="Restaurant interior">
+        </div>
+        <div class="photo-item">
+          <img src="https://media-cdn.tripadvisor.com/media/photo-s/16/5e/d4/5f/img-20190205-192053-largejpg.jpg" alt="Traditional accompaniments">
+        </div>
+      </div>
+      
+      <h2>The Perfect Duck: A Meticulous Process</h2>
+      
+      <p>What truly distinguishes Duck de Chine is their uncompromising attention to detail in preparing Beijing's signature dish. Their ducks undergo a proprietary aging and preparation process that results in skin that's exceptionally crisp while keeping the meat tender and juicy. Each duck is roasted for precisely 65 minutes in a custom-designed apple wood-fired oven, creating a delicate smoky flavor that enhances the natural richness of the meat.</p>
+      
+      <div class="preparation-stages">
+        <div class="stage">
+          <span class="stage-number">1</span>
+          <span>Selection</span>
+        </div>
+        <div class="stage">
+          <span class="stage-number">2</span>
+          <span>Air Drying</span>
+        </div>
+        <div class="stage">
+          <span class="stage-number">3</span>
+          <span>Glazing</span>
+        </div>
+        <div class="stage">
+          <span class="stage-number">4</span>
+          <span>Roasting</span>
+        </div>
+        <div class="stage">
+          <span class="stage-number">5</span>
+          <span>Carving</span>
+        </div>
+      </div>
+      
+      <p>The tableside carving of the duck is elevated to performance art, as skilled chefs demonstrate their expertise in slicing the perfect pieces—each with the ideal ratio of crispy skin to succulent meat. The traditional three-cut method ensures that diners experience different textures and flavors from various parts of the duck.</p>
+      
+      <div class="content-quote">
+        "When we developed Duck de Chine, we wanted to create a Peking duck that respects centuries of Beijing tradition while incorporating modern techniques and a more refined dining experience. We've spent years perfecting our aging method and roasting temperature to achieve what we believe is the perfect balance of crispy skin and tender meat. The sauce, too, was developed over months of experimentation to complement rather than overpower the natural duck flavor." - Chef Li Qiang, Executive Chef at Duck de Chine
+      </div>
+      
+      <h2>The Famous Sauce Bar</h2>
+      
+      <p>Perhaps Duck de Chine's most innovative contribution to Peking duck cuisine is their signature sauce bar. While traditional restaurants typically offer a single sweet bean sauce, Duck de Chine presents diners with an array of house-made condiments that allow for personalized flavor combinations:</p>
+      
+      <div class="sauce-bar">
+        <div class="sauce-item">
+          <img src="https://www.justonecookbook.com/wp-content/uploads/2020/08/Hoisin-Sauce-0143-I.jpg" alt="Traditional bean sauce">
+          <h3>Traditional Tianmian</h3>
+          <p>The classic sweet bean sauce, perfected with a hint of sesame</p>
+        </div>
+        <div class="sauce-item">
+          <img src="https://www.wandercooks.com/wp-content/uploads/2020/09/chinese-scallion-oil-fb.jpg" alt="Spring onion oil">
+          <h3>Spring Onion Oil</h3>
+          <p>Delicate infused oil that enhances the duck's natural flavor</p>
+        </div>
+        <div class="sauce-item">
+          <img src="https://fluffyrice.com/wp-content/uploads/2021/04/garlic-paste-fresh-scaled-500x500.jpg" alt="Garlic paste">
+          <h3>Garlic Paste</h3>
+          <p>Smooth, aromatic paste adding a subtle pungency</p>
+        </div>
+      </div>
+      
+      <p>The restaurant provides guidance on combining these sauces for different flavor experiences, encouraging diners to experiment based on their preferences. This personalization element adds an interactive dimension to the meal that both honors tradition and invites innovation.</p>
+      
+      <h2>Duck Preparation Styles</h2>
+      
+      <div class="duck-comparison">
+        <div class="duck-style">
+          <h3>Traditional Preparation</h3>
+          <p>Following centuries-old Beijing methods, the duck is air-dried for 36 hours, glazed with maltose, and roasted in a wood-fired oven. The skin achieves a mahogany color and glass-like crispness, while the meat remains moist. Served with thin pancakes, green onions, cucumber, and the restaurant's signature sauce selection.</p>
+        </div>
+        <div class="duck-style">
+          <h3>French-Inspired Innovation</h3>
+          <p>The signature Duck de Chine preparation incorporates French influences with the duck being aged longer (48 hours) and marinated with imported spices and aromatics. The duck is glazed with a proprietary mixture that includes Champagne and honey, resulting in more complex flavor notes. Optionally served with foie gras as an additional luxury element.</p>
+        </div>
+      </div>
+      
+      <h2>Beyond The Duck</h2>
+      
+      <p>While Peking duck is unquestionably the star at Duck de Chine, the menu extends well beyond this signature dish. The kitchen demonstrates versatility with a selection of modern Chinese dishes that incorporate French techniques and presentation styles:</p>
+      
+      <ul>
+        <li><strong>Duck Foie Gras with Osmanthus Honey (¥188)</strong> - A French-Chinese fusion appetizer with delicate local flavors</li>
+        <li><strong>Black Truffle Duck Soup (¥98)</strong> - Rich duck bone broth enhanced with imported black truffles</li>
+        <li><strong>Duck Liver Pâté with Brioche (¥128)</strong> - French preparation using Chinese duck liver</li>
+        <li><strong>Crispy Duck Salad with Pomelo (¥88)</strong> - Refreshing starter with shredded duck and citrus</li>
+        <li><strong>Kung Pao Shrimp (¥168)</strong> - Classic Sichuan dish elevated with premium seafood</li>
+        <li><strong>Stir-fried Seasonal Vegetables (¥68-88)</strong> - Simple, perfect execution of Chinese greens</li>
+      </ul>
+      
+      <p>The beverage program similarly bridges cultures, offering an impressive wine list with selections specifically chosen to pair with the richness of duck, as well as premium Chinese baijiu and craft cocktails incorporating Asian flavors.</p>
+      
+      <div class="review-section">
+        <h2>Eastworld's Review</h2>
+        
+        <h3>Food Quality: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Duck de Chine unquestionably serves one of Beijing's finest Peking ducks. The meticulous preparation process, from selection to aging to precise roasting, results in exceptional flavor and texture. The supporting dishes maintain the same high standard, with quality ingredients and careful execution.</p>
+        
+        <h3>Authenticity: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>While purists might debate the French influences, Duck de Chine fundamentally respects the centuries-old tradition of Peking duck. Their innovations enhance rather than compromise the dish's integrity, and the result still feels authentically Beijing despite the elevated setting and presentation.</p>
+        
+        <h3>Value: <span style="color: #FFD700;">★★★</span></h3>
+        <p>At approximately ¥300-500 per person, Duck de Chine sits firmly in the premium dining category for Beijing. While expensive by local standards, the quality, ambiance, and service justify the price for a special dining experience. Their signature duck (¥338 for a whole duck) feeds 2-4 people and represents good value within the overall experience.</p>
+        
+        <h3>Atmosphere: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Housed in a beautifully renovated industrial space, the restaurant strikes the perfect balance between elegance and comfort. The spacious layout, thoughtful lighting, and design details create a sophisticated yet unpretentious setting ideal for both special occasions and business meals.</p>
+        
+        <h3>Service: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>The staff exhibits professionalism and knowledge rarely found in Beijing restaurants. Servers are well-versed in explaining the duck preparation process and recommending appropriate dishes and wine pairings. English is spoken by most staff, making it particularly accessible for international visitors.</p>
+        
+        <h3>Overall: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Duck de Chine represents the perfect marriage of tradition and innovation in Beijing's dining scene. For visitors seeking to experience the city's signature dish in a refined setting, it offers an unparalleled experience that balances authenticity with contemporary sensibilities. While not the most budget-friendly option, it delivers an exceptional culinary experience worthy of its reputation.</p>
+      </div>
+      
+      <h2>Tips for Visitors</h2>
+      
+      <ul>
+        <li>Make reservations at least 3-5 days in advance, especially for dinner and weekends</li>
+        <li>Order your duck when making your reservation to ensure availability</li>
+        <li>A whole duck serves 2-4 people depending on how many additional dishes you order</li>
+        <li>Ask for a demonstration of the recommended sauce combinations from your server</li>
+        <li>Consider ordering one traditional duck and exploring other menu items rather than ordering multiple ducks</li>
+        <li>The restaurant is particularly beautiful in the evening when the lighting accentuates the architecture</li>
+        <li>If dining with a group, the private rooms offer an exclusive experience for 8-12 guests</li>
+        <li>Don't rush—a proper Peking duck meal should be enjoyed over at least 90 minutes</li>
+        <li>Try the duck bone soup which is made to order with the carcass of your duck</li>
+      </ul>
+      
+      <!-- Visitor Information -->
+      <div id="visitor-info" class="review-section">
+        <h2>Visitor Information</h2>
+        
+        <h3>Reservations:</h3>
+        <p>Reservations are essential and can be made through:</p>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Phone: +86 10-6501-8881 (English spoken)</li>
+          <li>Email: reservation@duck-de-chine.com</li>
+          <li>Most high-end hotels can assist with reservations for international guests</li>
+          <li>Some online booking platforms like Chope also offer reservations</li>
+        </ul>
+        
+        <h3>English Support:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>English menus available with detailed descriptions</li>
+          <li>Most staff speak good conversational English</li>
+          <li>Wine list includes English descriptions and origin information</li>
+        </ul>
+        
+        <h3>Payment Information:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>All major international credit cards accepted</li>
+          <li>WeChat Pay and Alipay accepted</li>
+          <li>Cash (Chinese Yuan) also accepted</li>
+          <li>A 10% service charge is typically added to the bill</li>
+        </ul>
+        
+        <p>Duck de Chine is located in the fashionable 1949 Hidden City complex, which houses several other upscale restaurants and bars. After your meal, consider exploring the complex or heading to nearby Sanlitun for nightlife options. The restaurant is particularly convenient for visitors staying in the Chaoyang District or near the Workers' Stadium area.</p>
+      </div>
+      
+      <a href="../food.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Food Guide</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="../script.js"></script>
+</body>
+</html> 

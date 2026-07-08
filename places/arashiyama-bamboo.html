@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arashiyama Bamboo Grove - Eastworld Wonders</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Wonder page specific styles */
+    .wonder-hero {
+      height: 70vh;
+      background-image: url('https://images.unsplash.com/photo-1607619662634-3ac55ec0e215?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+    }
+    
+    .wonder-hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+    }
+    
+    .wonder-hero-content {
+      position: relative;
+      z-index: 2;
+      padding: 3rem;
+      width: 100%;
+      color: white;
+    }
+    
+    .wonder-title {
+      font-size: 3.5rem;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+    
+    .wonder-location {
+      display: flex;
+      align-items: center;
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+    }
+    
+    .wonder-location i {
+      margin-right: 0.5rem;
+    }
+    
+    .wonder-meta {
+      display: flex;
+      gap: 2rem;
+      margin-top: 1.5rem;
+    }
+    
+    .wonder-meta-item {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .meta-label {
+      font-size: 0.9rem;
+      opacity: 0.8;
+      margin-bottom: 0.3rem;
+    }
+    
+    .meta-value {
+      font-size: 1.2rem;
+      font-weight: 500;
+    }
+    
+    .wonder-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+    
+    .wonder-section {
+      margin-bottom: 4rem;
+    }
+    
+    .section-title {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      padding-bottom: 0.8rem;
+    }
+    
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 70px;
+      height: 3px;
+      background-color: #000;
+    }
+    
+    .section-content p {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: #333;
+      margin-bottom: 1.5rem;
+    }
+    
+    .wonder-image-container {
+      margin: 2.5rem 0;
+    }
+    
+    .wonder-image {
+      width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+    }
+    
+    .caption {
+      font-size: 0.95rem;
+      color: #555;
+      margin-top: 0.8rem;
+      text-align: center;
+      font-style: italic;
+    }
+    
+    /* Facts grid */
+    .facts-container {
+      background: #f9f9f9;
+      padding: 2rem;
+      border-radius: 8px;
+      margin-bottom: 4rem;
+    }
+    
+    .facts-title {
+      font-size: 1.8rem;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    .facts-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    
+    .fact-item {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      transition: transform 0.3s ease;
+    }
+    
+    .fact-item:hover {
+      transform: translateY(-5px);
+    }
+    
+    .fact-icon {
+      font-size: 2rem;
+      color: #4CAF50;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    
+    .fact-title {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+    
+    .fact-text {
+      font-size: 0.95rem;
+      color: #555;
+      line-height: 1.5;
+    }
+    
+    /* Gallery styles */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .gallery-item {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .gallery-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+    }
+    
+    .gallery-item img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      display: block;
+    }
+    
+    /* Visitor information */
+    .practical-info {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .info-card {
+      background: #f9f9f9;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    
+    .info-card-title {
+      font-size: 1.2rem;
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+    }
+    
+    .info-card-title i {
+      margin-right: 0.5rem;
+      color: #4CAF50;
+    }
+    
+    .info-list, .tips-list {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .info-list li {
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .info-list li:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    
+    .info-label {
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      color: #444;
+    }
+    
+    .tips-list li {
+      margin-bottom: 0.8rem;
+      padding-left: 1.5rem;
+      position: relative;
+    }
+    
+    .tips-list li:before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: #4CAF50;
+      font-weight: bold;
+    }
+    
+    .map-container {
+      margin-top: 2rem;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    /* Related wonders section */
+    .related-wonders {
+      background: #f9f9f9;
+      padding: 3rem 1.5rem;
+    }
+    
+    .related-wonders-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .wonder-card {
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      text-decoration: none;
+      color: inherit;
+    }
+    
+    .wonder-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+    }
+    
+    .wonder-card-img {
+      height: 200px;
+      overflow: hidden;
+    }
+    
+    .wonder-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    
+    .wonder-card:hover .wonder-card-img img {
+      transform: scale(1.05);
+    }
+    
+    .wonder-card-content {
+      padding: 1.5rem;
+    }
+    
+    .wonder-card-category {
+      font-size: 0.8rem;
+      color: #4CAF50;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+    
+    .wonder-card-title {
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .wonder-card-description {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 1rem;
+    }
+    
+    .wonder-card-location {
+      font-size: 0.9rem;
+      color: #888;
+      display: flex;
+      align-items: center;
+    }
+    
+    .wonder-card-location i {
+      margin-right: 0.5rem;
+      font-size: 0.8rem;
+    }
+    
+    /* Responsive fixes */
+    @media (max-width: 768px) {
+      .facts-grid,
+      .gallery,
+      .practical-info,
+      .related-wonders-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .wonder-meta {
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+      
+      .wonder-meta-item {
+        flex-basis: calc(50% - 1rem);
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .wonder-hero-content {
+        padding: 2rem 1.5rem;
+      }
+      
+      .wonder-title {
+        font-size: 2.5rem;
+      }
+      
+      .facts-grid,
+      .gallery,
+      .practical-info,
+      .related-wonders-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../food.html" class="nav-item">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../places.html" class="nav-item active">PLACES</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <div class="wonder-hero">
+      <div class="wonder-hero-content">
+        <h1 class="wonder-title">Arashiyama Bamboo Grove</h1>
+        <div class="wonder-location">
+          <i class="fas fa-map-marker-alt"></i> Kyoto, Japan
+        </div>
+        <p>A magical pathway through towering bamboo stalks that captivates visitors with its ethereal beauty</p>
+        <div class="wonder-meta">
+          <div class="wonder-meta-item">
+            <span class="meta-label">CATEGORY</span>
+            <span class="meta-value">Natural</span>
+          </div>
+          <div class="wonder-meta-item">
+            <span class="meta-label">AREA</span>
+            <span class="meta-value">16 hectares</span>
+          </div>
+          <div class="wonder-meta-item">
+            <span class="meta-label">FAMOUS SINCE</span>
+            <span class="meta-value">Heian Period</span>
+          </div>
+          <div class="wonder-meta-item">
+            <span class="meta-label">SPECIAL STATUS</span>
+            <span class="meta-value">Historic Site</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wonder-content">
+      <section class="wonder-section">
+        <h2 class="section-title">Overview</h2>
+        <div class="section-content">
+          <p>The Arashiyama Bamboo Grove is one of Kyoto's most iconic natural wonders, captivating visitors with its towering bamboo stalks that sway gently in the breeze, creating a symphony of rustling leaves and dappled sunlight. Located in the Arashiyama district of western Kyoto, this enchanting forest pathway stretches for hundreds of meters, immersing visitors in a tranquil green world unlike any other.</p>
+          
+          <p>The surreal beauty of the grove comes from the way sunlight filters through the densely packed bamboo, creating an otherworldly atmosphere that has inspired artists, writers, and photographers for centuries. The bamboo stalks, which can grow up to 20 meters tall, form a natural corridor that seems to transport visitors to another realm, offering a unique sensory experience that combines visual splendor with the distinctive sounds of bamboo stalks knocking against each other in the wind.</p>
+          
+          <div class="wonder-image-container">
+            <img src="https://images.unsplash.com/photo-1517821099606-cef63a9e210e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Pathway through Arashiyama Bamboo Grove" class="wonder-image">
+            <p class="caption">The iconic pathway through the Arashiyama Bamboo Grove, with sunlight filtering through the towering bamboo stalks.</p>
+          </div>
+          
+          <p>The bamboo grove is part of the larger Arashiyama Scenic Area, which has been designated as a "Historic Site and Place of Scenic Beauty" by the Japanese government. It connects several important cultural landmarks, including the Tenryū-ji Temple, a UNESCO World Heritage site, and the Ōkōchi Sansō Villa, making it not just a natural wonder but an integral part of Kyoto's cultural landscape.</p>
+        </div>
+      </section>
+      
+      <section class="wonder-section">
+        <h2 class="section-title">History</h2>
+        <div class="section-content">
+          <p>The history of the Arashiyama Bamboo Grove is deeply intertwined with the cultural and political development of Kyoto. The Arashiyama area first gained prominence during the Heian Period (794-1185), when it became a favorite retreat for the imperial court and nobility. Court nobles would escape the confines of the capital to enjoy the natural beauty of Arashiyama, particularly during autumn when the surrounding mountains displayed vibrant fall colors.</p>
+          
+          <p>The bamboo groves specifically gained importance during the rise of Zen Buddhism in Japan. In 1339, the Tenryū-ji Temple was established at the foot of the mountain by Shogun Ashikaga Takauji to commemorate Emperor Go-Daigo. The bamboo groves surrounding the temple were cultivated not only for their aesthetic value but also for practical purposes, as bamboo was an essential material used in traditional Japanese crafts, architecture, and daily life.</p>
+          
+          <p>During the Edo period (1603-1868), the area became famous as a place of scenic beauty, inspiring many poets, painters, and writers. The grove's ethereal quality has been captured in countless works of traditional Japanese art, appearing in ukiyo-e prints and serving as a backdrop for classical poetry.</p>
+          
+          <div class="wonder-image-container">
+            <img src="https://images.unsplash.com/photo-1583309221724-94bb07398e3d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Tenryū-ji Temple near Arashiyama" class="wonder-image">
+            <p class="caption">The historic Tenryū-ji Temple, established in 1339, is located adjacent to the bamboo grove and is an important part of the area's cultural heritage.</p>
+          </div>
+          
+          <p>In modern times, the Arashiyama Bamboo Grove has become one of Japan's most photographed sites and a symbol of Kyoto's natural beauty. In 2011, the Japanese Ministry of the Environment included the sound of bamboo in the grove swaying in the wind as one of the "100 Soundscapes of Japan," recognizing not just its visual impact but its distinctive auditory experience. Today, the bamboo grove continues to be carefully maintained to preserve its natural beauty while accommodating the thousands of visitors who come to experience its magic each day.</p>
+        </div>
+      </section>
+      
+      <div class="facts-container">
+        <h3 class="facts-title">Fascinating Facts About Arashiyama Bamboo Grove</h3>
+        <div class="facts-grid">
+          <div class="fact-item">
+            <div class="fact-icon"><i class="fas fa-tree"></i></div>
+            <h4 class="fact-title">Bamboo Growth</h4>
+            <p class="fact-text">The moso bamboo in the grove is one of the fastest growing plants in the world, capable of growing up to 1 meter (3.3 feet) in a single day under ideal conditions.</p>
+          </div>
+          
+          <div class="fact-item">
+            <div class="fact-icon"><i class="fas fa-volume-up"></i></div>
+            <h4 class="fact-title">Recognized Soundscape</h4>
+            <p class="fact-text">The sound of bamboo stalks swaying and knocking in the wind was recognized as one of the "100 Soundscapes of Japan" by the Japanese Ministry of the Environment.</p>
+          </div>
+          
+          <div class="fact-item">
+            <div class="fact-icon"><i class="fas fa-camera"></i></div>
+            <h4 class="fact-title">Photo Challenge</h4>
+            <p class="fact-text">Despite being one of the most photographed locations in Japan, capturing the true essence of the grove is notoriously difficult due to its unique lighting and the challenge of avoiding crowds.</p>
+          </div>
+          
+          <div class="fact-item">
+            <div class="fact-icon"><i class="fas fa-film"></i></div>
+            <h4 class="fact-title">Film Location</h4>
+            <p class="fact-text">The bamboo grove famously appeared in the international hit film "Memoirs of a Geisha" and has been featured in numerous documentaries about Japan.</p>
+          </div>
+          
+          <div class="fact-item">
+            <div class="fact-icon"><i class="fas fa-leaf"></i></div>
+            <h4 class="fact-title">Sustainable Resource</h4>
+            <p class="fact-text">Bamboo is harvested periodically from the grove as part of its maintenance, and is used for traditional crafts, construction, and various household items throughout Japan.</p>
+          </div>
+          
+          <div class="fact-item">
+            <div class="fact-icon"><i class="fas fa-moon"></i></div>
+            <h4 class="fact-title">Moonlit Path</h4>
+            <p class="fact-text">During annual special events, the bamboo grove is illuminated at night, creating a magical atmosphere that transforms the daytime experience into something completely different.</p>
+          </div>
+        </div>
+      </div>
+      
+      <section class="wonder-section">
+        <h2 class="section-title">The Grove Experience</h2>
+        <div class="section-content">
+          <p>Walking through the Arashiyama Bamboo Grove is a multisensory experience that begins the moment visitors step onto the main path. The most popular route starts near the Tenryū-ji Temple and extends for approximately 500 meters, though the bamboo forest itself covers a much larger area of the Arashiyama district.</p>
+          
+          <p>As you enter the grove, the most immediate and striking feature is the visual transformation. The densely packed bamboo creates natural walls on either side of the path, with stalks stretching upward to form a canopy that filters sunlight in a distinctive way. This creates an almost otherworldly green glow that changes throughout the day, with morning light offering soft, diffused illumination and midday sun creating more dramatic shafts of light between the bamboo.</p>
+          
+          <p>The auditory experience is equally compelling. As the wind passes through the grove, the bamboo stalks sway and knock against each other, creating a natural symphony that ranges from gentle rustling to resonant clacking sounds. This distinctive soundscape has been recognized as one of Japan's most important natural acoustic environments.</p>
+          
+          <div class="wonder-image-container">
+            <img src="https://images.unsplash.com/photo-1551651053-87c31564d263?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1976&q=80" alt="Light filtering through bamboo" class="wonder-image">
+            <p class="caption">Sunlight filtering through the dense bamboo creates an ethereal green glow throughout the pathway.</p>
+          </div>
+          
+          <p>The path through the grove is well-maintained and easily accessible, making it suitable for visitors of all ages and abilities. Along the way, there are several small shrines and rest areas where visitors can pause to fully absorb the atmosphere. The main pathway is flanked by traditional Japanese stone lanterns and rustic fences made from bamboo, adding to the cultural authenticity of the experience.</p>
+          
+          <p>One of the highlights of the route is the view from the higher ground, where visitors can look back and see the bamboo stretching across the hillside. This vantage point offers a different perspective on the grove's scale and beauty, particularly during the golden hours of early morning or late afternoon when the light is most enchanting.</p>
+        </div>
+      </section>
+      
+      <section class="wonder-section">
+        <h2 class="section-title">Visitor Information</h2>
+        <div class="practical-info">
+          <div class="info-card">
+            <h3 class="info-card-title"><i class="fas fa-info-circle"></i> Essential Information</h3>
+            <ul class="info-list">
+              <li>
+                <div class="info-label">Opening Hours</div>
+                <div class="info-value">24 hours, 365 days a year<br>(Best visited early morning or evening)</div>
+              </li>
+              <li>
+                <div class="info-label">Admission Fee</div>
+                <div class="info-value">Free</div>
+              </li>
+              <li>
+                <div class="info-label">Location</div>
+                <div class="info-value">Arashiyama District, Western Kyoto, Japan</div>
+              </li>
+              <li>
+                <div class="info-label">Recommended Duration</div>
+                <div class="info-value">1-2 hours (including nearby attractions)</div>
+              </li>
+              <li>
+                <div class="info-label">Nearest Stations</div>
+                <div class="info-value">Arashiyama Station (Randen Keifuku Line)<br>Saga-Arashiyama Station (JR Line)<br>Hankyu Arashiyama Station (Hankyu Line)</div>
+              </li>
+            </ul>
+          </div>
+          
+          <div class="info-card">
+            <h3 class="info-card-title"><i class="fas fa-lightbulb"></i> Travel Tips</h3>
+            <ul class="tips-list">
+              <li>Visit before 9:00 AM or after 4:00 PM to avoid crowds and capture better photos.</li>
+              <li>Combine your visit with nearby attractions like Tenryū-ji Temple, Togetsukyo Bridge, and the Monkey Park.</li>
+              <li>Consider visiting on weekdays rather than weekends, especially during autumn leaf viewing season (November) and cherry blossom season (April).</li>
+              <li>Take a rickshaw ride through the bamboo grove for a unique experience (advance bookings recommended).</li>
+              <li>Bring a good camera with appropriate settings for shooting in dappled light conditions.</li>
+              <li>Respect the natural environment by staying on the designated paths and not damaging or marking the bamboo.</li>
+              <li>Visit during light rain for a unique atmosphere with fewer tourists and enhanced soundscapes.</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="map-container">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3268.021478520845!2d135.6686337152341!3d35.01699028035752!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6001a9373149e637%3A0xfec579c9195453f5!2sArashiyama%20Bamboo%20Grove!5e0!3m2!1sen!2sus!4v1677650891583!5m2!1sen!2sus" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+      </section>
+      
+      <section class="wonder-section">
+        <h2 class="section-title">Cultural Significance</h2>
+        <div class="section-content">
+          <p>The Arashiyama Bamboo Grove holds profound cultural significance in Japan, representing the harmonious relationship between nature and human culture that is central to Japanese aesthetics and philosophy. Bamboo itself has been an integral part of Japanese culture for centuries, symbolizing strength, flexibility, and resilience - qualities highly valued in Japanese society.</p>
+          
+          <p>In traditional Japanese art and literature, the bamboo grove has long been a source of inspiration. Classical poems frequently reference the sound of wind through bamboo as a metaphor for impermanence and the beauty of transient moments. Ukiyo-e prints and landscape paintings often depict the Arashiyama area, with the distinctive silhouette of bamboo featuring prominently.</p>
+          
+          <p>The grove's connection to Zen Buddhism adds another layer of cultural significance. Adjacent to the Tenryū-ji Temple, one of Kyoto's most important Zen Buddhist temples, the bamboo grove embodied the Zen principles of simplicity, naturalness, and tranquility. Walking through the grove was considered a form of moving meditation, allowing visitors to experience mindfulness through the sensory aspects of the environment.</p>
+          
+          <div class="wonder-image-container">
+            <img src="https://images.unsplash.com/photo-1607619662634-3ac55ec0e215?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="Bamboo Grove Pathway" class="wonder-image">
+            <p class="caption">The path through the bamboo grove has been a place for contemplation and inspiration for centuries.</p>
+          </div>
+          
+          <p>In contemporary culture, the Arashiyama Bamboo Grove has become an iconic symbol of Kyoto and traditional Japan. It frequently appears in travel photography, films, and television shows that seek to capture the essence of Japanese aesthetics. The grove has been featured in international films like "Memoirs of a Geisha" and countless documentaries about Japanese culture, further cementing its status as a cultural icon.</p>
+          
+          <p>Today, the bamboo grove represents the delicate balance between preserving natural heritage and managing tourism. As one of Kyoto's most popular attractions, it faces challenges of overtourism and environmental conservation. Efforts to maintain the bamboo grove's authenticity while accommodating visitors have become an important part of Kyoto's cultural heritage management, reflecting broader concerns about sustainable tourism in historic and natural sites throughout Japan.</p>
+        </div>
+      </section>
+      
+      <section class="wonder-section">
+        <h2 class="section-title">Gallery</h2>
+        <div class="gallery">
+          <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1607619662634-3ac55ec0e215?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="Main path through the Arashiyama Bamboo Grove">
+          </div>
+          <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1629385744995-cd5b6516242d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Traditional rickshaw in the bamboo forest">
+          </div>
+          <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1551651053-87c31564d263?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1976&q=80" alt="Light filtering through bamboo">
+          </div>
+          <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1548404646-d5ffb695dee3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Togetsukyo Bridge near the bamboo grove">
+          </div>
+          <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1528360983277-13d401cdc186?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Bamboo forest in morning light">
+          </div>
+          <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1612423470859-6cd1bede5c50?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="Traditional gate in Arashiyama district">
+          </div>
+        </div>
+      </section>
+    </div>
+    
+    <section class="related-wonders">
+      <h2 class="section-title" style="text-align: center; margin-bottom: 2rem;">Other Japanese Wonders You Might Like</h2>
+      <div class="related-wonders-grid">
+        <a href="fushimi-inari.html" class="wonder-card">
+          <div class="wonder-card-img">
+            <img src="https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80" alt="Fushimi Inari Shrine">
+          </div>
+          <div class="wonder-card-content">
+            <div class="wonder-card-category">SHRINE</div>
+            <h3 class="wonder-card-title">Fushimi Inari Taisha</h3>
+            <p class="wonder-card-description">A mesmerizing shrine with thousands of vermilion torii gates winding up Mount Inari.</p>
+            <div class="wonder-card-location"><i class="fas fa-map-marker-alt"></i> Kyoto, Japan</div>
+          </div>
+        </a>
+        
+        <a href="tokyo-skytree.html" class="wonder-card">
+          <div class="wonder-card-img">
+            <img src="https://images.unsplash.com/photo-1557547143-47b1bcb4e52c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="Tokyo Skytree">
+          </div>
+          <div class="wonder-card-content">
+            <div class="wonder-card-category">MODERN</div>
+            <h3 class="wonder-card-title">Tokyo Skytree</h3>
+            <p class="wonder-card-description">Japan's tallest structure offering breathtaking panoramic views of Tokyo.</p>
+            <div class="wonder-card-location"><i class="fas fa-map-marker-alt"></i> Tokyo, Japan</div>
+          </div>
+        </a>
+        
+        <a href="../guides/kyoto-guide.html" class="wonder-card">
+          <div class="wonder-card-img">
+            <img src="https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Kyoto Guide">
+          </div>
+          <div class="wonder-card-content">
+            <div class="wonder-card-category">GUIDE</div>
+            <h3 class="wonder-card-title">Kyoto City Guide</h3>
+            <p class="wonder-card-description">Explore more wonders in Japan's cultural heart.</p>
+            <div class="wonder-card-location"><i class="fas fa-map-marker-alt"></i> Kyoto, Japan</div>
+          </div>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="../script.js"></script>
+</body>
+</html> 

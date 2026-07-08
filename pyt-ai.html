@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EASTWORLD - Plan Your Trip</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Additional styles for the Plan Your Trip page */
+    .section-title {
+      text-align: center;
+      font-size: 2.5rem;
+      letter-spacing: 2px;
+      margin-bottom: 1rem;
+      animation: fadeInDown 0.8s ease;
+    }
+    
+    .section-description {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto 2rem;
+      animation: fadeIn 1s ease;
+    }
+    
+    .city-buttons {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.8rem;
+      margin-bottom: 2rem;
+      animation: fadeIn 1s ease;
+    }
+    
+    @media (max-width: 992px) {
+      .city-buttons {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .city-buttons {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .city-buttons {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    .city-button {
+      padding: 0.8rem;
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+    
+    .city-button:hover {
+      background: #f0f0f0;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    .city-button.selected {
+      background: #000;
+      color: white;
+      border-color: #000;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    
+    .travel-companion {
+      margin-bottom: 2rem;
+      animation: fadeIn 1s ease 0.2s both;
+    }
+    
+    .companion-options {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .companion-option {
+      flex: 1;
+      padding: 1.2rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .companion-option:hover {
+      background: #f0f0f0;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    .companion-option.selected {
+      background: #000;
+      color: white;
+      transform: translateY(-3px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+    
+    .companion-option.selected h4,
+    .companion-option.selected p,
+    .companion-option.selected i {
+      color: white;
+    }
+    
+    .companion-option i {
+      font-size: 2rem;
+      margin-bottom: 0.8rem;
+      display: block;
+    }
+    
+    .next-step-btn, #generate-plan-btn {
+      background: #000;
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      animation: fadeIn 1s ease 0.4s both;
+    }
+    
+    .next-step-btn:hover, #generate-plan-btn:hover {
+      background: #333;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    .prev-step-btn {
+      background: transparent;
+      border: 1px solid #000;
+      color: #000;
+      padding: 0.8rem 1.5rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      animation: fadeIn 1s ease 0.4s both;
+    }
+    
+    .prev-step-btn:hover {
+      background: #f0f0f0;
+    }
+    
+    .nav-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 2rem;
+    }
+    
+    /* Animation keyframes */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    @keyframes fadeInDown {
+      from { 
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to { 
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes slideIn {
+      from { 
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+      to { 
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+    
+    .form-step {
+      animation: fadeIn 0.5s ease;
+    }
+    
+    .budget-category {
+      animation: slideIn 0.5s ease;
+    }
+    
+    /* New styles for the date inputs on the same line */
+    .date-inputs {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .date-field {
+      flex: 1;
+    }
+    
+    /* Updated styles for date-budget-selector to reduce width */
+    .date-budget-selector {
+      max-width: 800px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    /* Budget slider styles */
+    .budget-slider {
+      margin-bottom: 2rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 1.5rem;
+      margin-top: 1rem;
+    }
+    
+    /* Budget categories section styles */
+    .budget-categories-section {
+      margin-top: 1rem;
+    }
+    
+    .budget-categories-title {
+      margin-bottom: 0.8rem;
+      font-size: 1.1rem;
+      text-align: left;
+    }
+    
+    /* New styles for budget categories with logos */
+    .budget-categories {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .budget-category-container {
+      display: flex;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      transition: all 0.3s ease;
+      animation: fadeIn 0.8s ease;
+    }
+    
+    .budget-category-container:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    .category-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #000;
+      color: white;
+      padding: 1.5rem;
+      min-width: 80px;
+    }
+    
+    .category-logo i {
+      font-size: 2rem;
+    }
+    
+    .budget-category {
+      flex: 1;
+      padding: 1rem;
+    }
+    
+    .budget-options {
+      display: flex;
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+    
+    .budget-option {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    
+    .budget-category-info {
+      text-align: center;
+      font-size: 0.8rem;
+      color: #666;
+      margin-top: 0.8rem;
+    }
+    
+    @media (max-width: 768px) {
+      .date-inputs {
+        flex-direction: column;
+      }
+      
+      .budget-options {
+        flex-direction: column;
+      }
+    }
+    
+    /* Must Have's section styles */
+    .must-haves-description {
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+      color: #555;
+      animation: fadeIn 1s ease;
+    }
+    
+    #selected-city-display {
+      font-weight: 600;
+      text-transform: capitalize;
+    }
+    
+    .must-haves-selector {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      animation: fadeIn 1s ease;
+    }
+    
+    .must-have-option {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background-color: white;
+    }
+    
+    .must-have-option:hover {
+      background-color: #f5f5f5;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    }
+    
+    .must-have-option input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+    
+    .must-have-option label {
+      cursor: pointer;
+      font-size: 0.95rem;
+      flex: 1;
+    }
+    
+    .loading-attractions {
+      grid-column: span 2;
+      text-align: center;
+      padding: 1rem;
+      color: #666;
+      font-style: italic;
+    }
+    
+    @media (max-width: 768px) {
+      .must-haves-selector {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    /* Result action buttons */
+    .result-action-buttons {
+      display: none; /* Hidden by default until itinerary is generated */
+      justify-content: center;
+      gap: 1rem;
+      margin: 2rem 0;
+      animation: fadeIn 1s ease;
+    }
+    
+    .action-button {
+      padding: 0.75rem 1.5rem;
+      background-color: #ff4d4d;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.3s ease;
+    }
+    
+    .action-button:hover {
+      background-color: #e60000;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    .action-button.secondary {
+      background-color: #666;
+    }
+    
+    .action-button.secondary:hover {
+      background-color: #444;
+    }
+    
+    .specific-venue {
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 0.5rem;
+      font-size: 1.1em;
+    }
+    
+    .activity-price {
+      display: inline-block;
+      margin-top: 0.5rem;
+      margin-bottom: 1.5rem;
+      font-weight: 600;
+      color: #0066cc;
+      background-color: rgba(0,102,204,0.1);
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+    }
+    
+    .accommodation-recommendation {
+      margin-top: 1.5rem;
+      padding: 1.25rem;
+      background-color: rgba(255,230,230,0.3);
+      border-left: 4px solid #ff4d4d;
+      border-radius: 4px;
+    }
+    
+    .budget-premium {
+      color: #cc0000;
+    }
+    
+    .budget-moderate {
+      color: #e6a800;
+    }
+    
+    .budget-budget {
+      color: #006600;
+    }
+    
+    .budget-breakdown {
+      margin-top: 1rem;
+      padding: 1rem;
+      background-color: rgba(0,0,0,0.05);
+      border-radius: 4px;
+    }
+    
+    .budget-categories {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 0.5rem;
+    }
+    
+    .budget-category-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .day-plan {
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid #e6e6e6;
+    }
+    
+    .day-plan h4 {
+      background-color: #f9f9f9;
+      padding: 0.75rem 1rem;
+      border-radius: 4px;
+      margin-bottom: 1.25rem;
+      border-left: 3px solid #ff4d4d;
+    }
+    
+    .activity {
+      margin-bottom: 1.5rem;
+      display: grid;
+      grid-template-columns: 100px 1fr;
+      gap: 1rem;
+    }
+    
+    .activity-time {
+      font-weight: 600;
+      color: #666;
+      padding-top: 0.5rem;
+    }
+    
+    .activity-details {
+      background-color: #fafafa;
+      padding: 1rem;
+      border-radius: 4px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    
+    .activity-details h5 {
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+      color: #333;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.35rem;
+    }
+    
+    .recommendation-card {
+      background-color: white;
+      border-radius: 8px;
+      padding: 1.25rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      display: grid;
+      grid-template-columns: 40px 1fr;
+      gap: 1rem;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .recommendation-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    }
+    
+    .recommendation-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: rgba(255,77,77,0.1);
+      color: #ff4d4d;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      font-size: 1.2rem;
+    }
+    
+    .recommendation-content h4 {
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+    }
+    
+    .recommendation-content p {
+      margin: 0;
+      font-size: 0.95rem;
+      color: #555;
+    }
+    
+    .recommendations-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .activity {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+      }
+      
+      .activity-time {
+        padding: 0.25rem 0.5rem;
+        background-color: #f2f2f2;
+        display: inline-block;
+        border-radius: 4px;
+      }
+      
+      .budget-categories {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      
+      .recommendations-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="food.html" class="nav-item">FOOD</a>
+        <a href="stays.html" class="nav-item">STAYS</a>
+        <a href="places.html" class="nav-item">PLACES</a>
+        <a href="products.html" class="nav-item">PRODUCTS</a>
+        <a href="cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="pyt-ai.html" class="nav-item pyt-ai-btn active">PLAN YOUR TRIP</a>
+        <a href="ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="login.html" class="nav-item">LOGIN</a>
+          <a href="register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="content-container">
+    <section class="section-header">
+      <h1 class="section-title">PLAN YOUR TRIP</h1>
+      <p class="section-description">Let our AI assistant create your perfect East Asian adventure based on your preferences and budget</p>
+    </section>
+    
+    <div class="planner-container">
+      <div class="planner-form-container">
+        <form id="trip-planner-form" class="trip-planner-form">
+          <div class="form-step active" id="step-1">
+            <h3>Where would you like to go?</h3>
+            <div class="city-buttons">
+              <button type="button" class="city-button" data-city="tokyo" onclick="selectCity(this)">Tokyo</button>
+              <button type="button" class="city-button" data-city="osaka" onclick="selectCity(this)">Osaka</button>
+              <button type="button" class="city-button" data-city="kyoto" onclick="selectCity(this)">Kyoto</button>
+              <button type="button" class="city-button" data-city="kobe" onclick="selectCity(this)">Kobe</button>
+              <button type="button" class="city-button" data-city="beijing" onclick="selectCity(this)">Beijing</button>
+              <button type="button" class="city-button" data-city="shanghai" onclick="selectCity(this)">Shanghai</button>
+              <button type="button" class="city-button" data-city="guangzhou" onclick="selectCity(this)">Guangzhou</button>
+              <button type="button" class="city-button" data-city="hong-kong" onclick="selectCity(this)">Hong Kong</button>
+              <button type="button" class="city-button" data-city="seoul" onclick="selectCity(this)">Seoul</button>
+              <button type="button" class="city-button" data-city="bangkok" onclick="selectCity(this)">Bangkok</button>
+              <button type="button" class="city-button" data-city="singapore" onclick="selectCity(this)">Singapore</button>
+              <button type="button" class="city-button" data-city="ho-chi-minh-city" onclick="selectCity(this)">Ho Chi Minh City</button>
+              <button type="button" class="city-button" data-city="hanoi" onclick="selectCity(this)">Hanoi</button>
+              <button type="button" class="city-button" data-city="manila" onclick="selectCity(this)">Manila</button>
+              <button type="button" class="city-button" data-city="phnom-penh" onclick="selectCity(this)">Phnom Penh</button>
+              <button type="button" class="city-button" data-city="bali" onclick="selectCity(this)">Bali</button>
+              <button type="button" class="city-button" data-city="phuket" onclick="selectCity(this)">Phuket</button>
+              <button type="button" class="city-button" data-city="siem-reap" onclick="selectCity(this)">Siem Riep</button>
+              <button type="button" class="city-button" data-city="melbourne" onclick="selectCity(this)">Melbourne</button>
+              <button type="button" class="city-button" data-city="sydney" onclick="selectCity(this)">Sydney</button>
+              <button type="button" class="city-button" data-city="chongqing" onclick="selectCity(this)">Chongqing</button>
+              <button type="button" class="city-button" data-city="kuala-lumpur" onclick="selectCity(this)">Kuala Lumpur</button>
+              <button type="button" class="city-button" data-city="busan" onclick="selectCity(this)">Busan</button>
+              <button type="button" class="city-button" data-city="taipei" onclick="selectCity(this)">Taipei</button>
+            </div>
+            
+            <div class="travel-companion">
+              <h3>Are you traveling solo or with a partner?</h3>
+              <div class="companion-options">
+                <div class="companion-option" data-companion="solo" onclick="selectCompanion(this)">
+                  <i class="fas fa-user"></i>
+                  <h4>Solo</h4>
+                  <p>Traveling on your own</p>
+                </div>
+                <div class="companion-option" data-companion="partner" onclick="selectCompanion(this)">
+                  <i class="fas fa-user-friends"></i>
+                  <h4>With Partner</h4>
+                  <p>Traveling with someone</p>
+                </div>
+              </div>
+            </div>
+            
+            <button type="button" class="next-step-btn" onclick="goToNextStep(this)">Next: Trip Details</button>
+          </div>
+          
+          <div class="form-step" id="step-2">
+            <h3>When are you traveling?</h3>
+            <div class="date-budget-selector">
+              <div class="date-range" style="margin-bottom: 1.5rem;">
+                <div class="date-inputs">
+                  <div class="date-field">
+                    <label for="start-date">Start Date</label>
+                    <input type="date" id="start-date" name="start-date">
+                  </div>
+                  <div class="date-field">
+                    <label for="end-date">End Date</label>
+                    <input type="date" id="end-date" name="end-date">
+                  </div>
+                </div>
+              </div>
+              
+              <div class="budget-slider">
+                <label for="budget-range">Your Budget</label>
+                <div class="budget-range-container">
+                  <input type="range" id="budget-range" name="budget" min="500" max="10000" step="500" value="2500" oninput="document.getElementById('budget-display').textContent = Number(this.value).toLocaleString(); document.getElementById('budget-display').style.color = parseInt(this.value) > 5000 ? '#cc0000' : '#006600';">
+                  <div class="budget-value">$<span id="budget-display" style="font-size: 1.3rem; font-weight: bold;">2,500</span></div>
+                </div>
+                <div class="budget-labels">
+                  <span>Budget</span>
+                  <span>Luxury</span>
+                </div>
+              </div>
+
+              <div class="budget-categories-section">
+                <h4 class="budget-categories-title">Select Budget Category for Each Aspect of Your Trip</h4>
+                <div class="budget-categories">
+                  <div class="budget-category-container">
+                    <div class="category-logo">
+                      <i class="fas fa-hotel"></i>
+                    </div>
+                    <div class="budget-category">
+                      <label>Stays (Accommodation)</label>
+                      <div class="budget-options">
+                        <div class="budget-option">
+                          <input type="radio" id="stays-budget" name="stays-budget" value="budget" checked>
+                          <label for="stays-budget">$ Budget</label>
+                        </div>
+                        <div class="budget-option">
+                          <input type="radio" id="stays-standard" name="stays-budget" value="standard">
+                          <label for="stays-standard">$$ Moderate</label>
+                        </div>
+                        <div class="budget-option">
+                          <input type="radio" id="stays-premium" name="stays-budget" value="premium">
+                          <label for="stays-premium">$$$ Premium</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="budget-category-container">
+                    <div class="category-logo">
+                      <i class="fas fa-utensils"></i>
+                    </div>
+                    <div class="budget-category">
+                      <label>Food (Dining)</label>
+                      <div class="budget-options">
+                        <div class="budget-option">
+                          <input type="radio" id="food-budget" name="food-budget" value="budget" checked>
+                          <label for="food-budget">$ Budget</label>
+                        </div>
+                        <div class="budget-option">
+                          <input type="radio" id="food-standard" name="food-budget" value="standard">
+                          <label for="food-standard">$$ Moderate</label>
+                        </div>
+                        <div class="budget-option">
+                          <input type="radio" id="food-premium" name="food-budget" value="premium">
+                          <label for="food-premium">$$$ Premium</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="budget-category-container">
+                    <div class="category-logo">
+                      <i class="fas fa-compass"></i>
+                    </div>
+                    <div class="budget-category">
+                      <label>Wonders (Activities)</label>
+                      <div class="budget-options">
+                        <div class="budget-option">
+                          <input type="radio" id="wonders-budget" name="wonders-budget" value="budget" checked>
+                          <label for="wonders-budget">$ Budget</label>
+                        </div>
+                        <div class="budget-option">
+                          <input type="radio" id="wonders-standard" name="wonders-budget" value="standard">
+                          <label for="wonders-standard">$$ Moderate</label>
+                        </div>
+                        <div class="budget-option">
+                          <input type="radio" id="wonders-premium" name="wonders-budget" value="premium">
+                          <label for="wonders-premium">$$$ Premium</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="budget-category-info">
+                    <p>$ = Budget options | $$ = Moderate options | $$$ = Premium options</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nav-buttons">
+              <button type="button" class="prev-step-btn" onclick="goToPrevStep(this)">Previous</button>
+              <button type="button" class="next-step-btn" onclick="goToNextStep(this)">Next: Interests</button>
+            </div>
+          </div>
+          
+          <div class="form-step" id="step-3">
+            <h3>What are you interested in?</h3>
+            <div class="interests-selector">
+              <div class="interest-option">
+                <input type="checkbox" id="interest-culture" name="interests" value="culture">
+                <label for="interest-culture">Culture & History</label>
+              </div>
+              <div class="interest-option">
+                <input type="checkbox" id="interest-food" name="interests" value="food">
+                <label for="interest-food">Food & Dining</label>
+              </div>
+              <div class="interest-option">
+                <input type="checkbox" id="interest-nature" name="interests" value="nature">
+                <label for="interest-nature">Nature & Outdoors</label>
+              </div>
+              <div class="interest-option">
+                <input type="checkbox" id="interest-shopping" name="interests" value="shopping">
+                <label for="interest-shopping">Shopping & Markets</label>
+              </div>
+              <div class="interest-option">
+                <input type="checkbox" id="interest-nightlife" name="interests" value="nightlife">
+                <label for="interest-nightlife">Nightlife & Entertainment</label>
+              </div>
+              <div class="interest-option">
+                <input type="checkbox" id="interest-relaxation" name="interests" value="relaxation">
+                <label for="interest-relaxation">Relaxation & Wellness</label>
+              </div>
+            </div>
+            
+            <!-- New Must Have's section -->
+            <h3>Must Have's</h3>
+            <p class="must-haves-description">Select the attractions you don't want to miss in <span id="selected-city-display">your destination</span>:</p>
+            <div class="must-haves-selector" id="must-haves-container">
+              <!-- Must-have options will be dynamically generated based on selected city -->
+              <div class="loading-attractions">
+                <p><i class="fas fa-spinner fa-spin"></i> Loading attractions based on your destination...</p>
+              </div>
+            </div>
+            
+            <div class="nav-buttons">
+              <button type="button" class="prev-step-btn" onclick="goToPrevStep(this)">Previous</button>
+              <button type="button" id="generate-plan-btn" onclick="generateTripPlan()">Generate My Trip Plan</button>
+            </div>
+          </div>
+        </form>
+      </div>
+      
+      <div class="planner-results" id="planner-results">
+        <div class="results-placeholder">
+          <img src="https://cdn.dribbble.com/users/1186261/screenshots/3718681/media/c1a179995d063947e8b0d5b60c746618.gif" alt="AI Planning" class="planning-animation">
+          <p>Your personalized trip plan will appear here after you complete the form</p>
+        </div>
+        <!-- AI-generated results will be displayed here -->
+        <div class="result-action-buttons" style="display: none;">
+          <button id="save-itinerary-btn" class="action-button"><i class="fas fa-download"></i> Save Itinerary</button>
+          <button id="reset-form-btn" class="action-button secondary"><i class="fas fa-redo"></i> Start Over</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  
+  <script>
+    // Direct function to handle city button clicks
+    function selectCity(button) {
+      // Remove selection from all buttons
+      document.querySelectorAll('.city-button').forEach(btn => {
+        btn.classList.remove('selected');
+      });
+      
+      // Add selection to clicked button
+      button.classList.add('selected');
+      
+      // Update the city name display if it exists
+      const selectedCityDisplay = document.getElementById('selected-city-display');
+      if (selectedCityDisplay) {
+        selectedCityDisplay.textContent = button.getAttribute('data-city').replace(/-/g, ' ');
+      }
+      
+      console.log("City selected:", button.getAttribute('data-city'));
+    }
+    
+    // Direct function to handle companion selection
+    function selectCompanion(option) {
+      // Remove selection from all options
+      document.querySelectorAll('.companion-option').forEach(opt => {
+        opt.classList.remove('selected');
+      });
+      
+      // Add selection to clicked option
+      option.classList.add('selected');
+      
+      console.log("Companion selected:", option.getAttribute('data-companion'));
+    }
+    
+    // Function to handle moving to next step
+    function goToNextStep(button) {
+      const currentStep = button.closest('.form-step');
+      const nextStep = currentStep.nextElementSibling;
+      
+      // Validate current step before proceeding
+      if (currentStep.id === 'step-1') {
+        const selectedCityButton = currentStep.querySelector('.city-button.selected');
+        const selectedCompanionOption = currentStep.querySelector('.companion-option.selected');
+        
+        if (!selectedCityButton) {
+          alert('Please select a city before proceeding.');
+          return;
+        }
+        
+        if (!selectedCompanionOption) {
+          alert('Please select if you are traveling solo or with a partner.');
+          return;
+        }
+      }
+      
+      if (nextStep && nextStep.classList.contains('form-step')) {
+        currentStep.classList.remove('active');
+        nextStep.classList.add('active');
+        
+        // If moving to step 3 (attractions), generate the attractions
+        if (nextStep.id === 'step-3') {
+          const selectedCityButton = document.querySelector('.city-button.selected');
+          if (selectedCityButton) {
+            const selectedCity = selectedCityButton.getAttribute('data-city');
+            console.log("Generating attractions for step 3, city:", selectedCity);
+            window.generateAttractions(selectedCity);
+          }
+        }
+        
+        // Add animation
+        nextStep.style.animation = 'none';
+        setTimeout(() => {
+          nextStep.style.animation = 'fadeIn 0.5s ease';
+        }, 10);
+      }
+    }
+    
+    // Function to handle moving to previous step
+    function goToPrevStep(button) {
+      const currentStep = button.closest('.form-step');
+      const prevStep = currentStep.previousElementSibling;
+      
+      if (prevStep && prevStep.classList.contains('form-step')) {
+        currentStep.classList.remove('active');
+        prevStep.classList.add('active');
+        
+        // Add animation
+        prevStep.style.animation = 'none';
+        setTimeout(() => {
+          prevStep.style.animation = 'fadeIn 0.5s ease';
+        }, 10);
+      }
+    }
+    
+    // Function to generate trip plan
+    function generateTripPlan() {
+      console.log("Calling enhanced trip plan generator...");
+      
+      // Call the global function from script.js that has access to all the enhanced itinerary functions
+      if (typeof generateEnhancedTripPlan === 'function') {
+        generateEnhancedTripPlan();
+      } else {
+        alert("Enhanced trip planning functionality not available. Please make sure script.js is properly loaded.");
+      }
+    }
+    
+    // Must-have attractions data for each city
+    const cityAttractions = {
+      'tokyo': [
+        'Tokyo Skytree',
+        'Meiji Shrine',
+        'Shibuya Crossing',
+        'Tsukiji Fish Market',
+        'Senso-ji Temple'
+      ],
+      'osaka': [
+        'Osaka Castle',
+        'Dotonbori',
+        'Universal Studios Japan',
+        'Kuromon Ichiba Market',
+        'Umeda Sky Building'
+      ],
+      'kyoto': [
+        'Fushimi Inari Shrine',
+        'Kinkaku-ji (Golden Pavilion)',
+        'Arashiyama Bamboo Grove',
+        'Kiyomizu-dera Temple',
+        'Nijo Castle'
+      ],
+      'kobe': [
+        'Kobe Harborland',
+        'Kobe Beef Restaurants',
+        'Nunobiki Herb Garden',
+        'Meriken Park',
+        'Ikuta Shrine'
+      ],
+      'beijing': [
+        'Great Wall of China',
+        'Forbidden City',
+        'Temple of Heaven',
+        'Summer Palace',
+        'Tiananmen Square'
+      ],
+      'shanghai': [
+        'The Bund',
+        'Yu Garden',
+        'Shanghai Tower',
+        'Nanjing Road',
+        'Oriental Pearl Tower'
+      ],
+      'guangzhou': [
+        'Canton Tower',
+        'Chen Clan Ancestral Hall',
+        'Shamian Island',
+        'Yuexiu Park',
+        'Chimelong Safari Park'
+      ],
+      'hong-kong': [
+        'Victoria Peak',
+        'Hong Kong Disneyland',
+        'Tsim Sha Tsui Promenade',
+        'Temple Street Night Market',
+        'Tian Tan Buddha'
+      ],
+      'seoul': [
+        'Gyeongbokgung Palace',
+        'N Seoul Tower',
+        'Myeongdong Shopping Street',
+        'Bukchon Hanok Village',
+        'Lotte World'
+      ],
+      'bangkok': [
+        'Grand Palace',
+        'Wat Arun',
+        'Chatuchak Weekend Market',
+        'Khao San Road',
+        'Chao Phraya River'
+      ],
+      'singapore': [
+        'Gardens by the Bay',
+        'Marina Bay Sands',
+        'Sentosa Island',
+        'Singapore Zoo',
+        'Orchard Road'
+      ],
+      'ho-chi-minh-city': [
+        'Cu Chi Tunnels',
+        'War Remnants Museum',
+        'Ben Thanh Market',
+        'Notre-Dame Cathedral Basilica',
+        'Bitexco Financial Tower'
+      ],
+      'hanoi': [
+        'Hoan Kiem Lake',
+        'Hanoi Old Quarter',
+        'Temple of Literature',
+        'Ho Chi Minh Mausoleum',
+        'Thang Long Water Puppet Theatre'
+      ],
+      'manila': [
+        'Intramuros',
+        'Rizal Park',
+        'Manila Ocean Park',
+        'Fort Santiago',
+        'San Agustin Church'
+      ],
+      'phnom-penh': [
+        'Royal Palace',
+        'Tuol Sleng Genocide Museum',
+        'Central Market',
+        'National Museum of Cambodia',
+        'Wat Phnom'
+      ],
+      'bali': [
+        'Tanah Lot Temple',
+        'Ubud Monkey Forest',
+        'Tegallalang Rice Terraces',
+        'Kuta Beach',
+        'Uluwatu Temple'
+      ],
+      'phuket': [
+        'Patong Beach',
+        'Big Buddha Phuket',
+        'Old Phuket Town',
+        'Phang Nga Bay',
+        'Bangla Road'
+      ],
+      'siem-reap': [
+        'Angkor Wat',
+        'Bayon Temple',
+        'Ta Prohm',
+        'Angkor Thom',
+        'Pub Street'
+      ],
+      'melbourne': [
+        'Federation Square',
+        'Royal Botanic Gardens',
+        'Great Ocean Road',
+        'Melbourne Cricket Ground',
+        'Queen Victoria Market'
+      ],
+      'sydney': [
+        'Sydney Opera House',
+        'Sydney Harbour Bridge',
+        'Bondi Beach',
+        'Darling Harbour',
+        'Royal Botanic Garden'
+      ],
+      'chongqing': [
+        'Three Gorges Museum',
+        'Hongyadong Complex',
+        'Ciqikou Ancient Town',
+        'Dazu Rock Carvings',
+        'Yangtze River Cableway'
+      ],
+      'kuala-lumpur': [
+        'Petronas Twin Towers',
+        'Batu Caves',
+        'Central Market',
+        'Merdeka Square',
+        'Petaling Street'
+      ],
+      'busan': [
+        'Haeundae Beach',
+        'Gamcheon Culture Village',
+        'Jagalchi Fish Market',
+        'Busan Tower',
+        'Haedong Yonggungsa Temple'
+      ],
+      'taipei': [
+        'Taipei 101',
+        'National Palace Museum',
+        'Shilin Night Market',
+        'Chiang Kai-shek Memorial Hall',
+        'Longshan Temple'
+      ]
+    };
+    
+    // Function to generate attractions based on selected city
+    // Make it globally accessible for script.js
+    window.generateAttractions = function(city) {
+      console.log("Generating attractions for city:", city);
+      const mustHavesContainer = document.getElementById('must-haves-container');
+      const selectedCityDisplay = document.getElementById('selected-city-display');
+      
+      if (!mustHavesContainer) {
+        console.log("Must-haves container not found");
+        return;
+      }
+      
+      // Clear previous content
+      mustHavesContainer.innerHTML = '';
+      
+      // Update the city name display in the Must Have's section
+      if (selectedCityDisplay) {
+        selectedCityDisplay.textContent = city.replace(/-/g, ' ');
+      } else {
+        console.log("Selected city display element not found");
+      }
+      
+      if (cityAttractions[city]) {
+        console.log("Found attractions for city:", cityAttractions[city]);
+        const attractions = cityAttractions[city];
+        
+        // Create checkbox options for each attraction
+        attractions.forEach((attraction, index) => {
+          const attractionOption = document.createElement('div');
+          attractionOption.className = 'must-have-option';
+          
+          const checkboxId = `attraction-${city}-${index}`;
+          
+          attractionOption.innerHTML = `
+            <input type="checkbox" id="${checkboxId}" name="must-haves" value="${attraction}">
+            <label for="${checkboxId}">${attraction}</label>
+          `;
+          
+          mustHavesContainer.appendChild(attractionOption);
+        });
+      } else {
+        // Fallback if no attractions defined for this city
+        mustHavesContainer.innerHTML = '<p class="loading-attractions">No attractions data available for this city.</p>';
+      }
+    }
+  </script>
+</body>
+</html> 

@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Baoyuan Dumplings - Eastworld Beijing Restaurant Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Restaurant-specific styles */
+    .restaurant-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+      .restaurant-info {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .restaurant-details {
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .detail-row {
+      display: flex;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+    }
+    
+    .detail-label {
+      font-weight: 600;
+      min-width: 120px;
+      color: #333;
+    }
+    
+    .detail-value {
+      flex: 1;
+      color: #555;
+    }
+    
+    .map-container {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .map-container iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+    }
+    
+    .dumpling-palette {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    @media (max-width: 768px) {
+      .dumpling-palette {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    .dumpling-color {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+    
+    .dumpling-color:hover {
+      transform: translateY(-5px);
+    }
+    
+    .dumpling-color img {
+      height: 150px;
+      width: 100%;
+      object-fit: cover;
+    }
+    
+    .dumpling-color h3 {
+      padding: 0.8rem;
+      text-align: center;
+      font-size: 1rem;
+      margin: 0;
+      background: #f9f9f9;
+    }
+    
+    .photos-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .photo-item {
+      border-radius: 8px;
+      overflow: hidden;
+      height: 150px;
+    }
+    
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .photo-item img:hover {
+      transform: scale(1.05);
+    }
+    
+    .review-section {
+      margin: 2rem 0;
+      padding: 2rem;
+      background: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .booking-button {
+      display: block;
+      background-color: #ff4d4d;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      margin: 1.5rem 0;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    
+    .booking-button:hover {
+      background-color: #e63939;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    .review-carousel {
+      position: relative;
+      margin: 2rem 0;
+      overflow: hidden;
+      padding: 1rem 0;
+    }
+    
+    .review-slides {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    
+    .review-slide {
+      min-width: 100%;
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .reviewer-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #f0f0f0;
+      padding-bottom: 0.8rem;
+    }
+    
+    .reviewer-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding-top: 0.2rem;
+    }
+    
+    .review-date {
+      color: #888;
+      font-size: 0.75rem;
+      margin-top: 0.1rem;
+    }
+    
+    .content-quote {
+      font-style: italic;
+      padding: 1.5rem;
+      background: #f5f5f5;
+      border-left: 4px solid #ff4d4d;
+      margin: 1.5rem 0;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../food.html" class="nav-item active">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="content-container">
+    <div class="content-header">
+      <span class="content-category">DUMPLINGS</span>
+      <h1 class="content-title">Baoyuan Dumplings - Beijing's Colorful Dumpling Artistry</h1>
+      <div class="rating">
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star half-star">
+          <i class="far fa-star"></i>
+          <i class="fas fa-star-half"></i>
+        </span>
+        <span class="score-label">4.3/5.0</span>
+      </div>
+    </div>
+
+    <div class="hero-container">
+      <img class="content-hero" src="https://rimage.gnst.jp/livejapan.com/public/article/detail/a/00/02/a0002591/img/basic/a0002591_main.jpg" alt="Rainbow dumplings at Baoyuan" 
+      onerror="this.onerror=null;this.parentElement.innerHTML='<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#333;color:white;font-size:1.5rem;text-align:center;padding:2rem;\'>Baoyuan Dumplings</div>';">
+    </div>
+    
+    <!-- Booking Button -->
+    <a href="#visitor-info" class="booking-button">
+      <i class="fas fa-info-circle"></i> VISITOR INFORMATION
+    </a>
+
+    <div class="restaurant-info">
+      <div class="restaurant-details">
+        <h2>Restaurant Details</h2>
+        <div class="detail-row">
+          <div class="detail-label">Address:</div>
+          <div class="detail-value">6 Maizidian Jie, Chaoyang District, Beijing, China</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Hours:</div>
+          <div class="detail-value">11:00 AM - 9:30 PM (Daily)</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Phone:</div>
+          <div class="detail-value">+86 10-6586-4967</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Price Range:</div>
+          <div class="detail-value">¥60-120 ($9-18) per person</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Cuisine:</div>
+          <div class="detail-value">Northern Chinese, Dumplings</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Reservations:</div>
+          <div class="detail-value">Recommended on weekends</div>
+        </div>
+        
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">How to Get There</h3>
+        <p>From Dongzhimen Subway Station:</p>
+        <ul style="margin-bottom: 1rem; padding-left: 1.5rem;">
+          <li>Take Line 2 to Dongzhimen Station</li>
+          <li>Take Exit C and walk north on Dongzhimen Outer Street</li>
+          <li>Turn right onto Maizidian Street</li>
+          <li>The restaurant is about 300 meters on your right</li>
+        </ul>
+      </div>
+      <div class="map-container">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3055.325430879693!2d116.43658931536389!3d39.9411919794216!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x35f1ac6bb0f5db7f%3A0xe0ecc89becc47846!2sBaoyuan%20Jiaozi%20Wu!5e0!3m2!1sen!2sus!4v1693230090086!5m2!1sen!2sus" allowfullscreen loading="lazy"></iframe>
+      </div>
+    </div>
+
+    <div class="content-text">
+      <h2>Beijing's Rainbow Dumpling Phenomenon</h2>
+      
+      <p>In the northeastern corner of Beijing's Chaoyang District, Baoyuan Dumplings has transformed the traditional Chinese dumpling into an Instagram-worthy culinary art form. What began as a local favorite has blossomed into a must-visit destination for food enthusiasts seeking a modern twist on Beijing's classic dumpling culture.</p>
+      
+      <p>While the restaurant's setting remains humble and traditional—a no-frills dining room with simple wooden tables and bright lighting—the dumplings themselves are anything but ordinary. Baoyuan's claim to fame is their naturally dyed, vibrantly colored dumpling wrappers that turn a standard meal into an artistic experience.</p>
+      
+      <div class="photos-container">
+        <div class="photo-item">
+          <img src="https://static.independent.co.uk/s3fs-public/thumbnails/image/2018/09/11/09/istock-879838466.jpg" alt="Purple dumplings">
+        </div>
+        <div class="photo-item">
+          <img src="https://img.theculturetrip.com/1440x807/smart/wp-content/uploads/2018/05/shutterstock_1035331537.jpg" alt="Colorful dumpling plate">
+        </div>
+        <div class="photo-item">
+          <img src="https://img.theculturetrip.com/1440x807/smart/wp-content/uploads/2017/05/baoyuanjiaozi.jpg" alt="Green spinach dumplings">
+        </div>
+        <div class="photo-item">
+          <img src="https://img.theculturetrip.com/1440x807/smart/wp-content/uploads/2017/05/shutterstock_276517315.jpg" alt="Dumpling preparation">
+        </div>
+      </div>
+      
+      <h2>The Art of Colored Dumplings</h2>
+      
+      <p>What sets Baoyuan apart from countless other dumpling houses in Beijing is their innovative use of natural vegetable dyes to create their Instagram-famous multicolored dumpling skins. Unlike other establishments that might rely on artificial food coloring, Baoyuan infuses their dumpling dough with vegetable juices and natural ingredients to achieve their distinctive palette:</p>
+      
+      <div class="dumpling-palette">
+        <div class="dumpling-color">
+          <img src="https://images.getrecipekit.com/20220301142809-spinach-20dumplings.jpg?aspect_ratio=16:9&quality=90&" alt="Green spinach dumplings">
+          <h3>Emerald (Spinach)</h3>
+        </div>
+        <div class="dumpling-color">
+          <img src="https://media-cdn.tripadvisor.com/media/photo-s/1a/6a/10/90/purple-cabbage-dumplings.jpg" alt="Purple cabbage dumplings">
+          <h3>Violet (Purple Cabbage)</h3>
+        </div>
+        <div class="dumpling-color">
+          <img src="https://i0.wp.com/theplantbasedwok.com/wp-content/uploads/2022/01/Turmeric-Dumplings.jpg?resize=600%2C600&ssl=1" alt="Yellow turmeric dumplings">
+          <h3>Golden (Turmeric)</h3>
+        </div>
+        <div class="dumpling-color">
+          <img src="https://starvingfoodseeker.com/wp-content/uploads/2018/05/orange-dumpling.jpeg" alt="Orange carrot dumplings">
+          <h3>Amber (Carrot)</h3>
+        </div>
+      </div>
+      
+      <p>Each colored wrapper doesn't just serve aesthetic purposes—they subtly influence the flavor profile of the dumpling, adding depth to the culinary experience. The spinach-infused emerald dumplings carry a mild earthy undertone, while the purple cabbage wrappers offer a slightly sweeter note that complements certain fillings particularly well.</p>
+      
+      <div class="content-quote">
+        "Our colorful dumplings began as an experiment to make traditional food more appealing to younger generations. We never expected to create such a phenomenon. Now, we see people from all over the world visiting just to photograph and taste our rainbow dumplings. But for us, what matters most is that the flavors remain authentic to Beijing's dumpling traditions." - Zhang Wei, Head Chef at Baoyuan Dumplings
+      </div>
+      
+      <h2>Beyond the Colors: Exceptional Fillings</h2>
+      
+      <p>While the vibrant colors might initially catch your eye, it's the quality and creativity of the fillings that keep locals coming back. Baoyuan offers over 20 varieties of fillings, ranging from traditional to innovative combinations:</p>
+      
+      <ul>
+        <li><strong>Pork and Fennel (猪肉茴香)</strong> - A Beijing classic, perfectly balanced with fragrant fennel seeds</li>
+        <li><strong>Lamb and Caraway (羊肉孜然)</strong> - Northern-style dumplings with warming spices</li>
+        <li><strong>Pork and Pickled Cabbage (猪肉酸菜)</strong> - A local favorite with tangy preserved vegetables</li>
+        <li><strong>Three Delicacies (三鲜)</strong> - A mix of pork, shrimp, and egg with chives</li>
+        <li><strong>Wild Mushroom and Tofu (野菌豆腐)</strong> - A vegetarian option with earthy forest mushrooms</li>
+        <li><strong>Seafood Medley (海鲜)</strong> - Prized mix of shrimp, scallop, and squid</li>
+      </ul>
+      
+      <p>The restaurant also offers seasonal specialties that incorporate the freshest ingredients available, such as garlic chive and egg dumplings in spring or pumpkin-filled dumplings in autumn.</p>
+      
+      <!-- Customer Reviews Carousel -->
+      <h2>Customer Reviews</h2>
+      
+      <div class="review-carousel">
+        <div class="carousel-arrow carousel-prev">
+          <i class="fas fa-chevron-left"></i>
+        </div>
+        
+        <div class="review-slides">
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Alex T.</div>
+                <div class="review-date">Visited August 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"After seeing these colorful dumplings all over social media, I had to try them during my Beijing trip. They absolutely lived up to the hype! Not just visually stunning but delicious too. We ordered the purple cabbage dumplings with the three delicacies filling and green spinach with lamb—both excellent. The staff was extremely patient with our limited Chinese and even demonstrated the proper way to eat them with vinegar and chili oil. A must-visit in Beijing for both the food and the photos!"</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Lin Jie</div>
+                <div class="review-date">Visited July 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="far fa-star" style="color: #ddd;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"As a Beijing local, I've tried most dumpling shops in the city, and Baoyuan ranks among my top three. Their colored dumplings aren't just a gimmick—the wrappers have a good texture and the fillings are generous. The pork and pickled cabbage is especially authentic with just the right amount of seasoning. It's become more crowded with tourists in recent years, but they've maintained their quality. Only minor complaint is that wait times can be long on weekends, so come early or make reservations."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Sarah M.</div>
+                <div class="review-date">Visited June 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="far fa-star" style="color: #ddd;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"Baoyuan offers a unique dumpling experience that balances innovation with tradition. The naturally dyed wrappers are beautiful, especially the purple ones, and they don't compromise on taste. We tried the wild mushroom and tofu dumplings which had a wonderful umami flavor, and the classic pork and chive which was perfectly seasoned. The restaurant itself is unpretentious—exactly what you'd expect from an authentic Beijing dumpling house. Their homemade chili oil is exceptional and complements every dumpling variety. Great value too at around 80 yuan per person for a satisfying meal."</p>
+          </div>
+        </div>
+        
+        <div class="carousel-arrow carousel-next">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+        
+        <div class="carousel-nav">
+          <div class="carousel-dot active"></div>
+          <div class="carousel-dot"></div>
+          <div class="carousel-dot"></div>
+        </div>
+      </div>
+      
+      <h2>Menu Highlights</h2>
+      
+      <p>Beyond the signature colored dumplings, Baoyuan offers a selection of other regional specialties worth exploring:</p>
+      
+      <ul>
+        <li><strong>Assorted Colored Dumpling Platter (¥88)</strong> - The signature offering featuring 24 dumplings with four different colored wrappers and fillings</li>
+        <li><strong>Traditional Boiled Dumplings (¥48-68)</strong> - Classic Beijing-style dumplings in various filling options</li>
+        <li><strong>Pan-Fried Pot Stickers (¥58)</strong> - Crispy-bottomed dumplings served with black vinegar</li>
+        <li><strong>Cold Shredded Potato (¥28)</strong> - A refreshing appetizer of julienned potato in vinegar dressing</li>
+        <li><strong>Cucumber with Garlic Sauce (¥22)</strong> - The perfect palate cleanser between dumpling varieties</li>
+        <li><strong>Sweet Red Bean Dumplings (¥35)</strong> - Dessert dumplings with purple sweet potato wrappers</li>
+      </ul>
+      
+      <div class="review-section">
+        <h2>Eastworld's Review</h2>
+        
+        <h3>Food Quality: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Baoyuan excels in both presentation and flavor. The colored dumpling wrappers maintain the perfect thickness and chewiness, while the fillings are generously portioned and expertly seasoned. The naturally dyed wrappers actually enhance rather than detract from the traditional flavors.</p>
+        
+        <h3>Authenticity: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>While the rainbow colors add a modern twist, the cooking techniques and flavor profiles remain true to Beijing's dumpling traditions. The restaurant doesn't compromise authenticity for Instagram appeal—a difficult balance that they manage beautifully.</p>
+        
+        <h3>Value: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>For around ¥80-100 per person, you can enjoy a variety of dumplings and side dishes that showcase both creativity and tradition. Given the quality of ingredients and unique experience, this represents excellent value in Beijing's dining scene.</p>
+        
+        <h3>Atmosphere: <span style="color: #FFD700;">★★★</span></h3>
+        <p>The restaurant maintains a traditional, no-frills ambiance typical of authentic Chinese dumpling houses. While not luxurious, it's clean, comfortable, and focuses attention where it should be—on the food. The open kitchen allows diners to watch the skilled dumpling makers at work.</p>
+        
+        <h3>Service: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>Despite the language barrier that may exist for international visitors, the staff is patient and helpful, often using pictures or demonstrations to explain dumpling varieties and eating techniques. Some basic English is spoken, and they're accustomed to international guests.</p>
+        
+        <h3>Overall: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>Baoyuan Dumplings offers one of Beijing's most photogenic yet authentically delicious culinary experiences. The colored dumplings may initially seem like a gimmick, but the quality of execution and flavors ensures that this is a substantive culinary destination rather than just a pretty picture for social media.</p>
+      </div>
+      
+      <h2>Tips for Visitors</h2>
+      
+      <ul>
+        <li>Try at least one colored dumpling variety, even if you normally prefer traditional styles</li>
+        <li>The restaurant can get busy during peak lunch and dinner hours, so consider dining slightly earlier or later</li>
+        <li>Don't rush—dumpling making is time-consuming, so orders may take 15-20 minutes to arrive</li>
+        <li>The traditional dipping sauce is black vinegar with a small amount of their house-made chili oil</li>
+        <li>Watch the open kitchen to see the skilled chefs hand-making every colorful dumpling</li>
+        <li>The menu has pictures, which helps with ordering if you don't speak Chinese</li>
+        <li>Consider ordering a few traditional sides to complement your dumpling selection</li>
+      </ul>
+      
+      <!-- Visitor Information -->
+      <div id="visitor-info" class="review-section">
+        <h2>Visitor Information</h2>
+        
+        <h3>Reservations:</h3>
+        <p>Reservations are recommended, especially on weekends, and can be made through:</p>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Phone: +86 10-6586-4967 (Chinese language primarily)</li>
+          <li>Many hotels can assist with reservations for international visitors</li>
+        </ul>
+        
+        <h3>English Support:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Picture menu available with some English descriptions</li>
+          <li>Basic English is understood by some staff members</li>
+          <li>Bringing a translation app can be helpful for specific requests</li>
+        </ul>
+        
+        <h3>Payment Information:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Cash (Chinese Yuan) is preferred</li>
+          <li>WeChat Pay and Alipay are accepted (Chinese payment apps)</li>
+          <li>Some international credit cards accepted, but not guaranteed</li>
+        </ul>
+        
+        <p>While exploring Beijing's food scene, consider pairing your visit to Baoyuan with a trip to nearby Sanlitun for shopping or the Worker's Stadium area for evening entertainment. The restaurant's location in the embassy district makes it conveniently accessible from many central Beijing accommodations.</p>
+      </div>
+      
+      <a href="../food.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Food Guide</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Review carousel functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const slides = document.querySelector('.review-slides');
+      const dots = document.querySelectorAll('.carousel-dot');
+      const prevBtn = document.querySelector('.carousel-prev');
+      const nextBtn = document.querySelector('.carousel-next');
+      let currentSlide = 0;
+      const totalSlides = document.querySelectorAll('.review-slide').length;
+      
+      // Function to update slide position
+      function showSlide(index) {
+        if (index < 0) index = totalSlides - 1;
+        if (index >= totalSlides) index = 0;
+        
+        currentSlide = index;
+        slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+        
+        // Update active dot
+        dots.forEach((dot, i) => {
+          dot.classList.toggle('active', i === currentSlide);
+        });
+      }
+      
+      // Set up event listeners for dots
+      dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => showSlide(i));
+      });
+      
+      // Set up event listeners for arrows
+      prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
+      nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
+      
+      // Auto-rotate slides every 5 seconds
+      setInterval(() => {
+        showSlide(currentSlide + 1);
+      }, 5000);
+    });
+  </script>
+  
+  <script src="../script.js"></script>
+</body>
+</html> 

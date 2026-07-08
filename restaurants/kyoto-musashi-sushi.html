@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Musashi Sushi - Eastworld Restaurant Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Additional styles specific to restaurant reviews */
+    .restaurant-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+      .restaurant-info {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .restaurant-details {
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .detail-row {
+      display: flex;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+    }
+    
+    .detail-label {
+      font-weight: 600;
+      min-width: 120px;
+      color: #333;
+    }
+    
+    .detail-value {
+      flex: 1;
+      color: #555;
+    }
+    
+    .rating {
+      margin-bottom: 1rem;
+    }
+    
+    .star {
+      color: #ddd;
+      font-size: 1.5rem;
+    }
+    
+    .star.filled {
+      color: #FFD700;
+    }
+    
+    .half-star {
+      position: relative;
+    }
+    
+    .half-star .fas.fa-star-half {
+      color: #FFD700;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    
+    .score-label {
+      margin-left: 0.5rem;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .map-container {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .map-container iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+    }
+    
+    .photos-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .photo-item {
+      border-radius: 8px;
+      overflow: hidden;
+      height: 150px;
+    }
+    
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .photo-item img:hover {
+      transform: scale(1.05);
+    }
+    
+    .review-section {
+      margin: 2rem 0;
+      padding: 2rem;
+      background: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    /* Booking button styles */
+    .booking-button {
+      display: block;
+      background-color: #ff4d4d;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      margin: 1.5rem 0;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    
+    .booking-button:hover {
+      background-color: #e63939;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    /* Review carousel styles */
+    .review-carousel {
+      position: relative;
+      margin: 2rem 0;
+      overflow: hidden;
+      padding: 1rem 0;
+    }
+    
+    .review-slides {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    
+    .review-slide {
+      min-width: 100%;
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .reviewer-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #f0f0f0;
+      padding-bottom: 0.8rem;
+    }
+    
+    .reviewer-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 0.8rem;
+    }
+    
+    .reviewer-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding-top: 0.2rem;
+    }
+    
+    .review-date {
+      color: #888;
+      font-size: 0.75rem;
+      margin-top: 0.1rem;
+    }
+    
+    .review-rating {
+      display: flex;
+      margin-top: 0.2rem;
+    }
+    
+    .review-rating i {
+      font-size: 0.8rem;
+      margin-right: 2px;
+    }
+    
+    .carousel-nav {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+    
+    .carousel-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ddd;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .carousel-dot.active {
+      background: #ff4d4d;
+    }
+    
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.7);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+    
+    .carousel-prev {
+      left: 10px;
+    }
+    
+    .carousel-next {
+      right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../food.html" class="nav-item active">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="content-container">
+    <div class="content-header">
+      <span class="content-category">SUSHI</span>
+      <h1 class="content-title">Musashi Sushi - Affordable Conveyor Belt Sushi in Nishiki Market</h1>
+      
+      <!-- Rating Section -->
+      <div class="rating">
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star">
+          <i class="far fa-star"></i>
+        </span>
+        <span class="score-label">4.0/5.0</span>
+      </div>
+    </div>
+    
+    <div class="hero-container">
+      <img class="content-hero" src="https://media.timeout.com/images/105741741/image.jpg" alt="Musashi Sushi Conveyor Belt" 
+      onerror="this.onerror=null; 
+      this.parentElement.innerHTML = '<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#333;color:white;font-size:1.5rem;text-align:center;padding:2rem;\'>Musashi Sushi Kyoto</div>';">
+    </div>
+    
+    <!-- Visitor Information Button -->
+    <a href="#visitor-info" class="booking-button">
+      <i class="fas fa-info-circle"></i> VISITOR INFORMATION
+    </a>
+    
+    <!-- Restaurant Information Section -->
+    <div class="restaurant-info">
+      <div class="restaurant-details">
+        <h2>Restaurant Details</h2>
+        
+        <div class="detail-row">
+          <div class="detail-label">Address:</div>
+          <div class="detail-value">586 Nakanocho, Nishikikoji-dori, Nakagyo-ku, Kyoto 604-8042, Japan</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Hours:</div>
+          <div class="detail-value">11:00 AM - 9:30 PM<br>Open daily</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Phone:</div>
+          <div class="detail-value">+81 75-256-1866</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Price Range:</div>
+          <div class="detail-value">¥100-200 per plate (about $0.70-1.40)<br>
+            Average meal: ¥1,000-1,500 ($7-10) per person</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Cuisine:</div>
+          <div class="detail-value">Japanese, Sushi, Conveyor Belt, Budget-Friendly</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Reservations:</div>
+          <div class="detail-value">Not accepted - first come, first served</div>
+        </div>
+        
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">How to Get There</h3>
+        <p>From Shijo Station or Kawaramachi Station:</p>
+        <ul style="margin-bottom: 1rem; padding-left: 1.5rem;">
+          <li>Walk approximately 5 minutes to Nishiki Market</li>
+          <li>Enter from the eastern end near Takakura-dori</li>
+          <li>Walk about 3/4 of the way through the market</li>
+          <li>Look for the restaurant on the left side with the distinctive yellow signage</li>
+          <li>You can often identify it by the line of people waiting outside</li>
+        </ul>
+      </div>
+      
+      <div class="map-container">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3268.124522232293!2d135.7658146!3d35.0053865!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x600108953aa30413%3A0x3a93c9b99a216550!2sMusashi%20Sushi!5e0!3m2!1sen!2sus!4v1693230090086!5m2!1sen!2sus"  
+        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+    
+    <div class="content-text">
+      <h2>Nishiki Market's Beloved Sushi Institution</h2>
+      
+      <p>Located in the heart of Kyoto's famed "Kitchen of Kyoto" - Nishiki Market - Musashi Sushi has established itself as one of the city's most popular and affordable sushi destinations. This no-frills conveyor belt sushi restaurant (known as "kaiten-zushi" in Japanese) offers an authentic, budget-friendly Japanese dining experience that attracts both locals and tourists alike.</p>
+      
+      <p>Unlike high-end sushi establishments that might intimidate first-time visitors to Japan, Musashi embraces a casual, accessible approach to sushi dining. The restaurant's modest storefront might be easy to miss amid the bustling market stalls, but the consistent line of patrons outside marks its location. Inside, the energetic atmosphere, rapid turnover of fresh plates, and the hypnotic movement of the conveyor belt create a quintessentially Japanese dining experience.</p>
+      
+      <div class="photos-container">
+        <div class="photo-item">
+          <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/08/7d/3c/a5/musashizushi.jpg" alt="Assorted Sushi Plates">
+        </div>
+        <div class="photo-item">
+          <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/11/d2/34/0d/photo0jpg.jpg" alt="Sushi Chefs at Work">
+        </div>
+        <div class="photo-item">
+          <img src="https://media-cdn.tripadvisor.com/media/photo-s/1a/be/f2/66/sushi-at-musashi.jpg" alt="Salmon Nigiri">
+        </div>
+        <div class="photo-item">
+          <img src="https://media-cdn.tripadvisor.com/media/photo-s/06/e1/48/42/musashi-sushi.jpg" alt="Interior with Conveyor Belt">
+        </div>
+      </div>
+      
+      <h2>The Conveyor Belt Experience</h2>
+      
+      <p>Musashi operates on the simple concept that has made conveyor belt sushi a Japanese cultural icon. Seated at a counter surrounding a rotating conveyor belt, diners simply grab plates of sushi as they pass by. Each plate is color-coded to indicate its price, though at Musashi, most plates are uniformly priced at ¥137 (tax included) - roughly $1 per plate. This straightforward pricing makes it especially easy for visitors to keep track of their spending.</p>
+      
+      <p>While some conveyor belt sushi chains rely heavily on automation, Musashi maintains the human touch. Behind the counter, skilled chefs continuously prepare fresh sushi, placing it directly onto the conveyor belt. If you don't see what you're craving on the belt, you can order directly from the chefs who will make it to order and hand it to you - a system that ensures freshness and customization despite the fast-paced environment.</p>
+      
+      <p>The restaurant's relatively small size (seating around 30 people) contributes to its intimate feel and ensures rapid turnover of sushi, meaning the fish rarely sits on the belt for long. The constant movement of the plates, the calls between staff members, and the satisfaction of assembling your own unique meal create a dynamic dining experience that's as much about the atmosphere as it is about the food.</p>
+      
+      <div class="content-quote">
+        "In Kyoto's Nishiki Market, where centuries-old specialty food shops operate alongside modern eateries, Musashi Sushi represents the perfect middle ground - traditional Japanese cuisine presented in an accessible, modern format at prices that allow travelers to enjoy quality seafood without breaking their budget." - Kyoto Food Guide
+      </div>
+      
+      <!-- User Reviews Carousel -->
+      <h2>Customer Reviews</h2>
+      
+      <div class="review-carousel">
+        <div class="carousel-arrow carousel-prev">
+          <i class="fas fa-chevron-left"></i>
+        </div>
+        
+        <div class="review-slides">
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Sarah K.</div>
+                <div class="review-date">Visited April 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"We stumbled upon Musashi while exploring Nishiki Market, and it ended up being one of our favorite meals in Kyoto! Yes, there was a line, but it moved quickly (we waited about 15 minutes at lunchtime). The sushi was surprisingly good for the price—much better than conveyor belt sushi I've had back home. We especially loved the salmon, tuna, and tamago nigiri. Everything tasted fresh, and at ¥137 per plate, we could try many different things without worrying about the cost. The staff was efficient despite the language barrier, and the chefs were happy to make something special when we asked. The cozy atmosphere added to the experience—sitting shoulder-to-shoulder with locals and fellow travelers while grabbing colorful plates from the belt felt like the authentic Japanese dining experience we were looking for. Perfect spot for lunch while exploring the market!"</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Takeshi Y.</div>
+                <div class="review-date">Visited February 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="far fa-star" style="color: #ddd;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"As a Kyoto resident, I've been coming to Musashi for years whenever I'm shopping in Nishiki. It's not high-end sushi by any means, but for the price, it's exactly what you'd expect and want from kaiten-zushi. The quality is consistent, and the turnover is quick enough that the fish is always fresh. Their saba (mackerel) is particularly good—a Kyoto specialty that they prepare well. The restaurant has become increasingly popular with tourists, which sometimes means longer waits than in the past, but the service remains efficient. One tip for first-timers: don't be shy about ordering directly from the chefs if you don't see what you want on the belt. Many tourists don't realize this is an option and miss out on fresher pieces. Also, try to avoid peak lunch hours (12-1:30) if possible. Overall, a reliable, budget-friendly option in an otherwise expensive city."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Miguel R.</div>
+                <div class="review-date">Visited May 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star-half-alt" style="color: #FFD700;"></i>
+                  <i class="far fa-star" style="color: #ddd;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"Musashi offers great value in an expensive city like Kyoto, and it's a fun introduction to conveyor belt sushi for first-time visitors to Japan. We went around 2 PM and only waited about 5 minutes, which was a pleasant surprise given the reviews about long lines. The fixed price per plate (¥137) makes it easy to budget your meal. I particularly enjoyed the salmon, yellowtail, and eel nigiri. The fatty tuna was also good, though not as melt-in-your-mouth as you'd get at a high-end place (but at a fraction of the price, no complaints!). The only slight negative was that the seating is very tight and you might be squeezed in next to other diners, which can feel a bit rushed and cramped. Also, some items on the belt didn't look as fresh toward the end of our meal. My advice is to go during off-peak hours and focus on the most popular items, which turn over quickly. Absolutely worth a visit for the experience and value."</p>
+          </div>
+        </div>
+        
+        <div class="carousel-arrow carousel-next">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+        
+        <div class="carousel-nav">
+          <div class="carousel-dot active"></div>
+          <div class="carousel-dot"></div>
+          <div class="carousel-dot"></div>
+        </div>
+      </div>
+      
+      <h2>Menu Highlights</h2>
+      
+      <p>While the selection rotates based on seasonal availability, some staple offerings at Musashi include:</p>
+      
+      <ul>
+        <li><strong>Maguro (Tuna)</strong> - Available in various cuts, from lean akami to fatty otoro when in season</li>
+        <li><strong>Sake (Salmon)</strong> - Fresh and often available in both regular and aburi (flame-seared) preparations</li>
+        <li><strong>Hamachi (Yellowtail)</strong> - A buttery, rich option that's particularly popular</li>
+        <li><strong>Tamago (Egg)</strong> - Sweet Japanese omelette, a good option for those new to sushi</li>
+        <li><strong>Saba (Mackerel)</strong> - A local Kyoto specialty, lightly pickled and full of flavor</li>
+        <li><strong>Ika (Squid)</strong> - Tender slices with a subtle sweetness</li>
+        <li><strong>Unagi (Freshwater Eel)</strong> - Brushed with a sweet soy glaze and flame-grilled</li>
+        <li><strong>Gunkan Maki</strong> - "Battleship" style sushi topped with ingredients like ikura (salmon roe) or negitoro (minced fatty tuna with green onion)</li>
+        <li><strong>Miso Soup</strong> - Available to order separately to complement your sushi selection</li>
+        <li><strong>Green Tea</strong> - Complimentary with your meal, as is customary in Japan</li>
+      </ul>
+      
+      <div class="review-section">
+        <h2>Eastworld's Review</h2>
+        
+        <h3>Food Quality: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>For a budget-friendly conveyor belt sushi restaurant, Musashi delivers impressive quality. The fish is fresh, cuts are generous, and the rice is properly seasoned. While it won't compete with high-end sushi establishments, it consistently exceeds expectations for its price point.</p>
+        
+        <h3>Value: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>This is where Musashi truly shines. At ¥137 per plate regardless of the type of sushi, it offers exceptional value in an increasingly expensive city. A filling meal of 8-10 plates will cost less than ¥1,500 ($10), making it one of Kyoto's best food bargains.</p>
+        
+        <h3>Atmosphere: <span style="color: #FFD700;">★★★½</span></h3>
+        <p>The bustling, somewhat cramped atmosphere is part of the authentic experience, though not everyone will appreciate the close quarters and fast-paced environment. The location within Nishiki Market adds to the local feel, but expect some noise and potential waits.</p>
+        
+        <h3>Service: <span style="color: #FFD700;">★★★½</span></h3>
+        <p>Despite language barriers, the staff is efficient and accommodating. The self-service nature of conveyor belt sushi means minimal interaction is required, but chefs are responsive when custom orders are requested.</p>
+        
+        <h3>Authenticity: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>Musashi offers an authentic Japanese kaiten-zushi experience in a market setting frequented by locals—a combination that provides cultural insight along with a satisfying meal. The restaurant hasn't been overly modified to cater to tourists, maintaining its genuine character.</p>
+        
+        <h3>Overall: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>Musashi Sushi exemplifies what budget travel in Japan can be at its best—authentic, satisfying, and accessible. It's not the pinnacle of Japanese cuisine, but it offers a genuine culinary experience that balances quality and value perfectly. For travelers exploring Nishiki Market, it's an ideal lunch spot that delivers both sustenance and cultural experience.</p>
+      </div>
+      
+      <h2>Tips for Visitors</h2>
+      
+      <ul>
+        <li><strong>Timing is Key:</strong> Visit during off-peak hours (before noon or between 2-5 PM) to minimize wait times</li>
+        <li><strong>Plate Etiquette:</strong> Stack your finished plates at your place setting; staff will count them at the end of your meal to calculate your bill</li>
+        <li><strong>Don't Be Shy:</strong> If you don't see what you want on the belt, you can order directly from the chefs</li>
+        <li><strong>Water and Tea:</strong> Self-service tea powder and hot water are available at each seat</li>
+        <li><strong>Wasabi Warning:</strong> Most nigiri already has wasabi applied between the fish and rice; additional wasabi is available if desired</li>
+        <li><strong>Eating Technique:</strong> Traditional sushi etiquette suggests eating nigiri in one bite, fish-side down on your tongue</li>
+        <li><strong>Payment:</strong> Cash is preferred, though some credit cards are accepted. Have yen ready for a smoother experience</li>
+        <li><strong>Tipping:</strong> As with all establishments in Japan, no tipping is expected or necessary</li>
+      </ul>
+      
+      <!-- Visitor Information -->
+      <div id="visitor-info" class="review-section">
+        <h2>Visitor Information</h2>
+        <p>Here's what you need to know when planning your visit to Musashi Sushi:</p>
+        
+        <h3>Best Times to Visit:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Weekdays tend to be less crowded than weekends</li>
+          <li>Early opening (11:00 AM) is a good time to avoid lines</li>
+          <li>Late afternoon (2:30-5:00 PM) is typically less busy</li>
+          <li>The restaurant is busiest during standard lunch (12:00-1:30 PM) and dinner (6:00-8:00 PM) times</li>
+        </ul>
+        
+        <h3>What to Expect:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Line formation outside the restaurant (staff may provide approximate wait times)</li>
+          <li>Compact seating with counter spots around the conveyor belt</li>
+          <li>Fast turnover - most diners finish within 30-45 minutes</li>
+          <li>Limited English spoken by staff, but picture menus are available</li>
+          <li>Self-service green tea powder and hot water dispensers at each seat</li>
+        </ul>
+        
+        <h3>Combine With:</h3>
+        <p>Musashi's location in Nishiki Market makes it ideal to combine with:</p>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Exploring the 400+ year old market (allow 1-2 hours for browsing)</li>
+          <li>Shopping in nearby Teramachi and Shinkyogoku covered shopping arcades</li>
+          <li>Visiting Nishiki Tenmangu Shrine at the western end of the market</li>
+          <li>Walking to Gion district (15 minutes east) for afternoon tea or evening geisha spotting</li>
+        </ul>
+        
+        <p>As is typical in Japan, the restaurant appreciates efficient dining, especially during busy periods. Once you've finished eating, it's customary to pay and depart to make room for waiting guests.</p>
+      </div>
+      
+      <a href="../food.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Food Guide</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Review carousel functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const slides = document.querySelector('.review-slides');
+      const dots = document.querySelectorAll('.carousel-dot');
+      const prevBtn = document.querySelector('.carousel-prev');
+      const nextBtn = document.querySelector('.carousel-next');
+      let currentSlide = 0;
+      const totalSlides = document.querySelectorAll('.review-slide').length;
+      
+      // Function to update slide position
+      function showSlide(index) {
+        if (index < 0) index = totalSlides - 1;
+        if (index >= totalSlides) index = 0;
+        
+        currentSlide = index;
+        slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+        
+        // Update active dot
+        dots.forEach((dot, i) => {
+          dot.classList.toggle('active', i === currentSlide);
+        });
+      }
+      
+      // Set up event listeners for dots
+      dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => showSlide(i));
+      });
+      
+      // Set up event listeners for arrows
+      prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
+      nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
+      
+      // Auto-rotate slides every 5 seconds
+      setInterval(() => {
+        showSlide(currentSlide + 1);
+      }, 5000);
+    });
+  </script>
+  
+  <script src="../script.js"></script>
+</body>
+</html> 

@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kani Doraku - Eastworld Restaurant Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Additional styles specific to restaurant reviews */
+    .restaurant-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+      .restaurant-info {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .restaurant-details {
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .detail-row {
+      display: flex;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+    }
+    
+    .detail-label {
+      font-weight: 600;
+      min-width: 120px;
+      color: #333;
+    }
+    
+    .detail-value {
+      flex: 1;
+      color: #555;
+    }
+    
+    .rating {
+      margin-bottom: 1rem;
+    }
+    
+    .star {
+      color: #ddd;
+      font-size: 1.5rem;
+    }
+    
+    .star.filled {
+      color: #FFD700;
+    }
+    
+    .half-star {
+      position: relative;
+    }
+    
+    .half-star .fas.fa-star-half {
+      color: #FFD700;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    
+    .score-label {
+      margin-left: 0.5rem;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .map-container {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .map-container iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+    }
+    
+    .photos-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .photo-item {
+      border-radius: 8px;
+      overflow: hidden;
+      height: 150px;
+    }
+    
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .photo-item img:hover {
+      transform: scale(1.05);
+    }
+    
+    .review-section {
+      margin: 2rem 0;
+      padding: 2rem;
+      background: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    /* Booking button styles */
+    .booking-button {
+      display: block;
+      background-color: #ff4d4d;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      margin: 1.5rem 0;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    
+    .booking-button:hover {
+      background-color: #e63939;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    /* Review carousel styles */
+    .review-carousel {
+      position: relative;
+      margin: 2rem 0;
+      overflow: hidden;
+      padding: 1rem 0;
+    }
+    
+    .review-slides {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    
+    .review-slide {
+      min-width: 100%;
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .reviewer-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #f0f0f0;
+      padding-bottom: 0.8rem;
+    }
+    
+    .reviewer-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 0.8rem;
+    }
+    
+    .reviewer-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding-top: 0.2rem;
+    }
+    
+    .review-date {
+      color: #888;
+      font-size: 0.75rem;
+      margin-top: 0.1rem;
+    }
+    
+    .review-rating {
+      display: flex;
+      margin-top: 0.2rem;
+    }
+    
+    .review-rating i {
+      font-size: 0.8rem;
+      margin-right: 2px;
+    }
+    
+    .carousel-nav {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+    
+    .carousel-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ddd;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .carousel-dot.active {
+      background: #ff4d4d;
+    }
+    
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.7);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+    
+    .carousel-prev {
+      left: 10px;
+    }
+    
+    .carousel-next {
+      right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../food.html" class="nav-item active">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="content-container">
+    <div class="content-header">
+      <span class="content-category">SEAFOOD</span>
+      <h1 class="content-title">Kani Doraku - Osaka's Iconic Crab Specialist</h1>
+      
+      <!-- Rating Section -->
+      <div class="rating">
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star half-star">
+          <i class="far fa-star"></i>
+          <i class="fas fa-star-half"></i>
+        </span>
+        <span class="score-label">4.5/5.0</span>
+      </div>
+    </div>
+    
+    <div class="hero-container">
+      <img class="content-hero" src="https://upload.wikimedia.org/wikipedia/commons/e/ea/Kani_Doraku_Dotonbori_Osaka.jpg" alt="Kani Doraku Dotonbori" 
+      onerror="this.onerror=null; 
+      this.parentElement.innerHTML = '<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#333;color:white;font-size:1.5rem;text-align:center;padding:2rem;\'>Kani Doraku Dotonbori</div>';">
+    </div>
+    
+    <!-- Booking Button -->
+    <a href="#booking-form" class="booking-button">
+      <i class="fas fa-calendar-alt"></i> RESERVE A TABLE
+    </a>
+    
+    <!-- Restaurant Information Section -->
+    <div class="restaurant-info">
+      <div class="restaurant-details">
+        <h2>Restaurant Details</h2>
+        
+        <div class="detail-row">
+          <div class="detail-label">Address:</div>
+          <div class="detail-value">1-6-18 Dotonbori, Chuo-ku, Osaka 542-0071, Japan</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Hours:</div>
+          <div class="detail-value">11:00 AM - 10:00 PM (Last order at 9:30 PM)</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Phone:</div>
+          <div class="detail-value">+81 6-6211-8975</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Price Range:</div>
+          <div class="detail-value">¥5,000-15,000 ($45-135) per person</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Cuisine:</div>
+          <div class="detail-value">Japanese, Seafood, Crab Specialty</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Reservations:</div>
+          <div class="detail-value">Recommended, especially for dinner and weekends</div>
+        </div>
+        
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">How to Get There</h3>
+        <p>From Namba Station:</p>
+        <ul style="margin-bottom: 1rem; padding-left: 1.5rem;">
+          <li>Take the North Exit</li>
+          <li>Walk north along Midosuji Street for about 5 minutes</li>
+          <li>Turn right onto Dotonbori Street</li>
+          <li>Kani Doraku is easily identifiable by the giant mechanical crab sign on the building facade</li>
+        </ul>
+      </div>
+      
+      <div class="map-container">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3281.0246557196213!2d135.49983127522028!3d34.66855897292968!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6000e713986578b3%3A0xb7f7940aa6d7c427!2zS2FuaSBEb3Jha3UgRG90b25ib3JpIE1haW4gU3RvcmUg6JaE44OJ44Op44Kv6YO96aCt5omA!5e0!3m2!1sen!2sjp!4v1693320290086!5m2!1sen!2sjp" 
+        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+    
+    <div class="content-text">
+      <h2>A Dotonbori Landmark Since 1960</h2>
+      
+      <p>Kani Doraku has been synonymous with Osaka's vibrant food scene for over six decades. Founded in 1960 by seafood merchant Konosuke Yamada, the restaurant has grown from a small shop to one of Japan's most recognizable culinary landmarks, famous for its giant mechanical crab sign that moves its claws and eyes, captivating passersby on Dotonbori Street.</p>
+      
+      <p>The name "Doraku" translates to "pleasure seeker," reflecting the restaurant's mission to provide pure enjoyment through high-quality crab cuisine. As a pioneer in specialized crab restaurants in Japan, Kani Doraku has maintained its reputation for excellent seafood while becoming a must-visit destination for tourists and locals alike.</p>
+      
+      <div class="photos-container">
+        <div class="photo-item">
+          <img src="https://media-cdn.tripadvisor.com/media/photo-s/01/ba/a4/a7/fresh-crab-display-at.jpg" alt="Fresh crab display">
+        </div>
+        <div class="photo-item">
+          <img src="https://deliciousosakafood.net/wp-content/uploads/2019/07/Kani-Doraku.jpg" alt="Crab dishes at Kani Doraku">
+        </div>
+        <div class="photo-item">
+          <img src="https://taiken.co/uploads/2015/06/Kani-Doraku-interior.jpg" alt="Restaurant interior">
+        </div>
+        <div class="photo-item">
+          <img src="https://lh3.googleusercontent.com/p/AF1QipO1PGYeLCagA1qI2WiCjXwrJHnbRsUt5sQEEFrg=s1360-w1360-h1020" alt="Grilled crab legs">
+        </div>
+      </div>
+      
+      <h2>The Complete Crab Experience</h2>
+      
+      <p>Kani Doraku specializes in serving several varieties of high-quality crab, including the prized Hokkaido snow crab and king crab. The restaurant's philosophy centers on showcasing the natural flavors of fresh crab through various preparation methods that highlight different aspects of this delicacy.</p>
+      
+      <p>Inside, the restaurant features traditional Japanese decor with private tatami rooms as well as Western-style seating. Guests can watch chefs work with live crabs at the open preparation area, selecting the perfect specimens for each order.</p>
+      
+      <p>While crab is the undeniable star, Kani Doraku also offers various seasonal dishes and seafood options, making it accessible even for diners who might not be crab enthusiasts. The comprehensive menu includes everything from simple grilled crab legs to elaborate multi-course crab kaiseki meals.</p>
+      
+      <div class="content-quote">
+        "Our goal has always been to share the pure joy of perfectly prepared crab with everyone who visits Osaka. We want the experience to be memorable not just for the giant crab sign outside, but for the quality and taste of our cuisine." - Management of Kani Doraku
+      </div>
+      
+      <!-- User Reviews Carousel -->
+      <h2>Customer Reviews</h2>
+      
+      <div class="review-carousel">
+        <div class="carousel-arrow carousel-prev">
+          <i class="fas fa-chevron-left"></i>
+        </div>
+        
+        <div class="review-slides">
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">James W.</div>
+                <div class="review-date">Visited May 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"I was initially concerned Kani Doraku might be just a tourist trap because of its famous sign, but it absolutely delivered on the promise of exceptional crab. We ordered the mid-range set menu which included crab prepared five different ways—the crab sashimi was incredibly fresh, and the crab gratin with miso was decadently delicious. Service was impeccable despite the language barrier, with staff using picture cards to explain each course. Yes, it's pricey, but the quality justifies the cost. Make a reservation—we saw many walk-ins being turned away even on a weekday."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Keiko M.</div>
+                <div class="review-date">Visited March 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="far fa-star" style="color: #ddd;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"As an Osaka local, I usually avoid Dotonbori's touristy restaurants, but Kani Doraku remains a solid choice when I'm craving crab. We visited during snow crab season and the quality was excellent. Their shabu-shabu with crab was particularly good—the broth develops such a rich flavor as you cook the crab. The lunch sets offer better value than dinner, with similar quality but at about 60% of the evening prices. One small complaint: the restaurant can feel rushed during peak hours, with servers sometimes hovering, waiting for you to finish."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Maria S.</div>
+                <div class="review-date">Visited February 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star-half-alt" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"Our visit to Kani Doraku was the culinary highlight of our Osaka trip. We opted for the premium kaiseki course, which took us through a journey of crab preparations—from the subtle sweetness of crab sashimi to the intense richness of crab miso soup. The staff guided us through the proper eating technique for each dish, including how to extract every morsel of meat from the legs using the specialized tools provided. The tempura course was particularly memorable, with the delicate crab flavor perfectly preserved within the light, crispy batter. Reserve well in advance if you want a window seat overlooking Dotonbori Canal."</p>
+          </div>
+        </div>
+        
+        <div class="carousel-arrow carousel-next">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+        
+        <div class="carousel-nav">
+          <div class="carousel-dot active"></div>
+          <div class="carousel-dot"></div>
+          <div class="carousel-dot"></div>
+        </div>
+      </div>
+      
+      <h2>Menu Highlights</h2>
+      
+      <p>While the menu varies seasonally based on crab availability, these signature items are typically offered year-round:</p>
+      
+      <ul>
+        <li><strong>Kani Full Course (¥10,000-15,000)</strong> - The ultimate crab experience featuring 8-10 different preparations, from sashimi to hot pot to charcoal-grilled</li>
+        <li><strong>Kani Shabu-Shabu (¥7,000)</strong> - DIY hot pot featuring thinly sliced crab legs and various vegetables cooked in a delicate dashi broth</li>
+        <li><strong>Kani Sashimi (¥3,500)</strong> - Ultra-fresh raw crab meat, served with a special dipping sauce</li>
+        <li><strong>Charcoal Grilled Crab Legs (¥4,500)</strong> - Leg segments grilled over binchō-tan charcoal to enhance their natural sweetness</li>
+        <li><strong>Kani Miso Soup (¥1,200)</strong> - Rich soup featuring crab meat and the prized "kani miso" (crab tomalley)</li>
+        <li><strong>Crab Cream Croquettes (¥1,500)</strong> - Crispy exterior gives way to a creamy, crab-rich filling</li>
+        <li><strong>Lunch Sets (¥3,500-7,000)</strong> - Excellent value featuring smaller portions of signature dishes</li>
+      </ul>
+      
+      <div class="review-section">
+        <h2>Eastworld's Review</h2>
+        
+        <h3>Food Quality: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Kani Doraku delivers exceptionally fresh crab prepared with a level of expertise that can only come from decades of specialization. Each preparation method is designed to highlight different aspects of crab's flavor profile, from the subtle sweetness of sashimi to the rich intensity of grilled legs.</p>
+        
+        <h3>Menu Variety: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>While the focus is undeniably on crab, the restaurant offers enough variety in preparation methods and complementary dishes to create a comprehensive dining experience. Non-crab options are limited but well-executed.</p>
+        
+        <h3>Atmosphere: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>The restaurant strikes a good balance between traditional Japanese aesthetics and the lively energy of Dotonbori. Private rooms offer a more intimate setting, while the main dining area captures the bustling atmosphere of Osaka's food culture.</p>
+        
+        <h3>Service: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>Staff are efficient and knowledgeable about the menu, with picture guides and English descriptions available to assist international visitors. During peak hours, service can feel somewhat rushed, but overall remains attentive and professional.</p>
+        
+        <h3>Value: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>While not an inexpensive dining option, Kani Doraku provides fair value considering the quality and quantity of crab served. Lunch sets offer particularly good value for those wanting to experience the restaurant on a more modest budget.</p>
+        
+        <h3>Overall: <span style="color: #FFD700;">★★★★½</span></h3>
+        <p>Kani Doraku has maintained its reputation for excellence over six decades for good reason. It offers a quintessential Osaka dining experience that skillfully balances being tourist-friendly without compromising on authentic quality.</p>
+      </div>
+      
+      <h2>Tips for Visitors</h2>
+      
+      <ul>
+        <li>Make reservations in advance, especially for dinner and weekends</li>
+        <li>Consider the lunch sets for better value with similar quality</li>
+        <li>Visit during winter months (November-March) when snow crab is in peak season</li>
+        <li>Request an English menu when being seated</li>
+        <li>If unfamiliar with eating whole crab, don't hesitate to ask staff for demonstrations</li>
+        <li>The restaurant has six floors—upper floors tend to be quieter with better views</li>
+        <li>Take a photo with the famous mechanical crab sign before or after your meal</li>
+      </ul>
+      
+      <!-- Booking Form -->
+      <div id="booking-form" class="review-section">
+        <h2>Reservation Information</h2>
+        <p>Reservations for Kani Doraku can be made through several methods:</p>
+        
+        <h3>Booking Contact:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Phone: +81 6-6211-8975 (Japanese language preferred)</li>
+          <li>Online: <a href="https://www.kani-doraku.co.jp/en/store/shinsaibashi/" target="_blank" style="color: #ff4d4d;">www.kani-doraku.co.jp</a> (English reservation form available)</li>
+          <li>Through your hotel concierge (recommended for international visitors)</li>
+        </ul>
+        
+        <p>When making reservations, please specify:</p>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Preferred date and time</li>
+          <li>Number of guests</li>
+          <li>Any dietary restrictions</li>
+          <li>Whether you prefer table seating or traditional tatami room</li>
+        </ul>
+        
+        <p>For larger groups (8+ people), please book at least one week in advance and be prepared to provide credit card details to secure your reservation.</p>
+        
+        <p>For assistance with reservations, please contact the Eastworld concierge service at <a href="mailto:concierge@eastworld.com" style="color: #ff4d4d;">concierge@eastworld.com</a>.</p>
+      </div>
+      
+      <a href="../food.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Food Guide</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Review carousel functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const slides = document.querySelector('.review-slides');
+      const dots = document.querySelectorAll('.carousel-dot');
+      const prevBtn = document.querySelector('.carousel-prev');
+      const nextBtn = document.querySelector('.carousel-next');
+      let currentSlide = 0;
+      const totalSlides = document.querySelectorAll('.review-slide').length;
+      
+      // Function to update slide position
+      function showSlide(index) {
+        if (index < 0) index = totalSlides - 1;
+        if (index >= totalSlides) index = 0;
+        
+        currentSlide = index;
+        slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+        
+        // Update active dot
+        dots.forEach((dot, i) => {
+          dot.classList.toggle('active', i === currentSlide);
+        });
+      }
+      
+      // Set up event listeners for dots
+      dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => showSlide(i));
+      });
+      
+      // Set up event listeners for arrows
+      prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
+      nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
+      
+      // Auto-rotate slides every 5 seconds
+      setInterval(() => {
+        showSlide(currentSlide + 1);
+      }, 5000);
+    });
+  </script>
+  
+  <script src="../script.js"></script>
+</body>
+</html> 

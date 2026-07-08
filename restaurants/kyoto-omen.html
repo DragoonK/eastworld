@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Omen - Eastworld Restaurant Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Additional styles specific to restaurant reviews */
+    .restaurant-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+      .restaurant-info {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .restaurant-details {
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .detail-row {
+      display: flex;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+    }
+    
+    .detail-label {
+      font-weight: 600;
+      min-width: 120px;
+      color: #333;
+    }
+    
+    .detail-value {
+      flex: 1;
+      color: #555;
+    }
+    
+    .rating {
+      margin-bottom: 1rem;
+    }
+    
+    .star {
+      color: #ddd;
+      font-size: 1.5rem;
+    }
+    
+    .star.filled {
+      color: #FFD700;
+    }
+    
+    .half-star {
+      position: relative;
+    }
+    
+    .half-star .fas.fa-star-half {
+      color: #FFD700;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    
+    .score-label {
+      margin-left: 0.5rem;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .map-container {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .map-container iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+    }
+    
+    .photos-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .photo-item {
+      border-radius: 8px;
+      overflow: hidden;
+      height: 150px;
+    }
+    
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .photo-item img:hover {
+      transform: scale(1.05);
+    }
+    
+    .review-section {
+      margin: 2rem 0;
+      padding: 2rem;
+      background: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    /* Booking button styles */
+    .booking-button {
+      display: block;
+      background-color: #ff4d4d;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      margin: 1.5rem 0;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    
+    .booking-button:hover {
+      background-color: #e63939;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    /* Review carousel styles */
+    .review-carousel {
+      position: relative;
+      margin: 2rem 0;
+      overflow: hidden;
+      padding: 1rem 0;
+    }
+    
+    .review-slides {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    
+    .review-slide {
+      min-width: 100%;
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .reviewer-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #f0f0f0;
+      padding-bottom: 0.8rem;
+    }
+    
+    .reviewer-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 0.8rem;
+    }
+    
+    .reviewer-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding-top: 0.2rem;
+    }
+    
+    .review-date {
+      color: #888;
+      font-size: 0.75rem;
+      margin-top: 0.1rem;
+    }
+    
+    .review-rating {
+      display: flex;
+      margin-top: 0.2rem;
+    }
+    
+    .review-rating i {
+      font-size: 0.8rem;
+      margin-right: 2px;
+    }
+    
+    .carousel-nav {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+    
+    .carousel-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ddd;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .carousel-dot.active {
+      background: #ff4d4d;
+    }
+    
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.7);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+    
+    .carousel-prev {
+      left: 10px;
+    }
+    
+    .carousel-next {
+      right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../food.html" class="nav-item active">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="content-container">
+    <div class="content-header">
+      <span class="content-category">UDON</span>
+      <h1 class="content-title">Omen - Kyoto's Celebrated Handmade Udon Experience</h1>
+      
+      <!-- Rating Section -->
+      <div class="rating">
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star half-star">
+          <i class="far fa-star"></i>
+          <i class="fas fa-star-half"></i>
+        </span>
+        <span class="score-label">4.5/5.0</span>
+      </div>
+    </div>
+    
+    <div class="hero-container">
+      <img class="content-hero" src="https://cdn.cheapoguides.com/wp-content/uploads/sites/2/2019/10/kyoto-omen-kaiseki-restaurant-iMG_9324.jpg" alt="Omen Gion Restaurant Exterior" 
+      onerror="this.onerror=null; 
+      this.parentElement.innerHTML = '<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#333;color:white;font-size:1.5rem;text-align:center;padding:2rem;\'>Omen Kyoto</div>';">
+    </div>
+    
+    <!-- Visitor Information Button -->
+    <a href="#visitor-info" class="booking-button">
+      <i class="fas fa-info-circle"></i> VISITOR INFORMATION
+    </a>
+    
+    <!-- Restaurant Information Section -->
+    <div class="restaurant-info">
+      <div class="restaurant-details">
+        <h2>Restaurant Details</h2>
+        
+        <div class="detail-row">
+          <div class="detail-label">Address:</div>
+          <div class="detail-value">31 Higashiyama Kita-ku, Shishigatani Jodoji, Sakyo-ku, Kyoto 606-8404, Japan (Main Location)</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Hours:</div>
+          <div class="detail-value">11:30 AM - 8:30 PM<br>Closed Wednesdays</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Phone:</div>
+          <div class="detail-value">+81 75-771-8994</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Price Range:</div>
+          <div class="detail-value">¥1,200-2,000 ($8-14) per person for lunch<br>¥2,500-4,000 ($17-28) per person for dinner</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Cuisine:</div>
+          <div class="detail-value">Japanese, Udon, Light Meals, Vegetarian-Friendly</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Reservations:</div>
+          <div class="detail-value">Recommended for dinner and weekends<br>Phone: +81 75-771-8994</div>
+        </div>
+        
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">Additional Locations</h3>
+        <ul style="margin-bottom: 1rem; padding-left: 1.5rem;">
+          <li><strong>Omen Gion:</strong> 7 Jodoji Ishibashi-cho, Higashiyama-ku, Kyoto</li>
+          <li><strong>Omen Kodaiji:</strong> 388 Masuyacho, Higashiyama-ku, Kyoto</li>
+        </ul>
+        
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">How to Get There</h3>
+        <p>To the original location near Ginkakuji (Silver Pavilion):</p>
+        <ul style="margin-bottom: 1rem; padding-left: 1.5rem;">
+          <li>Take bus #5, #17, or #100 from Kyoto Station to the Ginkakuji-michi stop</li>
+          <li>Walk approximately 5 minutes south along Philosopher's Path</li>
+          <li>Look for the traditional wooden storefront with noren curtains</li>
+        </ul>
+      </div>
+      
+      <div class="map-container">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3267.329126764334!2d135.7946732!3d35.0273915!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x600108e639e58411%3A0x71b7bc42495ad464!2sOMEN%20MAIN%20STORE!5e0!3m2!1sen!2sus!4v1693230090086!5m2!1sen!2sus" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+    
+    <div class="content-text">
+      <h2>A Sanctuary of Udon Excellence in Historic Kyoto</h2>
+      
+      <p>Since 1972, Omen has been perfecting the art of udon noodles, establishing itself as one of Kyoto's most beloved culinary institutions. What began as a humble noodle shop has evolved into a mini-empire with three locations throughout the city, each maintaining the same commitment to quality and tradition that made the original so popular with both locals and tourists.</p>
+      
+      <p>Situated near the Philosopher's Path and the renowned Ginkakuji (Silver Pavilion), Omen's original location occupies a traditional Japanese wooden building that exudes the calm, understated elegance that Kyoto is famous for. Inside, minimalist interiors with tatami seating, low tables, and views of a small garden create a serene atmosphere that complements the restaurant's refined approach to traditional Japanese cuisine.</p>
+      
+      <div class="photos-container">
+        <div class="photo-item">
+          <img src="https://media-cdn.tripadvisor.com/media/photo-s/18/4a/a1/d3/photo0jpg.jpg" alt="Omen signature udon dish">
+        </div>
+        <div class="photo-item">
+          <img src="https://media-cdn.tripadvisor.com/media/photo-s/13/c5/12/0b/photo0jpg.jpg" alt="Traditional interior seating">
+        </div>
+        <div class="photo-item">
+          <img src="https://media-cdn.tripadvisor.com/media/photo-s/05/62/f5/98/omen.jpg" alt="Seasonal side dishes">
+        </div>
+        <div class="photo-item">
+          <img src="https://media-cdn.tripadvisor.com/media/photo-p/08/e7/af/d1/omen.jpg" alt="Garden view from restaurant">
+        </div>
+      </div>
+      
+      <h2>The Art of Handmade Udon</h2>
+      
+      <p>While many restaurants in Kyoto focus on elaborate multi-course kaiseki meals, Omen has dedicated itself to perfecting a single specialty: udon noodles. Unlike the thin, delicate soba or the mass-produced udon found elsewhere, Omen's noodles are handmade daily using a special recipe that produces a distinctive texture—slightly thicker than typical udon, with a perfect balance of firmness and chewiness that aficionados recognize immediately.</p>
+      
+      <p>The signature dish, also called "omen," features these exceptional noodles served in a unique style. Rather than being submerged in broth as is typical with Japanese noodle dishes, Omen's udon is served separately from its accompanying dashi (broth), along with a carefully arranged selection of fresh seasonal vegetables and toppings. Diners are encouraged to dip the noodles and vegetables into the flavorful broth before eating, allowing each component to maintain its individual texture and flavor.</p>
+      
+      <p>This deconstructed approach highlights the quality of each ingredient while providing a interactive dining experience. The dashi itself is meticulously prepared, typically using a combination of kombu (kelp), shiitake mushrooms, and sometimes a light fish base, resulting in a broth that's both complex and delicate—a perfect complement to the substantial noodles without overwhelming them.</p>
+      
+      <div class="content-quote">
+        "At Omen, we believe that simplicity, when executed with absolute precision and the finest ingredients, can create the most memorable culinary experiences. Our focus has always been on making one thing—udon—as perfectly as possible, rather than creating an extensive menu of many dishes." - Omen founder
+      </div>
+      
+      <!-- User Reviews Carousel -->
+      <h2>Customer Reviews</h2>
+      
+      <div class="review-carousel">
+        <div class="carousel-arrow carousel-prev">
+          <i class="fas fa-chevron-left"></i>
+        </div>
+        
+        <div class="review-slides">
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Emily J.</div>
+                <div class="review-date">Visited April 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"After a morning exploring the Silver Pavilion and strolling along the Philosopher's Path, Omen provided exactly the tranquil lunch experience we were hoping for. We visited the original location, which has such a peaceful atmosphere with its traditional Japanese architecture and garden views. The signature udon dish was unlike any noodle dish I've had before—the noodles had this wonderful chewy texture, and I loved being able to dip them into the flavorful broth along with the fresh vegetables. The seasonal tempura was also exceptional, light and crisp without being greasy. Service was attentive but unobtrusive, and the staff helped explain the proper way to enjoy the dish. While not the cheapest lunch option in Kyoto, the quality justified the price, and the portion size was satisfying. I recommend making a reservation if you're going during peak hours, as it's clearly popular with both tourists and locals. A truly authentic Kyoto dining experience!"</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Hiroshi T.</div>
+                <div class="review-date">Visited February 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star-half-alt" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"As someone who grew up in Kyoto, Omen has always been a special place for my family. When visitors come to town, I often take them to the Gion branch because it offers not just excellent food but also a chance to experience a traditional Kyoto-style restaurant in a historic district. The noodles here have a distinct texture that sets them apart from typical udon—slightly thicker and with more bite. The preparation method, where you dip the noodles in the broth yourself, allows you to control how much flavor each bite absorbs. While the signature udon is the star, don't miss their seasonal side dishes, which showcase local Kyoto vegetables prepared with subtle Japanese techniques. In spring, the fresh bamboo shoot dishes are particularly outstanding. The restaurant can get quite busy, especially during cherry blossom season, so I always recommend making reservations. If you want a truly authentic meal in Kyoto that's more accessible than formal kaiseki dining, Omen is the perfect choice."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Lisa K.</div>
+                <div class="review-date">Visited May 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="far fa-star" style="color: #ddd;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"As a vegetarian traveling in Japan, finding traditional restaurants that can accommodate dietary restrictions can be challenging, which is why Omen was such a wonderful discovery. I visited the Kodaiji location and was delighted that they offer a fully vegetarian version of their signature udon dish with a kombu and shiitake-based broth that was incredibly flavorful. The staff was knowledgeable about vegetarian options and happy to make adjustments. The udon itself had a wonderful texture—slightly thicker than what I've had elsewhere, with a satisfying chewiness. I appreciated the traditional setting with tatami mats, though as a tall person, sitting on the floor for the duration of the meal was a bit uncomfortable (they do have some Western-style seating available if requested). The price was reasonable for the quality—I paid about ¥1,800 for the set meal which included several small side dishes featuring local vegetables. My only minor criticism would be that the restaurant was quite crowded and tables are close together, so it wasn't as peaceful as I had hoped. Still, definitely worth visiting for a taste of traditional Kyoto cuisine that's accessible to vegetarians."</p>
+          </div>
+        </div>
+        
+        <div class="carousel-arrow carousel-next">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+        
+        <div class="carousel-nav">
+          <div class="carousel-dot active"></div>
+          <div class="carousel-dot"></div>
+          <div class="carousel-dot"></div>
+        </div>
+      </div>
+      
+      <h2>Menu Highlights</h2>
+      
+      <p>While Omen is primarily known for its signature udon dish, the menu offers several variations and complementary items:</p>
+      
+      <ul>
+        <li><strong>Omen Udon Set (¥1,500-1,800)</strong> - The signature dish featuring handmade udon served with seasonal vegetables and a separate bowl of dashi broth</li>
+        <li><strong>Niku Omen (¥1,800)</strong> - The classic udon enhanced with thinly sliced simmered beef</li>
+        <li><strong>Tempura Omen (¥2,000)</strong> - Udon served with a selection of crispy seasonal vegetable and seafood tempura</li>
+        <li><strong>Vegetarian Omen (¥1,500)</strong> - A plant-based version with kombu and shiitake broth and additional vegetable toppings</li>
+        <li><strong>Kamo Omen (¥2,200)</strong> - Premium udon set with slices of tender duck, popular during colder months</li>
+        <li><strong>Seasonal Side Dishes (¥500-800)</strong> - Small plates showcasing local Kyoto vegetables prepared using traditional methods</li>
+        <li><strong>Kyoto Obanzai Set (¥1,800)</strong> - A selection of small traditional Kyoto-style side dishes served with rice</li>
+        <li><strong>Seasonal Desserts (¥600-800)</strong> - Traditional Japanese sweets that change with the seasons, such as warabi mochi in summer or chestnut-based desserts in autumn</li>
+      </ul>
+      
+      <p>Beverage options include local Kyoto sake varieties, Japanese beer, plum wine, and various teas including houjicha (roasted green tea) and seasonal specialty teas.</p>
+      
+      <div class="review-section">
+        <h2>Eastworld's Review</h2>
+        
+        <h3>Noodles: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Omen's udon noodles are exceptional—handmade daily with the perfect thickness and chewiness that distinguishes them from mass-produced varieties. The distinctive texture allows them to stand up to dipping without becoming soggy, while still being tender enough to enjoy.</p>
+        
+        <h3>Broth & Accompaniments: <span style="color: #FFD700;">★★★★½</span></h3>
+        <p>The dashi broth achieves an impressive balance—flavorful enough to enhance the noodles but delicate enough to let the quality of the udon shine through. Seasonal vegetables are always impeccably fresh, and the preparation method preserves their individual flavors and textures.</p>
+        
+        <h3>Atmosphere: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>Traditional Japanese architecture, tatami seating, and garden views create an authentic Kyoto dining experience. The serene setting complements the refined simplicity of the food, though some locations can become quite crowded during peak tourist seasons.</p>
+        
+        <h3>Service: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>Staff are knowledgeable and attentive, with enough English proficiency to guide international visitors in how to properly enjoy their signature dishes. Service strikes the right balance between being helpful and unobtrusive.</p>
+        
+        <h3>Value: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>While not the cheapest noodle option in Kyoto, the quality of ingredients, careful preparation, and overall dining experience justify the price point. Lunch sets offer particularly good value compared to many tourist-oriented establishments in the city.</p>
+        
+        <h3>Overall: <span style="color: #FFD700;">★★★★½</span></h3>
+        <p>Omen offers a perfect middle ground in Kyoto's dining scene—more refined than casual noodle shops but more accessible than formal kaiseki restaurants. Their focused approach to perfecting udon represents the best of Japanese culinary philosophy: mastering a single specialty through years of dedicated craftsmanship. A must-visit for those seeking authentic Kyoto cuisine in a traditionally elegant setting.</p>
+      </div>
+      
+      <h2>Tips for Visitors</h2>
+      
+      <ul>
+        <li><strong>Make Reservations:</strong> Especially for dinner and during peak tourist seasons like cherry blossom (April) and autumn foliage (November)</li>
+        <li><strong>Explore the Locations:</strong> Each of the three branches has a slightly different atmosphere—the original near Ginkakuji is more serene, the Gion location offers a historic district experience, and the Kodaiji branch tends to be slightly less crowded</li>
+        <li><strong>Dipping Technique:</strong> Follow the staff's guidance on how to properly enjoy the udon—typically by dipping both noodles and vegetables into the broth before eating</li>
+        <li><strong>Consider Set Meals:</strong> The set options (teishoku) provide the best value and a well-balanced experience of Omen's offerings</li>
+        <li><strong>Timing Your Visit:</strong> Lunch service tends to be less crowded than dinner, particularly on weekdays</li>
+        <li><strong>Dietary Restrictions:</strong> Vegetarian options are available and clearly marked, making Omen one of the more accommodating traditional restaurants in Kyoto</li>
+        <li><strong>Seating Preferences:</strong> If you have mobility issues or prefer not to sit on tatami floors, request Western-style table seating when making a reservation</li>
+        <li><strong>Combine with Sightseeing:</strong> The original location pairs perfectly with a visit to the Silver Pavilion and a stroll along the Philosopher's Path, while the Gion branch complements exploration of Kyoto's geisha district</li>
+      </ul>
+      
+      <!-- Visitor Information -->
+      <div id="visitor-info" class="review-section">
+        <h2>Visitor Information</h2>
+        <p>Here's what you need to know when planning your visit to Omen:</p>
+        
+        <h3>Multiple Locations:</h3>
+        <p>Omen has three branches in Kyoto, each with slightly different hours and atmospheres:</p>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li><strong>Original (Jodoji)</strong>: Near Ginkakuji/Silver Pavilion, more serene atmosphere with garden views</li>
+          <li><strong>Gion</strong>: Located in the historic geisha district, popular with tourists</li>
+          <li><strong>Kodaiji</strong>: Near Kodaiji Temple, tends to be slightly less crowded</li>
+        </ul>
+        
+        <h3>Reservations:</h3>
+        <p>Reservations are recommended, especially for:</p>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Dinner service (5:00 PM - 8:30 PM)</li>
+          <li>Weekends and holidays</li>
+          <li>Peak tourist seasons (March-May and October-November)</li>
+          <li>Call directly at least one day in advance: +81 75-771-8994 (Main location)</li>
+          <li>Some hotel concierges can assist with making reservations</li>
+        </ul>
+        
+        <h3>English Support:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>English menus are available at all locations</li>
+          <li>Staff have basic English communication skills</li>
+          <li>Picture menus help with identifying dishes</li>
+          <li>Staff will explain the proper way to enjoy the udon</li>
+        </ul>
+        
+        <h3>Payment Information:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Cash is preferred, though major credit cards are accepted</li>
+          <li>Tax is included in menu prices</li>
+          <li>No tipping is necessary or expected, as is standard in Japan</li>
+        </ul>
+        
+        <p>The restaurants typically ask that cell phones be set to silent mode, and photography should be discreet to maintain the peaceful atmosphere. As with many traditional Japanese establishments, removing shoes is required when sitting at tatami-style seating.</p>
+      </div>
+      
+      <a href="../food.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Food Guide</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Review carousel functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const slides = document.querySelector('.review-slides');
+      const dots = document.querySelectorAll('.carousel-dot');
+      const prevBtn = document.querySelector('.carousel-prev');
+      const nextBtn = document.querySelector('.carousel-next');
+      let currentSlide = 0;
+      const totalSlides = document.querySelectorAll('.review-slide').length;
+      
+      // Function to update slide position
+      function showSlide(index) {
+        if (index < 0) index = totalSlides - 1;
+        if (index >= totalSlides) index = 0;
+        
+        currentSlide = index;
+        slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+        
+        // Update active dot
+        dots.forEach((dot, i) => {
+          dot.classList.toggle('active', i === currentSlide);
+        });
+      }
+      
+      // Set up event listeners for dots
+      dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => showSlide(i));
+      });
+      
+      // Set up event listeners for arrows
+      prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
+      nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
+      
+      // Auto-rotate slides every 5 seconds
+      setInterval(() => {
+        showSlide(currentSlide + 1);
+      }, 5000);
+    });
+  </script>
+  
+  <script src="../script.js"></script>
+</body>
+</html> 

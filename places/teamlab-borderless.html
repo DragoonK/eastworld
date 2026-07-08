@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TeamLab Borderless - Eastworld Wonders</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Wonder page specific styles */
+    .wonder-hero {
+      height: 70vh;
+      background-image: url('https://dynamic-media-cdn.tripadvisor.com/media/photo-o/17/f6/39/f4/teamlab-borderless-is.jpg?w=1200&h=-1&s=1');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+    }
+    
+    .wonder-hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+    }
+    
+    .wonder-hero-content {
+      position: relative;
+      z-index: 2;
+      padding: 3rem;
+      width: 100%;
+      color: white;
+    }
+    
+    .wonder-title {
+      font-size: 3.5rem;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+    
+    .wonder-location {
+      display: flex;
+      align-items: center;
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+    }
+    
+    .wonder-location i {
+      margin-right: 0.5rem;
+    }
+    
+    .wonder-meta {
+      display: flex;
+      gap: 2rem;
+      margin-top: 1.5rem;
+    }
+    
+    .wonder-meta-item {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .meta-label {
+      font-size: 0.9rem;
+      opacity: 0.8;
+      margin-bottom: 0.3rem;
+    }
+    
+    .meta-value {
+      font-size: 1.2rem;
+      font-weight: 500;
+    }
+    
+    .wonder-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+    
+    .wonder-section {
+      margin-bottom: 4rem;
+    }
+    
+    .section-title {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      padding-bottom: 0.8rem;
+    }
+    
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 70px;
+      height: 3px;
+      background-color: #000;
+    }
+    
+    .section-content p {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: #333;
+      margin-bottom: 1.5rem;
+    }
+    
+    .wonder-image-container {
+      margin: 2.5rem 0;
+    }
+    
+    .wonder-image {
+      width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+    }
+    
+    .caption {
+      font-size: 0.95rem;
+      color: #555;
+      margin-top: 0.8rem;
+      text-align: center;
+      font-style: italic;
+    }
+    
+    /* Content quote styling */
+    .content-quote {
+      font-style: italic;
+      font-size: 1.2rem;
+      margin: 2rem 0;
+      padding: 1.5rem 2.5rem;
+      border-left: 4px solid #8C52FF;
+      background-color: #f8f8f8;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    
+    /* Facts grid */
+    .facts-container {
+      background: #f9f9f9;
+      padding: 2rem;
+      border-radius: 8px;
+      margin-bottom: 4rem;
+    }
+    
+    .facts-title {
+      font-size: 1.8rem;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    .facts-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    
+    .fact-item {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      transition: transform 0.3s ease;
+    }
+    
+    .fact-item:hover {
+      transform: translateY(-5px);
+    }
+    
+    .fact-icon {
+      font-size: 2rem;
+      color: #8C52FF;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    
+    .fact-title {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+    
+    .fact-text {
+      font-size: 0.95rem;
+      color: #555;
+      line-height: 1.5;
+    }
+    
+    /* Gallery styles */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .gallery-item {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .gallery-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+    }
+    
+    .gallery-item img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      display: block;
+    }
+    
+    /* Visitor information */
+    .practical-info {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .info-card {
+      background: #f9f9f9;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    
+    .info-card-title {
+      font-size: 1.2rem;
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+    }
+    
+    .info-card-title i {
+      margin-right: 0.5rem;
+      color: #8C52FF;
+    }
+    
+    .info-list, .tips-list {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .info-list li {
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .info-list li:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    
+    .info-label {
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      color: #444;
+    }
+    
+    .tips-list li {
+      margin-bottom: 0.8rem;
+      padding-left: 1.5rem;
+      position: relative;
+    }
+    
+    .tips-list li:before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: #8C52FF;
+      font-weight: bold;
+    }
+    
+    .map-container {
+      margin-top: 2rem;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    /* Related wonders section */
+    .related-wonders {
+      background: #f9f9f9;
+      padding: 3rem 1.5rem;
+    }
+    
+    .related-wonders-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .wonder-card {
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      text-decoration: none;
+      color: inherit;
+    }
+    
+    .wonder-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+    }
+    
+    .wonder-card-img {
+      height: 200px;
+      overflow: hidden;
+    }
+    
+    .wonder-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    
+    .wonder-card:hover .wonder-card-img img {
+      transform: scale(1.05);
+    }
+    
+    .wonder-card-content {
+      padding: 1.5rem;
+    }
+    
+    .wonder-card-category {
+      font-size: 0.8rem;
+      color: #8C52FF;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+    
+    .wonder-card-title {
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .wonder-card-description {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 1rem;
+    }
+    
+    .wonder-card-location {
+      font-size: 0.9rem;
+      color: #888;
+      display: flex;
+      align-items: center;
+    }
+    
+    .wonder-card-location i {
+      margin-right: 0.5rem;
+      font-size: 0.8rem;
+    }
+    
+    /* Responsive fixes */
+    @media (max-width: 768px) {
+      .facts-grid,
+      .gallery,
+      .practical-info,
+      .related-wonders-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .wonder-meta {
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+      
+      .wonder-meta-item {
+        flex-basis: calc(50% - 1rem);
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .wonder-hero-content {
+        padding: 2rem 1.5rem;
+      }
+      
+      .wonder-title {
+        font-size: 2.5rem;
+      }
+      
+      .facts-grid,
+      .gallery,
+      .practical-info,
+      .related-wonders-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../food.html" class="nav-item">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../places.html" class="nav-item active">PLACES</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <div class="wonder-hero">
+      <div class="wonder-hero-content">
+        <h1 class="wonder-title">TeamLab Borderless</h1>
+        <div class="wonder-location">
+          <i class="fas fa-map-marker-alt"></i> Tokyo, Japan
+        </div>
+        <p>A revolutionary digital art museum where boundaries between artworks dissolve, creating an immersive experience like no other</p>
+        <div class="wonder-meta">
+          <div class="wonder-meta-item">
+            <span class="meta-label">CATEGORY</span>
+            <span class="meta-value">Digital Art</span>
+          </div>
+          <div class="wonder-meta-item">
+            <span class="meta-label">ESTABLISHED</span>
+            <span class="meta-value">2018</span>
+          </div>
+          <div class="wonder-meta-item">
+            <span class="meta-label">AREA</span>
+            <span class="meta-value">10,000 m²</span>
+          </div>
+          <div class="wonder-meta-item">
+            <span class="meta-label">EXHIBITS</span>
+            <span class="meta-value">60+</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="wonder-content">
+      <section class="wonder-section">
+        <h2 class="section-title">Overview</h2>
+        <div class="section-content">
+          <p>TeamLab Borderless is a groundbreaking digital art museum where art moves freely, forming connections with visitors and other artworks in a borderless world. Located in Tokyo, this revolutionary space spans 10,000 square meters and houses over 60 interactive artworks that transcend the boundaries of traditional art museums.</p>
+          
+          <p>Unlike conventional museums where art is static and confined to specific spaces, TeamLab Borderless creates an environment where digital art installations flow from room to room, interacting with each other and responding to human presence. The result is a constantly evolving, immersive experience that changes with each visit and for each visitor.</p>
+          
+          <div class="wonder-image-container">
+            <img src="https://cdn.vox-cdn.com/thumbor/O_k3DNjxGbMp07AVKHmWVgmzH5k=/1400x1400/filters:format(jpeg)/cdn.vox-cdn.com/uploads/chorus_asset/file/16213786/Untitled_1.jpg" alt="Forest of Resonating Lamps at TeamLab Borderless" class="wonder-image">
+            <p class="caption">The mesmerizing Forest of Resonating Lamps, one of the most iconic installations at TeamLab Borderless, where hundreds of Venetian glass lamps change color in response to human presence.</p>
+          </div>
+          
+          <p>The museum is divided into five distinct but interconnected zones: Borderless World, Athletics Forest, Future Park, Forest of Lamps, and EN Tea House. Each area offers different types of experiences—from contemplative light installations to playful interactive games—but all share the core philosophy of breaking down barriers between art and viewer, technology and nature, and individual and collective experience.</p>
+        </div>
+      </section>
+      
+      <section class="wonder-section">
+        <h2 class="section-title">History and Concept</h2>
+        <div class="section-content">
+          <p>TeamLab Borderless is the creation of teamLab, an international art collective formed in 2001 by Toshiyuki Inoko and several friends while they were students at the University of Tokyo. The collective brings together artists, programmers, engineers, CG animators, mathematicians, and architects to create art that explores the relationship between humans and nature, and between individuals and the collective, through digital technology.</p>
+          
+          <p>The museum first opened its doors in June 2018 as MORI Building DIGITAL ART MUSEUM: teamLab Borderless, a collaborative project between the Mori Building Company and teamLab. Within its first year, it attracted over 2.3 million visitors from more than 160 countries, quickly becoming one of Tokyo's most popular attractions and earning recognition as a must-visit destination by numerous international publications.</p>
+          
+          <div class="content-quote">
+            "We want people to understand the continuity of time, and that the world exists in a complex plane of endless interactions. We see no boundary between humans and nature, and between oneself and the world; one is in the other and the other in one."<br>- Toshiyuki Inoko, teamLab founder
+          </div>
+          
+          <p>The concept behind TeamLab Borderless reflects traditional Japanese spatial perception, which differs from Western perspectives that tend to emphasize distinct boundaries. In traditional Japanese art and architecture, spaces are often defined by their relationships rather than by rigid separations—an idea that teamLab has expanded upon through digital technology.</p>
+          
+          <div class="wonder-image-container">
+            <img src="https://www.teamlab.art/images/pc-l/13176" alt="Universe of Water Particles at TeamLab Borderless" class="wonder-image">
+            <p class="caption">Universe of Water Particles, a virtual waterfall that responds to visitors' movements, exemplifying the blend of traditional Japanese aesthetics with cutting-edge technology.</p>
+    </div>
+    
+          <p>Following the success of the Tokyo location, teamLab has expanded the Borderless concept to cities like Shanghai and Macao, with more international locations planned. The original Tokyo museum in Odaiba closed in August 2022 to make way for redevelopment, but a new, expanded TeamLab Borderless Tokyo has been announced to open in central Tokyo, continuing the legacy of this revolutionary approach to digital art.</p>
+        </div>
+      </section>
+      
+      <div class="facts-container">
+        <h3 class="facts-title">Fascinating Facts About TeamLab Borderless</h3>
+        <div class="facts-grid">
+          <div class="fact-item">
+            <div class="fact-icon"><i class="fas fa-code"></i></div>
+            <h4 class="fact-title">Digital Innovation</h4>
+            <p class="fact-text">The museum uses over 520 computers and 470 projectors to create its immersive digital environments, all synchronized in real-time.</p>
+          </div>
+          
+          <div class="fact-item">
+            <div class="fact-icon"><i class="fas fa-trophy"></i></div>
+            <h4 class="fact-title">Record Breaking</h4>
+            <p class="fact-text">In its first year, TeamLab Borderless became the most visited single-artist museum in the world, attracting over 2.3 million visitors.</p>
+          </div>
+          
+          <div class="fact-item">
+            <div class="fact-icon"><i class="fas fa-paint-brush"></i></div>
+            <h4 class="fact-title">Interactive Art</h4>
+            <p class="fact-text">The artworks are not pre-recorded animations—they're rendered in real-time and respond uniquely to each visitor's presence and behavior.</p>
+          </div>
+          
+          <div class="fact-item">
+            <div class="fact-icon"><i class="fas fa-sync-alt"></i></div>
+            <h4 class="fact-title">Ever-Changing</h4>
+            <p class="fact-text">No two visits to TeamLab Borderless are the same—the artworks constantly change throughout the seasons, time of day, and in response to visitor interactions.</p>
+          </div>
+          
+          <div class="fact-item">
+            <div class="fact-icon"><i class="fas fa-users"></i></div>
+            <h4 class="fact-title">Collaborative Creation</h4>
+            <p class="fact-text">TeamLab consists of over 600 professionals from diverse fields including artists, programmers, engineers, CG animators, mathematicians, and architects.</p>
+          </div>
+          
+          <div class="fact-item">
+            <div class="fact-icon"><i class="fas fa-globe-asia"></i></div>
+            <h4 class="fact-title">Global Impact</h4>
+            <p class="fact-text">Following the success of the Tokyo location, TeamLab has expanded the Borderless concept to Shanghai, Macao, and has plans for more international museums.</p>
+          </div>
+        </div>
+      </div>
+      
+      <section class="wonder-section">
+        <h2 class="section-title">Exhibition Highlights</h2>
+        <div class="section-content">
+          <p>TeamLab Borderless offers a vast array of digital art experiences spread across five distinct but interconnected zones. Each installation is designed to blur the boundaries between the artwork and the visitor, creating a deeply immersive experience. Here are some of the most captivating highlights from the museum:</p>
+          
+          <h3 style="font-size: 1.5rem; margin: 1.5rem 0 0.5rem 0;">Borderless World</h3>
+          <p>The largest area of the museum features digital artworks that move freely between rooms, interacting with each other and with visitors. One of the most spectacular installations is "Universe of Water Particles," a virtual waterfall that cascades around visitors, splitting around any human presence it detects. Nearby, "Flutter of Butterflies Beyond Borders" fills rooms with colorful digital butterflies that are born, live, and die in response to human touch and movement.</p>
+          
+          <div class="wonder-image-container">
+            <img src="https://media.timeout.com/images/105237091/750/422/image.jpg" alt="Crystal World at TeamLab Borderless" class="wonder-image">
+            <p class="caption">Crystal World creates an immersive three-dimensional space using thousands of LED strings, where visitors can walk through what feels like the center of the universe.</p>
+          </div>
+          
+          <h3 style="font-size: 1.5rem; margin: 1.5rem 0 0.5rem 0;">Forest of Resonating Lamps</h3>
+          <p>One of the most photographed and sought-after experiences at TeamLab Borderless is the Forest of Resonating Lamps. This room features hundreds of Venetian glass lamps suspended from the ceiling, with mirrors creating an infinite reflection effect. As visitors move through the space, the lamps closest to them respond by changing colors and communicating the change to nearby lamps, creating waves of light that spread throughout the installation.</p>
+          
+          <h3 style="font-size: 1.5rem; margin: 1.5rem 0 0.5rem 0;">Athletics Forest</h3>
+          <p>This area combines physical activity with artistic creation, encouraging visitors to use their bodies to interact with digital environments. Installations like "Aerial Climbing through a Flock of Colored Birds" allow visitors to climb through three-dimensional spaces while digital birds respond to their movements. The "Light Forest Three-dimensional Bouldering" offers a climbing wall where routes are created with changing light patterns, combining physical challenge with digital art.</p>
+          
+          <h3 style="font-size: 1.5rem; margin: 1.5rem 0 0.5rem 0;">Future Park</h3>
+          <p>Designed with younger visitors in mind but enjoyable for all ages, Future Park focuses on collaborative creation. In "Sketch Aquarium," visitors can color paper drawings of sea creatures and then scan them to see their creations come to life in a giant digital aquarium. Similarly, "Sketch Town" allows visitors to design cars, buildings, and spaceships that become part of an animated digital cityscape.</p>
+          
+          <h3 style="font-size: 1.5rem; margin: 1.5rem 0 0.5rem 0;">EN Tea House</h3>
+          <p>Offering a more contemplative experience, the EN Tea House combines traditional Japanese tea culture with digital art. When visitors place a cup of tea on the table, digital flowers bloom inside and around the cup. The longer the tea remains, the more the flowers grow and spread, eventually spilling beyond the cup to connect with the flowers blooming from other visitors' tea cups.</p>
+        </div>
+      </section>
+      
+      <section class="wonder-section">
+        <h2 class="section-title">Visitor Information</h2>
+        <div class="practical-info">
+          <div class="info-card">
+            <h3 class="info-card-title"><i class="fas fa-info-circle"></i> Essential Information</h3>
+            <ul class="info-list">
+              <li>
+                <div class="info-label">Location</div>
+                <div class="info-value">Mori Building, Toranomon-Azabudai, Tokyo, Japan (New location)</div>
+              </li>
+              <li>
+                <div class="info-label">Opening Hours</div>
+                <div class="info-value">10:00 AM - 7:00 PM (Last entry at 6:00 PM)<br>Closed on specific Tuesdays (check website)</div>
+              </li>
+              <li>
+                <div class="info-label">Admission Fee</div>
+                <div class="info-value">Adults: ¥3,200 ($22 USD)<br>Children (4-14): ¥1,000 ($7 USD)<br>Children under 3: Free</div>
+              </li>
+              <li>
+                <div class="info-label">Recommended Duration</div>
+                <div class="info-value">3-4 hours (many visitors spend an entire day)</div>
+              </li>
+              <li>
+                <div class="info-label">Official Website</div>
+                <div class="info-value"><a href="https://borderless.teamlab.art/" target="_blank">borderless.teamlab.art</a></div>
+              </li>
+            </ul>
+          </div>
+          
+          <div class="info-card">
+            <h3 class="info-card-title"><i class="fas fa-lightbulb"></i> Travel Tips</h3>
+            <ul class="tips-list">
+              <li>Purchase tickets online in advance as they often sell out, especially during peak tourist seasons and weekends.</li>
+              <li>Visit on weekdays or early mornings to avoid crowds and have a more personal experience with the installations.</li>
+              <li>Wear comfortable clothes in light colors to better experience the interactive projections.</li>
+              <li>Wear comfortable shoes as you'll be walking and standing for several hours.</li>
+              <li>Photography is allowed and encouraged, but be prepared for challenging lighting conditions.</li>
+              <li>Some spaces have mirrored floors - consider this when choosing your outfit.</li>
+              <li>Download the official TeamLab app before your visit for enhanced interaction with certain exhibits.</li>
+              <li>Consider visiting the nearby teamLab Planets for a complementary but different digital art experience.</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="map-container">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3243.3333833852357!2d139.77455511525872!3d35.62432088020841!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x601889fac484aaab%3A0x37f469a62c6c434!2sMORI%20Building%20DIGITAL%20ART%20MUSEUM%3A%20EPSON%20teamLab%20Borderless!5e0!3m2!1sen!2sjp!4v1615270784894!5m2!1sen!2sjp" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+      </section>
+      
+      <section class="wonder-section">
+        <h2 class="section-title">The Visitor Experience</h2>
+        <div class="section-content">
+          <p>Visiting TeamLab Borderless is unlike any traditional museum experience. There is no prescribed route or path—visitors are encouraged to wander freely and discover spaces at their own pace, exploring the interconnected digital environments that constantly transform and respond to human presence.</p>
+          
+          <p>The experience begins the moment you step into the museum. With no maps provided and minimal signage, visitors embark on an adventure of discovery, often stumbling upon hidden rooms and secret passageways that lead to new installations. This intentional disorientation is part of the experience, encouraging exploration and fostering a childlike sense of wonder and discovery.</p>
+          
+          <p>As you move through the space, you'll notice how the digital artworks respond not only to your presence but also to the presence of others around you. Flowers might bloom beneath your feet, butterflies might gather around your shadow, or a school of digital fish might dart away as you approach. This responsiveness creates a deeply personal connection between visitor and artwork, while also highlighting the collective nature of the experience.</p>
+          
+          <div class="wonder-image-container">
+            <img src="https://www.teamlab.art/images/pc-l/15955" alt="Interactive floor installation at TeamLab Borderless" class="wonder-image">
+            <p class="caption">Visitors interact with a floor projection where digital flowers bloom and scatter in response to movement, creating a personalized artistic experience.</p>
+      </div>
+      
+          <p>The absence of physical boundaries between artworks means that installations often blend into one another, creating unexpected combinations and interactions. A flock of digital birds might fly from one room to another, carrying elements of one installation into the next. This fluid movement of art throughout the space reinforces the "borderless" concept at the heart of the museum.</p>
+          
+          <p>Unlike traditional museums where touching the art is forbidden, TeamLab Borderless encourages physical interaction. Many installations respond directly to touch, and visitors are invited to become part of the artwork rather than remaining passive observers. This participatory approach transforms visitors from spectators to co-creators, blurring the distinction between the art and its audience.</p>
+          
+          <p>The multisensory nature of the experience—combining light, color, sound, and movement—creates an immersive environment that engages visitors on multiple levels. The emotional impact can be profound, with many visitors describing feelings of awe, joy, and even tranquility as they lose themselves in the digital landscapes.</p>
+        </div>
+      </section>
+      
+      <section class="wonder-section">
+        <h2 class="section-title">Gallery</h2>
+        <div class="gallery">
+          <div class="gallery-item">
+              <img src="https://cdn.vox-cdn.com/thumbor/O_k3DNjxGbMp07AVKHmWVgmzH5k=/1400x1400/filters:format(jpeg)/cdn.vox-cdn.com/uploads/chorus_asset/file/16213786/Untitled_1.jpg" alt="Forest of Resonating Lamps">
+            </div>
+          <div class="gallery-item">
+            <img src="https://www.teamlab.art/images/pc-l/13176" alt="Universe of Water Particles">
+            </div>
+          <div class="gallery-item">
+            <img src="https://media.timeout.com/images/105237091/750/422/image.jpg" alt="Crystal World">
+          </div>
+          <div class="gallery-item">
+            <img src="https://thedesigntourist.com/wp-content/uploads/2018/07/teamlab-athletics-forest1.jpg" alt="Athletics Forest">
+            </div>
+          <div class="gallery-item">
+            <img src="https://www.teamlab.art/images/pc-l/15955" alt="Interactive Floor Installation">
+          </div>
+          <div class="gallery-item">
+            <img src="https://images.squarespace-cdn.com/content/v1/5b7b22b89f8770558158d617/1541574482150-X7572LPDB3PFBM3POQZ1/Tea+House.jpg" alt="EN Tea House">
+          </div>
+        </div>
+      </section>
+    </div>
+    
+    <section class="related-wonders">
+      <h2 class="section-title" style="text-align: center; margin-bottom: 2rem;">Other Tokyo Wonders You Might Like</h2>
+      <div class="related-wonders-grid">
+        <a href="tokyo-skytree.html" class="wonder-card">
+          <div class="wonder-card-img">
+            <img src="https://images.unsplash.com/photo-1557547143-47b1bcb4e52c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="Tokyo Skytree">
+            </div>
+          <div class="wonder-card-content">
+            <div class="wonder-card-category">MODERN</div>
+            <h3 class="wonder-card-title">Tokyo Skytree</h3>
+            <p class="wonder-card-description">Japan's tallest structure offering breathtaking panoramic views of Tokyo.</p>
+            <div class="wonder-card-location"><i class="fas fa-map-marker-alt"></i> Tokyo, Japan</div>
+            </div>
+          </a>
+        
+        <a href="senso-ji-temple.html" class="wonder-card">
+          <div class="wonder-card-img">
+            <img src="https://a.cdn-hotels.com/gdcs/production135/d294/8a0eeced-ac56-417d-8d07-35ac885dbfce.jpg" alt="Senso-ji Temple">
+            </div>
+          <div class="wonder-card-content">
+            <div class="wonder-card-category">HISTORICAL</div>
+            <h3 class="wonder-card-title">Senso-ji Temple</h3>
+            <p class="wonder-card-description">Tokyo's oldest and most significant Buddhist temple, featuring the famous Thunder Gate.</p>
+            <div class="wonder-card-location"><i class="fas fa-map-marker-alt"></i> Tokyo, Japan</div>
+            </div>
+          </a>
+        
+        <a href="../guides/tokyo-guide.html" class="wonder-card">
+          <div class="wonder-card-img">
+            <img src="https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2036&q=80" alt="Tokyo Guide">
+            </div>
+          <div class="wonder-card-content">
+            <div class="wonder-card-category">GUIDE</div>
+            <h3 class="wonder-card-title">Tokyo City Guide</h3>
+            <p class="wonder-card-description">Explore more wonders in Japan's dynamic capital city.</p>
+            <div class="wonder-card-location"><i class="fas fa-map-marker-alt"></i> Tokyo, Japan</div>
+            </div>
+          </a>
+        </div>
+      </section>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="../script.js"></script>
+</body>
+</html> 

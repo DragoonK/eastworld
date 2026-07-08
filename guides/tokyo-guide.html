@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EASTWORLD - Tokyo City Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css' rel='stylesheet' />
+  <style>
+    /* City Guide specific styles */
+    .guide-hero {
+      height: 500px;
+      background-image: url('https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1936&q=80');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 3rem;
+    }
+    
+    .guide-hero-content {
+      text-align: center;
+      color: white;
+      position: relative;
+      z-index: 2;
+      padding: 2rem;
+      max-width: 800px;
+      background-color: rgba(0, 0, 0, 0.6);
+    }
+    
+    .guide-hero::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(0deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.2) 100%);
+    }
+    
+    .guide-hero h1 {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      letter-spacing: 3px;
+    }
+    
+    .guide-hero p {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    
+    .guide-intro {
+      max-width: 800px;
+      margin: 0 auto 3rem;
+      padding: 0 1rem;
+      line-height: 1.8;
+    }
+    
+    .guide-section {
+      margin-bottom: 4rem;
+    }
+    
+    .guide-section-title {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: 2.2rem;
+      letter-spacing: 1px;
+    }
+    
+    .guide-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+    
+    .guide-card {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+    
+    .guide-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .guide-card-img {
+      height: 200px;
+      overflow: hidden;
+    }
+    
+    .guide-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    
+    .guide-card:hover .guide-card-img img {
+      transform: scale(1.05);
+    }
+    
+    .guide-card-content {
+      padding: 1.5rem;
+    }
+    
+    .guide-card h3 {
+      margin-bottom: 0.5rem;
+      font-size: 1.2rem;
+    }
+    
+    .guide-card-meta {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      color: #666;
+    }
+    
+    .guide-card-meta i {
+      margin-right: 0.3rem;
+    }
+    
+    .guide-card-meta span {
+      margin-right: 1rem;
+    }
+    
+    .guide-card p {
+      color: #555;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    
+    .guide-map {
+      width: 100%;
+      height: 500px;
+      border: none;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+    }
+    
+    .guide-tips {
+      background-color: #f8f8f8;
+      padding: 2rem;
+      border-radius: 8px;
+      margin-bottom: 3rem;
+    }
+    
+    .guide-tips h3 {
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+    
+    .guide-tips-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+    
+    .guide-tip-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+    }
+    
+    .guide-tip-item i {
+      margin-right: 0.5rem;
+      color: #000;
+      margin-top: 0.25rem;
+    }
+    
+    .guide-download {
+      text-align: center;
+      margin: 3rem 0;
+      padding: 2rem;
+      background-color: #f0f0f0;
+      border-radius: 8px;
+    }
+    
+    .guide-download h3 {
+      margin-bottom: 1rem;
+      font-size: 1.8rem;
+    }
+    
+    .guide-download-btn {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 1rem 2rem;
+      background-color: #000;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+    
+    .guide-download-btn:hover {
+      background-color: #333;
+    }
+    
+    .guide-map {
+      width: 100%;
+      height: 500px;
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../food.html" class="nav-item">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+  
+  <main class="content-container">
+    <div class="guide-hero">
+      <div class="guide-hero-content">
+        <h1>TOKYO</h1>
+        <p>Discover Japan's dynamic capital, where ancient traditions meet futuristic innovation in a city that never sleeps.</p>
+      </div>
+    </div>
+    
+    <section class="guide-intro">
+      <p>Tokyo, Japan's bustling capital, is a mesmerizing blend of the ultramodern and the traditional, from neon-lit skyscrapers to historic temples. The city is a global powerhouse for technology, fashion, food, and culture, offering an unparalleled urban experience that stimulates all the senses.</p>
+      
+      <p>A sprawling metropolis of 37 million people, Tokyo is organized into distinct neighborhoods, each with its own character: Shinjuku's towering skyscrapers and bustling nightlife, Shibuya's youthful energy and famous pedestrian crossing, Asakusa's ancient temples and traditional crafts, and Ginza's luxury shopping and fine dining. Despite its vastness, Tokyo maintains a sense of order, cleanliness, and efficiency that makes navigating this incredible city a surprisingly pleasant experience.</p>
+    </section>
+    
+    <section class="guide-section">
+      <h2 class="guide-section-title">TOP ATTRACTIONS</h2>
+      
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/17/f6/39/f4/teamlab-borderless-is.jpg?w=1200&h=-1&s=1" alt="TeamLab Borderless">
+          </div>
+          <div class="guide-card-content">
+            <h3>TeamLab Borderless</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Odaiba</span>
+              <i class="far fa-clock"></i><span>10:00-19:00 (Closed Tuesdays)</span>
+            </div>
+            <p>An immersive digital art museum where art transcends boundaries and moves freely through rooms, creating a borderless world of artworks that interact with visitors.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://a.cdn-hotels.com/gdcs/production135/d294/8a0eeced-ac56-417d-8d07-35ac885dbfce.jpg" alt="Senso-ji Temple">
+          </div>
+          <div class="guide-card-content">
+            <h3>Senso-ji Temple</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Asakusa</span>
+              <i class="far fa-clock"></i><span>24 hours (Main hall: 6:00-17:00)</span>
+            </div>
+            <p>Tokyo's oldest temple, founded in 628 AD, featuring the iconic Kaminarimon Gate and a long shopping street (Nakamise-dori) leading to the main temple complex.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://media.timeout.com/images/105238138/750/422/image.jpg" alt="Tokyo Skytree">
+          </div>
+          <div class="guide-card-content">
+            <h3>Tokyo Skytree</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Sumida</span>
+              <i class="far fa-clock"></i><span>10:00-21:00</span>
+            </div>
+            <p>The tallest structure in Japan (634m) offering breathtaking panoramic views of Tokyo from its two observation decks, along with shops and restaurants.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://media.cntraveler.com/photos/5ea9ca482136a80a9e6cd034/16:9/w_2560,c_limit/Shinjuku-Gyoen-GettyImages-1141191450.jpg" alt="Shinjuku Gyoen">
+          </div>
+          <div class="guide-card-content">
+            <h3>Shinjuku Gyoen</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Shinjuku</span>
+              <i class="far fa-clock"></i><span>9:00-16:30 (Closed Mondays)</span>
+            </div>
+            <p>One of Tokyo's largest and most beautiful parks featuring three distinct garden styles: Japanese traditional, formal French, and English landscape, with seasonal highlights including cherry blossoms.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://www.gotokyo.org/en/spot/39/images/39_1050_1.jpg" alt="Meiji Shrine">
+          </div>
+          <div class="guide-card-content">
+            <h3>Meiji Shrine</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Shibuya</span>
+              <i class="far fa-clock"></i><span>Sunrise to sunset</span>
+            </div>
+            <p>A serene Shinto shrine dedicated to Emperor Meiji and Empress Shoken, set within a 170-acre evergreen forest with 120,000 trees representing species from all over Japan.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://www.japan-guide.com/g18/3041_01.jpg" alt="Akihabara">
+          </div>
+          <div class="guide-card-content">
+            <h3>Akihabara Electric Town</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Akihabara</span>
+              <i class="far fa-clock"></i><span>Varies by store</span>
+            </div>
+            <p>The world-famous electronics district and center of anime and manga culture, featuring countless shops selling electronics, games, anime merchandise, and maid cafes.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="guide-section">
+      <h2 class="guide-section-title">WHERE TO EAT</h2>
+      
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://media.cnn.com/api/v1/images/stellar/prod/191029104555-sixtus-1019-sukiyabashi-jiro-obama.jpg?q=w_1600,h_900,x_0,y_0,c_fill" alt="Sukiyabashi Jiro">
+          </div>
+          <div class="guide-card-content">
+            <h3>Sukiyabashi Jiro</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Ginza</span>
+              <i class="fas fa-yen-sign"></i><span>¥¥¥¥</span>
+            </div>
+            <p>World-famous sushi restaurant run by master chef Jiro Ono, subject of the documentary "Jiro Dreams of Sushi," offering an exquisite omakase experience (reservation required months in advance).</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://resources.matcha-jp.com/resize/720x2000/2019/07/31-80158.jpeg" alt="Ichiran Ramen">
+          </div>
+          <div class="guide-card-content">
+            <h3>Ichiran Ramen</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Multiple locations</span>
+              <i class="fas fa-yen-sign"></i><span>¥¥</span>
+            </div>
+            <p>Famous chain known for individual dining booths and customizable tonkotsu ramen, with 24-hour locations in Shibuya and Shinjuku perfect for late-night cravings.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://www.tsunagujapan.com/wp-content/uploads/2021/03/74-2.jpg" alt="Tsukiji Outer Market">
+          </div>
+          <div class="guide-card-content">
+            <h3>Tsukiji Outer Market</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Tsukiji</span>
+              <i class="fas fa-yen-sign"></i><span>¥-¥¥¥</span>
+            </div>
+            <p>Vibrant market district with hundreds of shops and restaurants offering the freshest seafood, from casual standing sushi bars to sit-down establishments serving donburi rice bowls.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://res.cloudinary.com/sagacity/image/upload/c_crop,h_3333,w_5000,x_0,y_0/c_limit,dpr_auto,f_auto,fl_lossy,q_80,w_1080/IMG_1227_ql5ubi.jpg" alt="Gonpachi Nishi-Azabu">
+          </div>
+          <div class="guide-card-content">
+            <h3>Gonpachi Nishi-Azabu</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Roppongi</span>
+              <i class="fas fa-yen-sign"></i><span>¥¥¥</span>
+            </div>
+            <p>Known as the "Kill Bill Restaurant" for inspiring the film's iconic fight scene, serving traditional Japanese dishes like soba noodles, tempura, and yakitori in a dramatic multi-level interior.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="guide-section">
+      <h2 class="guide-section-title">WHERE TO STAY</h2>
+      
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://www.kayak.com/rimg/himg/58/b5/59/leonardo-2085747-153675563-566747.jpg?width=1366&height=768&crop=true" alt="Park Hyatt Tokyo">
+          </div>
+          <div class="guide-card-content">
+            <h3>Park Hyatt Tokyo</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Shinjuku</span>
+              <i class="fas fa-star"></i><span>5-star luxury</span>
+            </div>
+            <p>Made famous by the movie "Lost in Translation," this luxury hotel occupies the top 14 floors of a skyscraper with stunning city views, featuring elegant rooms, multiple restaurants, and the iconic New York Bar.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://ak-d.tripcdn.com/images/0203j120008k9q8o77A06_R_1100_824_R5_Q70_D.jpg" alt="Hoshinoya Tokyo">
+          </div>
+          <div class="guide-card-content">
+            <h3>Hoshinoya Tokyo</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Otemachi</span>
+              <i class="fas fa-star"></i><span>5-star ryokan</span>
+            </div>
+            <p>A modern interpretation of a traditional Japanese ryokan in the heart of Tokyo, with tatami-matted rooms, communal lounges serving tea and sake, and a rooftop onsen with natural hot spring water.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/75146752.jpg?k=1c8bd895cdb4107f55dfd52dc2f29c482de4a842f154cec2c8e39519f63deaac&o=&hp=1" alt="Hotel Gracery Shinjuku">
+          </div>
+          <div class="guide-card-content">
+            <h3>Hotel Gracery Shinjuku</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Kabukicho, Shinjuku</span>
+              <i class="fas fa-star"></i><span>4-star</span>
+            </div>
+            <p>Modern hotel in the heart of Shinjuku's entertainment district, famous for the giant Godzilla head on its terrace, offering comfortable rooms, easy access to transportation, and numerous dining options nearby.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/348391299.jpg?k=57a5a9a86322c4af17b194ca0eb2dfa1da1c4a8a44e3767853b8aec1c9c4f363&o=&hp=1" alt="UNPLAN Kagurazaka">
+          </div>
+          <div class="guide-card-content">
+            <h3>UNPLAN Kagurazaka</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Kagurazaka</span>
+              <i class="fas fa-star"></i><span>Upscale hostel</span>
+            </div>
+            <p>A stylish, design-focused hostel offering both private rooms and dormitories, with a cafe, co-working space, and communal kitchen in the charming Kagurazaka neighborhood known for its blend of traditional and French influences.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="guide-section">
+      <h2 class="guide-section-title">GETTING AROUND</h2>
+      
+      <div class="guide-map" id="tokyoMap"></div>
+      
+      <div class="guide-tips">
+        <h3>Local Transportation Tips</h3>
+        <div class="guide-tips-list">
+          <div class="guide-tip-item">
+            <i class="fas fa-subway"></i>
+            <p>The Tokyo Metro and JR lines form an extensive network covering the entire city. Get a Suica or PASMO IC card for seamless travel across all systems.</p>
+          </div>
+          
+          <div class="guide-tip-item">
+            <i class="fas fa-train"></i>
+            <p>The JR Yamanote Line loops around central Tokyo, connecting most major districts including Shinjuku, Shibuya, Tokyo Station, and Ueno.</p>
+          </div>
+          
+          <div class="guide-tip-item">
+            <i class="fas fa-bus"></i>
+            <p>Buses are less convenient for tourists due to complex routes, but useful in areas not covered by trains. Many tourist areas have hop-on-hop-off sightseeing buses.</p>
+          </div>
+          
+          <div class="guide-tip-item">
+            <i class="fas fa-taxi"></i>
+            <p>Taxis are clean, safe, and plentiful but expensive. Most drivers don't speak English, so have your destination written in Japanese or show them on a map.</p>
+          </div>
+          
+          <div class="guide-tip-item">
+            <i class="fas fa-walking"></i>
+            <p>Many neighborhoods like Shibuya, Shinjuku, and Asakusa are best explored on foot, with pedestrian-friendly streets and numerous hidden gems in side alleys.</p>
+          </div>
+          
+          <div class="guide-tip-item">
+            <i class="fas fa-clock"></i>
+            <p>The metro system typically runs from around 5:00 AM to midnight. Plan accordingly for late nights, or be prepared to take a taxi if staying out after the last train.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="guide-download">
+      <h3>Download the Complete Tokyo City Guide</h3>
+      <p>Get our comprehensive 50-page guide to Tokyo with detailed itineraries, insider tips, neighborhood guides, and seasonal recommendations.</p>
+      <p>Available as a PDF for your convenience - take it with you offline!</p>
+      <a href="#" class="guide-download-btn">Download Guide (PDF) - $12.99</a>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+  
+  <script src='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js'></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize Mapbox for Tokyo
+      mapboxgl.accessToken = 'pk.eyJ1IjoiZWFzdHdvcmxkIiwiYSI6ImNscDg5c3dsaDBrN3YyanBsZzV1dmg0OG0ifQ.9h-PyeATCU2zO9L43WHBEw';
+      const map = new mapboxgl.Map({
+        container: 'tokyoMap',
+        style: 'mapbox://styles/mapbox/streets-v12',
+        center: [139.6917, 35.6895], // Tokyo coordinates
+        zoom: 12,
+        pitch: 60, // Add 3D perspective
+        bearing: 30
+      });
+      
+      // Add 3D buildings layer
+      map.on('load', function() {
+        // Add 3D buildings layer
+        const layers = map.getStyle().layers;
+        
+        // Find the index of the first symbol layer
+        let firstSymbolId;
+        for (const layer of layers) {
+          if (layer.type === 'symbol') {
+            firstSymbolId = layer.id;
+            break;
+          }
+        }
+        
+        // Add 3D buildings
+        map.addLayer({
+          'id': '3d-buildings',
+          'source': 'composite',
+          'source-layer': 'building',
+          'filter': ['==', 'extrude', 'true'],
+          'type': 'fill-extrusion',
+          'minzoom': 15,
+          'paint': {
+            'fill-extrusion-color': '#aaa',
+            'fill-extrusion-height': [
+              'interpolate', ['linear'], ['zoom'],
+              15, 0,
+              15.05, ['get', 'height']
+            ],
+            'fill-extrusion-base': [
+              'interpolate', ['linear'], ['zoom'],
+              15, 0,
+              15.05, ['get', 'min_height']
+            ],
+            'fill-extrusion-opacity': 0.6
+          }
+        }, firstSymbolId);
+        
+        // Add navigation controls
+        map.addControl(new mapboxgl.NavigationControl());
+        
+        // Add key attraction markers
+        const attractions = [
+          { name: 'Senso-ji Temple', coordinates: [139.7975, 35.7148], description: 'Tokyo\'s oldest temple' },
+          { name: 'Tokyo Skytree', coordinates: [139.8107, 35.7101], description: 'Japan\'s tallest structure' },
+          { name: 'Shinjuku Gyoen', coordinates: [139.7100, 35.6852], description: 'Beautiful park with three garden styles' },
+          { name: 'Meiji Shrine', coordinates: [139.6997, 35.6764], description: 'Serene shrine in a forest setting' },
+          { name: 'Shibuya Crossing', coordinates: [139.7005, 35.6596], description: 'Famous pedestrian scramble' },
+          { name: 'Akihabara', coordinates: [139.7738, 35.6984], description: 'Electronics and anime district' }
+        ];
+        
+        attractions.forEach(spot => {
+          // Create popup content
+          const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(
+            `<strong>${spot.name}</strong><br>${spot.description}`
+          );
+          
+          // Add marker
+          new mapboxgl.Marker({ color: '#ff4d4d' })
+            .setLngLat(spot.coordinates)
+            .setPopup(popup)
+            .addTo(map);
+        });
+        
+        // Start with a fly-to animation
+        map.flyTo({
+          center: [139.7036, 35.6640],
+          zoom: 13,
+          pitch: 65,
+          bearing: 45,
+          duration: 5000
+        });
+      });
+    });
+  </script>
+  <script src="../script.js"></script>
+</body>
+</html> 

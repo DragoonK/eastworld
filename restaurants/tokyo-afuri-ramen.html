@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Afuri Ramen - Eastworld Restaurant Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Additional styles specific to restaurant reviews */
+    .restaurant-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+      .restaurant-info {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .restaurant-details {
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .detail-row {
+      display: flex;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+    }
+    
+    .detail-label {
+      font-weight: 600;
+      min-width: 120px;
+      color: #333;
+    }
+    
+    .detail-value {
+      flex: 1;
+      color: #555;
+    }
+    
+    .rating {
+      margin-bottom: 1rem;
+    }
+    
+    .star {
+      color: #ddd;
+      font-size: 1.5rem;
+    }
+    
+    .star.filled {
+      color: #FFD700;
+    }
+    
+    .half-star {
+      position: relative;
+    }
+    
+    .half-star .fas.fa-star-half {
+      color: #FFD700;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    
+    .score-label {
+      margin-left: 0.5rem;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .map-container {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .map-container iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+    }
+    
+    .photos-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .photo-item {
+      border-radius: 8px;
+      overflow: hidden;
+      height: 150px;
+    }
+    
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .photo-item img:hover {
+      transform: scale(1.05);
+    }
+    
+    .review-section {
+      margin: 2rem 0;
+      padding: 2rem;
+      background: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    /* Booking button styles */
+    .booking-button {
+      display: block;
+      background-color: #ff4d4d;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      margin: 1.5rem 0;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    
+    .booking-button:hover {
+      background-color: #e63939;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    /* Review carousel styles */
+    .review-carousel {
+      position: relative;
+      margin: 2rem 0;
+      overflow: hidden;
+      padding: 1rem 0;
+    }
+    
+    .review-slides {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    
+    .review-slide {
+      min-width: 100%;
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .reviewer-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #f0f0f0;
+      padding-bottom: 0.8rem;
+    }
+    
+    .reviewer-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 0.8rem;
+    }
+    
+    .reviewer-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding-top: 0.2rem;
+    }
+    
+    .review-date {
+      color: #888;
+      font-size: 0.75rem;
+      margin-top: 0.1rem;
+    }
+    
+    .review-rating {
+      display: flex;
+      margin-top: 0.2rem;
+    }
+    
+    .review-rating i {
+      font-size: 0.8rem;
+      margin-right: 2px;
+    }
+    
+    .carousel-nav {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+    
+    .carousel-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ddd;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .carousel-dot.active {
+      background: #ff4d4d;
+    }
+    
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.7);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+    
+    .carousel-prev {
+      left: 10px;
+    }
+    
+    .carousel-next {
+      right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../food.html" class="nav-item active">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="content-container">
+    <div class="content-header">
+      <span class="content-category">RAMEN</span>
+      <h1 class="content-title">Afuri Ramen - Tokyo's Yuzu-Infused Ramen Sensation</h1>
+      
+      <!-- Rating Section -->
+      <div class="rating">
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star half-star">
+          <i class="far fa-star"></i>
+          <i class="fas fa-star-half"></i>
+        </span>
+        <span class="score-label">4.5/5.0</span>
+      </div>
+    </div>
+    
+    <div class="hero-container">
+      <img class="content-hero" src="https://cdn.cheapoguides.com/wp-content/uploads/sites/2/2017/12/afuri-ebisu.jpg" alt="Afuri Ramen Storefront" 
+      onerror="this.onerror=null; 
+      this.parentElement.innerHTML = '<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#333;color:white;font-size:1.5rem;text-align:center;padding:2rem;\'>Afuri Ramen Tokyo</div>';">
+    </div>
+    
+    <!-- Visitor Information Button -->
+    <a href="#visitor-info" class="booking-button">
+      <i class="fas fa-info-circle"></i> VISITOR INFORMATION
+    </a>
+    
+    <!-- Restaurant Information Section -->
+    <div class="restaurant-info">
+      <div class="restaurant-details">
+        <h2>Restaurant Details</h2>
+        
+        <div class="detail-row">
+          <div class="detail-label">Address:</div>
+          <div class="detail-value">1-1-7 Ebisu, Shibuya-ku, Tokyo 150-0013, Japan (Ebisu Flagship Location)</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Hours:</div>
+          <div class="detail-value">11:00 AM - 10:00 PM<br>Open daily</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Phone:</div>
+          <div class="detail-value">+81 3-5795-0750</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Price Range:</div>
+          <div class="detail-value">¥1,000-1,800 ($7-15) per person</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Cuisine:</div>
+          <div class="detail-value">Japanese, Ramen, Yuzu-Infused</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Reservations:</div>
+          <div class="detail-value">Not accepted - waiting in line is necessary</div>
+        </div>
+        
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">How to Get There</h3>
+        <p>From Ebisu Station:</p>
+        <ul style="margin-bottom: 1rem; padding-left: 1.5rem;">
+          <li>Take the JR Yamanote Line or Hibiya Subway Line to Ebisu Station</li>
+          <li>Exit from the East Exit (towards Ebisu Garden Place)</li>
+          <li>Walk straight ahead for about 3 minutes</li>
+          <li>Look for the distinctive yellow storefront on your right</li>
+          <li>Note: Afuri has multiple locations throughout Tokyo - this is their flagship Ebisu branch</li>
+        </ul>
+      </div>
+      
+      <div class="map-container">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3242.2521881342646!2d139.7093456!3d35.6471001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60188b40f59aee0f%3A0x484f741ea2825432!2sAFURI%20Ebisu!5e0!3m2!1sen!2sus!4v1693230090086!5m2!1sen!2sus" 
+        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+    
+    <div class="content-text">
+      <h2>The Bright, Citrusy Ramen Revolution</h2>
+      
+      <p>In a city with thousands of ramen shops, Afuri has distinguished itself with a revolutionary approach to Japan's beloved noodle soup. Founded in 2003 and named after Mount Afuri in Kanagawa Prefecture—known for its pristine water that flows from the mountains—this ramen chain has perfected a lighter, brighter style of ramen that stands in contrast to the rich, heavy tonkotsu broths that dominated the scene.</p>
+      
+      <p>Afuri's signature innovation is the addition of yuzu citrus to their chicken-based broth, creating a refreshing, aromatic experience that has garnered them a dedicated following among both locals and tourists. Their clean, minimalist spaces with counter seating reflect the philosophy behind their ramen: simple, refined, and high-quality.</p>
+      
+      <div class="photos-container">
+        <div class="photo-item">
+          <img src="https://res.cloudinary.com/tf-lab/image/upload/restaurant/1ff55e61-30f9-4a91-9fc2-3ac5da347ca8/fae3a4c1-c24a-49ac-a5a4-0bc4de93d60e.jpg" alt="Yuzu Shio Ramen">
+        </div>
+        <div class="photo-item">
+          <img src="https://static.trip101.com/paragraph_media/pictures/002/380/268/large/Aff.jpg" alt="Counter seating">
+        </div>
+        <div class="photo-item">
+          <img src="https://res.cloudinary.com/hg7dyjv3j/image/upload/c_fill,g_auto,h_375,w_500/v1/RESTAURANTS/Afuri_MG_7225.jpg" alt="Chef preparing ramen">
+        </div>
+        <div class="photo-item">
+          <img src="https://res.cloudinary.com/tf-lab/image/upload/restaurant/1ff55e61-30f9-4a91-9fc2-3ac5da347ca8/047a5ea8-cb4b-4e9d-af79-1b30c2a7b9b8.jpg" alt="Gyoza side dish">
+        </div>
+      </div>
+      
+      <h2>Signature Ramen & Culinary Approach</h2>
+      
+      <p>Afuri's approach to ramen starts with a chintan (clear) broth made from chicken and vegetables, meticulously strained for a clean, flavorful base. This lighter broth allows the citrus notes of yuzu to shine through, creating a refreshing profile that's especially appealing during Tokyo's hot, humid summers, though delicious year-round.</p>
+      
+      <p>The noodles at Afuri are medium-thick and straight, with a perfect al dente texture that holds up well in their broth. Toppings are minimalist but thoughtful—typically a slice of chashu pork, half an ajitama (seasoned soft-boiled egg), nori, and bamboo shoots. The presentation is artful, with a slice of yuzu peel perched atop the bowl, releasing its aromatic oils as you eat.</p>
+      
+      <p>Beyond their signature yuzu shio (salt) and yuzu shoyu (soy sauce) ramen, Afuri offers seasonal variations and vegan options that maintain their commitment to bright, clean flavors. Their gyoza dumplings and crispy karaage (fried chicken) make excellent side dishes to round out a meal.</p>
+      
+      <div class="content-quote">
+        "We wanted to create ramen that even people who don't typically enjoy heavy ramen could appreciate—something refreshing and clean that highlights, rather than masks, the quality of our ingredients. The addition of yuzu was revolutionary when we started, but it's become our signature that people travel across Tokyo to experience." - Afuri Representative
+      </div>
+      
+      <!-- User Reviews Carousel -->
+      <h2>Customer Reviews</h2>
+      
+      <div class="review-carousel">
+        <div class="carousel-arrow carousel-prev">
+          <i class="fas fa-chevron-left"></i>
+        </div>
+        
+        <div class="review-slides">
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Jason M.</div>
+                <div class="review-date">Visited March 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"After trying several traditional, heavy tonkotsu ramen shops in Tokyo, Afuri was a refreshing change of pace. The yuzu shoyu ramen had a perfect balance of flavors—bright citrus notes cutting through the savory chicken broth without overwhelming it. The noodles had excellent texture, and the chashu was tender without being too fatty. What really impressed me was how I felt after eating—satisfied but not weighed down, which is rare for ramen. The vending machine ordering system was easy to navigate even with minimal Japanese, and the counter seating provided a great view of the chefs at work. Just be prepared for a short wait during peak hours—we arrived around 1:30 PM and waited about 15 minutes, which wasn't bad at all. Definitely worth seeking out if you want to try a different style of ramen."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Haruka T.</div>
+                <div class="review-date">Visited January 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="far fa-star" style="color: #ddd;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"As a Tokyo resident, I've watched Afuri grow from a single shop to a popular chain with international locations. The Ebisu branch remains my favorite, as it consistently delivers the bright yuzu flavor that made them famous. Their tsukemen (dipping noodles) option is actually my personal favorite—the concentrated dipping broth has an intense yuzu punch that pairs perfectly with their thicker noodles. The only reason I don't give five stars is that their popularity has sometimes led to consistency issues across branches, and prices have increased over the years. That said, the quality of ingredients remains high, and their seasonal specials are always worth trying. For visitors, I recommend going outside peak hours if possible; the experience is much more enjoyable when you're not feeling rushed. Don't skip their gyoza—they're some of the best side dishes in Tokyo's ramen scene."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Aiko L.</div>
+                <div class="review-date">Visited April 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star-half-alt" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"I visited the Afuri in Harajuku after a recommendation from my hotel concierge, and it exceeded my expectations. As a vegetarian traveling in Japan, finding good ramen options can be challenging, but Afuri's vegan ramen was outstanding. The broth had a complex depth of flavor despite being plant-based, and the yuzu added a beautiful brightness. The noodles were perfect—chewy with just the right resistance. The modern, clean aesthetic of the restaurant made for a pleasant dining environment, and I appreciated that they had an English menu option on their ticket machine. The staff was efficient but friendly, and someone helped me when I was confused about how to order. The ramen came out within minutes of sitting down at the counter. It's slightly pricier than some other ramen shops, but the quality justifies the cost. This was one of my favorite meals during my two-week trip through Japan."</p>
+          </div>
+        </div>
+        
+        <div class="carousel-arrow carousel-next">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+        
+        <div class="carousel-nav">
+          <div class="carousel-dot active"></div>
+          <div class="carousel-dot"></div>
+          <div class="carousel-dot"></div>
+        </div>
+      </div>
+      
+      <h2>Menu Highlights</h2>
+      
+      <p>Afuri's menu is streamlined but offers enough variety to appeal to different tastes:</p>
+      
+      <ul>
+        <li><strong>Yuzu Shio Ramen (¥1,200)</strong> - Their signature dish featuring a clear chicken broth with salt seasoning and yuzu citrus</li>
+        <li><strong>Yuzu Shoyu Ramen (¥1,200)</strong> - A soy sauce variation of their signature ramen with a slightly deeper flavor profile</li>
+        <li><strong>Yuzu Ratanmen (¥1,300)</strong> - A spicy variation with chili oil for those who enjoy some heat</li>
+        <li><strong>Yuzu Tsukemen (¥1,300)</strong> - Dipping noodles with a concentrated yuzu-infused broth</li>
+        <li><strong>Vegan Ramen (¥1,300)</strong> - Plant-based ramen that doesn't compromise on flavor, featuring seasonal vegetables</li>
+        <li><strong>Gyoza (¥550 for 5 pieces)</strong> - Pan-fried dumplings with a crisp bottom and juicy filling</li>
+        <li><strong>Karaage (¥550)</strong> - Japanese-style fried chicken with a light, crispy coating</li>
+        <li><strong>Seasonal Specials</strong> - Limited-time offerings that showcase seasonal ingredients</li>
+      </ul>
+      
+      <div class="review-section">
+        <h2>Eastworld's Review</h2>
+        
+        <h3>Broth: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Afuri's clear, yuzu-infused broth offers a refreshing alternative to heavier ramen styles. The balance between chicken, salt/soy, and citrus notes is masterfully executed, creating a unique flavor profile that's both complex and refreshing.</p>
+        
+        <h3>Noodles: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>The medium-thick, straight noodles have excellent texture and are served perfectly al dente. They pair well with the lighter broth, though some purists might prefer a more artisanal noodle with greater variation in texture.</p>
+        
+        <h3>Toppings: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>While minimalist compared to some ramen shops, each topping is prepared with care. The chashu is lean but tender, the eggs consistently have jammy yolks, and the bamboo shoots add pleasant texture. The yuzu peel garnish is both functional and beautiful.</p>
+        
+        <h3>Atmosphere: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>Clean, modern interiors with efficient counter service create a pleasant dining environment. The open kitchen adds to the experience, though the spaces can feel a bit clinical compared to more traditional ramen shops.</p>
+        
+        <h3>Value: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>At ¥1,200-1,500 for a bowl of ramen, Afuri sits slightly above average in pricing. However, the quality of ingredients, unique flavor profile, and overall experience justify the premium. Add-ons and side dishes are reasonably priced.</p>
+        
+        <h3>Overall: <span style="color: #FFD700;">★★★★½</span></h3>
+        <p>Afuri has successfully carved out a unique niche in Tokyo's competitive ramen landscape. Their yuzu-infused broths offer a refreshing alternative to traditional styles, and their consistent quality across multiple locations makes them a reliable choice for both first-time visitors and ramen enthusiasts looking for something different.</p>
+      </div>
+      
+      <h2>Tips for Visitors</h2>
+      
+      <ul>
+        <li>Visit during off-peak hours (before noon or after 2 PM) to minimize waiting time</li>
+        <li>Familiarize yourself with the ticket vending machine system before you go—you purchase your meal ticket first, then hand it to the staff when seated</li>
+        <li>Most locations have English buttons on their machines, but don't hesitate to ask staff for help if needed</li>
+        <li>Counter seating is the norm, making this ideal for solo diners or pairs</li>
+        <li>Eat your ramen promptly when served—the balance of flavors is best when hot, and the noodles can become soft if left too long</li>
+        <li>Consider trying both the shio (salt) and shoyu (soy sauce) variations to appreciate the subtle differences</li>
+        <li>If you're a spice lover, the yuzu ratanmen offers a pleasant heat that doesn't overwhelm the citrus notes</li>
+        <li>Vegetarians should seek out their excellent vegan ramen option, which isn't available at all ramen shops</li>
+      </ul>
+      
+      <!-- Visitor Information -->
+      <div id="visitor-info" class="review-section">
+        <h2>Visitor Information</h2>
+        <p>Here's what you need to know when planning your visit to Afuri:</p>
+        
+        <h3>Multiple Locations:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Ebisu (Original Flagship) - 1-1-7 Ebisu, Shibuya-ku</li>
+          <li>Harajuku - 3-63-1 Sendagaya, Shibuya-ku</li>
+          <li>Roppongi - 6-2-31 Roppongi, Minato-ku</li>
+          <li>Nakameguro - 1-23-1 Kamimeguro, Meguro-ku</li>
+          <li>Shinjuku - NEWoMan Shinjuku 2F, 4-1-6 Shinjuku</li>
+        </ul>
+        
+        <h3>Ordering System:</h3>
+        <p>Afuri uses ticket vending machines for ordering:</p>
+        <ol style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Purchase your ticket from the vending machine near the entrance</li>
+          <li>Select your preferred ramen type and any side dishes</li>
+          <li>Pay using cash (machines do not accept all foreign credit cards)</li>
+          <li>Take your ticket and wait to be seated if the restaurant is full</li>
+          <li>Hand your ticket to the staff once seated</li>
+        </ol>
+        
+        <h3>English Support:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Most Afuri locations have English options on their ticket machines</li>
+          <li>Staff typically have basic English abilities to assist with ordering</li>
+          <li>Picture menus are available at most locations</li>
+        </ul>
+        
+        <p>As is customary in ramen shops throughout Japan, turnover is relatively quick, and lingering after finishing your meal is not expected, especially during busy periods when others are waiting.</p>
+      </div>
+      
+      <a href="../food.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Food Guide</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Review carousel functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const slides = document.querySelector('.review-slides');
+      const dots = document.querySelectorAll('.carousel-dot');
+      const prevBtn = document.querySelector('.carousel-prev');
+      const nextBtn = document.querySelector('.carousel-next');
+      let currentSlide = 0;
+      const totalSlides = document.querySelectorAll('.review-slide').length;
+      
+      // Function to update slide position
+      function showSlide(index) {
+        if (index < 0) index = totalSlides - 1;
+        if (index >= totalSlides) index = 0;
+        
+        currentSlide = index;
+        slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+        
+        // Update active dot
+        dots.forEach((dot, i) => {
+          dot.classList.toggle('active', i === currentSlide);
+        });
+      }
+      
+      // Set up event listeners for dots
+      dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => showSlide(i));
+      });
+      
+      // Set up event listeners for arrows
+      prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
+      nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
+      
+      // Auto-rotate slides every 5 seconds
+      setInterval(() => {
+        showSlide(currentSlide + 1);
+      }, 5000);
+    });
+  </script>
+  
+  <script src="../script.js"></script>
+</body>
+</html> 

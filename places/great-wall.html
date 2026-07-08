@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Great Wall of China - Eastworld Wonders</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Wonder page specific styles */
+    .wonder-hero {
+      height: 70vh;
+      background-image: url('https://images.unsplash.com/photo-1508804185872-d7badad00f7d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+    }
+    
+    .wonder-hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+    }
+    
+    .wonder-hero-content {
+      position: relative;
+      z-index: 2;
+      padding: 3rem;
+      width: 100%;
+      color: white;
+    }
+    
+    .wonder-title {
+      font-size: 3.5rem;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+    
+    .wonder-location {
+      display: flex;
+      align-items: center;
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+    }
+    
+    .wonder-location i {
+      margin-right: 0.5rem;
+    }
+    
+    .wonder-meta {
+      display: flex;
+      gap: 2rem;
+      margin-top: 1.5rem;
+    }
+    
+    .wonder-meta-item {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .meta-label {
+      font-size: 0.9rem;
+      opacity: 0.8;
+      margin-bottom: 0.3rem;
+    }
+    
+    .meta-value {
+      font-size: 1.2rem;
+      font-weight: 500;
+    }
+    
+    .wonder-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+    
+    .wonder-section {
+      margin-bottom: 4rem;
+    }
+    
+    .section-title {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .section-content {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      color: #333;
+    }
+    
+    .section-content p {
+      margin-bottom: 1.5rem;
+    }
+
+    /* Gallery styles */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .gallery-item {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .gallery-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+    }
+    
+    .gallery-item img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      display: block;
+    }
+    
+    /* Visitor information */
+    .practical-info {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .info-card {
+      background: #f9f9f9;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    
+    .info-card-title {
+      font-size: 1.2rem;
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+    }
+    
+    .info-card-title i {
+      margin-right: 0.5rem;
+      color: #e74c3c;
+    }
+    
+    .info-list, .tips-list {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .info-list li {
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .info-list li:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    
+    .info-label {
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      color: #444;
+    }
+    
+    .tips-list li {
+      margin-bottom: 0.8rem;
+      padding-left: 1.5rem;
+      position: relative;
+    }
+    
+    .tips-list li:before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: #e74c3c;
+      font-weight: bold;
+    }
+    
+    .map-container {
+      margin-top: 2rem;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    /* Related wonders section */
+    .related-wonders {
+      background: #f9f9f9;
+      padding: 3rem 1.5rem;
+    }
+    
+    .related-wonders-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .wonder-card {
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      text-decoration: none;
+      color: inherit;
+    }
+    
+    .wonder-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+    }
+    
+    .wonder-card-img {
+      height: 200px;
+      overflow: hidden;
+    }
+    
+    .wonder-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    
+    .wonder-card:hover .wonder-card-img img {
+      transform: scale(1.05);
+    }
+    
+    .wonder-card-content {
+      padding: 1.5rem;
+    }
+    
+    .wonder-card-category {
+      font-size: 0.8rem;
+      color: #e74c3c;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+    
+    .wonder-card-title {
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .wonder-card-description {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 1rem;
+    }
+    
+    .wonder-card-location {
+      font-size: 0.9rem;
+      color: #888;
+      display: flex;
+      align-items: center;
+    }
+    
+    .wonder-card-location i {
+      margin-right: 0.5rem;
+      font-size: 0.8rem;
+    }
+    
+    /* Facts grid */
+    .facts-container {
+      background: #f9f9f9;
+      padding: 2rem;
+      border-radius: 8px;
+      margin-bottom: 4rem;
+    }
+    
+    .facts-title {
+      font-size: 1.8rem;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    .facts-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    
+    .fact-item {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      transition: transform 0.3s ease;
+    }
+    
+    .fact-item:hover {
+      transform: translateY(-5px);
+    }
+    
+    .fact-icon {
+      font-size: 2rem;
+      color: #e74c3c;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    
+    .fact-title {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+    
+    .fact-text {
+      font-size: 0.95rem;
+      color: #555;
+      line-height: 1.5;
+    }
+    
+    /* Responsive fixes */
+    @media (max-width: 768px) {
+      .wonder-meta {
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+      
+      .wonder-meta-item {
+        flex-basis: calc(50% - 1rem);
+      }
+      
+      .facts-grid,
+      .gallery,
+      .practical-info,
+      .related-wonders-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .wonder-hero-content {
+        padding: 2rem 1.5rem;
+      }
+      
+      .wonder-title {
+        font-size: 2.5rem;
+      }
+      
+      .facts-grid,
+      .gallery,
+      .practical-info,
+      .related-wonders-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../food.html" class="nav-item">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../places.html" class="nav-item active">PLACES</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <div class="wonder-hero">
+      <div class="wonder-hero-content">
+        <h1 class="wonder-title">Great Wall of China</h1>
+        <div class="wonder-location">
+          <i class="fas fa-map-marker-alt"></i> Beijing, China
+        </div>
+        <p>One of the world's greatest architectural wonders spanning thousands of miles</p>
+        <div class="wonder-meta">
+          <div class="wonder-meta-item">
+            <span class="meta-label">CATEGORY</span>
+            <span class="meta-value">Historical</span>
+          </div>
+          <div class="wonder-meta-item">
+            <span class="meta-label">BUILT</span>
+            <span class="meta-value">7th century BCE - 17th century CE</span>
+          </div>
+          <div class="wonder-meta-item">
+            <span class="meta-label">LENGTH</span>
+            <span class="meta-value">13,171 miles</span>
+          </div>
+          <div class="wonder-meta-item">
+            <span class="meta-label">UNESCO STATUS</span>
+            <span class="meta-value">World Heritage Site</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wonder-content">
+      <section class="wonder-section">
+        <h2 class="section-title">Overview</h2>
+        <div class="section-content">
+          <p>The Great Wall of China is an ancient series of walls and fortifications located in northern China, built around 500 years ago. Contrary to popular belief, the Great Wall cannot be seen from space with the naked eye. One of the most impressive architectural feats in human history, the wall was built to protect Chinese states and empires against raids and invasions from nomadic groups from the Eurasian Steppe.</p>
+          
+          <p>The Great Wall stretches from Dandong in the east to Lop Lake in the west, along an arc that roughly delineates the southern edge of Inner Mongolia. The most comprehensive archaeological survey has concluded that all the walls measure approximately 13,171 miles (21,196 kilometers). This includes 5,500 miles (8,850 km) of actual wall, 359 miles (578 km) of trenches, and 2,232 miles (3,591 km) of natural defensive barriers such as hills and rivers.</p>
+          
+          <p>Today, the Great Wall of China is generally recognized as one of the most impressive architectural feats in human history and was listed as a UNESCO World Heritage site in 1987. The Great Wall has become China's most recognizable symbol and is an iconic tourist attraction visited by millions each year.</p>
+        </div>
+      </section>
+      
+      <section class="wonder-section">
+        <h2 class="section-title">History</h2>
+        <div class="section-content">
+          <p>The history of the Great Wall of China begins when fortifications built by various states during the Spring and Autumn period (771–476 BC) and the Warring States period (475–221 BC) were connected by the first emperor of China, Qin Shi Huang, to protect his newly founded Qin dynasty (221–206 BC) against intrusions by nomadic groups from the Eurasian Steppe.</p>
+          
+          <p>The walls built during the rule of the Qin dynasty were primarily made of stone and earth. Later, during the Han dynasty (206 BC – 220 AD), the walls were fortified and expanded to provide further protection from northern invaders. After the fall of the Han dynasty, China fell into a period of disunity, and construction and maintenance of the wall largely ceased.</p>
+          
+          <div class="wonder-image-container">
+            <img src="https://images.unsplash.com/photo-1467803738586-46b7eb7b16a1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="Historic section of the Great Wall" class="wonder-image">
+            <p class="caption">A well-preserved section of the Great Wall, showing the intricate architecture and strategic positioning along mountain ridges.</p>
+          </div>
+          
+          <p>The most well-known and best-preserved sections of the Great Wall were built during the Ming dynasty (1368–1644). These sections were constructed primarily of brick and stone instead of earth. During this period, the wall was enlarged and reinforced to protect China against Mongol attacks from the north. The Ming dynasty devoted enormous resources to the construction and maintenance of the wall.</p>
+          
+          <p>After the Ming dynasty was overthrown by the Qing dynasty (1644–1912), there was a period of relative peace and the Great Wall was no longer needed for defensive purposes. As a result, the wall fell into disrepair and many sections were scavenged for building materials or destroyed.</p>
+          
+          <p>It wasn't until the 20th century that the Great Wall began to be seen as a symbol of Chinese national pride and steps were taken to preserve what remained of it. Today, restoration and preservation efforts continue, and the wall remains a powerful symbol of China's enduring civilization.</p>
+        </div>
+      </section>
+      
+      <div class="facts-container">
+        <h3 class="facts-title">Fascinating Facts About the Great Wall</h3>
+        <div class="facts-grid">
+          <div class="fact-item">
+            <div class="fact-icon"><i class="fas fa-ruler"></i></div>
+            <h4 class="fact-title">Impressive Length</h4>
+            <p class="fact-text">The entire Great Wall with all of its branches measures approximately 13,171 miles (21,196 kilometers) - more than half the circumference of Earth.</p>
+          </div>
+          
+          <div class="fact-item">
+            <div class="fact-icon"><i class="fas fa-users"></i></div>
+            <h4 class="fact-title">Human Cost</h4>
+            <p class="fact-text">It's believed that over one million people died during the Wall's construction, leading to its nickname "the longest cemetery on Earth."</p>
+          </div>
+          
+          <div class="fact-item">
+            <div class="fact-icon"><i class="fas fa-tools"></i></div>
+            <h4 class="fact-title">Building Materials</h4>
+            <p class="fact-text">Earlier sections used compacted earth, while Ming dynasty walls were constructed with bricks and stone. In some areas, glutinous rice flour was used as mortar.</p>
+          </div>
+          
+          <div class="fact-item">
+            <div class="fact-icon"><i class="fas fa-mountain"></i></div>
+            <h4 class="fact-title">Geographical Adaptation</h4>
+            <p class="fact-text">The Wall follows the contours of mountains and adapts to the local terrain, with some sections reaching heights of over 25 feet (7.8 meters).</p>
+          </div>
+          
+          <div class="fact-item">
+            <div class="fact-icon"><i class="fas fa-shield-alt"></i></div>
+            <h4 class="fact-title">Military Innovation</h4>
+            <p class="fact-text">The Wall features watchtowers spaced approximately every 200 yards, designed for surveillance, communication, and shelter for troops.</p>
+          </div>
+          
+          <div class="fact-item">
+            <div class="fact-icon"><i class="fas fa-clock"></i></div>
+            <h4 class="fact-title">Continuous Construction</h4>
+            <p class="fact-text">The Wall was built over a period of approximately 2,000 years, with each dynasty adding to or rebuilding different sections.</p>
+          </div>
+        </div>
+      </div>
+      
+      <section class="wonder-section">
+        <h2 class="section-title">Architectural Features</h2>
+        <div class="section-content">
+          <p>The Great Wall of China is not a single continuous wall but rather a collection of wall sections built during different dynasties. The architectural features vary depending on when and where each section was built. However, there are some common elements found throughout much of the wall, particularly in the well-preserved Ming dynasty sections.</p>
+          
+          <h3 style="font-size: 1.5rem; margin: 1.5rem 0 0.5rem 0;">Watch Towers</h3>
+          <p>Watch towers are perhaps the most distinctive architectural features of the Great Wall. These structures were built at regular intervals along the wall and served multiple purposes. They were used as lookout posts to spot potential enemy movements, as garrison stations for troops, and as signal stations to transmit messages along the wall using smoke signals during the day and fire at night.</p>
+          
+          <p>The watch towers typically had two or three stories, with the upper levels used for observation and the lower levels for storage, living quarters, and sometimes stables. Some of the larger towers could house up to 100 soldiers. The design of these towers allowed for 360-degree visibility of the surrounding terrain.</p>
+          
+          <div class="wonder-image-container">
+            <img src="https://images.unsplash.com/photo-1618607653658-d48eda4be521?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="Watchtower on the Great Wall" class="wonder-image">
+            <p class="caption">A watchtower at Mutianyu section of the Great Wall, showing architectural details and strategic positioning.</p>
+          </div>
+          
+          <h3 style="font-size: 1.5rem; margin: 1.5rem 0 0.5rem 0;">Wall Construction</h3>
+          <p>The construction techniques used for the Great Wall varied across different periods and locations. The earliest sections, built during the Qin and Han dynasties, were primarily made of packed earth, gravel, and wood. The Ming dynasty sections, which are the best preserved today, were constructed with bricks and stone.</p>
+          
+          <p>The typical Ming wall measures 25 feet (7.6 meters) in height and 15 to 30 feet (4.6 to 9.1 meters) in width at the base, narrowing to 12 feet (3.7 meters) at the top. The wall featured crenellations along the top that served as defensive barriers for soldiers, with holes through which they could observe or shoot arrows at enemies.</p>
+          
+          <p>A key innovation in the wall's design was its steps, which were intentionally uneven and of varying heights. This design was meant to slow down and trip up invaders unfamiliar with the pattern, while Chinese soldiers who were accustomed to the steps could move quickly up and down the wall.</p>
+        </div>
+      </section>
+      
+      <section class="wonder-section">
+        <h2 class="section-title">Popular Sections to Visit</h2>
+        <div class="section-content">
+          <p>While the Great Wall stretches across much of northern China, only certain sections are open to tourists. Here are some of the most popular and accessible sections for visitors:</p>
+          
+          <h3 style="font-size: 1.5rem; margin: 1.5rem 0 0.5rem 0;">Badaling</h3>
+          <p>Located approximately 50 miles (80 km) northwest of Beijing, Badaling is the most visited section of the Great Wall. It's known for being well-restored and having relatively gentle slopes, making it accessible for most visitors. This section was the first to be opened to tourists in 1957 and has received numerous state leaders and dignitaries. While Badaling offers stunning views and historical significance, it can be extremely crowded, especially during peak tourist seasons and Chinese national holidays.</p>
+          
+          <h3 style="font-size: 1.5rem; margin: 1.5rem 0 0.5rem 0;">Mutianyu</h3>
+          <p>About 45 miles (70 km) northeast of Beijing, the Mutianyu section is less crowded than Badaling but equally well-restored. This section features 22 watchtowers over a relatively short stretch, offering spectacular views of the surrounding mountains. Mutianyu is known for its beautiful natural setting, with dense forests covering 90% of the surrounding area. Visitors can access the wall via cable car or chairlift, and there's even a toboggan slide for the trip down, making it a family-friendly option.</p>
+          
+          <h3 style="font-size: 1.5rem; margin: 1.5rem 0 0.5rem 0;">Jinshanling</h3>
+          <p>Located about 80 miles (130 km) northeast of Beijing, Jinshanling offers a good balance between accessibility and authenticity. This section is partially restored and less crowded than both Badaling and Mutianyu. It's particularly popular with photographers and hikers because of its dramatic landscapes and varied architectural features. The wall here has both original and restored sections, giving visitors a better understanding of how the wall has changed over time.</p>
+          
+          <h3 style="font-size: 1.5rem; margin: 1.5rem 0 0.5rem 0;">Simatai</h3>
+          <p>Approximately 75 miles (120 km) northeast of Beijing, Simatai is known for its steepness and unique features. This section is notable for being the only section open for night visits, offering a rare opportunity to see the wall illuminated against the night sky. Simatai features 35 watchtowers, each with unique designs and characteristics. It's less crowded than many other sections but requires a good level of fitness due to its steep inclines.</p>
+          
+          <h3 style="font-size: 1.5rem; margin: 1.5rem 0 0.5rem 0;">Jiankou</h3>
+          <p>For adventurous travelers, Jiankou offers an authentic, unrestored experience of the Great Wall. Located about 50 miles (80 km) north of Beijing, this section is known for its rugged beauty and treacherous terrain. Built along ridges with steep mountains on both sides, Jiankou provides dramatic views and excellent photography opportunities. However, this section is not officially open to tourists and can be dangerous, with crumbling sections and precipitous drops. Travelers who wish to visit Jiankou should hire an experienced guide and be prepared for a challenging hike.</p>
+        </div>
+      </section>
+      
+      <section class="wonder-section">
+        <h2 class="section-title">Gallery</h2>
+        <div class="gallery">
+          <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1508804185872-d7badad00f7d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80" alt="Great Wall winding through mountains">
+          </div>
+          <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1547981609-4b6bfe67ca0b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="Great Wall in autumn with colorful foliage">
+          </div>
+          <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1549883627-04c350a0a0fd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="Watchtower on Great Wall">
+          </div>
+          <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1519309424303-44cae817b2cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="Great Wall under sunset sky">
+          </div>
+          <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1551873183-c4141797a9cc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="Snowcovered Great Wall in winter">
+          </div>
+          <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1569997323902-258d3f126bf4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1971&q=80" alt="Great Wall stretching to the horizon">
+          </div>
+        </div>
+      </section>
+      
+      <section class="wonder-section">
+        <h2 class="section-title">Visitor Information</h2>
+        <div class="practical-info">
+          <div class="info-card">
+            <h3 class="info-card-title"><i class="fas fa-info-circle"></i> Essential Information</h3>
+            <ul class="info-list">
+              <li>
+                <div class="info-label">Best Sections for Tourists</div>
+                <div class="info-value">Badaling, Mutianyu, Jinshanling, Simatai</div>
+              </li>
+              <li>
+                <div class="info-label">Opening Hours</div>
+                <div class="info-value">Varies by section, generally 7:30 AM - 5:30 PM (April to October) and 8:00 AM - 5:00 PM (November to March)</div>
+              </li>
+              <li>
+                <div class="info-label">Admission Fees</div>
+                <div class="info-value">Varies by section: Badaling (¥40), Mutianyu (¥45), Jinshanling (¥65), Simatai (¥40)</div>
+              </li>
+              <li>
+                <div class="info-label">Best Time to Visit</div>
+                <div class="info-value">Spring (April-May) and Autumn (September-October) for comfortable temperatures and good visibility</div>
+              </li>
+              <li>
+                <div class="info-label">Distance from Beijing</div>
+                <div class="info-value">40-80 miles (60-130 km) depending on the section</div>
+              </li>
+            </ul>
+          </div>
+          
+          <div class="info-card">
+            <h3 class="info-card-title"><i class="fas fa-lightbulb"></i> Travel Tips</h3>
+            <ul class="tips-list">
+              <li>Wear comfortable walking shoes with good grip, as many sections feature steep and uneven steps.</li>
+              <li>Arrive early in the morning (before 9 AM) to avoid crowds, especially at popular sections like Badaling.</li>
+              <li>Bring plenty of water, snacks, and sun protection, as there are limited facilities on some sections of the wall.</li>
+              <li>Consider visiting on weekdays rather than weekends, and avoid Chinese public holidays when the wall is extremely crowded.</li>
+              <li>Check the weather forecast before your visit; the wall can be dangerous during heavy rain or snow.</li>
+              <li>For a more authentic experience with fewer tourists, consider the less-visited sections like Jinshanling or Huanghuacheng.</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="map-container">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6049.971067840339!2d116.0152307766426!3d40.43128948831743!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x35f121d7687f2ccf%3A0xd040259b950522df!2sBadaling%20Great%20Wall!5e0!3m2!1sen!2sus!4v1704531275941!5m2!1sen!2sus" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+      </section>
+    </div>
+    
+    <section class="related-wonders">
+      <h2 class="section-title" style="text-align: center; margin-bottom: 2rem;">Other Chinese Wonders You Might Like</h2>
+      <div class="related-wonders-grid">
+        <a href="forbidden-city.html" class="wonder-card">
+          <div class="wonder-card-img">
+            <img src="https://images.unsplash.com/photo-1599707254554-027aeb4deacd?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80" alt="Forbidden City">
+          </div>
+          <div class="wonder-card-content">
+            <div class="wonder-card-category">HISTORICAL</div>
+            <h3 class="wonder-card-title">Forbidden City</h3>
+            <p class="wonder-card-description">Imperial palace complex of the Ming and Qing dynasties.</p>
+            <div class="wonder-card-location"><i class="fas fa-map-marker-alt"></i> Beijing, China</div>
+          </div>
+        </a>
+        
+        <a href="terracotta-warriors.html" class="wonder-card">
+          <div class="wonder-card-img">
+            <img src="https://images.unsplash.com/photo-1549867499-c530333a6881?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="Terracotta Warriors">
+          </div>
+          <div class="wonder-card-content">
+            <div class="wonder-card-category">HISTORICAL</div>
+            <h3 class="wonder-card-title">Terracotta Warriors</h3>
+            <p class="wonder-card-description">Army of life-sized clay soldiers guarding China's first emperor.</p>
+            <div class="wonder-card-location"><i class="fas fa-map-marker-alt"></i> Xi'an, China</div>
+          </div>
+        </a>
+        
+        <a href="../guides/beijing-guide.html" class="wonder-card">
+          <div class="wonder-card-img">
+            <img src="https://images.unsplash.com/photo-1547981609-4b6bfe67ca0b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="Beijing Guide">
+          </div>
+          <div class="wonder-card-content">
+            <div class="wonder-card-category">GUIDE</div>
+            <h3 class="wonder-card-title">Beijing City Guide</h3>
+            <p class="wonder-card-description">Explore more wonders in China's historic capital city.</p>
+            <div class="wonder-card-location"><i class="fas fa-map-marker-alt"></i> Beijing, China</div>
+          </div>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="../script.js"></script>
+</body>
+</html> 

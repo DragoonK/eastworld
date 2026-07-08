@@ -1,0 +1,12 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Local data: the database and uploaded images are content, not code.
+# Production creates its own on the server's persistent disk.
+backend/blog.db
+backend/uploads/
+
+# macOS
+.DS_Store

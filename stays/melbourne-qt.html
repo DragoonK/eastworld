@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QT Melbourne - Eastworld Hotel Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Additional styles specific to hotel reviews */
+    .review-categories {
+      display: flex;
+      margin: 2rem 0;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .review-category {
+      flex: 1;
+      padding: 1rem;
+      background: #f9f9f9;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 1rem;
+      font-weight: 500;
+    }
+    
+    .review-category.active {
+      background: #000;
+      color: white;
+    }
+    
+    .review-content {
+      display: none;
+      margin: 2rem 0;
+    }
+    
+    .review-content.active {
+      display: block;
+    }
+    
+    .review-carousel {
+      position: relative;
+      margin: 2rem 0;
+    }
+    
+    .review-slides {
+      display: flex;
+      overflow: hidden;
+      scroll-behavior: smooth;
+    }
+    
+    .review-slide {
+      min-width: 100%;
+      padding: 1.5rem;
+      background: #f9f9f9;
+      border-radius: 8px;
+      margin-right: 1rem;
+    }
+    
+    .reviewer-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    
+    .reviewer-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: #ddd;
+      margin-right: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: #666;
+    }
+    
+    .reviewer-details {
+      flex: 1;
+    }
+    
+    .reviewer-name {
+      font-weight: bold;
+      margin-bottom: 0.25rem;
+    }
+    
+    .reviewer-location {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 0.25rem;
+    }
+    
+    .review-rating {
+      color: #FFD700;
+    }
+    
+    .carousel-nav {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 1rem 0;
+      gap: 0.5rem;
+    }
+    
+    .carousel-arrow {
+      background: #000;
+      color: white;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.3s ease;
+    }
+    
+    .carousel-arrow:hover {
+      background: #333;
+    }
+    
+    .carousel-dots {
+      display: flex;
+      gap: 0.5rem;
+      margin: 0 1rem;
+    }
+    
+    .carousel-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #ddd;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .carousel-dot.active {
+      background: #000;
+    }
+    
+    .hotel-amenities {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .amenity-item {
+      display: flex;
+      align-items: center;
+      padding: 0.5rem;
+      background: #f9f9f9;
+      border-radius: 4px;
+    }
+    
+    .amenity-item i {
+      margin-right: 0.5rem;
+      color: #666;
+    }
+    
+    .booking-section {
+      background: #f0f8ff;
+      padding: 2rem;
+      border-radius: 8px;
+      margin: 2rem 0;
+      text-align: center;
+    }
+    
+    .booking-button {
+      display: inline-block;
+      background: #000;
+      color: white;
+      padding: 1rem 2rem;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: bold;
+      transition: background 0.3s ease;
+      margin: 1rem 0.5rem;
+    }
+    
+    .booking-button:hover {
+      background: #333;
+    }
+    
+    .hotel-info-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+    
+    .hotel-details {
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 8px;
+    }
+    
+    .detail-row {
+      display: flex;
+      margin: 0.75rem 0;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+    }
+    
+    .detail-label {
+      font-weight: bold;
+      min-width: 120px;
+      margin-right: 1rem;
+    }
+    
+    .detail-value {
+      flex: 1;
+    }
+    
+    @media (max-width: 768px) {
+      .hotel-info-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .review-categories {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../food.html" class="nav-item">FOOD</a>
+        <a href="../stays.html" class="nav-item active">STAYS</a>
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="content-container">
+    <div class="content-header">
+      <span class="content-category">DESIGN HOTEL</span>
+      <h1 class="content-title">QT Melbourne - Bold Design in the Fashion District</h1>
+      
+      <!-- Rating Section -->
+      <div class="rating">
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star half-star">
+          <i class="far fa-star"></i>
+          <i class="fas fa-star-half"></i>
+        </span>
+        <span class="score-label">4.4/5.0</span>
+      </div>
+    </div>
+    
+    <div class="hero-container">
+      <img class="content-hero" src="https://qthotelsandresorts.com/content/uploads/2022/03/QT-Melbourne-Exterior.jpg" alt="QT Melbourne" 
+      onerror="this.onerror=null; 
+      this.parentElement.innerHTML = '<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#333;color:white;font-size:1.5rem;text-align:center;padding:2rem;\'>QT Melbourne</div>';">
+    </div>
+    
+    <!-- Booking Buttons -->
+    <div class="booking-section">
+      <h3>Book Your Stay at QT Melbourne</h3>
+      <a href="#" class="booking-button">
+        <i class="fas fa-calendar-alt"></i> Book Direct - Best Rates
+      </a>
+      <a href="#" class="booking-button">
+        <i class="fas fa-phone"></i> Call Hotel: +61 3 8636 8800
+      </a>
+    </div>
+    
+    <!-- Hotel Information Section -->
+    <div class="hotel-info-grid">
+      <div class="hotel-details">
+        <h2>Hotel Details</h2>
+        
+        <div class="detail-row">
+          <div class="detail-label">Address:</div>
+          <div class="detail-value">133 Russell Street, Melbourne VIC 3000, Australia</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Check-in:</div>
+          <div class="detail-value">3:00 PM</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Check-out:</div>
+          <div class="detail-value">11:00 AM</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Phone:</div>
+          <div class="detail-value">+61 3 8636 8800</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Price Range:</div>
+          <div class="detail-value">$180-300 AUD per night</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Category:</div>
+          <div class="detail-value">Boutique Design Hotel</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Location:</div>
+          <div class="detail-value">Melbourne CBD Fashion & Theatre District</div>
+        </div>
+      </div>
+      
+      <div>
+        <h3>Key Amenities</h3>
+        <div class="hotel-amenities">
+          <div class="amenity-item">
+            <i class="fas fa-wifi"></i>
+            <span>Complimentary WiFi</span>
+          </div>
+          <div class="amenity-item">
+            <i class="fas fa-dumbbell"></i>
+            <span>24/7 Fitness Center</span>
+          </div>
+          <div class="amenity-item">
+            <i class="fas fa-utensils"></i>
+            <span>Pascale Bar & Grill</span>
+          </div>
+          <div class="amenity-item">
+            <i class="fas fa-cocktail"></i>
+            <span>Rooftop at QT</span>
+          </div>
+          <div class="amenity-item">
+            <i class="fas fa-concierge-bell"></i>
+            <span>Concierge Services</span>
+          </div>
+          <div class="amenity-item">
+            <i class="fas fa-palette"></i>
+            <span>Art Collection</span>
+          </div>
+          <div class="amenity-item">
+            <i class="fas fa-tshirt"></i>
+            <span>Fashion District Access</span>
+          </div>
+          <div class="amenity-item">
+            <i class="fas fa-theatre-masks"></i>
+            <span>Theatre Concierge</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="content-text">
+      <h2>Playful Luxury in Melbourne's Creative Heart</h2>
+      
+      <p>QT Melbourne stands boldly in the heart of the city's fashion and theatre district, offering an unapologetically playful approach to luxury hospitality. This boutique design hotel challenges conventional luxury with its eclectic aesthetic, curated art collection, and irreverent personality that perfectly captures Melbourne's creative spirit and love for the unexpected.</p>
+      
+      <p>Located on Russell Street, QT Melbourne puts guests at the epicenter of Melbourne's cultural energy. The hotel's striking design, featuring bold patterns, unexpected color palettes, and carefully curated artworks, creates an atmosphere that's both sophisticated and whimsical - a perfect reflection of Melbourne's reputation as Australia's most culturally diverse and creative city.</p>
+      
+      <div class="photos-container">
+        <div class="photo-item">
+          <img src="https://qthotelsandresorts.com/content/uploads/2022/03/QT-Melbourne-Room.jpg" alt="QT Melbourne designer room">
+        </div>
+        <div class="photo-item">
+          <img src="https://qthotelsandresorts.com/content/uploads/2022/03/QT-Melbourne-Pascale.jpg" alt="Pascale Bar & Grill">
+        </div>
+        <div class="photo-item">
+          <img src="https://qthotelsandresorts.com/content/uploads/2022/03/QT-Melbourne-Rooftop.jpg" alt="Rooftop at QT">
+        </div>
+        <div class="photo-item">
+          <img src="https://qthotelsandresorts.com/content/uploads/2022/03/QT-Melbourne-Lobby.jpg" alt="QT Melbourne artistic lobby">
+        </div>
+      </div>
+      
+      <h2>Designer Rooms with Personality</h2>
+      
+      <p>Each of the 188 guest rooms and suites showcases QT's signature design philosophy through bold patterns, rich textures, and unexpected artistic touches. No two rooms are identical, with each featuring unique artwork, custom furnishings, and thoughtful details that tell a story. The rooms blend comfort with creativity, offering modern amenities within spaces that feel more like art installations than traditional hotel accommodations.</p>
+      
+      <p>The Terrace Suites feature private outdoor spaces with city views, while the Penthouse Suite spans two levels with a private rooftop terrace. All rooms include custom QT amenities, locally-sourced minibar selections, and technology seamlessly integrated into the artistic design aesthetic.</p>
+
+      <!-- Local vs Tourist Reviews Section -->
+      <div class="review-section">
+        <h2>What Our Community Says</h2>
+        <p style="margin-bottom: 2rem; color: #666; font-style: italic;">Experience QT Melbourne through the eyes of locals who appreciate creative design and tourists seeking Melbourne's unique artistic personality.</p>
+        
+        <!-- Review Category Tabs -->
+        <div class="review-categories">
+          <button class="review-category active" data-category="local">
+            <i class="fas fa-map-marked-alt"></i>
+            <div>Local Reviews</div>
+            <small>Melbourne creatives & fashion industry professionals</small>
+          </button>
+          <button class="review-category" data-category="tourist">
+            <i class="fas fa-camera-retro"></i>
+            <div>Tourist Reviews</div>
+            <small>Design enthusiasts & culture seekers</small>
+          </button>
+        </div>
+        
+        <!-- Local Reviews -->
+        <div class="review-content active" id="local-reviews">
+          <div class="review-carousel">
+            <div class="review-slides" id="local-slides">
+              <div class="review-slide">
+                <div class="reviewer-info">
+                  <div class="reviewer-avatar">ZK</div>
+                  <div class="reviewer-details">
+                    <div class="reviewer-name">Zoe Kim</div>
+                    <div class="reviewer-location">Melbourne Fashion Designer, Fitzroy Local</div>
+                    <div class="review-rating">
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                    </div>
+                  </div>
+                </div>
+                <p>"As someone in Melbourne's fashion industry, QT perfectly captures the city's creative energy. The location on Russell Street puts you in the heart of everything - walking distance to the fashion precincts, galleries, and the best laneway bars. I regularly bring visiting designers and clients here because it showcases Melbourne's artistic personality better than anywhere else. The art collection is constantly evolving, and the staff understand the creative community - they can recommend emerging designers, gallery openings, and insider spots. Pascale Bar has become a regular meeting place for industry people. The hotel genuinely gets Melbourne's creative spirit."</p>
+              </div>
+              
+              <div class="review-slide">
+                <div class="reviewer-info">
+                  <div class="reviewer-avatar">MC</div>
+                  <div class="reviewer-details">
+                    <div class="reviewer-name">Marcus Chen</div>
+                    <div class="reviewer-location">Melbourne Arts Producer, Theatre Professional</div>
+                    <div class="review-rating">
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="far fa-star"></i>
+                    </div>
+                  </div>
+                </div>
+                <p>"Working in Melbourne's theatre scene, I appreciate QT's location and understanding of the cultural calendar. The hotel is perfectly positioned for the theatre district - walking distance to most venues and great for hosting cast and creative teams. The concierge team knows the arts scene and can arrange last-minute tickets or connect guests with local artists. The Rooftop at QT is fantastic for opening night parties and industry events. The design aesthetic attracts creative types who appreciate boldness over traditional luxury. Only minor complaint is that during major festivals, the rates increase significantly, but it's still more affordable than the traditional luxury options."</p>
+              </div>
+              
+              <div class="review-slide">
+                <div class="reviewer-info">
+                  <div class="reviewer-avatar">LB</div>
+                  <div class="reviewer-details">
+                    <div class="reviewer-name">Laura Brown</div>
+                    <div class="reviewer-location">Melbourne Gallery Owner, Art Scene Insider</div>
+                    <div class="review-rating">
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                    </div>
+                  </div>
+                </div>
+                <p>"QT has become an integral part of Melbourne's art ecosystem. The hotel actively collaborates with local artists and galleries, rotating artworks and hosting exhibitions. As a gallery owner, I've worked with them on several projects, and they truly support the local creative community. The hotel attracts international art collectors and curators who appreciate the commitment to contemporary design. The location gives easy access to the gallery district and street art tours. For locals in the arts, it's become a cultural hub where you're likely to bump into artists, curators, and creative directors. The bar serves as an unofficial meeting place for the art community."</p>
+              </div>
+            </div>
+            
+            <div class="carousel-nav">
+              <button class="carousel-arrow carousel-prev" data-carousel="local">
+                <i class="fas fa-chevron-left"></i>
+              </button>
+              <div class="carousel-dots">
+                <div class="carousel-dot active" data-slide="0"></div>
+                <div class="carousel-dot" data-slide="1"></div>
+                <div class="carousel-dot" data-slide="2"></div>
+              </div>
+              <button class="carousel-arrow carousel-next" data-carousel="local">
+                <i class="fas fa-chevron-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Tourist Reviews -->
+        <div class="review-content" id="tourist-reviews">
+          <div class="review-carousel">
+            <div class="review-slides" id="tourist-slides">
+              <div class="review-slide">
+                <div class="reviewer-info">
+                  <div class="reviewer-avatar">AS</div>
+                  <div class="reviewer-details">
+                    <div class="reviewer-name">Alex Sanders</div>
+                    <div class="reviewer-location">London, Design & Architecture Tourist</div>
+                    <div class="review-rating">
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                    </div>
+                  </div>
+                </div>
+                <p>"Chose QT Melbourne specifically for its design reputation and wasn't disappointed! From the moment you enter the lobby, it's clear this hotel celebrates creativity and artistic expression. Our room was like staying in a contemporary art gallery - every detail was thoughtfully curated. The location in the fashion district was perfect for exploring Melbourne's famous laneways and street art. The concierge arranged a private street art tour and connected us with local designers. The Rooftop bar provided stunning city views with perfectly crafted cocktails. For anyone seeking a uniquely Melbourne experience that goes beyond traditional luxury, QT delivers an authentic taste of the city's creative soul."</p>
+              </div>
+              
+              <div class="review-slide">
+                <div class="reviewer-info">
+                  <div class="reviewer-avatar">RO</div>
+                  <div class="reviewer-details">
+                    <div class="reviewer-name">Rachel O'Brien</div>
+                    <div class="reviewer-location">Dublin, Art & Culture Traveler</div>
+                    <div class="review-rating">
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="far fa-star"></i>
+                    </div>
+                  </div>
+                </div>
+                <p>"QT Melbourne perfectly captured our desire for a hotel that reflected the city's creative reputation. The design is bold and playful without being overwhelming - every common area and our room felt like curated art spaces. The staff were incredibly knowledgeable about Melbourne's cultural scene, arranging gallery visits and recommending hidden artistic gems. The location provided easy access to theatres, shopping, and the famous coffee culture. Pascale Bar & Grill offered excellent food with artistic presentation. While the design aesthetic might not appeal to everyone, for travelers seeking authentic Melbourne creativity, it's unmatched. The Instagram-worthy interiors were an added bonus for sharing our Melbourne adventure."</p>
+              </div>
+              
+              <div class="review-slide">
+                <div class="reviewer-info">
+                  <div class="reviewer-avatar">KL</div>
+                  <div class="reviewer-details">
+                    <div class="reviewer-name">Kevin Liu</div>
+                    <div class="reviewer-location">San Francisco, Tech Professional & Design Enthusiast</div>
+                    <div class="review-rating">
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                    </div>
+                  </div>
+                </div>
+                <p>"Traveling to Melbourne for a tech conference but staying an extra week to explore the city's design scene. QT was the perfect base - the hotel itself is a masterclass in contemporary Australian design. The technology integration was seamless while maintaining the artistic aesthetic. The rooftop space became my favorite spot for evening video calls with the city skyline as backdrop. The concierge team arranged visits to design studios and connected me with local creatives. The location provided walking access to everything from street art tours to fashion boutiques to coffee roasteries. For design-minded travelers, QT offers an immersive Melbourne experience that traditional luxury hotels simply can't match."</p>
+              </div>
+            </div>
+            
+            <div class="carousel-nav">
+              <button class="carousel-arrow carousel-prev" data-carousel="tourist">
+                <i class="fas fa-chevron-left"></i>
+              </button>
+              <div class="carousel-dots">
+                <div class="carousel-dot active" data-slide="0"></div>
+                <div class="carousel-dot" data-slide="1"></div>
+                <div class="carousel-dot" data-slide="2"></div>
+              </div>
+              <button class="carousel-arrow carousel-next" data-carousel="tourist">
+                <i class="fas fa-chevron-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <h2>Creative Dining & Rooftop Experience</h2>
+      
+      <p>Pascale Bar & Grill reimagines the traditional hotel restaurant concept through a lens of creativity and playfulness. The menu showcases modern Australian cuisine with unexpected twists, while the interior design creates an atmosphere that's part restaurant, part art installation. The space regularly hosts culinary events, wine tastings, and collaborative dinners with local chefs.</p>
+      
+      <p>The Rooftop at QT provides one of Melbourne's most distinctive elevated experiences, featuring panoramic city views, creative cocktails, and a design aesthetic that changes with the seasons. The space hosts regular events, from fashion shows to art exhibitions, making it a dynamic venue that reflects Melbourne's ever-evolving cultural landscape.</p>
+      
+      <h2>Melbourne's Creative Hub Location</h2>
+      
+      <ul>
+        <li><strong>Fashion & Design Precincts:</strong> In the heart of Melbourne's fashion district with designer boutiques and emerging labels</li>
+        <li><strong>Theatre District:</strong> Walking distance to Princess Theatre, Regent Theatre, and Comedy Theatre</li>
+        <li><strong>Street Art & Laneways:</strong> Direct access to Melbourne's famous laneway culture and street art scene</li>
+        <li><strong>Gallery District:</strong> Easy access to contemporary galleries and art spaces</li>
+        <li><strong>Coffee Culture:</strong> Surrounded by specialty coffee roasters and Melbourne's renowned café scene</li>
+        <li><strong>Public Transport:</strong> Parliament Station (5 minutes) connecting to entire Melbourne network</li>
+      </ul>
+      
+      <h2>Cultural Experiences & Concierge</h2>
+      
+      <p>QT Melbourne's concierge team specializes in connecting guests with Melbourne's creative community. Services include private gallery tours, fashion studio visits, street art expeditions, and access to exclusive cultural events. The hotel regularly collaborates with local artists, designers, and cultural institutions to offer guests authentic insights into Melbourne's thriving creative scene.</p>
+      
+      <!-- Final Booking Section -->
+      <div class="booking-section">
+        <h3>Experience Melbourne's Most Creative Hotel</h3>
+        <p>Book your stay at QT Melbourne for an artistic adventure in the heart of Australia's cultural capital.</p>
+        <a href="#" class="booking-button">
+          <i class="fas fa-calendar-alt"></i> Reserve Your Creative Experience
+        </a>
+        <a href="#" class="booking-button">
+          <i class="fas fa-phone"></i> Contact QT Melbourne
+        </a>
+      </div>
+      
+      <a href="../stays.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Stays Guide</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Review category switching
+    document.querySelectorAll('.review-category').forEach(button => {
+      button.addEventListener('click', function() {
+        // Remove active class from all buttons
+        document.querySelectorAll('.review-category').forEach(btn => btn.classList.remove('active'));
+        // Add active class to clicked button
+        this.classList.add('active');
+        
+        // Hide all review content
+        document.querySelectorAll('.review-content').forEach(content => content.classList.remove('active'));
+        // Show selected review content
+        const category = this.getAttribute('data-category');
+        document.getElementById(category + '-reviews').classList.add('active');
+      });
+    });
+
+    // Carousel functionality
+    function setupCarousel(carouselType) {
+      const slides = document.getElementById(carouselType + '-slides');
+      const dots = document.querySelectorAll(`#${carouselType}-reviews .carousel-dot`);
+      const prevBtn = document.querySelector(`#${carouselType}-reviews .carousel-prev`);
+      const nextBtn = document.querySelector(`#${carouselType}-reviews .carousel-next`);
+      
+      let currentSlide = 0;
+      
+      function showSlide(index) {
+        slides.style.transform = `translateX(-${index * 100}%)`;
+        dots.forEach(dot => dot.classList.remove('active'));
+        dots[index].classList.add('active');
+        currentSlide = index;
+      }
+      
+      dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => showSlide(index));
+      });
+      
+      prevBtn.addEventListener('click', () => {
+        const newIndex = currentSlide > 0 ? currentSlide - 1 : dots.length - 1;
+        showSlide(newIndex);
+      });
+      
+      nextBtn.addEventListener('click', () => {
+        const newIndex = currentSlide < dots.length - 1 ? currentSlide + 1 : 0;
+        showSlide(newIndex);
+      });
+    }
+
+    // Initialize carousels
+    setupCarousel('local');
+    setupCarousel('tourist');
+  </script>
+</body>
+</html> 

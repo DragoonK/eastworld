@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ichiran Ramen - Eastworld Restaurant Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Additional styles specific to restaurant reviews */
+    .restaurant-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+      .restaurant-info {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .restaurant-details {
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .detail-row {
+      display: flex;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+    }
+    
+    .detail-label {
+      font-weight: 600;
+      min-width: 120px;
+      color: #333;
+    }
+    
+    .detail-value {
+      flex: 1;
+      color: #555;
+    }
+    
+    .rating {
+      margin-bottom: 1rem;
+    }
+    
+    .star {
+      color: #ddd;
+      font-size: 1.5rem;
+    }
+    
+    .star.filled {
+      color: #FFD700;
+    }
+    
+    .half-star {
+      position: relative;
+    }
+    
+    .half-star .fas.fa-star-half {
+      color: #FFD700;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    
+    .score-label {
+      margin-left: 0.5rem;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .map-container {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .map-container iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+    }
+    
+    .photos-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .photo-item {
+      border-radius: 8px;
+      overflow: hidden;
+      height: 150px;
+    }
+    
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .photo-item img:hover {
+      transform: scale(1.05);
+    }
+    
+    .review-section {
+      margin: 2rem 0;
+      padding: 2rem;
+      background: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    /* Booking button styles */
+    .booking-button {
+      display: block;
+      background-color: #ff4d4d;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      margin: 1.5rem 0;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    
+    .booking-button:hover {
+      background-color: #e63939;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    /* Review carousel styles */
+    .review-carousel {
+      position: relative;
+      margin: 2rem 0;
+      overflow: hidden;
+      padding: 1rem 0;
+    }
+    
+    .review-slides {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    
+    .review-slide {
+      min-width: 100%;
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .reviewer-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #f0f0f0;
+      padding-bottom: 0.8rem;
+    }
+    
+    .reviewer-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 0.8rem;
+    }
+    
+    .reviewer-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding-top: 0.2rem;
+    }
+    
+    .review-date {
+      color: #888;
+      font-size: 0.75rem;
+      margin-top: 0.1rem;
+    }
+    
+    .review-rating {
+      display: flex;
+      margin-top: 0.2rem;
+    }
+    
+    .review-rating i {
+      font-size: 0.8rem;
+      margin-right: 2px;
+    }
+    
+    .carousel-nav {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+    
+    .carousel-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ddd;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .carousel-dot.active {
+      background: #ff4d4d;
+    }
+    
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.7);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+    
+    .carousel-prev {
+      left: 10px;
+    }
+    
+    .carousel-next {
+      right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../food.html" class="nav-item active">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="content-container">
+    <div class="content-header">
+      <span class="content-category">RAMEN</span>
+      <h1 class="content-title">Ichiran Ramen - Tokyo's Famous Solo Dining Experience</h1>
+      
+      <!-- Rating Section -->
+      <div class="rating">
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star">
+          <i class="far fa-star"></i>
+        </span>
+        <span class="score-label">4.0/5.0</span>
+      </div>
+    </div>
+    
+    <div class="hero-container">
+      <img class="content-hero" src="https://cdn.cheapoguides.com/wp-content/uploads/sites/2/2017/10/ichiran-ramen-iStock-1175509259-1024x600.jpg" alt="Ichiran's signature tonkotsu ramen in a bowl" 
+      onerror="this.onerror=null; 
+      this.parentElement.innerHTML = '<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#333;color:white;font-size:1.5rem;text-align:center;padding:2rem;\'>Ichiran Ramen Tokyo</div>';">
+    </div>
+    
+    <!-- Visitor Information Button -->
+    <a href="#visitor-info" class="booking-button">
+      <i class="fas fa-info-circle"></i> VISITOR INFORMATION
+    </a>
+    
+    <!-- Restaurant Information Section -->
+    <div class="restaurant-info">
+      <div class="restaurant-details">
+        <h2>Restaurant Details</h2>
+        
+        <div class="detail-row">
+          <div class="detail-label">Address:</div>
+          <div class="detail-value">Multiple locations throughout Tokyo<br>Flagship: 1-22-7 Jinnan, Shibuya, Tokyo 150-0041, Japan</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Hours:</div>
+          <div class="detail-value">24 hours (most locations)<br>Some branches close briefly for cleaning</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Phone:</div>
+          <div class="detail-value">+81 3-3463-3667 (Shibuya branch)</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Price Range:</div>
+          <div class="detail-value">¥900-1,500 ($6-10) per bowl<br>Add-ons: ¥100-400 ($0.70-2.80) each</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Cuisine:</div>
+          <div class="detail-value">Japanese, Ramen, Tonkotsu (Pork Bone Broth)</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Reservations:</div>
+          <div class="detail-value">Not accepted<br>First-come, first-served only</div>
+        </div>
+        
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">Popular Tokyo Locations</h3>
+        <ul style="margin-bottom: 1rem; padding-left: 1.5rem;">
+          <li>Shibuya - Near Center Gai, 24 hours</li>
+          <li>Shinjuku - East Exit area, 24 hours</li>
+          <li>Ueno - Near Ameyoko Shopping Street</li>
+          <li>Roppongi - Near Roppongi Crossing</li>
+          <li>Ikebukuro - Near East Exit of station</li>
+        </ul>
+      </div>
+      
+      <div class="map-container">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3241.492166296525!2d139.7000499!3d35.6622717!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60188ca9c2f4dea7%3A0x1de842376d1fa1f!2sIchiran%20Shibuya!5e0!3m2!1sen!2sus!4v1693230090086!5m2!1sen!2sus" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+    
+    <div class="content-text">
+      <h2>The Unique Ichiran Experience</h2>
+      
+      <p>Ichiran Ramen represents a quintessentially Japanese approach to dining—focused, efficient, and centered entirely on the pursuit of ramen perfection. This chain, which originated in Fukuoka (the birthplace of tonkotsu ramen) in 1960 and now has locations throughout Japan and internationally, has become famous not only for its rich, pork-based broth but also for its unique "flavor concentration booths"—individual dining partitions designed to help customers focus exclusively on the flavor of their ramen without distractions.</p>
+      
+      <p>The Ichiran concept is built around a singular obsession: serving the perfect bowl of tonkotsu ramen. The chain limits its menu to just one type of ramen—a classic pork bone broth with their secret red sauce (a spicy-umami blend), thin, straight noodles, and minimal toppings. However, customers can customize virtually every aspect of their bowl through a detailed order form, adjusting everything from noodle firmness to broth richness to garlic intensity. This simultaneously limited yet highly customizable approach embodies a particularly Japanese philosophy—mastery through specialization rather than diversification.</p>
+      
+      <div class="photos-container">
+        <div class="photo-item">
+          <img src="https://resources.matcha-jp.com/resize/720x2000/2019/04/25-76589.jpeg" alt="Private Dining Booth at Ichiran">
+        </div>
+        <div class="photo-item">
+          <img src="https://cdn.cheapoguides.com/wp-content/uploads/sites/2/2017/10/ichiran-order-form-iStock-1175509259.jpg" alt="Ichiran Order Form">
+        </div>
+        <div class="photo-item">
+          <img src="https://cdn.cheapoguides.com/wp-content/uploads/sites/2/2017/10/ichiran-chef-iStock-1175509259.jpg" alt="Anonymous Service Through Booth Curtain">
+        </div>
+        <div class="photo-item">
+          <img src="https://live.staticflickr.com/3804/33185826426_8b77e3dc57_b.jpg" alt="Perfect Ichiran Egg Topping">
+        </div>
+      </div>
+      
+      <h2>Solo Dining Perfected</h2>
+      
+      <p>Perhaps the most distinctive aspect of Ichiran is its dining system. Upon entering, customers purchase meal tickets from a vending machine, then are shown to individual booths separated by wooden partitions. These booths typically face a wall or curtain, behind which the kitchen staff works. There's a small bamboo curtain that is raised only briefly when your food is delivered, then immediately lowered again—minimizing human interaction and allowing complete focus on the meal.</p>
+      
+      <p>This unique setup was originally designed to allow customers to enjoy their meal without self-consciousness or distraction. It's particularly suited to solo diners, who in other settings might feel awkward eating alone. At Ichiran, dining solo is not just accommodated—it's celebrated as the preferred way to appreciate the nuances of their ramen. The partitions can be folded down for those dining in groups, but many Japanese customers maintain them even when eating with companions, a testament to the cultural understanding that some pleasures are best enjoyed in contemplative solitude.</p>
+      
+      <p>The ordering process itself is equally methodical. Upon being seated, customers fill out a detailed preference form, indicating their desired level of richness (amount of fat in the broth), garlic intensity, noodle firmness, amount of their secret "red sauce" (a chili oil-based condiment), and optional toppings. This system allows each bowl to be precisely tailored to individual taste, while also streamlining the ordering process and overcoming language barriers—making Ichiran particularly accessible to international visitors.</p>
+      
+      <div class="content-quote">
+        "Ichiran has elevated the mundane task of slurping noodles into a meditative ritual—a zen-like experience where each sense is engaged yet isolated. The individual booths seem at first like a gimmick, but they genuinely transform how you experience the food, forcing a singular focus that reveals flavor nuances you might otherwise miss. In a world of constant distraction, Ichiran offers a rare opportunity for culinary mindfulness." - Tokyo Food Guide
+      </div>
+      
+      <!-- User Reviews Carousel -->
+      <h2>Customer Reviews</h2>
+      
+      <div class="review-carousel">
+        <div class="carousel-arrow carousel-prev">
+          <i class="fas fa-chevron-left"></i>
+        </div>
+        
+        <div class="review-slides">
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Daniel K.</div>
+                <div class="review-date">Visited March 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"My wife and I visited the Shinjuku branch during our first night in Tokyo—jet-lagged and hungry at 1 AM, we were thrilled to find Ichiran open 24 hours. The ticket machine system was easy to navigate with pictures, and staff guided us to adjacent booths (we folded down the dividers to talk). The order form was detailed but intuitive, with an English version available. I went with medium richness, firm noodles, and medium spice level. The ramen arrived quickly—a beautiful bowl of cloudy pork broth with thin noodles, a slice of chashu pork, and green onions. The broth was the standout: intensely porky with a silky mouthfeel from the collagen. The noodles had perfect texture—QC is clearly stringent here. We ordered extra noodles (kae-dama) halfway through to soak up remaining broth. The experience was efficient, reasonably priced (about ¥1,200 each), and deeply satisfying. While purists might debate whether Ichiran is 'the best' ramen in Tokyo, it offers remarkable consistency and accessibility. Those individual booths that seemed strange at first actually enhanced our focus on the flavors. We ended up returning twice more during our 10-day trip—high praise considering how many food options Tokyo offers."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Keiko T.</div>
+                <div class="review-date">Visited January 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="far fa-star" style="color: #ddd;"></i>
+                  <i class="far fa-star" style="color: #ddd;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"As a Tokyo resident, I have conflicting feelings about Ichiran. On one hand, their tonkotsu broth has impressive depth for a chain, with that signature creamy opacity that comes from properly boiled pork bones. Their thin noodles are consistently well-made, with the perfect elastic bite when ordered firm (which I recommend). The customization system is genuinely useful—I appreciate being able to specify exactly how much garlic and spice I want. The booths are perfect for a quick solo meal when I don't feel like socializing. On the other hand, the growing tourist crowds mean longer waits at popular locations, and prices have steadily increased over the years (now nearly ¥1,500 for a fully-loaded bowl). For the same price or less, many local non-chain ramen shops offer more complex, interesting bowls with better toppings. Ichiran's pork chashu is just adequate—a thin slice without much char or flavor development. Would I recommend visitors try Ichiran? Yes, for the unique experience and reliable quality. But I would also encourage them to explore independent ramen shops for comparison. Ichiran is like the Beatles of ramen—enormously popular, undeniably good, but perhaps not as adventurous as smaller acts with more niche appeal."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Sophie M.</div>
+                <div class="review-date">Visited February 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="far fa-star" style="color: #ddd;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"I visited the Shibuya branch of Ichiran on my first solo trip to Japan, and it turned out to be the perfect introduction to both Tokyo dining and authentic ramen. As a woman traveling alone, I often feel self-conscious dining solo in restaurants, but Ichiran's booth system eliminated that awkwardness entirely. The process was straightforward even with minimal Japanese: buy a ticket, wait for a seat (about 20 minutes at 7 PM), fill out the order form, and then enjoy in privacy. I chose medium richness, medium-firm noodles, and moderate spice. The ramen arrived within minutes—steaming hot with a rich, opaque broth that had remarkable depth for what's essentially a chain restaurant. The noodles remained firm throughout the meal, and the single slice of chashu, while small, was meltingly tender. I added a soft-boiled egg which was perfectly executed with a jammy yolk. The real standout was their spicy red sauce, which added complexity without overwhelming the pork flavor. The whole meal cost around ¥1,300 and was deeply satisfying. While I later tried other ramen shops during my trip, including some highly-rated local spots, I actually returned to Ichiran before flying home. There's something comforting about their consistent quality and the contemplative solo dining experience they've created. Pro tip: The Shibuya branch has multiple floors, so even when there's a line outside, the wait is usually reasonable."</p>
+          </div>
+        </div>
+        
+        <div class="carousel-arrow carousel-next">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+        
+        <div class="carousel-nav">
+          <div class="carousel-dot active"></div>
+          <div class="carousel-dot"></div>
+          <div class="carousel-dot"></div>
+        </div>
+      </div>
+      
+      <h2>Menu & Customization Options</h2>
+      
+      <p>Ichiran's menu is refreshingly simple—they serve only tonkotsu ramen, but with extensive customization options:</p>
+      
+      <h3>Basic Ramen (¥980 base price)</h3>
+      <ul>
+        <li><strong>Dashi (Broth) Strength:</strong> Choose from 5 levels from light to strong</li>
+        <li><strong>Richness:</strong> 5 levels from no lard to extra fatty</li>
+        <li><strong>Garlic:</strong> None, 1 clove, 2 cloves, or grated</li>
+        <li><strong>Secret Red Sauce (Spice):</strong> 5 levels from none to extra spicy</li>
+        <li><strong>Green Onion:</strong> None, just a little, or regular amount</li>
+        <li><strong>Chashu (Pork):</strong> Included as standard (1 slice)</li>
+        <li><strong>Noodle Firmness:</strong> 5 options from very soft to very firm</li>
+      </ul>
+      
+      <h3>Optional Add-ons</h3>
+      <ul>
+        <li><strong>Extra Noodles (Kae-dama) (¥200):</strong> Additional serving of noodles to add to your remaining broth</li>
+        <li><strong>Extra Chashu (¥200):</strong> Additional pork slices</li>
+        <li><strong>Soft-boiled Egg (¥200):</strong> Marinated ajitama with semi-liquid yolk</li>
+        <li><strong>Nori Seaweed (¥100):</strong> Crisp sheets of nori</li>
+        <li><strong>Special Sauce Top-up (¥100):</strong> Extra spicy sauce</li>
+      </ul>
+      
+      <h3>Drinks</h3>
+      <ul>
+        <li><strong>Draft Beer (¥550):</strong> Usually Asahi or Sapporo</li>
+        <li><strong>Sake (¥500):</strong> Small serving of house sake</li>
+        <li><strong>Soft Drinks (¥300):</strong> Various options including Coca-Cola products</li>
+        <li><strong>Water:</strong> Complimentary, self-serve at booths</li>
+      </ul>
+      
+      <div class="review-section">
+        <h2>Eastworld's Review</h2>
+        
+        <h3>Food Quality: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>Ichiran produces a consistently excellent tonkotsu broth with remarkable depth and silkiness for a chain restaurant. The noodles are uniformly well-executed with good texture, especially when ordered firm. The customization system ensures you get exactly the flavor profile you prefer. The toppings, while minimal, are of good quality, though the chashu is merely adequate rather than exceptional. What's most impressive is their consistency across locations—a bowl in Shibuya will taste nearly identical to one in Shinjuku.</p>
+        
+        <h3>Value: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>At roughly ¥980-1,500 depending on add-ons, Ichiran is priced at the higher end of the Tokyo ramen spectrum, especially for a chain. However, the quality justifies the cost, and the portion size is satisfying. The 24-hour availability at many locations adds significant value for travelers adjusting to the time zone or late-night revelers. The kae-dama (extra noodles) option provides good value for hungrier diners.</p>
+        
+        <h3>Atmosphere: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>The individual booth concept that might initially seem gimmicky genuinely enhances the dining experience, creating a focused environment for appreciating the nuances of your ramen. The near-anonymity of service (you rarely see staff faces) reduces social pressure and creates a uniquely meditative dining atmosphere. The booths cleverly solve the common travel dilemma of dining alone in a foreign country, making solo meals comfortable rather than awkward.</p>
+        
+        <h3>Accessibility: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Ichiran excels at eliminating barriers for international visitors. The ticket machine system, detailed order forms with English options, and minimal verbal interaction required make this one of the easiest authentic Japanese dining experiences for tourists to navigate comfortably. The multiple locations in popular areas and 24-hour operation at many branches add to this accessibility.</p>
+        
+        <h3>Authenticity: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>While Ichiran is a chain, it originated in Fukuoka (the birthplace of tonkotsu ramen) and maintains authentic preparation methods for both broth and noodles. The minimalist approach to toppings reflects traditional Hakata-style ramen. The experience has been somewhat standardized for mass appeal, but the core offering remains authentically Japanese both in flavor and concept.</p>
+        
+        <h3>Overall: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>Ichiran offers an exceptional introduction to Japanese ramen culture, delivering consistently excellent tonkotsu ramen in a uniquely Japanese dining environment. While ramen enthusiasts might find more adventurous or nuanced bowls at independent shops, Ichiran's reliability, customization system, and barrier-free experience make it particularly valuable for visitors. It's a cultural experience as much as a meal, and one that bridges the gap between authentic Japanese cuisine and accessible tourist-friendly dining.</p>
+      </div>
+      
+      <h2>Tips for Visitors</h2>
+      
+      <ul>
+        <li><strong>Avoiding Lines:</strong> Visit during off-peak hours (2-5 PM or after 10 PM) for shorter waits, especially at popular locations like Shibuya</li>
+        <li><strong>Noodle Firmness:</strong> Order noodles on the firmer side as they continue cooking in the hot broth</li>
+        <li><strong>Kae-dama Strategy:</strong> Save some broth if ordering extra noodles; press the call button when ready for them</li>
+        <li><strong>Ticket Machine Navigation:</strong> Look for a button marked "English" on most machines, or use the pictures to guide your selection</li>
+        <li><strong>Spice Level:</strong> Their spice is moderate by international standards; level 3 (of 5) provides noticeable heat without overpowering</li>
+        <li><strong>Efficient Dining:</strong> Ichiran is designed for relatively quick meals (20-30 minutes), not leisurely dining</li>
+        <li><strong>Booth Selection:</strong> Solo travelers can request corner booths for extra privacy if available</li>
+        <li><strong>Group Dining:</strong> Partitions between booths can be folded down for those dining together, though many Japanese patrons keep them up regardless</li>
+      </ul>
+      
+      <!-- Visitor Information -->
+      <div id="visitor-info" class="review-section">
+        <h2>Visitor Information</h2>
+        <p>Here's what you need to know when planning your visit to Ichiran:</p>
+        
+        <h3>Top Tokyo Locations:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li><strong>Shibuya Branch:</strong> 1-22-7 Jinnan, Shibuya, 7-minute walk from Shibuya Station</li>
+          <li><strong>Shinjuku Branch:</strong> 3-34-11 Shinjuku, 5-minute walk from Shinjuku Station East Exit</li>
+          <li><strong>Ueno Branch:</strong> 7-66-1 Ueno, 3-minute walk from Ueno Station Asakusa Exit</li>
+          <li><strong>Roppongi Branch:</strong> 4-11-11 Roppongi, 5-minute walk from Roppongi Station Exit 3</li>
+        </ul>
+        
+        <h3>Hours & Wait Times:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Most Tokyo locations are open 24 hours (Shibuya and Shinjuku branches are reliably 24/7)</li>
+          <li>Peak hours (6-9 PM) can see wait times of 30-60 minutes at popular locations</li>
+          <li>Electronic wait displays at entrance show current queue length</li>
+          <li>Some locations offer a waiting area with seating</li>
+        </ul>
+        
+        <h3>Ordering Process:</h3>
+        <ol style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Purchase meal ticket from vending machine near entrance</li>
+          <li>Staff will direct you to waiting area if necessary</li>
+          <li>When seated, complete the order form to customize your ramen</li>
+          <li>Press call button when ready to order or need assistance</li>
+          <li>Food is delivered through a small window with bamboo curtain</li>
+          <li>Pay at machine before leaving (your ticket will be collected)</li>
+        </ol>
+        
+        <h3>Practical Notes:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Major credit cards accepted at most locations</li>
+          <li>English menus and order forms available</li>
+          <li>Water dispensers at each booth are self-service</li>
+          <li>Press call button if you want to order additional items</li>
+          <li>No tipping necessary, as is standard in Japan</li>
+          <li>Ichiran sells packaged ramen kits to take home as souvenirs</li>
+        </ul>
+        
+        <p>The Ichiran experience is designed to be straightforward and efficient, making it an ideal introduction to Japanese dining culture even for those with no Japanese language skills or familiarity with local customs.</p>
+      </div>
+      
+      <a href="../food.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Food Guide</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Review carousel functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const slides = document.querySelector('.review-slides');
+      const dots = document.querySelectorAll('.carousel-dot');
+      const prevBtn = document.querySelector('.carousel-prev');
+      const nextBtn = document.querySelector('.carousel-next');
+      let currentSlide = 0;
+      const totalSlides = document.querySelectorAll('.review-slide').length;
+      
+      // Function to update slide position
+      function showSlide(index) {
+        if (index < 0) index = totalSlides - 1;
+        if (index >= totalSlides) index = 0;
+        
+        currentSlide = index;
+        slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+        
+        // Update active dot
+        dots.forEach((dot, i) => {
+          dot.classList.toggle('active', i === currentSlide);
+        });
+      }
+      
+      // Set up event listeners for dots
+      dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => showSlide(i));
+      });
+      
+      // Set up event listeners for arrows
+      prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
+      nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
+      
+      // Auto-rotate slides every 5 seconds
+      setInterval(() => {
+        showSlide(currentSlide + 1);
+      }, 5000);
+    });
+  </script>
+  
+  <script src="../script.js"></script>
+</body>
+</html> 

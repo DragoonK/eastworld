@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gyoza Garden - Eastworld Kobe Restaurant Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Restaurant-specific styles */
+    .hero-container {
+      background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), 
+                  url('https://d3dqioy2sca31t.cloudfront.net/Projects/cms/production/000/040/615/slideshow/5a0a0a0d3a0d3c5b8c0b4b0d.jpg');
+      background-size: cover;
+    }
+    
+    .gyoza-variety {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .gyoza-type {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .gyoza-type img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+    
+    /* Additional styles specific to restaurant reviews */
+    .restaurant-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+      .restaurant-info {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .restaurant-details {
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .detail-row {
+      display: flex;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+    }
+    
+    .detail-label {
+      font-weight: 600;
+      min-width: 120px;
+      color: #333;
+    }
+    
+    .detail-value {
+      flex: 1;
+      color: #555;
+    }
+    
+    .rating {
+      margin-bottom: 1rem;
+    }
+    
+    .star {
+      color: #ddd;
+      font-size: 1.5rem;
+    }
+    
+    .star.filled {
+      color: #FFD700;
+    }
+    
+    .half-star {
+      position: relative;
+    }
+    
+    .half-star .fas.fa-star-half {
+      color: #FFD700;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    
+    .score-label {
+      margin-left: 0.5rem;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .map-container {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .map-container iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+    }
+    
+    .photos-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .photo-item {
+      border-radius: 8px;
+      overflow: hidden;
+      height: 150px;
+    }
+    
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .photo-item img:hover {
+      transform: scale(1.05);
+    }
+    
+    .review-section {
+      margin: 2rem 0;
+      padding: 2rem;
+      background: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    /* Booking button styles */
+    .booking-button {
+      display: block;
+      background-color: #ff4d4d;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      margin: 1.5rem 0;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    
+    .booking-button:hover {
+      background-color: #e63939;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    /* Review carousel styles */
+    .review-carousel {
+      position: relative;
+      margin: 2rem 0;
+      overflow: hidden;
+      padding: 1rem 0;
+    }
+    
+    .review-slides {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    
+    .review-slide {
+      min-width: 100%;
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .reviewer-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #f0f0f0;
+      padding-bottom: 0.8rem;
+    }
+    
+    .reviewer-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 0.8rem;
+    }
+    
+    .reviewer-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding-top: 0.2rem;
+    }
+    
+    .review-date {
+      color: #888;
+      font-size: 0.75rem;
+      margin-top: 0.1rem;
+    }
+    
+    .review-rating {
+      display: flex;
+      margin-top: 0.2rem;
+    }
+    
+    .review-rating i {
+      font-size: 0.8rem;
+      margin-right: 2px;
+    }
+    
+    .carousel-nav {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+    
+    .carousel-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ddd;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .carousel-dot.active {
+      background: #ff4d4d;
+    }
+    
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.7);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+    
+    .carousel-prev {
+      left: 10px;
+    }
+    
+    .carousel-next {
+      right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../food.html" class="nav-item active">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="content-container">
+    <div class="content-header">
+      <span class="content-category">GYOZA</span>
+      <h1 class="content-title">Gyoza Garden - Kobe's Dumpling Paradise</h1>
+      
+      <!-- Rating Section -->
+      <div class="rating">
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star half-star">
+          <i class="far fa-star"></i>
+          <i class="fas fa-star-half"></i>
+        </span>
+        <span class="score-label">4.5/5.0</span>
+      </div>
+    </div>
+    
+    <div class="hero-container">
+      <img class="content-hero" src="https://d20aeo683mqd6t.cloudfront.net/articles/title_images/000/043/147/original/pixta_50025713_S%E3%81%AE%E3%82%B3%E3%83%94%E3%83%BC.jpg?2021&d=750x400" alt="Kobe Gyoza Garden with perfectly arranged gyoza" 
+      onerror="this.onerror=null; 
+      this.parentElement.innerHTML = '<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#333;color:white;font-size:1.5rem;text-align:center;padding:2rem;\'>Kobe Gyoza Garden</div>';">
+    </div>
+    
+    <!-- Visitor Information Button -->
+    <a href="#visitor-info" class="booking-button">
+      <i class="fas fa-info-circle"></i> VISITOR INFORMATION
+    </a>
+    
+    <!-- Restaurant Information Section -->
+    <div class="restaurant-info">
+      <div class="restaurant-details">
+        <h2>Restaurant Details</h2>
+        
+        <div class="detail-row">
+          <div class="detail-label">Address:</div>
+          <div class="detail-value">2-13-13 Sannomiya-cho, Chuo-ku, Kobe 650-0021</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Hours:</div>
+          <div class="detail-value">11:30 AM - 2:30 PM, 5:00 PM - 10:00 PM<br>Open daily</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Phone:</div>
+          <div class="detail-value">+81 78-391-5580</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Price Range:</div>
+          <div class="detail-value">¥700-1,800 ($5-12) per person<br>Average meal: ¥1,500 ($10) with drinks</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Cuisine:</div>
+          <div class="detail-value">Japanese, Gyoza (Dumplings), Izakaya, Budget-Friendly</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Reservations:</div>
+          <div class="detail-value">Accepted for groups of 4 or more<br>Walk-ins welcome for smaller parties</div>
+        </div>
+        
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">Local Favorite Since 1988</h3>
+        <p>Kobe Gyoza Garden has been a fixture in Kobe's dining scene for over three decades, beloved for its perfect gyoza and warm atmosphere. Located in the Sannomiya district near the harbor, it attracts both locals and visitors seeking authentic Japanese dumplings with a distinct Kobe touch.</p>
+      </div>
+      
+      <div class="map-container">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3280.296271845854!2d135.19000231744384!3d34.69086699999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60008f011304b433%3A0x479f3d8e4a3da99!2sKobe%20Gyoza%20Garden!5e0!3m2!1sen!2sus!4v1693230090086!5m2!1sen!2sus" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+    
+    <div class="content-text">
+      <h2>Gyoza Varieties</h2>
+      <div class="gyoza-variety">
+        <div class="gyoza-type">
+          <img src="https://rimage.gnst.jp/restaurant/images/Rvw/103259/103259397.jpg" alt="Pork Gyoza">
+          <h3>Classic Pork</h3>
+          <p>Juicy minced pork with garlic chives</p>
+        </div>
+        <!-- More gyoza types -->
+      </div>
+      
+      <h2>Perfecting the Art of Gyoza</h2>
+      
+      <p>What distinguishes Kobe Gyoza Garden from countless other gyoza specialists across Japan is their unwavering commitment to quality and consistency. The restaurant's founder spent years perfecting a recipe that balances traditional Chinese dumpling-making techniques with Japanese preferences for texture and flavor profiles. This dedication shows in every aspect of their gyoza:</p>
+      
+      <p>The wrappers are made fresh daily using a precise blend of flours that yields the ideal thickness—thin enough to be delicate, yet sturdy enough to withstand the high-heat cooking process without tearing. The filling combines premium ground pork from local farms with a meticulous blend of cabbage, garlic, ginger, and green onions, all bound together with a secret mixture of seasonings that has remained unchanged for decades.</p>
+      
+      <p>But perhaps most distinctive is Kobe Gyoza Garden's cooking method, which follows a specific temperature-controlled process. Each dumpling is pan-fried until the bottom achieves a golden-brown crust, then steamed to perfection, resulting in the characteristic crispy-tender contrast that defines exceptional gyoza. Their signature dipping sauce—a house-made blend of soy sauce, rice vinegar, chili oil, and several undisclosed ingredients—completes the experience.</p>
+      
+      <p>While the classic pork gyoza remains their flagship offering, Kobe Gyoza Garden has thoughtfully expanded their menu over the years to include several variations that showcase local ingredients. Their Kobe beef gyoza—featuring small amounts of the prized marbled beef blended with pork—offers a luxurious twist on the classic at a surprisingly accessible price point. Seasonal specials might incorporate fresh seafood from Kobe's harbor or vegetables from surrounding farms.</p>
+      
+      <div class="content-quote">
+        "What makes Kobe Gyoza Garden special isn't just technical excellence—it's the consistency. I've been coming here monthly for over fifteen years, and they've never had an off day. Each plate arrives perfectly identical to the last, with that same balance of crisp and tender textures, juicy filling, and addictive flavor. That kind of reliability is rare in any restaurant, but especially one specializing in something as technically demanding as gyoza." - Kobe Shimbun Food Critic
+      </div>
+      
+      <!-- User Reviews Carousel -->
+      <h2>Customer Reviews</h2>
+      
+      <div class="review-carousel">
+        <div class="carousel-arrow carousel-prev">
+          <i class="fas fa-chevron-left"></i>
+        </div>
+        
+        <div class="review-slides">
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">James W.</div>
+                <div class="review-date">Visited February 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"We came to Kobe primarily for the beef experience but stumbled upon Gyoza Garden while exploring Sannomiya. What a fortunate discovery! After several high-end meals that were delicious but budget-stretching, this place offered incredible value without compromising on quality. We ordered their classic pork gyoza and the specialty Kobe beef gyoza to compare. Both were exceptional—perfectly crisp on the bottom, tender on top, and filled with juicy, flavorful fillings. The Kobe beef version had a subtle richness that justified the slightly higher price. We paired these with their cucumber salad (refreshing and lightly pickled) and a couple of local Kobe craft beers. The atmosphere was cozy and authentic, with a mix of locals and tourists. Staff were friendly and efficient despite the language barrier—the menu has photos and English descriptions for most items. Our bill came to around ¥3,500 for two people, making it one of the best value meals of our entire Japan trip. If you're in Kobe and need a break from the high-end steakhouses, this place is absolutely worth seeking out."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Yuki N.</div>
+                <div class="review-date">Visited April 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star-half-alt" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"As a Kobe native who has moved away, I make a point to visit Gyoza Garden whenever I return home. It's been a local institution for decades, and with good reason. Their gyoza have a distinctive quality that's difficult to find elsewhere—the wrappers have just the right thickness, and the balance of meat to vegetables in the filling is perfect. The frying technique creates that coveted crispy bottom without being greasy. Beyond the classic gyoza, I recommend trying their seasonal specialties; I was lucky enough to visit during sakura season when they offered a limited cherry blossom shrimp gyoza that was exceptional. The restaurant has been renovated since my childhood visits, but thankfully they've maintained the traditional elements while modernizing just enough. It can get crowded during peak hours, but the turnover is efficient—this isn't a place where people linger for hours. Instead, it's where locals come for a reliable, satisfying meal without pretension. For visitors, it offers an authentic glimpse into everyday Kobe dining culture beyond the famous beef. Their homemade chili oil is spectacular—be sure to add a bit to your dipping sauce!"</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Maria C.</div>
+                <div class="review-date">Visited March 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="far fa-star" style="color: #ddd;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"After spending a fortune on a Kobe beef dinner the night before, we were looking for something more affordable but still authentically Japanese. Our hotel concierge recommended Gyoza Garden, saying it was where locals eat regularly. The restaurant was easy to find, about a 7-minute walk from Sannomiya Station. We arrived around 6 PM and were seated immediately, though it filled up quickly after we arrived. The menu is straightforward and focused—various types of gyoza, a few side dishes, and drinks. We ordered the standard pork gyoza, the garlic-heavy 'stamina' gyoza, and their signature Kobe beef gyoza, plus some edamame and cold beers. Every variety of gyoza was delicious, with the Kobe beef version standing out for its extra depth of flavor. The garlic 'stamina' version wasn't for the faint-hearted—definitely not first-date food! Everything arrived quickly, piping hot and perfectly prepared. The staff spoke limited English but were extremely helpful, and the picture menu made ordering simple. The restaurant has a casual, homey atmosphere where you can see the chefs working in the semi-open kitchen. For about ¥1,800 per person including drinks, it was an excellent value and a nice contrast to the more formal dining experiences we'd had elsewhere in Japan. Highly recommended for dumpling lovers!"</p>
+          </div>
+        </div>
+        
+        <div class="carousel-arrow carousel-next">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+        
+        <div class="carousel-nav">
+          <div class="carousel-dot active"></div>
+          <div class="carousel-dot"></div>
+          <div class="carousel-dot"></div>
+        </div>
+      </div>
+      
+      <h2>Menu Highlights</h2>
+      
+      <p>Kobe Gyoza Garden specializes in exceptional dumplings and complementary dishes:</p>
+      
+      <ul>
+        <li><strong>Classic Pork Gyoza (¥580 for 6 pieces)</strong> - Their signature offering with the perfect balance of pork, cabbage, and aromatics</li>
+        <li><strong>Kobe Beef Gyoza (¥980 for 6 pieces)</strong> - A premium version incorporating the famous local beef for added richness</li>
+        <li><strong>"Stamina" Garlic Gyoza (¥650 for 6 pieces)</strong> - Extra garlicky version for those seeking bold flavors</li>
+        <li><strong>Shrimp & Vegetable Gyoza (¥680 for 6 pieces)</strong> - A lighter alternative featuring fresh seafood</li>
+        <li><strong>Seasonal Special Gyoza (¥680-980 for 6 pieces)</strong> - Rotating limited-time offerings that incorporate seasonal ingredients</li>
+        <li><strong>Cucumber & Wakame Salad (¥450)</strong> - Refreshing counterpoint to the rich gyoza</li>
+        <li><strong>Chilled Tofu with Bonito Flakes (¥420)</strong> - Silken tofu topped with katsuobushi, scallions, and ginger</li>
+        <li><strong>Gyoza Rice Bowl (¥850)</strong> - Chopped gyoza over steamed rice with special sauce</li>
+        <li><strong>Local Kobe Craft Beer (¥650)</strong> - Rotating selection of regional brews</li>
+        <li><strong>House Sake (¥700)</strong> - Selected to pair perfectly with gyoza</li>
+      </ul>
+      
+      <div class="review-section">
+        <h2>Eastworld's Review</h2>
+        
+        <h3>Food Quality: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Kobe Gyoza Garden delivers gyoza of exceptional quality. Their dumplings showcase technical mastery with consistently perfect wrappers, well-balanced fillings, and ideal cooking technique. The supporting menu items maintain the same high standards, though they properly remain secondary to the star attraction. For a specialty restaurant focusing on a single dish, the execution is flawless.</p>
+        
+        <h3>Value: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Despite Kobe's reputation as an expensive dining destination, Gyoza Garden offers remarkable value. Even their premium Kobe beef gyoza remains affordable, and a satisfying meal with drinks typically costs under ¥2,000 per person. For the quality of ingredients and preparation, this represents exceptional value.</p>
+        
+        <h3>Atmosphere: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>The restaurant strikes an ideal balance between traditional and contemporary design elements, creating a space that feels authentic without being stuffy. The counter seating with views of the kitchen adds entertainment value to the dining experience. The space can feel crowded during peak hours, but this contributes to the lively, convivial atmosphere rather than detracting from it.</p>
+        
+        <h3>Service: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>Service is efficient and friendly, with staff demonstrating genuine pride in the restaurant's offerings. While English proficiency varies among staff members, the picture menu and their willingness to assist make navigation simple for international visitors. Even during busy periods, service remains attentive without feeling rushed.</p>
+        
+        <h3>Authenticity: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>This is a genuine local favorite that hasn't been significantly altered to cater to tourism. The restaurant preserves traditional gyoza-making techniques while incorporating subtle local influences that reflect Kobe's culinary identity. The dining experience provides visitors an authentic glimpse into everyday Japanese food culture.</p>
+        
+        <h3>Overall: <span style="color: #FFD700;">★★★★½</span></h3>
+        <p>Kobe Gyoza Garden exemplifies the Japanese approach to culinary specialization—focusing on a single dish and perfecting it over decades. While visitors to Kobe will understandably seek out the famous beef, this beloved gyoza institution provides a different but equally valid perspective on the city's food culture. For travelers seeking exceptional value, authentic atmosphere, and meticulously crafted food, this restaurant offers a welcome counterpoint to more expensive dining options, without compromising on the quality that defines Japanese cuisine.</p>
+      </div>
+      
+      <h2>Tips for Visitors</h2>
+      
+      <ul>
+        <li><strong>Timing:</strong> Arrive between 11:30-12:30 for lunch or 5:00-6:00 for dinner to avoid the peak crowds</li>
+        <li><strong>Order Strategy:</strong> A standard order is 1-2 plates of gyoza per person (6 pieces each) plus a side dish</li>
+        <li><strong>Seating:</strong> Counter seats offer views of the kitchen and are ideal for solo diners or couples</li>
+        <li><strong>Dipping Technique:</strong> Try your first gyoza with their standard dipping sauce, then experiment with adding their house-made chili oil</li>
+        <li><strong>Drink Pairing:</strong> Local Kobe craft beer complements the gyoza perfectly, or try their carefully selected sake</li>
+        <li><strong>Language:</strong> Basic English is understood, and the picture menu facilitates ordering</li>
+        <li><strong>Payment:</strong> Both cash and major credit cards are accepted</li>
+        <li><strong>Combination Suggestion:</strong> Visit after exploring nearby Chinatown (Nankinmachi) for an interesting cultural contrast</li>
+      </ul>
+      
+      <!-- Visitor Information -->
+      <div id="visitor-info" class="review-section">
+        <h2>Visitor Information</h2>
+        <p>Here's what you need to know when planning your visit to Kobe Gyoza Garden:</p>
+        
+        <h3>Getting There:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>From Sannomiya Station (JR, Hankyu, Hanshin, or Port Liner): 7-minute walk north toward the harbor area</li>
+          <li>From Motomachi Station: 10-minute walk west</li>
+          <li>Located in the bustling Sannomiya district, Kobe's central shopping and dining hub</li>
+          <li>Look for the distinctive red and white signage with gyoza illustrations</li>
+        </ul>
+        
+        <h3>Best Times to Visit:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Lunch service (11:30 AM - 2:30 PM) is typically less crowded on weekdays</li>
+          <li>Early dinner (5:00 PM - 6:00 PM) or later evening (after 8:30 PM) for shorter wait times</li>
+          <li>Weekday lunch offers the best combination of availability and value</li>
+          <li>During peak hours (7:00 PM - 8:30 PM), expect a 15-30 minute wait</li>
+        </ul>
+        
+        <h3>Nearby Attractions:</h3>
+        <p>Kobe Gyoza Garden's central location makes it perfect to combine with:</p>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Nankinmachi (Kobe's historic Chinatown): 5-minute walk</li>
+          <li>Kobe Harborland and Meriken Park: 15-minute walk</li>
+          <li>Ikuta Shrine: 10-minute walk</li>
+          <li>Sannomiya Center Gai Shopping Street: 3-minute walk</li>
+        </ul>
+        
+        <h3>Payment Information:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Cash (Japanese yen) and major credit cards accepted</li>
+          <li>Most meals range from ¥1,200-2,000 per person including drinks</li>
+          <li>No tipping necessary, as is standard in Japan</li>
+        </ul>
+        
+        <p>For groups of 4 or more, making a reservation is recommended, especially for weekend dinners. The restaurant accommodates both Japanese and English reservation requests by phone at +81 78-391-5580.</p>
+      </div>
+      
+      <a href="../food.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Food Guide</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Review carousel functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const slides = document.querySelector('.review-slides');
+      const dots = document.querySelectorAll('.carousel-dot');
+      const prevBtn = document.querySelector('.carousel-prev');
+      const nextBtn = document.querySelector('.carousel-next');
+      let currentSlide = 0;
+      const totalSlides = document.querySelectorAll('.review-slide').length;
+      
+      // Function to update slide position
+      function showSlide(index) {
+        if (index < 0) index = totalSlides - 1;
+        if (index >= totalSlides) index = 0;
+        
+        currentSlide = index;
+        slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+        
+        // Update active dot
+        dots.forEach((dot, i) => {
+          dot.classList.toggle('active', i === currentSlide);
+        });
+      }
+      
+      // Set up event listeners for dots
+      dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => showSlide(i));
+      });
+      
+      // Set up event listeners for arrows
+      prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
+      nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
+      
+      // Auto-rotate slides every 5 seconds
+      setInterval(() => {
+        showSlide(currentSlide + 1);
+      }, 5000);
+    });
+  </script>
+  
+  <script src="../script.js"></script>
+</body>
+</html> 

@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maisen Tonkatsu - Eastworld Restaurant Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Additional styles specific to restaurant reviews */
+    .restaurant-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+      .restaurant-info {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .restaurant-details {
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .detail-row {
+      display: flex;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+    }
+    
+    .detail-label {
+      font-weight: 600;
+      min-width: 120px;
+      color: #333;
+    }
+    
+    .detail-value {
+      flex: 1;
+      color: #555;
+    }
+    
+    .rating {
+      margin-bottom: 1rem;
+    }
+    
+    .star {
+      color: #ddd;
+      font-size: 1.5rem;
+    }
+    
+    .star.filled {
+      color: #FFD700;
+    }
+    
+    .half-star {
+      position: relative;
+    }
+    
+    .half-star .fas.fa-star-half {
+      color: #FFD700;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    
+    .score-label {
+      margin-left: 0.5rem;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .map-container {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .map-container iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+    }
+    
+    .photos-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .photo-item {
+      border-radius: 8px;
+      overflow: hidden;
+      height: 150px;
+    }
+    
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .photo-item img:hover {
+      transform: scale(1.05);
+    }
+    
+    .review-section {
+      margin: 2rem 0;
+      padding: 2rem;
+      background: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    /* Booking button styles */
+    .booking-button {
+      display: block;
+      background-color: #ff4d4d;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      margin: 1.5rem 0;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    
+    .booking-button:hover {
+      background-color: #e63939;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    /* Review carousel styles */
+    .review-carousel {
+      position: relative;
+      margin: 2rem 0;
+      overflow: hidden;
+      padding: 1rem 0;
+    }
+    
+    .review-slides {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    
+    .review-slide {
+      min-width: 100%;
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .reviewer-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #f0f0f0;
+      padding-bottom: 0.8rem;
+    }
+    
+    .reviewer-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 0.8rem;
+    }
+    
+    .reviewer-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding-top: 0.2rem;
+    }
+    
+    .review-date {
+      color: #888;
+      font-size: 0.75rem;
+      margin-top: 0.1rem;
+    }
+    
+    .review-rating {
+      display: flex;
+      margin-top: 0.2rem;
+    }
+    
+    .review-rating i {
+      font-size: 0.8rem;
+      margin-right: 2px;
+    }
+    
+    .carousel-nav {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+    
+    .carousel-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ddd;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .carousel-dot.active {
+      background: #ff4d4d;
+    }
+    
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.7);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+    
+    .carousel-prev {
+      left: 10px;
+    }
+    
+    .carousel-next {
+      right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../food.html" class="nav-item active">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="content-container">
+    <div class="content-header">
+      <span class="content-category">TONKATSU</span>
+      <h1 class="content-title">Maisen Tonkatsu - Tokyo's Legendary Pork Cutlet Specialist</h1>
+      
+      <!-- Rating Section -->
+      <div class="rating">
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star half-star">
+          <i class="far fa-star"></i>
+          <i class="fas fa-star-half"></i>
+        </span>
+        <span class="score-label">4.5/5.0</span>
+      </div>
+    </div>
+    
+    <div class="hero-container">
+      <img class="content-hero" src="https://www.maisen.co.jp/wp/wp-content/themes/maisen/img/home/main_img.jpg" alt="Maisen Tonkatsu Specialty Dish" 
+      onerror="this.onerror=null; 
+      this.parentElement.innerHTML = '<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#333;color:white;font-size:1.5rem;text-align:center;padding:2rem;\'>Maisen Tonkatsu Tokyo</div>';">
+    </div>
+    
+    <!-- Visitor Information Button -->
+    <a href="#visitor-info" class="booking-button">
+      <i class="fas fa-info-circle"></i> VISITOR INFORMATION
+    </a>
+    
+    <!-- Restaurant Information Section -->
+    <div class="restaurant-info">
+      <div class="restaurant-details">
+        <h2>Restaurant Details</h2>
+        
+        <div class="detail-row">
+          <div class="detail-label">Address:</div>
+          <div class="detail-value">4-8-5 Jingumae, Shibuya-ku, Tokyo 150-0001, Japan (Main Aoyama/Omotesando Location)</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Hours:</div>
+          <div class="detail-value">11:00 AM - 10:00 PM (Last order 9:30 PM)<br>Open daily</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Phone:</div>
+          <div class="detail-value">+81 3-3470-0071</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Price Range:</div>
+          <div class="detail-value">Lunch sets: ¥1,800-3,500 ($12-25)<br>Dinner sets: ¥2,500-6,000 ($17-40)</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Cuisine:</div>
+          <div class="detail-value">Japanese, Tonkatsu (Breaded Pork Cutlet)</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Reservations:</div>
+          <div class="detail-value">Accepted for groups of 6 or more (call directly)<br>Walk-ins welcomed but expect a wait during peak hours</div>
+        </div>
+        
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">Multiple Locations</h3>
+        <p>While the flagship restaurant is in a converted historic bathhouse in Aoyama/Omotesando, Maisen also has several other locations:</p>
+        <ul style="margin-bottom: 1rem; padding-left: 1.5rem;">
+          <li>Maisen Daimaru Tokyo (Tokyo Station)</li>
+          <li>Maisen Shibuya Hikarie</li>
+          <li>Maisen Shinjuku Takashimaya</li>
+          <li>Plus additional locations in department stores and shopping centers throughout Tokyo</li>
+        </ul>
+      </div>
+      
+      <div class="map-container">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3241.4324684553584!2d139.7090384!3d35.6655401!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60188ca2a73e9d1d%3A0x9a1bb9911fe85855!2sTonkatsu%20Maisen%20Aoyama%20Honten!5e0!3m2!1sen!2sus!4v1693230090086!5m2!1sen!2sus" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+    
+    <div class="content-text">
+      <h2>A Tokyo Institution in a Historic Setting</h2>
+      
+      <p>Since opening its doors in 1965, Maisen has established itself as Tokyo's definitive tonkatsu (breaded and deep-fried pork cutlet) restaurant. Located in a converted public bathhouse (sento) from the 1930s, the flagship Aoyama location combines architectural heritage with culinary excellence to create a dining experience that has attracted everyone from local salarymen to international celebrities and Japanese dignitaries.</p>
+      
+      <p>The restaurant's high-ceilinged main dining room—with its Art Deco influences and hints of its bathing past—provides a unique atmosphere that feels simultaneously elegant and unpretentious. Beyond the distinctive setting, it's the meticulous attention to the craft of tonkatsu that has cemented Maisen's legendary status in a city where culinary perfection is the standard expectation.</p>
+      
+      <div class="photos-container">
+        <div class="photo-item">
+          <img src="https://www.maisen.co.jp/wp/wp-content/uploads/2019/01/main01-1-2.jpg" alt="Premium Kurobuta Pork Cutlet">
+        </div>
+        <div class="photo-item">
+          <img src="https://www.maisen.co.jp/wp/wp-content/uploads/2020/07/home_03-4.jpg" alt="Historic Restaurant Building">
+        </div>
+        <div class="photo-item">
+          <img src="https://www.maisen.co.jp/wp/wp-content/uploads/2020/07/home_02-3.jpg" alt="Tonkatsu Set with Rice and Vegetables">
+        </div>
+        <div class="photo-item">
+          <img src="https://www.maisen.co.jp/wp/wp-content/uploads/2019/01/main01-2.jpg" alt="Dining Room Interior">
+        </div>
+      </div>
+      
+      <h2>The Art of Perfect Tonkatsu</h2>
+      
+      <p>What distinguishes Maisen from countless other tonkatsu establishments is its fanatical dedication to every element of the dish. The journey to the perfect cutlet begins with carefully selected pork, with options ranging from standard high-quality cuts to premium Kurobuta (Japanese black pork) from Kagoshima Prefecture. The restaurant is particularly renowned for its exclusive "Okinawa-bred Agu" and "Hirata Farm" pork varieties, which offer exceptional marbling and flavor.</p>
+      
+      <p>The breading process involves a proprietary blend of fresh breadcrumbs that create the distinctive airy yet crisp coating that defines Maisen's cutlets. Unlike mass-produced versions, Maisen's breadcrumbs are made in-house daily, resulting in a lighter texture that doesn't absorb excess oil. The frying temperature and timing are precisely controlled to ensure each cutlet achieves the perfect balance: crispy golden exterior giving way to juicy, tender meat within.</p>
+      
+      <p>No tonkatsu is complete without its accompanying sauce, and Maisen's signature sauce—a proprietary blend that balances sweet, tangy, and umami notes—has been perfected over decades. Each table is equipped with both sauce and Japanese mustard, allowing diners to customize to their preference.</p>
+      
+      <p>A traditional tonkatsu set at Maisen includes the cutlet, shredded cabbage (which serves as a refreshing counterpoint to the rich pork), rice, miso soup, and Japanese pickles. The cabbage is unlimited and served with a sesame dressing that's become nearly as famous as the tonkatsu itself.</p>
+      
+      <div class="content-quote">
+        "Maisen represents the pinnacle of what can be achieved with a seemingly simple dish. Every aspect—from selecting the finest pork to controlling the temperature of the oil to the millisecond—contributes to an experience that transcends the sum of its parts. This is Japanese cooking philosophy distilled: simplicity executed with uncompromising dedication to craft." - Gourmet Tokyo Magazine
+      </div>
+      
+      <!-- User Reviews Carousel -->
+      <h2>Customer Reviews</h2>
+      
+      <div class="review-carousel">
+        <div class="carousel-arrow carousel-prev">
+          <i class="fas fa-chevron-left"></i>
+        </div>
+        
+        <div class="review-slides">
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Daniel W.</div>
+                <div class="review-date">Visited February 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"After hearing about Maisen for years, I finally made the pilgrimage to the Aoyama location during my recent Tokyo trip, and it absolutely lived up to the hype. We arrived around 2pm on a Thursday hoping to avoid lines, which worked well—only a 10-minute wait. The building itself is worth a visit; you can still see elements of its bathhouse past in the high ceilings and architectural details. I ordered the premium kurobuta rosu (loin) set, while my partner tried the hire (tenderloin). Both were revelation experiences—incredibly juicy inside with a light, crispy coating that defies the heavy feeling you might expect from fried food. The cabbage was fresh and crisp, and I appreciated that they brought more when we finished our first serving. The sesame dressing was so good I could have drunk it! Their homemade sauce perfectly complemented the pork without overwhelming it. Yes, it's more expensive than your average tonkatsu place (about ¥3,500 for my set), but the quality justifies the price. This is specialist food at its finest—a restaurant that has spent decades perfecting a single dish."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Keiko M.</div>
+                <div class="review-date">Visited April 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="far fa-star" style="color: #ddd;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"As a Tokyo resident, I've been coming to Maisen for special occasions for many years. While there are now many branches, the original Aoyama location remains special both for its historic building and consistency. Their tonkatsu is still excellent—the meat is always juicy and the breading has that distinctive lightness that makes Maisen famous. I particularly recommend the hire katsu (tenderloin) for first-timers, as it showcases their technique beautifully. One tip for visitors: the first floor tends to be more crowded and bustling, while the second floor offers a slightly more relaxed atmosphere if you don't mind waiting a bit longer. I've noticed that over the years, as their popularity with tourists has grown, prices have increased while portions have become slightly smaller. It's still excellent, but no longer the value it once was. The table service can also be a bit rushed during peak times. That said, it remains one of Tokyo's must-visit culinary experiences, especially for visitors wanting to try the definitive version of this Japanese comfort food. Their katsu sando (cutlet sandwich) from the takeout counter is also excellent if you're in a hurry."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">James L.</div>
+                <div class="review-date">Visited January 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star-half-alt" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"I visited the Maisen Aoyama location after it was recommended by our hotel concierge as the best tonkatsu in Tokyo. We arrived around 11:30 AM right when they opened and still had to wait about 20 minutes, which suggests how popular this place is. The converted bathhouse setting adds a unique charm to the dining experience. I ordered their signature kurobuta rosu katsu set, and my wife tried the menchi katsu (minced meat cutlet). Both were outstanding, though I slightly preferred the classic rosu cut with its perfect balance of lean meat and fat. What makes Maisen special is the quality of the ingredients and execution—the breading is impossibly light and crisp without being greasy, and the pork remained juicy throughout. I appreciated the thoughtful details: freshly grated wasabi instead of the paste you often get, unlimited cabbage with their house dressing, and pickles that provided the perfect palate cleanser between bites. Our server spoke enough English to guide us through the menu, and the picture menu made ordering straightforward. At around ¥3,000 per person for lunch, it's not cheap for what is essentially comfort food, but the craftsmanship justifies the price. I've tried tonkatsu elsewhere in Japan, and nothing compares to the texture and flavor achieved here."</p>
+          </div>
+        </div>
+        
+        <div class="carousel-arrow carousel-next">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+        
+        <div class="carousel-nav">
+          <div class="carousel-dot active"></div>
+          <div class="carousel-dot"></div>
+          <div class="carousel-dot"></div>
+        </div>
+      </div>
+      
+      <h2>Menu Highlights</h2>
+      
+      <p>While Maisen offers a variety of pork cuts and preparations, these are the standout items that have earned the restaurant its legendary status:</p>
+      
+      <ul>
+        <li><strong>Kurobuta Rosu Katsu Set (¥3,500)</strong> - The flagship offering featuring premium Japanese black pork loin with the ideal balance of lean meat and fat</li>
+        <li><strong>Kurobuta Hire Katsu Set (¥3,200)</strong> - Tenderloin cutlet that showcases the purity of the meat with minimal fat</li>
+        <li><strong>Special Agu Pork Katsu Set (¥5,000)</strong> - Limited availability; features the prized Okinawan native breed known for exceptional flavor</li>
+        <li><strong>Menchi Katsu (¥2,500)</strong> - Minced meat cutlet with a uniquely soft interior texture</li>
+        <li><strong>Katsu Sando (¥1,300-1,800)</strong> - Available from the takeout counter; features tonkatsu between slices of soft white bread with their signature sauce</li>
+        <li><strong>Special Rosu-Hire Moriawase (¥4,200)</strong> - Combination plate featuring both loin and tenderloin cutlets for those who can't decide</li>
+        <li><strong>Seasonal Special Sets</strong> - Rotating options that might include premium regional pork varieties or limited-time preparations</li>
+        <li><strong>Katsu Curry (¥2,600)</strong> - Tonkatsu served with Japanese curry rice</li>
+      </ul>
+      
+      <p>All set meals include rice, miso soup, unlimited shredded cabbage with sesame dressing, and Japanese pickles.</p>
+      
+      <div class="review-section">
+        <h2>Eastworld's Review</h2>
+        
+        <h3>Food Quality: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Maisen represents the pinnacle of tonkatsu craftsmanship. Their pork selection is impeccable, the breading achieves the perfect balance of lightness and crispness, and the cutlets are consistently cooked to juicy perfection. Supporting elements like the signature sauce, cabbage with sesame dressing, and pickles are executed with equal care.</p>
+        
+        <h3>Value: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>While definitely pricier than your average tonkatsu restaurant, Maisen's quality justifies the premium. The kurobuta sets in particular deliver exceptional value given the quality of the ingredients and the skill involved. The lunch sets offer better value than dinner, with similar quality at a lower price point.</p>
+        
+        <h3>Atmosphere: <span style="color: #FFD700;">★★★★½</span></h3>
+        <p>The converted bathhouse setting of the flagship location provides a unique backdrop that enhances the dining experience. The high ceilings and historic details create an ambiance that feels special without being stuffy. The only drawback is that the popularity means it can sometimes feel rushed, particularly during peak times.</p>
+        
+        <h3>Service: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>Service is efficient and professional, if not overly warm. Staff are accustomed to international visitors and can generally navigate language barriers effectively. During peak hours, service can feel somewhat hurried as they try to accommodate waiting diners.</p>
+        
+        <h3>Authenticity: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>This is the definitive version of a Japanese staple prepared according to traditional methods but elevated to an art form. Maisen has been setting the standard for tonkatsu for decades and represents authentic Japanese culinary values: simplicity, quality of ingredients, and masterful technique.</p>
+        
+        <h3>Overall: <span style="color: #FFD700;">★★★★½</span></h3>
+        <p>Maisen delivers a quintessential Tokyo dining experience by taking a humble dish and elevating it through obsessive attention to detail and commitment to quality. For anyone seeking to understand Japanese cuisine's dedication to perfecting seemingly simple foods, Maisen offers a delicious education. Even with the premium pricing and potential wait times, it remains a must-visit culinary destination in Tokyo.</p>
+      </div>
+      
+      <h2>Tips for Visitors</h2>
+      
+      <ul>
+        <li><strong>Timing:</strong> Arrive right when they open (11:00 AM) or during off-peak hours (2:30-5:00 PM) to minimize wait times</li>
+        <li><strong>Seating:</strong> The first floor is more vibrant but busier; request second-floor seating for a slightly more relaxed experience</li>
+        <li><strong>Menu Navigation:</strong> For first-timers, the kurobuta rosu (loin) set offers the definitive Maisen experience</li>
+        <li><strong>Food Customization:</strong> Feel free to request more cabbage; it's unlimited and complements the rich cutlet perfectly</li>
+        <li><strong>Sauce Technique:</strong> Try your first few bites without sauce to appreciate the meat quality, then experiment with different sauce amounts</li>
+        <li><strong>Language:</strong> An English menu is available; staff can generally handle basic English requests</li>
+        <li><strong>Takeout Option:</strong> If lines are too long, consider trying their excellent katsu sando (cutlet sandwich) from the takeout counter</li>
+        <li><strong>Alternative Locations:</strong> If the flagship location is too crowded, consider visiting one of the department store branches, which maintain similar quality standards</li>
+      </ul>
+      
+      <!-- Visitor Information -->
+      <div id="visitor-info" class="review-section">
+        <h2>Visitor Information</h2>
+        <p>Here's what you need to know when planning your visit to Maisen:</p>
+        
+        <h3>Getting There:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>From Omotesando Station (Tokyo Metro Ginza, Hanzomon, and Chiyoda Lines): Exit A4, walk approximately 5 minutes</li>
+          <li>From Gaienmae Station (Tokyo Metro Ginza Line): Exit 3, walk approximately 7 minutes</li>
+          <li>Look for the distinctive white building with "MAISEN" signage</li>
+        </ul>
+        
+        <h3>Best Times to Visit:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Weekdays are generally less crowded than weekends</li>
+          <li>Opening time (11:00 AM) has a line but moves quickly</li>
+          <li>Late lunch (2:00-4:00 PM) typically sees shorter waits</li>
+          <li>Expect 30-60 minute waits during peak lunch and dinner hours on weekends</li>
+        </ul>
+        
+        <h3>Payment Information:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Major credit cards accepted (Visa, Mastercard, JCB, American Express)</li>
+          <li>Cash (Japanese yen) is always accepted</li>
+          <li>Some locations accept digital payment methods like Suica/Pasmo</li>
+          <li>No tipping necessary (as is standard in Japan)</li>
+        </ul>
+        
+        <h3>Accessibility:</h3>
+        <p>The historic main building presents some accessibility challenges:</p>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Main entrance has several steps with no ramp</li>
+          <li>First floor dining area is accessible once inside</li>
+          <li>Second floor is accessed by stairs only (no elevator)</li>
+          <li>Department store locations typically offer better accessibility</li>
+        </ul>
+        
+        <p>While Maisen is popular with tourists, it remains an authentic Japanese dining establishment. Respectful behavior and patience during busy periods are appreciated, as is customary in Japan.</p>
+      </div>
+      
+      <a href="../food.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Food Guide</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Review carousel functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const slides = document.querySelector('.review-slides');
+      const dots = document.querySelectorAll('.carousel-dot');
+      const prevBtn = document.querySelector('.carousel-prev');
+      const nextBtn = document.querySelector('.carousel-next');
+      let currentSlide = 0;
+      const totalSlides = document.querySelectorAll('.review-slide').length;
+      
+      // Function to update slide position
+      function showSlide(index) {
+        if (index < 0) index = totalSlides - 1;
+        if (index >= totalSlides) index = 0;
+        
+        currentSlide = index;
+        slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+        
+        // Update active dot
+        dots.forEach((dot, i) => {
+          dot.classList.toggle('active', i === currentSlide);
+        });
+      }
+      
+      // Set up event listeners for dots
+      dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => showSlide(i));
+      });
+      
+      // Set up event listeners for arrows
+      prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
+      nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
+      
+      // Auto-rotate slides every 5 seconds
+      setInterval(() => {
+        showSlide(currentSlide + 1);
+      }, 5000);
+    });
+  </script>
+  
+  <script src="../script.js"></script>
+</body>
+</html> 

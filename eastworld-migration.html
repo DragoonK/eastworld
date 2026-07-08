@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eastworld Migration - Your Gateway to Australia</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Migration-specific styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #fff;
+        }
+
+        /* Header Navigation */
+        .main-nav {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            padding: 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            height: 70px;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            letter-spacing: 2px;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-menu li {
+            position: relative;
+        }
+
+        .nav-menu a {
+            color: white;
+            text-decoration: none;
+            padding: 20px 15px;
+            display: block;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-menu a:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        /* Dropdown menus */
+        .dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            min-width: 200px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            border-radius: 5px;
+        }
+
+        .nav-menu li:hover .dropdown {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .dropdown a {
+            color: #333;
+            padding: 12px 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .dropdown a:hover {
+            background-color: #f8f9fa;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, rgba(30, 60, 114, 0.9), rgba(42, 82, 152, 0.9)), 
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect fill="%234a90e2" width="1200" height="600"/><polygon fill="%23357abd" points="0,600 400,200 800,400 1200,100 1200,600"/></svg>');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 120px 20px 80px;
+            position: relative;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero-content p {
+            font-size: 1.3rem;
+            margin-bottom: 30px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            opacity: 0.95;
+        }
+
+        .cta-button {
+            background: #ff6b35;
+            color: white;
+            padding: 15px 35px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);
+        }
+
+        .cta-button:hover {
+            background: #e55a2b;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
+        }
+
+        /* Stats Section */
+        .stats {
+            background: #f8f9fa;
+            padding: 60px 20px;
+        }
+
+        .stats-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 30px 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #2a5298;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            color: #666;
+            font-weight: 500;
+        }
+
+        /* Why Choose Us Section */
+        .why-choose {
+            padding: 80px 20px;
+            background: white;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #2a5298;
+            font-weight: 700;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 60px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .features-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+        }
+
+        .feature-card {
+            text-align: center;
+            padding: 40px 30px;
+            border-radius: 15px;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            color: #ff6b35;
+            margin-bottom: 20px;
+        }
+
+        .feature-title {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: #2a5298;
+            font-weight: 600;
+        }
+
+        .feature-description {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Services Section */
+        .services {
+            padding: 80px 20px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        }
+
+        .services-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .service-title {
+            font-size: 1.5rem;
+            color: #2a5298;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .service-description {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .service-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .service-list li {
+            padding: 8px 0;
+            color: #555;
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .service-list li:before {
+            content: "✓";
+            color: #28a745;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        /* Success Cases */
+        .success-cases {
+            padding: 80px 20px;
+            background: white;
+        }
+
+        .cases-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .case-card {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 10px;
+            border-left: 4px solid #ff6b35;
+        }
+
+        .case-title {
+            font-size: 1.1rem;
+            color: #2a5298;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .case-description {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            padding: 80px 20px;
+            background: linear-gradient(135deg, #2a5298, #1e3c72);
+            color: white;
+        }
+
+        .testimonials-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .testimonial-card {
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .testimonial-author {
+            font-weight: 600;
+            color: #ff6b35;
+        }
+
+        /* Contact Section */
+        .contact {
+            padding: 80px 20px;
+            background: #f8f9fa;
+        }
+
+        .contact-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: start;
+        }
+
+        .contact-info h3 {
+            color: #2a5298;
+            margin-bottom: 30px;
+            font-size: 1.5rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .contact-icon {
+            color: #ff6b35;
+            font-size: 1.2rem;
+            margin-right: 15px;
+            width: 20px;
+        }
+
+        .contact-form {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #2a5298;
+        }
+
+        /* Footer */
+        .footer {
+            background: #1e3c72;
+            color: white;
+            padding: 40px 20px 20px;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-info {
+            margin-bottom: 20px;
+        }
+
+        .footer-info h4 {
+            color: #ff6b35;
+            margin-bottom: 10px;
+        }
+
+        .social-links {
+            margin: 20px 0;
+        }
+
+        .social-links a {
+            color: white;
+            font-size: 1.5rem;
+            margin: 0 10px;
+            transition: color 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: #ff6b35;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 20px;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                height: auto;
+                padding: 10px 20px;
+            }
+
+            .nav-menu {
+                margin-top: 10px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .nav-menu a {
+                padding: 10px 8px;
+                font-size: 0.8rem;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-content p {
+                font-size: 1.1rem;
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .dropdown {
+                position: static;
+                opacity: 1;
+                visibility: visible;
+                box-shadow: none;
+                background: rgba(255,255,255,0.1);
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="#" class="logo">EASTWORLD MIGRATION</a>
+            <ul class="nav-menu">
+                <li><a href="#home">Homepage</a></li>
+                <li><a href="#about">About Us</a></li>
+                <li><a href="#study-services">Study Services</a></li>
+                <li>
+                    <a href="#migration-services">Migration Services</a>
+                    <div class="dropdown">
+                        <a href="#aat-appeals">AAT Appeals</a>
+                        <a href="#spouse-migration">Marriage/Spouse Migration</a>
+                        <a href="#business-migration">Business Migration</a>
+                        <a href="#skilled-migration">Skilled Migration</a>
+                        <a href="#work-visa">Work Visa/Employer Sponsorship</a>
+                    </div>
+                </li>
+                <li>
+                    <a href="#information">Information Center</a>
+                    <div class="dropdown">
+                        <a href="#latest-news">Latest News</a>
+                        <a href="#life-australia">Life in Australia</a>
+                        <a href="#australian-institutions">Australian Institutions</a>
+                        <a href="#eastworld-classroom">Eastworld Classroom</a>
+                    </div>
+                </li>
+                <li><a href="#contact">Contact Us</a></li>
+                <li><a href="#english">ENGLISH</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Your Gateway to Australia</h1>
+            <p>Successfully helping thousands of Asian students achieve their dream of studying and living in Australia for over 20 years</p>
+            <a href="#contact" class="cta-button">Start Your Journey Today</a>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stats-container">
+            <div class="stat-item">
+                <div class="stat-number">10,000+</div>
+                <div class="stat-label">Successful Students</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">20+</div>
+                <div class="stat-label">Years of Experience</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">95%</div>
+                <div class="stat-label">Success Rate</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">Support Service</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us Section -->
+    <section class="why-choose" id="about">
+        <h2 class="section-title">Why Choose Eastworld Migration?</h2>
+        <p class="section-subtitle">Eastworld Migration was established in 2001 and has over 20 years of experience helping Asian students successfully migrate to Australia. Located in the heart of Melbourne, we provide comprehensive migration and education services.</p>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-award"></i>
+                </div>
+                <h3 class="feature-title">Authoritative Service</h3>
+                <p class="feature-description">Comprehensive immigration services including skilled migration, work visas, employer sponsorship, business migration, spouse visas, and student visas with accompanying family members.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <h3 class="feature-title">Caring Service</h3>
+                <p class="feature-description">Representing various Australian institutions, providing free course selection guidance, free application and processing for all types of transfers and enrollments.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-globe-asia"></i>
+                </div>
+                <h3 class="feature-title">Specialized Asian Focus</h3>
+                <p class="feature-description">Specialized expertise in helping Asian students with cultural understanding, language support, and tailored guidance for smooth transition to Australian life.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3 class="feature-title">Expert Team</h3>
+                <p class="feature-description">All migration advisors hold Australian government-regulated Migration Agent Registration Authority (MARA) certificates. Education advisors hold QEAC certificates.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services" id="study-services">
+        <h2 class="section-title">Our Professional Services</h2>
+        <p class="section-subtitle">Professional | Authoritative | Trustworthy - Personalized Service</p>
+        
+        <div class="services-grid">
+            <div class="service-card">
+                <h3 class="service-title"><i class="fas fa-graduation-cap"></i> Study Services</h3>
+                <p class="service-description">We have established excellent partnerships with numerous educational institutions and universities. Our experienced education consultants create comprehensive and reasonable study plans for each student.</p>
+                <ul class="service-list">
+                    <li>University application assistance</li>
+                    <li>Course selection guidance</li>
+                    <li>Student visa applications</li>
+                    <li>Pathway program enrollment</li>
+                    <li>Academic progress monitoring</li>
+                </ul>
+            </div>
+            
+            <div class="service-card">
+                <h3 class="service-title"><i class="fas fa-passport"></i> Migration Services</h3>
+                <p class="service-description">Our experienced migration experts stay up-to-date with all visa and immigration policies, creating customized migration solutions for each client's individual circumstances.</p>
+                <ul class="service-list">
+                    <li>Skilled migration (189/190/491)</li>
+                    <li>Employer sponsorship (482/186)</li>
+                    <li>Business and investment visas</li>
+                    <li>Partner and family visas</li>
+                    <li>AAT appeal representation</li>
+                </ul>
+            </div>
+            
+            <div class="service-card">
+                <h3 class="service-title"><i class="fas fa-handshake"></i> Settlement Support</h3>
+                <p class="service-description">Beyond visas and applications, we provide comprehensive settlement support to ensure your successful integration into Australian society.</p>
+                <ul class="service-list">
+                    <li>Accommodation assistance</li>
+                    <li>Bank account setup</li>
+                    <li>Tax file number application</li>
+                    <li>Job search guidance</li>
+                    <li>Community integration support</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Success Cases Section -->
+    <section class="success-cases">
+        <h2 class="section-title">Recent Success Stories</h2>
+        <p class="section-subtitle">Over 20 years, we have achieved nearly 10,000 successful cases for international students and migrants</p>
+        
+        <div class="cases-grid">
+            <div class="case-card">
+                <h4 class="case-title">Case 7: Sarah Chen Successfully Obtained Accounting Professional Independent Skilled Migration Visa</h4>
+                <p class="case-description">Despite challenging circumstances, we helped Sarah navigate the complex points system and secure her PR within 8 months.</p>
+            </div>
+            
+            <div class="case-card">
+                <h4 class="case-title">Case 6: David Kim Granted IT Professional Skilled Migration Visa</h4>
+                <p class="case-description">Through strategic skills assessment and state nomination, David achieved his migration goals with exceptional processing time.</p>
+            </div>
+            
+            <div class="case-card">
+                <h4 class="case-title">Case 5: Maria Zhang Quickly Approved for Partner Permanent Residence Visa</h4>
+                <p class="case-description">Complex relationship documentation made simple - Maria and her partner received PR approval in record time.</p>
+            </div>
+            
+            <div class="case-card">
+                <h4 class="case-title">Case 4: Recent Graduate Secured 4-Year Employer Sponsorship Work Visa</h4>
+                <p class="case-description">Despite having no work experience, we successfully secured a 482 visa leading to permanent residency pathway.</p>
+            </div>
+            
+            <div class="case-card">
+                <h4 class="case-title">Case 3: Couple Achieved PR in 3 Weeks Despite Limited Documentation</h4>
+                <p class="case-description">Through strategic approach and expert documentation, we overcame significant challenges to secure rapid approval.</p>
+            </div>
+            
+            <div class="case-card">
+                <h4 class="case-title">Case 2: Non-Listed Profession Graduate Successfully Obtained Work Visa</h4>
+                <p class="case-description">Creative pathway solutions for graduates in challenging fields - proving that every case has potential.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials">
+        <h2 class="section-title">What Our Clients Say</h2>
+        
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <p class="testimonial-text">"Every counselor at Eastworld Migration was incredibly professional and helpful. They guided me through every step of my student visa and subsequent PR application. I'm grateful for their expertise and support."</p>
+                <p class="testimonial-author">- Li Wei, Software Engineer</p>
+            </div>
+            
+            <div class="testimonial-card">
+                <p class="testimonial-text">"Excellence beyond all expectations! The team's dedication to helping Asian students is remarkable. They understand our unique challenges and provide solutions that work."</p>
+                <p class="testimonial-author">- Priya Sharma, Nurse</p>
+            </div>
+            
+            <div class="testimonial-card">
+                <p class="testimonial-text">"The best migration service for Asian students. Their cultural understanding and professional expertise made my journey to permanent residency smooth and successful."</p>
+                <p class="testimonial-author">- Tanaka Hiroshi, Accountant</p>
+            </div>
+            
+            <div class="testimonial-card">
+                <p class="testimonial-text">"Professional service at its finest. From student visa to skilled migration, they supported me every step of the way. Highly recommended for all Asian students."</p>
+                <p class="testimonial-author">- Amanda Chen, Teacher</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <h2 class="section-title">Contact Us</h2>
+        <p class="section-subtitle">Ready to start your Australian journey? Get in touch with our expert team today.</p>
+        
+        <div class="contact-grid">
+            <div class="contact-info">
+                <h3>Get In Touch</h3>
+                
+                <div class="contact-item">
+                    <i class="fas fa-map-marker-alt contact-icon"></i>
+                    <div>
+                        <strong>Address</strong><br>
+                        Suite 510, Level 5, 343 Little Collins Street<br>
+                        Melbourne, VIC 3000, Australia
+                    </div>
+                </div>
+                
+                <div class="contact-item">
+                    <i class="fas fa-phone contact-icon"></i>
+                    <div>
+                        <strong>Phone</strong><br>
+                        +61-3-9670-9199<br>
+                        +61-3-9670-0088
+                    </div>
+                </div>
+                
+                <div class="contact-item">
+                    <i class="fas fa-envelope contact-icon"></i>
+                    <div>
+                        <strong>Email</strong><br>
+                        info@eastworldmigration.com.au
+                    </div>
+                </div>
+                
+                <div class="contact-item">
+                    <i class="fas fa-clock contact-icon"></i>
+                    <div>
+                        <strong>Office Hours</strong><br>
+                        Mon - Fri: 9:30am - 5:30pm<br>
+                        Sat - Sun: By Appointment
+                    </div>
+                </div>
+                
+                <div class="contact-item">
+                    <i class="fas fa-comments contact-icon"></i>
+                    <div>
+                        <strong>WeChat</strong><br>
+                        EASTWORLDBEST
+                    </div>
+                </div>
+            </div>
+            
+            <div class="contact-form">
+                <h3>Free Consultation</h3>
+                <form>
+                    <div class="form-group">
+                        <label for="name">Full Name *</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email Address *</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="service">Service Interested In *</label>
+                        <select id="service" name="service" required>
+                            <option value="">Select a service</option>
+                            <option value="student-visa">Student Visa</option>
+                            <option value="skilled-migration">Skilled Migration</option>
+                            <option value="employer-sponsorship">Employer Sponsorship</option>
+                            <option value="partner-visa">Partner Visa</option>
+                            <option value="business-visa">Business Visa</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="country">Current Country *</label>
+                        <select id="country" name="country" required>
+                            <option value="">Select your country</option>
+                            <option value="china">China</option>
+                            <option value="india">India</option>
+                            <option value="south-korea">South Korea</option>
+                            <option value="japan">Japan</option>
+                            <option value="vietnam">Vietnam</option>
+                            <option value="thailand">Thailand</option>
+                            <option value="malaysia">Malaysia</option>
+                            <option value="singapore">Singapore</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">Tell us about your situation</label>
+                        <textarea id="message" name="message" rows="4" placeholder="Please describe your current situation, goals, and any specific questions you have..."></textarea>
+                    </div>
+                    
+                    <button type="submit" class="cta-button" style="width: 100%; margin-top: 10px;">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-info">
+                <h4>Follow Us</h4>
+                <p>Stay updated with the latest migration and education news</p>
+                
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>© 2024 EASTWORLD MIGRATION. ALL RIGHTS RESERVED.</p>
+                <p>Australian Government Registered Migration Agent MARN: 0640827</p>
+                <p>Professional Migration & Education Services for Asian Students</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Form submission handler
+        document.querySelector('.contact-form form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thank you for your inquiry! We will contact you within 24 hours.');
+            this.reset();
+        });
+
+        // Add animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all cards and sections for animation
+        document.querySelectorAll('.feature-card, .service-card, .case-card, .testimonial-card, .stat-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html> 

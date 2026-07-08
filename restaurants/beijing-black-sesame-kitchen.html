@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Black Sesame Kitchen - Eastworld Beijing Restaurant Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Restaurant-specific styles */
+    .restaurant-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+      .restaurant-info {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .restaurant-details {
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .detail-row {
+      display: flex;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+    }
+    
+    .detail-label {
+      font-weight: 600;
+      min-width: 120px;
+      color: #333;
+    }
+    
+    .detail-value {
+      flex: 1;
+      color: #555;
+    }
+    
+    .map-container {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .map-container iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+    }
+    
+    .cooking-class {
+      background: #f8f8f8;
+      padding: 2rem;
+      border-radius: 8px;
+      margin: 2rem 0;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .class-schedule {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    
+    @media (max-width: 768px) {
+      .class-schedule {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .class-type {
+      padding: 1.5rem;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      background: #fff;
+      transition: transform 0.3s ease;
+    }
+    
+    .class-type:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .class-type h3 {
+      margin-bottom: 0.8rem;
+      color: #1a1a1a;
+      border-bottom: 1px solid #f0f0f0;
+      padding-bottom: 0.5rem;
+    }
+    
+    .class-type p {
+      color: #666;
+      margin-bottom: 0.5rem;
+    }
+    
+    .class-type .price {
+      font-weight: 600;
+      color: #333;
+      margin-top: 1rem;
+    }
+    
+    .photos-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .photo-item {
+      border-radius: 8px;
+      overflow: hidden;
+      height: 150px;
+    }
+    
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .photo-item img:hover {
+      transform: scale(1.05);
+    }
+    
+    .menu-highlights {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+    
+    @media (max-width: 768px) {
+      .menu-highlights {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .menu-item {
+      background: #fff;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    
+    .menu-item h3 {
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+      color: #1a1a1a;
+    }
+    
+    .menu-item .description {
+      color: #666;
+      font-size: 0.95rem;
+      margin-bottom: 0.8rem;
+    }
+    
+    .menu-item .price {
+      font-weight: 600;
+      color: #1a1a1a;
+    }
+    
+    .booking-button {
+      display: block;
+      background-color: #ff4d4d;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      margin: 1.5rem 0;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    
+    .booking-button:hover {
+      background-color: #e63939;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    .review-section {
+      margin: 2rem 0;
+      padding: 2rem;
+      background: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .content-quote {
+      font-style: italic;
+      padding: 1.5rem;
+      background: #f5f5f5;
+      border-left: 4px solid #ff4d4d;
+      margin: 1.5rem 0;
+      line-height: 1.6;
+    }
+    
+    .review-carousel {
+      position: relative;
+      margin: 2rem 0;
+      overflow: hidden;
+      padding: 1rem 0;
+    }
+    
+    .review-slides {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    
+    .review-slide {
+      min-width: 100%;
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .reviewer-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #f0f0f0;
+      padding-bottom: 0.8rem;
+    }
+    
+    .reviewer-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding-top: 0.2rem;
+    }
+    
+    .review-date {
+      color: #888;
+      font-size: 0.75rem;
+      margin-top: 0.1rem;
+    }
+    
+    .carousel-nav {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+    
+    .carousel-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ddd;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .carousel-dot.active {
+      background: #ff4d4d;
+    }
+    
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.7);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+    
+    .carousel-prev {
+      left: 10px;
+    }
+    
+    .carousel-next {
+      right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../food.html" class="nav-item active">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="content-container">
+    <div class="content-header">
+      <span class="content-category">HUTONG DINING</span>
+      <h1 class="content-title">Black Sesame Kitchen - Private Dining in a Beijing Courtyard</h1>
+      <div class="rating">
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star half-star">
+          <i class="far fa-star"></i>
+          <i class="fas fa-star-half"></i>
+        </span>
+        <span class="score-label">4.5/5.0</span>
+      </div>
+    </div>
+
+    <div class="hero-container">
+      <img class="content-hero" src="https://media-cdn.tripadvisor.com/media/photo-s/0c/e0/6d/7c/black-sesame-kitchen.jpg" alt="Black Sesame Kitchen courtyard" 
+      onerror="this.onerror=null;this.parentElement.innerHTML='<div style=\'background:#1a1a1a; color:white; padding:2rem; text-align:center\'>Black Sesame Kitchen</div>';">
+    </div>
+    
+    <!-- Booking Button -->
+    <a href="#visitor-info" class="booking-button">
+      <i class="fas fa-info-circle"></i> VISITOR INFORMATION
+    </a>
+
+    <div class="restaurant-info">
+      <div class="restaurant-details">
+        <h2>Restaurant Details</h2>
+        <div class="detail-row">
+          <div class="detail-label">Address:</div>
+          <div class="detail-value">28 Zhong Lou Wan Hutong, Dongcheng District, Beijing</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Hours:</div>
+          <div class="detail-value">
+            Cooking Classes: 10:30 AM - 1:30 PM (Tue-Fri)<br>
+            Dinner Seatings: 7:00 PM (Tue-Sat)
+          </div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Phone:</div>
+          <div class="detail-value">+86 136-9147-4408</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Price Range:</div>
+          <div class="detail-value">
+            Cooking Classes: ¥400 ($60) per person<br>
+            Dinners: ¥300-400 ($45-60) per person
+          </div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Cuisine:</div>
+          <div class="detail-value">Northern Chinese, Multicourse Fixed Menu</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Reservations:</div>
+          <div class="detail-value">Essential - must book in advance</div>
+        </div>
+        
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">How to Get There</h3>
+        <p>From Nanluoguxiang Metro Station:</p>
+        <ul style="margin-bottom: 1rem; padding-left: 1.5rem;">
+          <li>Take Exit C from Nanluoguxiang Station (Line 6)</li>
+          <li>Walk north along Nanluoguxiang for about 5 minutes</li>
+          <li>Turn right onto Zhong Lou Wan Hutong</li>
+          <li>Look for number 28 on the south side of the street</li>
+          <li>Enter the gray door leading to the traditional courtyard</li>
+        </ul>
+      </div>
+      <div class="map-container">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3055.3149!2d116.4025!3d39.9405!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x35f0536c95214b47%3A0x2d71c844a7fee6b5!2sBlack%20Sesame%20Kitchen!5e0!3m2!1sen!2sus!4v1693230090086!5m2!1sen!2sus" allowfullscreen loading="lazy"></iframe>
+      </div>
+    </div>
+
+    <div class="content-text">
+      <h2>A Hidden Culinary Gem in Beijing's Hutongs</h2>
+      
+      <p>Tucked away in a traditional courtyard residence (siheyuan) in one of Beijing's historic hutong alleyways, Black Sesame Kitchen offers a dining experience that goes far beyond the typical restaurant visit. This intimate cooking school and private dining venue has become a beloved institution among expats, visitors, and locals seeking an authentic yet refined taste of Northern Chinese cuisine in a unique setting.</p>
+      
+      <p>Founded in 2008 by American Jen Lin-Liu (author of "Serve the People: A Stir-Fried Journey Through China") and later taken over by Chinese culinary expert Zhou Chao, Black Sesame Kitchen operates on a concept rarely found in Beijing: communal table dining with a fixed multicourse menu that showcases both classic and lesser-known specialties from Northern China and beyond.</p>
+      
+      <div class="photos-container">
+        <div class="photo-item">
+          <img src="https://media-cdn.tripadvisor.com/media/photo-s/04/72/9c/ef/black-sesame-kitchen.jpg" alt="Dining room setup">
+        </div>
+        <div class="photo-item">
+          <img src="https://media-cdn.tripadvisor.com/media/photo-s/12/df/43/3a/photo1jpg.jpg" alt="Food plating">
+        </div>
+        <div class="photo-item">
+          <img src="https://media-cdn.tripadvisor.com/media/photo-s/04/72/9c/8c/black-sesame-kitchen.jpg" alt="Cooking demonstration">
+        </div>
+        <div class="photo-item">
+          <img src="https://media-cdn.tripadvisor.com/media/photo-s/04/72/9c/74/black-sesame-kitchen.jpg" alt="Traditional courtyard">
+        </div>
+      </div>
+      
+      <h2>The Hutong Experience: Dining in a Historic Setting</h2>
+      
+      <p>The restaurant's setting is itself a cultural exploration. Located in a restored traditional courtyard home in the Nanluoguxiang area—one of Beijing's most well-preserved historic neighborhoods—Black Sesame Kitchen provides a glimpse into old Beijing architecture and lifestyle that most restaurants cannot offer.</p>
+      
+      <p>Upon entering through the unassuming gray door on Zhong Lou Wan Hutong, guests step back in time, walking into a peaceful courtyard surrounded by traditional rooms with wooden beams and latticed windows. The main dining area blends traditional architecture with contemporary comfort, featuring a large communal table that seats up to 12 guests and an open kitchen where chefs prepare dishes in full view of diners.</p>
+      
+      <p>This architectural authenticity creates a distinctive atmosphere for guests, providing a cultural context for the culinary journey they're about to experience—a refreshing contrast to both ultra-modern restaurants and touristy "traditional" venues that often feel contrived.</p>
+      
+      <div class="content-quote">
+        "We wanted to create a space that honors the traditional Beijing way of life while serving food that's both authentic and refined. In a city that's rapidly modernizing, these quiet hutong courtyards represent something precious—a connection to Beijing's past. When you combine that architectural heritage with carefully prepared home-style cooking, you create an experience that's about more than just eating. It's about cultural understanding through food." - Zhou Chao, Executive Chef at Black Sesame Kitchen
+      </div>
+      
+      <h2>Cooking Class Experiences</h2>
+      
+      <p>Beyond dinner service, Black Sesame Kitchen is renowned for its hands-on cooking classes that introduce participants to the techniques and flavors of Northern Chinese cuisine. These classes have become a highlight for culinary tourists seeking deeper engagement with local food culture.</p>
+      
+      <div class="cooking-class">
+        <h3>Available Classes</h3>
+        <p>Black Sesame Kitchen offers structured cooking experiences that combine demonstration, hands-on practice, cultural context, and of course, a delicious meal featuring the dishes you've learned to prepare.</p>
+        
+        <div class="class-schedule">
+          <div class="class-type">
+            <h3>Dumpling Masterclass</h3>
+            <p>Learn to prepare three different types of dumplings from scratch, including dough making, filling preparation, and various folding techniques.</p>
+            <p>Duration: 3 hours</p>
+            <p>Offered: Tuesdays and Thursdays</p>
+            <p class="price">¥400 per person</p>
+          </div>
+          <div class="class-type">
+            <h3>Northern Chinese Classics</h3>
+            <p>Master iconic dishes from Beijing and surrounding regions, including hand-pulled noodles, stir-fries, and traditional cold appetizers.</p>
+            <p>Duration: 3 hours</p>
+            <p>Offered: Wednesdays and Fridays</p>
+            <p class="price">¥400 per person</p>
+          </div>
+        </div>
+      </div>
+      
+      <p>Each class includes a detailed recipe booklet to take home, allowing participants to recreate their culinary achievements long after their Beijing visit. Classes are conducted in English with Chinese translation available, making them accessible to international visitors.</p>
+      
+      <h2>The Dinner Experience: Communal Chinese Dining</h2>
+      
+      <p>The evening dining experience at Black Sesame Kitchen differs significantly from standard restaurant visits. Instead of individual tables and à la carte ordering, guests join a single communal table for a multicourse feast that typically includes 10-12 dishes served family-style.</p>
+      
+      <p>This format encourages conversation among guests—who often include a mix of tourists, expats, and locals—creating a social dining atmosphere that's both engaging and educational. The chefs introduce each dish as it's served, explaining its cultural significance, ingredients, and preparation techniques.</p>
+      
+      <p>The fixed menu changes seasonally but always presents a balanced selection of Northern Chinese specialties, from familiar favorites to lesser-known regional dishes that even well-traveled food enthusiasts might not have encountered.</p>
+      
+      <h2>Menu Highlights</h2>
+      
+      <p>While the specific dishes rotate based on seasonality and the chef's inspiration, certain signature items have become mainstays at Black Sesame Kitchen:</p>
+      
+      <div class="menu-highlights">
+        <div class="menu-item">
+          <h3>Black Sesame Dumplings in Sweet Rice Wine Soup</h3>
+          <div class="description">The restaurant's namesake dessert featuring glutinous rice flour dumplings filled with toasted black sesame paste, served in a sweet fermented rice wine soup.</div>
+          <div class="price">Included in set menu</div>
+        </div>
+        <div class="menu-item">
+          <h3>Hand-Torn Cabbage with Vinegar Dressing</h3>
+          <div class="description">A deceptively simple appetizer that showcases the kitchen's attention to detail—cabbage is hand-torn rather than cut to create rough edges that better absorb the complex vinegar dressing.</div>
+          <div class="price">Included in set menu</div>
+        </div>
+        <div class="menu-item">
+          <h3>Eight Treasure Sweet Sticky Rice</h3>
+          <div class="description">A festive Northern Chinese dessert featuring sticky rice studded with eight different nuts, seeds, and dried fruits, drizzled with osmanthus syrup.</div>
+          <div class="price">Included in set menu</div>
+        </div>
+        <div class="menu-item">
+          <h3>Fish-Fragrant Eggplant</h3>
+          <div class="description">A Sichuan classic done with particular finesse—silky eggplant in a sauce combining sweet, sour, spicy, and savory notes.</div>
+          <div class="price">Included in set menu</div>
+        </div>
+      </div>
+      
+      <p>The beverage program includes premium Chinese teas, local and imported beer, and a small but thoughtfully selected wine list designed to complement the complex flavors of Chinese cuisine. A popular option is the wine pairing add-on (¥200), which includes three glasses matched specifically to the evening's menu.</p>
+      
+      <!-- Customer Reviews Carousel -->
+      <h2>Customer Reviews</h2>
+      
+      <div class="review-carousel">
+        <div class="carousel-arrow carousel-prev">
+          <i class="fas fa-chevron-left"></i>
+        </div>
+        
+        <div class="review-slides">
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Lisa M.</div>
+                <div class="review-date">Visited August 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"The dumpling class at Black Sesame Kitchen was the highlight of our Beijing trip! Chef Zhou was incredibly patient and skilled, showing us traditional techniques while sharing stories about the cultural significance of dumplings in Northern China. The class was hands-on but not intimidating, even for beginners like us. We made three types of dumplings with different fillings and folding styles. After cooking, we enjoyed our creations along with additional dishes prepared by the kitchen. The historic hutong setting made the experience even more special—it felt like being welcomed into someone's home rather than attending a cooking class. Worth every yuan!"</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Thomas K.</div>
+                <div class="review-date">Visited July 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="far fa-star" style="color: #ddd;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"We attended the Friday night dinner and had a wonderful experience. The communal dining concept initially made us hesitant (we're normally private diners), but it ended up being delightful. We met fascinating people from around the world, and conversation flowed easily as we shared the excellent food. The ten-course menu was impressive—standouts included the fish-fragrant eggplant, which had perfect texture and balance, and the black sesame dumplings for dessert. The chef provided context for each dish, enhancing our appreciation. My only suggestion would be to improve the wine list, as the pairings were decent but not exceptional. Nevertheless, this was a unique dining experience that offered insight into both traditional Chinese cuisine and culture."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Zhang Wei</div>
+                <div class="review-date">Visited June 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"As a Beijing native, I was initially skeptical about bringing foreign colleagues to a place that caters to many tourists, but Black Sesame Kitchen surprised me with its authenticity and quality. The Northern Chinese dishes were properly prepared with no compromises—the flavors were bold and true to tradition, while the presentation was more refined than what you'd find in most local restaurants. The hutong setting provides visitors with a glimpse of old Beijing that's increasingly rare. What impressed me most was the chef's knowledge; when my American colleagues asked questions about ingredients and techniques, the explanations were detailed and accurate. This place bridges cultures through food in a way that respects Chinese culinary traditions while making them accessible to international guests."</p>
+          </div>
+        </div>
+        
+        <div class="carousel-arrow carousel-next">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+        
+        <div class="carousel-nav">
+          <div class="carousel-dot active"></div>
+          <div class="carousel-dot"></div>
+          <div class="carousel-dot"></div>
+        </div>
+      </div>
+      
+      <div class="review-section">
+        <h2>Eastworld's Review</h2>
+        
+        <h3>Food Quality: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>The cuisine at Black Sesame Kitchen represents a refined take on traditional Northern Chinese cooking. Dishes demonstrate proper technique and high-quality ingredients, with flavors that are authentic but slightly adjusted for an international audience. The multi-course format showcases impressive range, from delicate appetizers to hearty main courses.</p>
+        
+        <h3>Authenticity: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Despite its popularity with foreigners, Black Sesame Kitchen doesn't water down its culinary traditions. The hutong setting, cooking methods, and flavor profiles remain true to Northern Chinese cuisine. The educational component adds depth, providing cultural context that enhances appreciation of the food's authenticity.</p>
+        
+        <h3>Value: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>At ¥300-400 per person for dinner and ¥400 for cooking classes, prices are higher than typical Chinese restaurants but reasonable given the experience offered. The multi-course dinner includes 10-12 dishes of excellent quality, while cooking classes provide hands-on instruction, recipes, and a full meal.</p>
+        
+        <h3>Atmosphere: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>The restored traditional courtyard creates a uniquely atmospheric setting that few Beijing restaurants can match. The intimate communal table arrangement encourages interaction, while the open kitchen adds entertainment value. The hutong location itself provides a cultural immersion that enhances the overall experience.</p>
+        
+        <h3>Service: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Staff are highly attentive, knowledgeable, and fluent in English. The chef's detailed explanations of each dish add educational value, while the cooking instructors display both expertise and patience. The reservation process is efficient, with prompt email communication.</p>
+        
+        <h3>Overall: <span style="color: #FFD700;">★★★★½</span></h3>
+        <p>Black Sesame Kitchen offers a dining experience that goes beyond mere sustenance to provide cultural and culinary education in a historic setting. It successfully bridges the gap between authentic Chinese cooking and accessibility for international visitors, making it an ideal choice for food enthusiasts seeking deeper engagement with Beijing's culinary heritage.</p>
+      </div>
+      
+      <h2>Tips for Visitors</h2>
+      
+      <ul>
+        <li>Make reservations well in advance—dinner spots often fill up 2-3 weeks ahead, while cooking classes book even earlier</li>
+        <li>Arrive early to explore the hutong neighborhood before your class or dinner</li>
+        <li>Consider the evening dinner if you're short on time, or the cooking class for a more interactive experience</li>
+        <li>Bring a camera—the traditional courtyard and beautifully presented food are highly photogenic</li>
+        <li>Dinner typically lasts about 2.5 hours, while cooking classes run approximately 3 hours</li>
+        <li>Come hungry—the portions are generous and you'll want to try everything</li>
+        <li>Dress comfortably—the atmosphere is relaxed rather than formal</li>
+        <li>Consider combining your visit with exploration of the nearby Nanluoguxiang pedestrian street</li>
+        <li>Dietary restrictions can be accommodated with advance notice when booking</li>
+      </ul>
+      
+      <!-- Visitor Information -->
+      <div id="visitor-info" class="review-section">
+        <h2>Visitor Information</h2>
+        
+        <h3>Reservations:</h3>
+        <p>Reservations are essential and can be made through:</p>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Email: info@blacksesamekitchen.com (recommended method)</li>
+          <li>Phone: +86 136-9147-4408</li>
+          <li>Website: https://www.blacksesamekitchen.com/reservations</li>
+          <li>Please note that a 50% deposit is required to secure cooking class reservations</li>
+        </ul>
+        
+        <h3>English Support:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>All staff speak fluent English</li>
+          <li>Cooking classes and dinner explanations are conducted in English</li>
+          <li>Written materials, including recipes, are provided in English</li>
+        </ul>
+        
+        <h3>Payment Information:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Major credit cards accepted (Visa, Mastercard)</li>
+          <li>WeChat Pay and Alipay accepted</li>
+          <li>Cash (Chinese Yuan) also accepted</li>
+          <li>For class deposits, international wire transfers or PayPal may be arranged</li>
+        </ul>
+        
+        <p>Black Sesame Kitchen is located in the historic Nanluoguxiang area, one of Beijing's most well-preserved hutong districts. Combining your visit with exploration of this neighborhood is recommended, as the area features traditional architecture, craft shops, and cafes. The location is within walking distance of the Drum and Bell Towers, providing an opportunity to experience multiple aspects of Beijing's cultural heritage in a single outing.</p>
+      </div>
+      
+      <a href="../food.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Food Guide</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Review carousel functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const slides = document.querySelector('.review-slides');
+      const dots = document.querySelectorAll('.carousel-dot');
+      const prevBtn = document.querySelector('.carousel-prev');
+      const nextBtn = document.querySelector('.carousel-next');
+      let currentSlide = 0;
+      const totalSlides = document.querySelectorAll('.review-slide').length;
+      
+      // Function to update slide position
+      function showSlide(index) {
+        if (index < 0) index = totalSlides - 1;
+        if (index >= totalSlides) index = 0;
+        
+        currentSlide = index;
+        slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+        
+        // Update active dot
+        dots.forEach((dot, i) => {
+          dot.classList.toggle('active', i === currentSlide);
+        });
+      }
+      
+      // Set up event listeners for dots
+      dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => showSlide(i));
+      });
+      
+      // Set up event listeners for arrows
+      prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
+      nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
+      
+      // Auto-rotate slides every 5 seconds
+      setInterval(() => {
+        showSlide(currentSlide + 1);
+      }, 5000);
+    });
+  </script>
+  
+  <script src="../script.js"></script>
+</body>
+</html> 

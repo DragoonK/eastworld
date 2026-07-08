@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kobe Motomachi Doria - Eastworld Restaurant Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Additional styles specific to restaurant reviews */
+    .restaurant-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+      .restaurant-info {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .restaurant-details {
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .detail-row {
+      display: flex;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+    }
+    
+    .detail-label {
+      font-weight: 600;
+      min-width: 120px;
+      color: #333;
+    }
+    
+    .detail-value {
+      flex: 1;
+      color: #555;
+    }
+    
+    .rating {
+      margin-bottom: 1rem;
+    }
+    
+    .star {
+      color: #ddd;
+      font-size: 1.5rem;
+    }
+    
+    .star.filled {
+      color: #FFD700;
+    }
+    
+    .half-star {
+      position: relative;
+    }
+    
+    .half-star .fas.fa-star-half {
+      color: #FFD700;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    
+    .score-label {
+      margin-left: 0.5rem;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .map-container {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .map-container iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+    }
+    
+    .photos-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .photo-item {
+      border-radius: 8px;
+      overflow: hidden;
+      height: 150px;
+    }
+    
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .photo-item img:hover {
+      transform: scale(1.05);
+    }
+    
+    .review-section {
+      margin: 2rem 0;
+      padding: 2rem;
+      background: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    /* Booking button styles */
+    .booking-button {
+      display: block;
+      background-color: #ff4d4d;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      margin: 1.5rem 0;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    
+    .booking-button:hover {
+      background-color: #e63939;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    /* Review carousel styles */
+    .review-carousel {
+      position: relative;
+      margin: 2rem 0;
+      overflow: hidden;
+      padding: 1rem 0;
+    }
+    
+    .review-slides {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    
+    .review-slide {
+      min-width: 100%;
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .reviewer-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #f0f0f0;
+      padding-bottom: 0.8rem;
+    }
+    
+    .reviewer-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 0.8rem;
+    }
+    
+    .reviewer-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding-top: 0.2rem;
+    }
+    
+    .review-date {
+      color: #888;
+      font-size: 0.75rem;
+      margin-top: 0.1rem;
+    }
+    
+    .review-rating {
+      display: flex;
+      margin-top: 0.2rem;
+    }
+    
+    .review-rating i {
+      font-size: 0.8rem;
+      margin-right: 2px;
+    }
+    
+    .carousel-nav {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+    
+    .carousel-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ddd;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .carousel-dot.active {
+      background: #ff4d4d;
+    }
+    
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.7);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+    
+    .carousel-prev {
+      left: 10px;
+    }
+    
+    .carousel-next {
+      right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../food.html" class="nav-item active">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="content-container">
+    <div class="content-header">
+      <span class="content-category">DORIA</span>
+      <h1 class="content-title">Kobe Motomachi Doria - The Pioneers of Japanese Rice Gratin</h1>
+      
+      <!-- Rating Section -->
+      <div class="rating">
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star">
+          <i class="far fa-star"></i>
+        </span>
+        <span class="score-label">4.0/5.0</span>
+      </div>
+    </div>
+    
+    <div class="hero-container">
+      <img class="content-hero" src="https://img.travel.rakuten.co.jp/share/image_up/144218/LARGE/5fZN1f.jpeg" alt="Signature Doria Dish" 
+      onerror="this.onerror=null; 
+      this.parentElement.innerHTML = '<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#333;color:white;font-size:1.5rem;text-align:center;padding:2rem;\'>Kobe Motomachi Doria</div>';">
+    </div>
+    
+    <!-- Visitor Information Button -->
+    <a href="#visitor-info" class="booking-button">
+      <i class="fas fa-info-circle"></i> VISITOR INFORMATION
+    </a>
+    
+    <!-- Restaurant Information Section -->
+    <div class="restaurant-info">
+      <div class="restaurant-details">
+        <h2>Restaurant Details</h2>
+        
+        <div class="detail-row">
+          <div class="detail-label">Address:</div>
+          <div class="detail-value">5-1-7 Motomachi, Chuo-ku, Kobe 650-0022, Japan (Main Store)</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Hours:</div>
+          <div class="detail-value">11:00 AM - 9:00 PM (Last order 8:30 PM)<br>Open daily</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Phone:</div>
+          <div class="detail-value">+81 78-391-5444</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Price Range:</div>
+          <div class="detail-value">Lunch sets: ¥1,000-1,800 ($7-12)<br>Dinner: ¥1,200-2,500 ($8-17) per person</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Cuisine:</div>
+          <div class="detail-value">Japanese-Western Fusion, Doria (Rice Gratin), Yoshoku</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Reservations:</div>
+          <div class="detail-value">Accepted for groups of 4 or more<br>Walk-ins welcome for smaller parties</div>
+        </div>
+        
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">Multiple Locations</h3>
+        <p>While the original flagship store is in Motomachi, there are now several branches:</p>
+        <ul style="margin-bottom: 1rem; padding-left: 1.5rem;">
+          <li>Main Store: Motomachi Shopping Street</li>
+          <li>Sannomiya Center Gai Branch</li>
+          <li>Kobe Harborland Branch</li>
+          <li>Plus additional locations throughout the Kansai region</li>
+        </ul>
+      </div>
+      
+      <div class="map-container">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3280.4622553168884!2d135.1885962!3d34.6896551!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60008ef1058ddd81%3A0xc13237315ca5398b!2sKobe%20Motomachi%20Doria%20Main%20Store!5e0!3m2!1sen!2sus!4v1693230090086!5m2!1sen!2sus" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+    
+    <div class="content-text">
+      <h2>The Birthplace of Japanese Doria</h2>
+      
+      <p>Established in 1950, Kobe Motomachi Doria claims the distinction of being the originator of one of Japan's most beloved western-inspired comfort foods: the doria. This dish, essentially a Japanese interpretation of a rice gratin, represents the fascinating culinary fusion that emerged in port cities like Kobe following Japan's opening to the West in the 19th century.</p>
+      
+      <p>While variations of doria now appear on menus throughout Japan, Motomachi Doria's version remains the definitive original. Their signature creation features a layer of pilaf-style seasoned rice topped with savory ingredients like seafood, meat, or vegetables, all blanketed in a rich béchamel sauce and baked until the cheese topping becomes golden and bubbly. The restaurant's history is intrinsically linked with the development of yoshoku cuisine—western-influenced Japanese cooking that emerged during the Meiji era—and represents Kobe's cosmopolitan culinary heritage.</p>
+      
+      <div class="photos-container">
+        <div class="photo-item">
+          <img src="https://media-cdn.tripadvisor.com/media/photo-s/15/66/de/b1/original-doria.jpg" alt="Classic Shrimp Doria">
+        </div>
+        <div class="photo-item">
+          <img src="https://img.travel.rakuten.co.jp/share/image_up/144218/LARGE/eN3y6p.jpeg" alt="Interior of Restaurant">
+        </div>
+        <div class="photo-item">
+          <img src="https://img.travel.rakuten.co.jp/share/image_up/144218/LARGE/JYvTW1.jpeg" alt="Meat Doria with Side Salad">
+        </div>
+        <div class="photo-item">
+          <img src="https://cdn.4travel.jp/img/thumbnails/imk/travelogue_pict/7/7/7/7/7771797.jpg" alt="Seafood Doria Set">
+        </div>
+      </div>
+      
+      <h2>A World of Doria Variations</h2>
+      
+      <p>What began as a single signature dish has expanded into a diverse menu featuring numerous doria variations, each showcasing different ingredient combinations while maintaining the fundamental structure that has made this dish so beloved. The restaurant takes pride in using quality ingredients and preparing each element from scratch—from the carefully seasoned rice to the velvety béchamel sauce made according to their original recipe.</p>
+      
+      <p>Among their most popular offerings is the "Original Doria," featuring plump shrimp and mushrooms in a rich cream sauce, topped with melted cheese—the very same recipe that has been served since the 1950s. Other favorites include the "Kobe Beef Doria," which incorporates the region's famous beef; the "Seafood Doria," loaded with an assortment of fresh seafood; and vegetable variations for non-meat eaters.</p>
+      
+      <p>While doria is the star attraction, the menu also includes other yoshoku classics like hamburger steak, croquettes, and omurice (omelette rice), all prepared with the same attention to quality that has maintained the restaurant's reputation for over seven decades. Each main dish is typically served with a fresh side salad dressed with their house vinaigrette—a light counterpoint to the rich, creamy main course.</p>
+      
+      <div class="content-quote">
+        "Our doria is more than just a dish—it's a piece of Kobe's culinary history. When we created it in 1950, we wanted to make something that combined the comfort of Japanese rice with Western cooking techniques that were becoming popular after the war. Little did we know it would become a national favorite. While many restaurants now serve doria throughout Japan, ours remains true to the original recipe that's delighted three generations of customers." - Kobe Motomachi Doria Management
+      </div>
+      
+      <!-- User Reviews Carousel -->
+      <h2>Customer Reviews</h2>
+      
+      <div class="review-carousel">
+        <div class="carousel-arrow carousel-prev">
+          <i class="fas fa-chevron-left"></i>
+        </div>
+        
+        <div class="review-slides">
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Jennifer L.</div>
+                <div class="review-date">Visited March 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"What a wonderful discovery during our day trip to Kobe! After shopping on Motomachi Street, we were looking for something uniquely 'Kobe' but not beef (which we'd had the previous night). Our hotel had recommended Motomachi Doria, describing it as 'very Kobe-style fusion food.' The restaurant has a charming, slightly retro feel, with wood paneling and vintage photos showing its long history. I ordered their signature dish, the Original Doria with shrimp, while my husband tried the Kobe Beef Doria. Both came bubbling hot in individual gratin dishes, with perfectly browned cheese on top. When you cut into it, you discover the layers—creamy sauce, fresh ingredients, and well-seasoned rice. The shrimp in mine were plump and numerous, not the tiny sparse pieces you sometimes get at chain restaurants. My husband's beef doria was particularly outstanding, with tender, flavorful Kobe beef that elevated the dish to something special. The lunch set included a fresh salad, soup, and dessert (a light flan) for around ¥1,500—excellent value. Service was polite and efficient, with enough English to help with ordering. This place serves comfort food with history and quality ingredients—don't miss it if you're in Kobe!"</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Takahiro K.</div>
+                <div class="review-date">Visited January 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="far fa-star" style="color: #ddd;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"As someone who grew up in Kobe, Motomachi Doria has been a familiar place since childhood. My parents would take me here as a special treat, and now I bring my own children. The restaurant hasn't changed much over the decades, which is part of its charm—the recipes remain true to their origins, and the quality has been consistent. Their original shrimp doria is the classic choice, but I personally prefer the 'Special Doria' which includes both shrimp and beef. The creaminess of the sauce, the slight crunch of the baked cheese on top, and the flavorful rice underneath create a perfect comfort food combination. What makes their doria special compared to others I've tried is the quality of their béchamel sauce—it's rich without being too heavy or floury. This visit, I tried their seasonal crab doria, which was excellent with generous portions of fresh crab meat. The restaurant can get quite busy during peak lunch and dinner hours, so I recommend visiting between 2-5pm if possible. While it's not high-end dining, it represents an important part of Kobe's food culture—the yoshoku tradition that blends Western techniques with Japanese sensibilities, which our port city helped pioneer. For visitors wanting to taste something uniquely Kobe beyond beef, this is a great option."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Alice W.</div>
+                <div class="review-date">Visited April 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="far fa-star" style="color: #ddd;"></i>
+                  <i class="far fa-star" style="color: #ddd;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"I visited Motomachi Doria with moderate expectations—I'd read it was a Kobe institution but wasn't sure if that meant 'tourist trap trading on past glory' or 'genuinely good.' The truth falls somewhere in between. The restaurant itself has a pleasant, nostalgic atmosphere with photos showing its long history. I ordered their signature Original Doria, which arrived looking picture-perfect—golden brown and bubbling. The flavor was good, comforting and rich, though perhaps less exciting than I'd anticipated given its reputation. The rice was well-cooked and the sauce creamy, but I found myself wishing for a bit more seasoning or depth of flavor. My dining companion's Kobe Beef Doria was definitely more interesting, with the quality of the beef elevating the entire dish. The service was efficient but somewhat impersonal, and the restaurant was quite crowded with tourists (mostly Japanese, some international). It's worth noting that the portions are quite modest for the price (around ¥1,500 for a basic lunch set). Overall, it's a pleasant meal and an interesting cultural experience—doria itself represents Japan's unique way of adapting Western dishes—but I wouldn't consider it a must-visit culinary destination. If you're in the Motomachi area and want something besides Kobe beef, it's a solid choice, but I wouldn't make a special trip just for this restaurant."</p>
+          </div>
+        </div>
+        
+        <div class="carousel-arrow carousel-next">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+        
+        <div class="carousel-nav">
+          <div class="carousel-dot active"></div>
+          <div class="carousel-dot"></div>
+          <div class="carousel-dot"></div>
+        </div>
+      </div>
+      
+      <h2>Menu Highlights</h2>
+      
+      <p>The menu at Kobe Motomachi Doria centers around their signature dish in various forms, with additional yoshoku classics:</p>
+      
+      <ul>
+        <li><strong>Original Shrimp Doria (¥1,300)</strong> - The classic that started it all, featuring succulent shrimp in a creamy sauce</li>
+        <li><strong>Kobe Beef Doria (¥1,800)</strong> - Premium local Kobe beef in a rich demi-glace sauce</li>
+        <li><strong>Seafood Doria (¥1,500)</strong> - An assortment of seafood including shrimp, scallops, and squid</li>
+        <li><strong>Crab Cream Doria (¥1,600)</strong> - Sweet crab meat in a velvety cream sauce</li>
+        <li><strong>Vegetable Doria (¥1,200)</strong> - Seasonal vegetables for non-meat eaters</li>
+        <li><strong>Special Doria (¥1,700)</strong> - A deluxe version combining beef and seafood</li>
+        <li><strong>Cheese Hamburg Steak (¥1,500)</strong> - Japanese-style hamburger steak with melted cheese</li>
+        <li><strong>Omurice (¥1,200)</strong> - Omelette covering seasoned rice, another yoshoku classic</li>
+        <li><strong>Lunch Sets (¥1,300-1,800)</strong> - Main dish plus soup, salad, and dessert, available until 2:30 PM</li>
+        <li><strong>Desserts (¥400-600)</strong> - Including pudding, ice cream, and seasonal fruit parfaits</li>
+      </ul>
+      
+      <p>Beverage options include Japanese and imported beer, wine by the glass, soft drinks, and hot or iced tea and coffee.</p>
+      
+      <div class="review-section">
+        <h2>Eastworld's Review</h2>
+        
+        <h3>Food Quality: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>Motomachi Doria delivers consistent, well-executed comfort food with quality ingredients. Their signature doria dishes showcase an excellent balance between the creamy sauce, flavorful rice, and featured ingredients. While not cutting-edge cuisine, it represents traditional yoshoku cooking at its most authentic.</p>
+        
+        <h3>Value: <span style="color: #FFD700;">★★★½</span></h3>
+        <p>The lunch sets offer particularly good value, with complete meals around ¥1,500 that include salad, soup, and dessert. Dinner prices remain reasonable for a sit-down restaurant in a prime tourist location. Portions are moderate rather than large, reflecting Japanese preferences.</p>
+        
+        <h3>Atmosphere: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>The restaurant strikes a pleasant balance between casual comfort and historical charm. Wood paneling, vintage photographs, and warm lighting create a nostalgic atmosphere that nicely complements the classic comfort food being served. The space is clean and well-maintained, though it can feel crowded during peak hours.</p>
+        
+        <h3>Service: <span style="color: #FFD700;">★★★½</span></h3>
+        <p>Service is efficient and polite in the Japanese manner—attentive without being intrusive. Staff members are accustomed to international visitors and can generally communicate basic information in English. During busy periods, the service prioritizes efficiency, which some might find rushed.</p>
+        
+        <h3>Historical Significance: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>As the originator of a now-nationwide favorite dish, Motomachi Doria holds genuine culinary-historical importance. The restaurant provides a taste of authentic yoshoku cuisine as it developed in Japan's international port cities during the post-war period, making it more than just a meal but a cultural experience.</p>
+        
+        <h3>Overall: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>Kobe Motomachi Doria offers a satisfying dining experience that combines culinary history with comforting, well-prepared food. While perhaps not a destination restaurant that warrants a special trip to Kobe, it's an excellent choice for visitors already in the city who want to try something uniquely representative of Kobe's fusion food heritage beyond the famous beef. For travelers interested in Japan's adaptation of Western cuisine, this pioneering establishment provides an authentic taste of yoshoku tradition.</p>
+      </div>
+      
+      <h2>Tips for Visitors</h2>
+      
+      <ul>
+        <li><strong>Timing:</strong> Visit between 2:00-5:00 PM to avoid the busiest lunch and dinner periods</li>
+        <li><strong>Lunch vs. Dinner:</strong> The lunch sets offer better value with the addition of soup and dessert</li>
+        <li><strong>First-Timer Recommendation:</strong> Order the Original Doria for the classic experience that made the restaurant famous</li>
+        <li><strong>Beyond Doria:</strong> If dining with a group, consider ordering one of their other yoshoku specialties like hamburg steak or omurice to sample more of the menu</li>
+        <li><strong>Language:</strong> Picture menus are available, and basic English is understood by most staff</li>
+        <li><strong>Location Context:</strong> The main store is located on Motomachi Shopping Street, making it a convenient lunch or dinner stop while shopping</li>
+        <li><strong>Heat Warning:</strong> Doria is served bubbling hot in a gratin dish—be careful with the first few bites</li>
+        <li><strong>Reservations:</strong> Generally not needed for small groups, but consider calling ahead for dinner on weekends</li>
+      </ul>
+      
+      <!-- Visitor Information -->
+      <div id="visitor-info" class="review-section">
+        <h2>Visitor Information</h2>
+        <p>Here's what you need to know when planning your visit to Kobe Motomachi Doria:</p>
+        
+        <h3>Getting There:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li><strong>Main Store:</strong> 5-minute walk from Motomachi Station (JR or Hanshin Line)</li>
+          <li>Located on Motomachi Shopping Street, a covered arcade with numerous shops</li>
+          <li>From Sannomiya Station: 10-minute walk south toward the harbor</li>
+          <li>Look for the green and white signage with "Motomachi Doria" in both English and Japanese</li>
+        </ul>
+        
+        <h3>Best Times to Visit:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Lunch rush: 12:00 PM - 1:30 PM (busiest)</li>
+          <li>Afternoon lull: 2:00 PM - 5:00 PM (recommended for shorter waits)</li>
+          <li>Dinner rush: 6:00 PM - 8:00 PM</li>
+          <li>Weekdays are generally less crowded than weekends</li>
+        </ul>
+        
+        <h3>Payment Information:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Major credit cards accepted (Visa, Mastercard, JCB)</li>
+          <li>Cash (Japanese yen) also accepted</li>
+          <li>Most prices on the menu include tax</li>
+          <li>Tipping is not customary in Japan and not expected</li>
+        </ul>
+        
+        <h3>Combining with Other Activities:</h3>
+        <p>The restaurant's location makes it easy to combine with other Kobe attractions:</p>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li><strong>Shopping:</strong> Located directly on Motomachi Shopping Street, one of Kobe's main shopping areas</li>
+          <li><strong>Sightseeing:</strong> 10-minute walk from Kobe Harborland and Meriken Park</li>
+          <li><strong>Historic Area:</strong> 15-minute walk from the Kobe Former Foreign Settlement area with its Western-style architecture</li>
+          <li><strong>Chinatown:</strong> 5-minute walk from Nankinmachi (Kobe's Chinatown)</li>
+        </ul>
+        
+        <p>A visit to Motomachi Doria can easily be incorporated into a day of shopping and sightseeing in central Kobe, providing a taste of the city's unique culinary heritage between other activities.</p>
+      </div>
+      
+      <a href="../food.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Food Guide</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Review carousel functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const slides = document.querySelector('.review-slides');
+      const dots = document.querySelectorAll('.carousel-dot');
+      const prevBtn = document.querySelector('.carousel-prev');
+      const nextBtn = document.querySelector('.carousel-next');
+      let currentSlide = 0;
+      const totalSlides = document.querySelectorAll('.review-slide').length;
+      
+      // Function to update slide position
+      function showSlide(index) {
+        if (index < 0) index = totalSlides - 1;
+        if (index >= totalSlides) index = 0;
+        
+        currentSlide = index;
+        slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+        
+        // Update active dot
+        dots.forEach((dot, i) => {
+          dot.classList.toggle('active', i === currentSlide);
+        });
+      }
+      
+      // Set up event listeners for dots
+      dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => showSlide(i));
+      });
+      
+      // Set up event listeners for arrows
+      prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
+      nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
+      
+      // Auto-rotate slides every 5 seconds
+      setInterval(() => {
+        showSlide(currentSlide + 1);
+      }, 5000);
+    });
+  </script>
+  
+  <script src="../script.js"></script>
+</body>
+</html> 

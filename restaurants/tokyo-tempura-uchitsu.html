@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tempura Uchitsu - Eastworld Restaurant Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Additional styles specific to restaurant reviews */
+    .restaurant-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+      .restaurant-info {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .restaurant-details {
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .detail-row {
+      display: flex;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+    }
+    
+    .detail-label {
+      font-weight: 600;
+      min-width: 120px;
+      color: #333;
+    }
+    
+    .detail-value {
+      flex: 1;
+      color: #555;
+    }
+    
+    .rating {
+      margin-bottom: 1rem;
+    }
+    
+    .star {
+      color: #ddd;
+      font-size: 1.5rem;
+    }
+    
+    .star.filled {
+      color: #FFD700;
+    }
+    
+    .half-star {
+      position: relative;
+    }
+    
+    .half-star .fas.fa-star-half {
+      color: #FFD700;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    
+    .score-label {
+      margin-left: 0.5rem;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .map-container {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .map-container iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+    }
+    
+    .photos-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .photo-item {
+      border-radius: 8px;
+      overflow: hidden;
+      height: 150px;
+    }
+    
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .photo-item img:hover {
+      transform: scale(1.05);
+    }
+    
+    .review-section {
+      margin: 2rem 0;
+      padding: 2rem;
+      background: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    /* Booking button styles */
+    .booking-button {
+      display: block;
+      background-color: #ff4d4d;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      margin: 1.5rem 0;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    
+    .booking-button:hover {
+      background-color: #e63939;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    /* Review carousel styles */
+    .review-carousel {
+      position: relative;
+      margin: 2rem 0;
+      overflow: hidden;
+      padding: 1rem 0;
+    }
+    
+    .review-slides {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    
+    .review-slide {
+      min-width: 100%;
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .reviewer-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #f0f0f0;
+      padding-bottom: 0.8rem;
+    }
+    
+    .reviewer-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 0.8rem;
+    }
+    
+    .reviewer-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding-top: 0.2rem;
+    }
+    
+    .review-date {
+      color: #888;
+      font-size: 0.75rem;
+      margin-top: 0.1rem;
+    }
+    
+    .review-rating {
+      display: flex;
+      margin-top: 0.2rem;
+    }
+    
+    .review-rating i {
+      font-size: 0.8rem;
+      margin-right: 2px;
+    }
+    
+    .carousel-nav {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+    
+    .carousel-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ddd;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .carousel-dot.active {
+      background: #ff4d4d;
+    }
+    
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.7);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+    
+    .carousel-prev {
+      left: 10px;
+    }
+    
+    .carousel-next {
+      right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../food.html" class="nav-item active">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="content-container">
+    <div class="content-header">
+      <span class="content-category">TEMPURA</span>
+      <h1 class="content-title">Tempura Uchitsu - Michelin-Starred Tempura Artistry</h1>
+      
+      <!-- Rating Section -->
+      <div class="rating">
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="score-label">4.8/5.0</span>
+      </div>
+    </div>
+    
+    <div class="hero-container">
+      <img class="content-hero" src="https://axwwgrkdco.cloudimg.io/v7/__gmpics__/b8c4a6e240e345c5a0a63f1574f0e8f2" alt="Tempura Uchitsu counter" 
+      onerror="this.onerror=null; 
+      this.parentElement.innerHTML = '<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#333;color:white;font-size:1.5rem;text-align:center;padding:2rem;\'>Tempura Uchitsu Tokyo</div>';">
+    </div>
+    
+    <!-- Booking Button -->
+    <a href="#booking-form" class="booking-button">
+      <i class="fas fa-calendar-alt"></i> RESERVE A TABLE
+    </a>
+    
+    <!-- Restaurant Information Section -->
+    <div class="restaurant-info">
+      <div class="restaurant-details">
+        <h2>Restaurant Details</h2>
+        
+        <div class="detail-row">
+          <div class="detail-label">Address:</div>
+          <div class="detail-value">Hatsudai 1-1-7, Shibuya-ku, Tokyo 151-0061, Japan</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Hours:</div>
+          <div class="detail-value">Lunch: 12:00 PM - 2:00 PM<br>Dinner: 5:30 PM - 8:00 PM<br>Closed on Sundays</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Phone:</div>
+          <div class="detail-value">+81 3-3373-4584</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Price Range:</div>
+          <div class="detail-value">¥20,000-30,000 ($140-210) per person for omakase</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Cuisine:</div>
+          <div class="detail-value">Japanese, Tempura</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Reservations:</div>
+          <div class="detail-value">Essential, book 1-2 months in advance</div>
+        </div>
+        
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">How to Get There</h3>
+        <p>From Hatsudai Station:</p>
+        <ul style="margin-bottom: 1rem; padding-left: 1.5rem;">
+          <li>Take the Keio New Line to Hatsudai Station</li>
+          <li>Exit the station and walk approximately 5 minutes north</li>
+          <li>The restaurant is in a small, understated building</li>
+          <li>Look for the simple wooden sign with "内津" (Uchitsu) characters</li>
+        </ul>
+      </div>
+      
+      <div class="map-container">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3240.960817694444!2d139.68382867608883!3d35.68151462739103!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6018f33a81b86f95%3A0x51d0c86e30e4bb6!2sTempura%20Uchitsu!5e0!3m2!1sen!2sus!4v1693230090086!5m2!1sen!2sus" 
+        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+    
+    <div class="content-text">
+      <h2>Tokyo's Tempura Masterpiece</h2>
+      
+      <p>Hidden in a quiet residential neighborhood of Tokyo's Shibuya ward, Tempura Uchitsu stands as one of Japan's most revered tempura specialists. Led by master chef Shinji Uchitsu, who trained for decades under tempura legends before opening his own establishment, this intimate restaurant has earned a coveted Michelin star for its extraordinary dedication to the art of tempura.</p>
+      
+      <p>Tempura might seem simple—ingredients coated in batter and deep-fried—but achieving the lightness, crispness, and perfect balance that define great tempura requires remarkable skill. Chef Uchitsu has mastered this art, creating delicate, ethereal tempura that showcases the natural flavors of seasonal ingredients rather than masking them behind heavy batter.</p>
+      
+      <div class="photos-container">
+        <div class="photo-item">
+          <img src="https://axwwgrkdco.cloudimg.io/v7/__gmpics__/af08cd5ec46e4ca987f9ddec85f7de21" alt="Chef preparing tempura">
+        </div>
+        <div class="photo-item">
+          <img src="https://axwwgrkdco.cloudimg.io/v7/__gmpics__/f21cf6eab1d740fca54c7bbf7f2c9e1e" alt="Tempura course">
+        </div>
+        <div class="photo-item">
+          <img src="https://axwwgrkdco.cloudimg.io/v7/__gmpics__/3efae17f05d346b1b8cf37f13f5bb61b" alt="Shrimp tempura">
+        </div>
+        <div class="photo-item">
+          <img src="https://axwwgrkdco.cloudimg.io/v7/__gmpics__/50fc9fcf09cc48c4be5fb2ca5aa3a534" alt="Vegetable tempura">
+        </div>
+      </div>
+      
+      <h2>The Ultimate Tempura Experience</h2>
+      
+      <p>Dining at Tempura Uchitsu is an intimate affair, with just eight counter seats facing directly onto Chef Uchitsu's cooking station. This setup allows guests to watch the entire tempura-making process from start to finish—the careful preparation of ingredients, the precise temperature management of the oil, and the split-second timing of each piece.</p>
+      
+      <p>The restaurant offers an omakase (chef's choice) menu that progresses through 15-20 pieces of tempura, each timed to be eaten at its perfect moment. Chef Uchitsu uses a special blend of oils and a housemade batter that results in exceptionally light, crisp tempura. The ingredients change with the seasons but might include sweet Hokkaido shrimp, delicate seasonal fish, mountain vegetables, and premium cuts of meat.</p>
+      
+      <p>Between tempura courses, small seasonal side dishes appear, cleansing the palate and providing rhythm to the meal. The tempura is served simply with high-quality salt, freshly grated daikon radish, and occasionally a light dipping sauce, allowing the natural flavors to shine through the gossamer-thin batter.</p>
+      
+      <div class="content-quote">
+        "The essence of tempura is paradoxical—it should be substantial enough to be satisfying, yet light enough to showcase the ingredient within. Our goal is to achieve that perfect moment when the exterior is crisp while the interior remains perfectly cooked but not overdone." - Chef Shinji Uchitsu
+      </div>
+      
+      <!-- User Reviews Carousel -->
+      <h2>Customer Reviews</h2>
+      
+      <div class="review-carousel">
+        <div class="carousel-arrow carousel-prev">
+          <i class="fas fa-chevron-left"></i>
+        </div>
+        
+        <div class="review-slides">
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Daniel K.</div>
+                <div class="review-date">Visited June 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"After trying numerous tempura restaurants across Japan, I can confidently say that Uchitsu stands in a league of its own. The batter is so light it's almost transparent, yet provides the perfect crisp texture that shatters delicately when bitten. What truly distinguishes Uchitsu is Chef Uchitsu's remarkable ability to bring out the natural flavors of each ingredient—whether it's the sweetness of a perfectly fresh shrimp or the earthiness of seasonal mushrooms. We were seated directly at the counter watching Chef Uchitsu work, and the precision in his movements was mesmerizing. Each piece is served the moment it's ready, ensuring optimal temperature and texture. While expensive, this meal was worth every yen for the craftsmanship involved."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Yuki T.</div>
+                <div class="review-date">Visited May 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"As a Japanese food journalist, I've witnessed the evolution of Tokyo's tempura scene over the decades, and Uchitsu represents its pinnacle. Chef Uchitsu's command of temperature control is unparalleled—each piece emerges from the oil at exactly the right moment, creating that magical contrast between crisp exterior and perfectly cooked interior. The spring menu featured bamboo shoots and firefly squid that captured the essence of the season perfectly. What I particularly appreciate is how Chef Uchitsu quietly explains each ingredient and the best way to enjoy it—whether with salt, a light dipping sauce, or with grated daikon. His gentle guidance creates a personalized experience while honoring traditional tempura customs. This is refined Japanese cuisine that celebrates simplicity and perfection."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Michelle S.</div>
+                <div class="review-date">Visited April 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star-half-alt" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"Our evening at Tempura Uchitsu was a revelation that completely redefined my understanding of tempura. Before this experience, I thought of tempura as relatively heavy, but Chef Uchitsu's creations were ethereally light—almost like a savory cloud surrounding each ingredient. The progression of the menu was thoughtfully designed, starting with lighter vegetables and moving to richer seafood. The kakiage (mixed vegetable tempura) was particularly outstanding, with distinct flavors somehow remaining identifiable despite being cooked together. My only small critique would be that the restaurant can feel slightly austere for those unfamiliar with traditional Japanese dining, but the staff make sincere efforts to make non-Japanese speakers feel welcome. If you truly appreciate culinary craftsmanship, this is an essential Tokyo dining experience."</p>
+          </div>
+        </div>
+        
+        <div class="carousel-arrow carousel-next">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+        
+        <div class="carousel-nav">
+          <div class="carousel-dot active"></div>
+          <div class="carousel-dot"></div>
+          <div class="carousel-dot"></div>
+        </div>
+      </div>
+      
+      <h2>Seasonal Specialties</h2>
+      
+      <p>While the menu changes with the seasons, these items frequently appear in their peak season:</p>
+      
+      <ul>
+        <li><strong>Kuruma Ebi (Japanese Tiger Prawn)</strong> - A tempura staple, Uchitsu serves this sweet, meaty prawn with exceptional freshness that highlights its natural flavor</li>
+        <li><strong>Seasonal Fish</strong> - Varying throughout the year, from delicate whiting in winter to rich, oily mackerel in summer</li>
+        <li><strong>Taranome (Angelica Tree Shoots)</strong> - A spring specialty with a distinctive aromatic quality and slight bitterness</li>
+        <li><strong>Anago (Sea Eel)</strong> - Lighter than freshwater eel, perfectly fried to maintain its tender texture</li>
+        <li><strong>Kakiage</strong> - Mixed vegetable tempura that demonstrates Chef Uchitsu's masterful batter technique, with each ingredient retaining its distinct character</li>
+        <li><strong>Kisu (Japanese Whiting)</strong> - A delicate white fish that tests the chef's skill, as it requires precise timing to avoid overcooking</li>
+        <li><strong>Seasonal Mushrooms</strong> - From matsutake in autumn to maitake in winter, each variety is selected at its peak</li>
+      </ul>
+      
+      <div class="review-section">
+        <h2>Eastworld's Review</h2>
+        
+        <h3>Food Quality: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Chef Uchitsu creates tempura of extraordinary delicacy and precision. His masterful control of oil temperature and timing results in tempura that is impossibly light yet deeply satisfying. Each ingredient is sourced at its seasonal peak and treated with reverence.</p>
+        
+        <h3>Technique: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>The level of technical skill on display is awe-inspiring. From the precise cutting of ingredients to the perfectly timed frying process, every aspect demonstrates decades of dedicated practice. The batter itself is a masterpiece—gossamer-thin yet providing ideal crispness.</p>
+        
+        <h3>Atmosphere: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>The intimate counter setting creates an immersive experience where diners can observe every step of the cooking process. The space is minimalist and serene, though some might find it slightly austere. The focus is entirely on the food and the craft.</p>
+        
+        <h3>Service: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Service is attentive yet unobtrusive, with clear explanations provided for each course. The staff are knowledgeable about the ingredients and techniques, and make sincere efforts to accommodate international guests despite the language barrier.</p>
+        
+        <h3>Value: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>At approximately ¥25,000 ($175) per person for dinner, Tempura Uchitsu represents a significant investment. However, considering the extraordinary skill involved, premium ingredients, and the overall experience, it provides fair value for what is arguably Tokyo's finest tempura.</p>
+        
+        <h3>Overall: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Tempura Uchitsu offers a transcendent tempura experience that reveals the extraordinary depth possible in this seemingly simple cooking technique. For culinary enthusiasts seeking to understand the highest expression of Japanese tempura, this is an essential destination.</p>
+      </div>
+      
+      <h2>Tips for Visitors</h2>
+      
+      <ul>
+        <li>Make reservations well in advance—ideally 1-2 months before your visit</li>
+        <li>Request counter seating to observe Chef Uchitsu's remarkable technique</li>
+        <li>Consider a lunch reservation for a slightly more accessible price point</li>
+        <li>Follow the chef's recommendations for how to enjoy each piece—some are best with salt, others with sauce</li>
+        <li>Be punctual for your reservation—the meal follows a precise timing</li>
+        <li>While some English is spoken, having a Japanese speaker make the reservation can be helpful</li>
+        <li>Inform the restaurant of any allergies or dietary restrictions when booking</li>
+        <li>Plan for approximately 2 hours for the full dining experience</li>
+      </ul>
+      
+      <!-- Booking Form -->
+      <div id="booking-form" class="review-section">
+        <h2>Reservation Information</h2>
+        <p>Reservations for Tempura Uchitsu can be made through the following methods:</p>
+        
+        <h3>Booking Contact:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Phone: +81 3-3373-4584 (Japanese language preferred)</li>
+          <li>The restaurant does not have an official website or online booking system</li>
+        </ul>
+        
+        <p>For international guests, we recommend:</p>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Asking your hotel concierge to assist with securing a reservation</li>
+          <li>Using a specialized concierge service like <a href="https://www.tableall.com/" target="_blank" style="color: #ff4d4d;">TableAll</a> (additional fee applies)</li>
+          <li>Booking through the Eastworld concierge service at <a href="mailto:concierge@eastworld.com" style="color: #ff4d4d;">concierge@eastworld.com</a></li>
+        </ul>
+        
+        <p>A credit card is required to secure your reservation. Cancellations must be made at least 3 days in advance to avoid a cancellation fee.</p>
+        
+        <p>When making your reservation, be sure to mention any dietary restrictions, though keep in mind that as a specialized tempura restaurant, major modifications to the menu may not be possible.</p>
+      </div>
+      
+      <a href="../food.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Food Guide</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Review carousel functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const slides = document.querySelector('.review-slides');
+      const dots = document.querySelectorAll('.carousel-dot');
+      const prevBtn = document.querySelector('.carousel-prev');
+      const nextBtn = document.querySelector('.carousel-next');
+      let currentSlide = 0;
+      const totalSlides = document.querySelectorAll('.review-slide').length;
+      
+      // Function to update slide position
+      function showSlide(index) {
+        if (index < 0) index = totalSlides - 1;
+        if (index >= totalSlides) index = 0;
+        
+        currentSlide = index;
+        slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+        
+        // Update active dot
+        dots.forEach((dot, i) => {
+          dot.classList.toggle('active', i === currentSlide);
+        });
+      }
+      
+      // Set up event listeners for dots
+      dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => showSlide(i));
+      });
+      
+      // Set up event listeners for arrows
+      prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
+      nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
+      
+      // Auto-rotate slides every 5 seconds
+      setInterval(() => {
+        showSlide(currentSlide + 1);
+      }, 5000);
+    });
+  </script>
+  
+  <script src="../script.js"></script>
+</body>
+</html> 

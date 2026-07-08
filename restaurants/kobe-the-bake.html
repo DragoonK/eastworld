@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Bake Kobe - Eastworld Restaurant Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Additional styles specific to restaurant reviews */
+    .restaurant-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+      .restaurant-info {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .restaurant-details {
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .detail-row {
+      display: flex;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+    }
+    
+    .detail-label {
+      font-weight: 600;
+      min-width: 120px;
+      color: #333;
+    }
+    
+    .detail-value {
+      flex: 1;
+      color: #555;
+    }
+    
+    .rating {
+      margin-bottom: 1rem;
+    }
+    
+    .star {
+      color: #ddd;
+      font-size: 1.5rem;
+    }
+    
+    .star.filled {
+      color: #FFD700;
+    }
+    
+    .half-star {
+      position: relative;
+    }
+    
+    .half-star .fas.fa-star-half {
+      color: #FFD700;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    
+    .score-label {
+      margin-left: 0.5rem;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .map-container {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .map-container iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+    }
+    
+    .photos-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .photo-item {
+      border-radius: 8px;
+      overflow: hidden;
+      height: 150px;
+    }
+    
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .photo-item img:hover {
+      transform: scale(1.05);
+    }
+    
+    .review-section {
+      margin: 2rem 0;
+      padding: 2rem;
+      background: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    /* Booking button styles */
+    .booking-button {
+      display: block;
+      background-color: #ff4d4d;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      margin: 1.5rem 0;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    
+    .booking-button:hover {
+      background-color: #e63939;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    /* Review carousel styles */
+    .review-carousel {
+      position: relative;
+      margin: 2rem 0;
+      overflow: hidden;
+      padding: 1rem 0;
+    }
+    
+    .review-slides {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    
+    .review-slide {
+      min-width: 100%;
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .reviewer-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #f0f0f0;
+      padding-bottom: 0.8rem;
+    }
+    
+    .reviewer-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 0.8rem;
+    }
+    
+    .reviewer-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding-top: 0.2rem;
+    }
+    
+    .review-date {
+      color: #888;
+      font-size: 0.75rem;
+      margin-top: 0.1rem;
+    }
+    
+    .review-rating {
+      display: flex;
+      margin-top: 0.2rem;
+    }
+    
+    .review-rating i {
+      font-size: 0.8rem;
+      margin-right: 2px;
+    }
+    
+    .carousel-nav {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+    
+    .carousel-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ddd;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .carousel-dot.active {
+      background: #ff4d4d;
+    }
+    
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.7);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+    
+    .carousel-prev {
+      left: 10px;
+    }
+    
+    .carousel-next {
+      right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../food.html" class="nav-item active">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="content-container">
+    <div class="content-header">
+      <span class="content-category">BAR & BAKERY</span>
+      <h1 class="content-title">The Bake Kobe - Innovative Bakery & Bar Concept</h1>
+      
+      <!-- Rating Section -->
+      <div class="rating">
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="score-label">4.8/5.0</span>
+      </div>
+    </div>
+    
+    <div class="hero-container">
+      <img class="content-hero" src="assets/The-Bake-Kobe.png" alt="The Bake Kobe Storefront" 
+      onerror="this.onerror=null; 
+      this.parentElement.innerHTML = '<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#333;color:white;font-size:1.5rem;text-align:center;padding:2rem;\'>The Bake Kobe</div>';">
+    </div>
+    
+    <!-- Booking Button -->
+    <a href="#visitor-info" class="booking-button">
+      <i class="fas fa-info-circle"></i> VISITOR INFORMATION
+    </a>
+    
+    <!-- Restaurant Information Section -->
+    <div class="restaurant-info">
+      <div class="restaurant-details">
+        <h2>Restaurant Details</h2>
+        
+        <div class="detail-row">
+          <div class="detail-label">Address:</div>
+          <div class="detail-value">3-9-2 Sannomiya-cho, Chuo-ku, Kobe 650-0021, Japan</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Hours:</div>
+          <div class="detail-value">
+            10:00 AM - 11:00 PM (Mon-Thu)<br>
+            10:00 AM - 12:00 AM (Fri-Sat)<br>
+            10:00 AM - 9:00 PM (Sun)
+          </div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Phone:</div>
+          <div class="detail-value">+81 78-391-3322</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Price Range:</div>
+          <div class="detail-value">¥800-3,500 ($5-25) per person</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Cuisine:</div>
+          <div class="detail-value">Bakery, Coffee, Cocktails, Contemporary</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Reservations:</div>
+          <div class="detail-value">Accepted for evening service, walk-ins welcome during daytime</div>
+        </div>
+        
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">About The Bake</h3>
+        <p>The Bake Kobe is a unique dual-concept establishment that functions as an artisanal bakery and café by day, transforming into a stylish cocktail bar by night. Located in the heart of Kobe's vibrant Sannomiya district, this trendy spot has gained popularity for its innovative pastries, quality coffee, and creative cocktails, all served in a chic, Instagram-worthy setting.</p>
+      </div>
+      
+      <div class="map-container">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3280.602607253424!2d135.18975487617755!3d34.69372497469073!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60008ee15d3a6a4d%3A0x81c3becc31d5d874!2sSannomiyacho%2C%20Chuo%20Ward%2C%20Kobe%2C%20Hyogo%20650-0021%2C%20Japan!5e0!3m2!1sen!2sus!4v1698120953721!5m2!1sen!2sus" 
+        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+    
+    <div class="content-text">
+      <h2>A Trendy Bakery by Day, Stylish Bar by Night</h2>
+      
+      <p>The Bake Kobe represents Kobe's modern culinary innovation, taking the concept of a bakery and elevating it into something more dynamic and contemporary. This stylish establishment seamlessly transitions from a bright, welcoming bakery café in the morning to a sophisticated cocktail bar as the sun sets, making it a versatile destination for any time of day.</p>
+      
+      <p>The interior design perfectly captures this duality with its minimalist aesthetic – concrete surfaces, strategic lighting, and warm wood accents create a space that feels both industrial and inviting. Carefully curated plants and subtle design elements add color and character to the otherwise monochromatic palette. As evening approaches, the lighting shifts to create a more intimate atmosphere conducive to leisurely drinks and conversation.</p>
+      
+      <div class="photos-container">
+        <div class="photo-item">
+          <img src="https://scontent-lax3-1.cdninstagram.com/v/t51.2885-15/370863592_346362764642889_7723546326903932467_n.jpg?stp=dst-jpg_e35_s1080x1080&_nc_ht=scontent-lax3-1.cdninstagram.com&_nc_cat=111&_nc_ohc=rWALK99zc0MAX9rGIvi&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AfCDWLkVvmNfPWQ_nS8ey_C9wlKrlPcz9JdcqLnSGEZCxw&oe=665E6EC5&_nc_sid=8b3546" alt="Interior of The Bake">
+        </div>
+        <div class="photo-item">
+          <img src="https://scontent-lax3-1.cdninstagram.com/v/t51.2885-15/379379307_858782742676037_1788926459243307456_n.jpg?stp=dst-jpg_e35_s1080x1080&_nc_ht=scontent-lax3-1.cdninstagram.com&_nc_cat=107&_nc_ohc=TsYpz78eEvUAX9aTGlx&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AfApxd1nQcMRXEd7bY5ADBq7MmTrUZGpd9i0F3X1UglVUQ&oe=665F25BA&_nc_sid=8b3546" alt="Pastries at The Bake">
+        </div>
+        <div class="photo-item">
+          <img src="https://scontent-lax3-1.cdninstagram.com/v/t51.2885-15/370921366_1032196511339430_4661349051759598358_n.jpg?stp=dst-jpg_e35_s1080x1080&_nc_ht=scontent-lax3-1.cdninstagram.com&_nc_cat=109&_nc_ohc=YHR5O1uASRsAX_W6VFr&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AfCPZ-iK3wnolKB1AImN_Pza7Gm2N-VtAMfZz2y8WokkGQ&oe=665DCEE9&_nc_sid=8b3546" alt="Cocktails at The Bake">
+        </div>
+        <div class="photo-item">
+          <img src="https://scontent-lax3-1.cdninstagram.com/v/t51.2885-15/367622729_835290931461396_3536051120245608349_n.jpg?stp=dst-jpg_e35_s1080x1080&_nc_ht=scontent-lax3-1.cdninstagram.com&_nc_cat=109&_nc_ohc=NKXL4H9BK8kAX-Ow5sG&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AfAA05P4XzPEUmM3vQB0qVwbnxqlQV-Xnr-kcMBB-S9oCA&oe=665D82D4&_nc_sid=8b3546" alt="Coffee at The Bake">
+        </div>
+      </div>
+      
+      <h2>Innovative Baked Goods and Artisanal Beverages</h2>
+      
+      <p>The Bake Kobe has earned a loyal following for its creative approach to traditional bakery items. The pastry chefs here blend Japanese precision with European techniques, resulting in unique offerings that are as beautiful as they are delicious. Seasonal ingredients feature prominently, with creations that showcase the best of each season – from sakura-infused pastries in spring to chestnut and sweet potato creations in autumn.</p>
+      
+      <p>Equal attention is given to their beverage program, which evolves throughout the day. Mornings bring meticulously prepared specialty coffee from carefully selected beans, while afternoons might see customers enjoying refreshing original tea creations. As evening approaches, the focus shifts to an impressive array of craft cocktails, many of which creatively incorporate bakery elements like housemade infusions, dehydrated fruits, or complementary flavor profiles that echo their pastry offerings.</p>
+      
+      <div class="content-quote">
+        "We wanted to create a space that evolves with the day – somewhere you could enjoy a perfect croissant and coffee in the morning, meet friends for afternoon tea, or unwind with creative cocktails at night. The Bake is about experiencing quality in different forms throughout the day." - The Bake Kobe Team
+      </div>
+      
+      <!-- User Reviews Carousel -->
+      <h2>Customer Reviews</h2>
+      
+      <div class="review-carousel">
+        <div class="carousel-arrow carousel-prev">
+          <i class="fas fa-chevron-left"></i>
+        </div>
+        
+        <div class="review-slides">
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Emma L.</div>
+                <div class="review-date">Visited April 2024</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"I'm still dreaming about their croissants! The Bake has this amazing way of blending Japanese and European baking techniques that results in some of the best pastries I've had anywhere. We visited in the morning for coffee and then came back in the evening to try their cocktails - it's like two completely different experiences in the same beautiful space. Their sakura-infused gin cocktail paired perfectly with a slice of their signature chocolate cake. The staff was incredibly knowledgeable about both their baked goods and their drinks. This place is a must-visit in Kobe!"</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Kenji M.</div>
+                <div class="review-date">Visited March 2024</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star-half-alt" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"As a local, The Bake has become my go-to spot for both client meetings during the day and after-work drinks. Their attention to detail is impressive - from the perfectly laminated pastries to their precisely balanced cocktails. The atmosphere transforms so naturally from day to night. My personal favorites are their cheese danish in the morning and their yuzu-infused whiskey sour in the evening. It can get quite busy on weekends, but the quality makes the wait worthwhile. The staff remembers regulars and always has great recommendations based on your preferences."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Alex J.</div>
+                <div class="review-date">Visited February 2024</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"I discovered The Bake while exploring Kobe and instantly fell in love with their concept. The seamless transition from bakery to bar is genius! Their pastries are works of art - visually stunning and delicious. I particularly loved their matcha croissant - the perfect balance of buttery layers and earthy matcha. When I returned in the evening, the vibe had completely transformed into this cool, intimate space. Their signature cocktail with house-infused Earl Grey gin was exceptional. The staff was friendly and happy to explain their process and ingredients. This place definitely deserves all the Instagram hype it gets!"</p>
+          </div>
+        </div>
+        
+        <div class="carousel-arrow carousel-next">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+        
+        <div class="carousel-nav">
+          <div class="carousel-dot active"></div>
+          <div class="carousel-dot"></div>
+          <div class="carousel-dot"></div>
+        </div>
+      </div>
+      
+      <h2>Menu Highlights</h2>
+      
+      <p>The Bake Kobe offers distinct menu items depending on the time of day, showcasing their versatility and commitment to quality:</p>
+      
+      <h3>Bakery Highlights (Morning & Afternoon)</h3>
+      <ul>
+        <li><strong>Signature Chocolate-Orange Croissant (¥580)</strong> - Buttery layers with dark chocolate and orange zest</li>
+        <li><strong>Matcha Cream Danish (¥620)</strong> - Flaky pastry filled with premium Uji matcha cream</li>
+        <li><strong>Seasonal Fruit Tart (¥780)</strong> - Changes regularly based on the best available fruits</li>
+        <li><strong>Honey Lavender Pound Cake (¥540)</strong> - Made with local honey and subtle lavender notes</li>
+        <li><strong>Artisanal Sourdough Bread (¥950)</strong> - Limited daily batches, available until sold out</li>
+        <li><strong>Single Origin Pour-Over Coffee (¥650)</strong> - Rotating selection of premium beans</li>
+      </ul>
+      
+      <h3>Bar Highlights (Evening)</h3>
+      <ul>
+        <li><strong>The Bake Old Fashioned (¥1,300)</strong> - Japanese whisky with house-made brown butter syrup</li>
+        <li><strong>Yuzu Gin Fizz (¥1,400)</strong> - Craft gin, fresh yuzu, egg white, and soda</li>
+        <li><strong>Hojicha Espresso Martini (¥1,500)</strong> - A Japanese twist on the classic with roasted green tea</li>
+        <li><strong>Seasonal Berry Shrub (¥1,200)</strong> - House-fermented berries with premium spirits</li>
+        <li><strong>Small Plates & Charcuterie (¥1,200-2,800)</strong> - Perfect for sharing alongside cocktails</li>
+        <li><strong>Dessert Cocktail Pairings (¥2,300)</strong> - Mini dessert served with a complementary cocktail</li>
+      </ul>
+      
+      <div class="review-section">
+        <h2>Eastworld's Review</h2>
+        
+        <h3>Food Quality: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>The Bake excels in both their pastry program and evening small plates. The technical execution of their baked goods is impeccable – perfectly laminated pastries, balanced flavors, and innovative combinations that reflect both European techniques and Japanese sensibilities. Their commitment to quality ingredients is evident in every bite.</p>
+        
+        <h3>Atmosphere: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Few establishments manage to create different atmospheres throughout the day as successfully as The Bake. The space transforms effortlessly from a bright, energetic bakery café to an intimate, sophisticated cocktail bar. The thoughtful interior design with its minimalist aesthetic provides the perfect backdrop for both experiences.</p>
+        
+        <h3>Service: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>The staff demonstrates extensive knowledge of both their bakery offerings and cocktail program. Service is attentive without being intrusive, and they excel at making recommendations based on customer preferences. During peak times, there can occasionally be slight delays, but the quality of interaction remains consistently high.</p>
+        
+        <h3>Value: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>While prices are slightly higher than average for Kobe, the quality and creativity justify the cost. The attention to detail, premium ingredients, and unique concepts make The Bake a worthwhile splurge. Their coffee program offers particularly good value considering the quality.</p>
+        
+        <h3>Location: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Situated in the heart of Sannomiya, The Bake is easily accessible from major transit hubs and shopping areas. Its central location makes it convenient for both locals and tourists, serving as either a destination in itself or a perfect stop during a day of exploring Kobe.</p>
+        
+        <h3>Overall: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>The Bake represents the best of Kobe's modern culinary innovation – a thoughtful blend of tradition and contemporary creativity. The dual-concept establishment successfully delivers excellence across all its offerings, from morning pastries to evening cocktails. It exemplifies the sophisticated yet approachable dining experience that makes Kobe's food scene so special.</p>
+      </div>
+      
+      <h2>Tips for Visitors</h2>
+      
+      <ul>
+        <li>For the best selection of pastries, arrive before noon as popular items often sell out</li>
+        <li>Weekday mornings are quieter if you prefer a more relaxed atmosphere</li>
+        <li>Reservations are recommended for evening cocktails, especially on weekends</li>
+        <li>Follow their Instagram (@thebake.boozys) for updates on seasonal offerings and special events</li>
+        <li>The transition from café to bar typically happens around 5:00 PM, with a slightly different menu available</li>
+        <li>Try their pastry and cocktail pairings for a unique experience that showcases their concept</li>
+        <li>The outdoor seating area is lovely during spring and autumn months</li>
+        <li>Ask the staff for recommendations – they're knowledgeable about both food and drinks</li>
+      </ul>
+      
+      <!-- Visitor Information -->
+      <div id="visitor-info" class="review-section">
+        <h2>Visitor Information</h2>
+        <p>Here's what you need to know when planning your visit to The Bake Kobe:</p>
+        
+        <h3>Location & Access:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Address: 3-9-2 Sannomiya-cho, Chuo-ku, Kobe 650-0021, Japan</li>
+          <li>5-minute walk from Sannomiya Station (JR, Hankyu, Hanshin lines)</li>
+          <li>7-minute walk from Kobe-Sannomiya Station (Kobe Municipal Subway)</li>
+          <li>Located near the eastern side of Center Gai shopping street</li>
+        </ul>
+        
+        <h3>Hours of Operation:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Monday-Thursday: 10:00 AM - 11:00 PM</li>
+          <li>Friday-Saturday: 10:00 AM - 12:00 AM</li>
+          <li>Sunday: 10:00 AM - 9:00 PM</li>
+          <li>The menu transitions from bakery to bar offerings around 5:00 PM daily</li>
+          <li>Kitchen for evening small plates closes 1 hour before closing time</li>
+        </ul>
+        
+        <h3>Facilities:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Free WiFi available for customers</li>
+          <li>Outdoor seating available (weather permitting)</li>
+          <li>Wheelchair accessible</li>
+          <li>Restrooms on premises</li>
+          <li>Non-smoking establishment</li>
+          <li>Take-out available for bakery items</li>
+          <li>Small merchandise corner with house-blended teas and coffee beans</li>
+        </ul>
+        
+        <h3>Additional Information:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Reservations recommended for evening service (especially weekends)</li>
+          <li>All major credit cards accepted</li>
+          <li>English menu available</li>
+          <li>Some staff speak English</li>
+          <li>Instagram: <a href="https://www.instagram.com/thebake.boozys" target="_blank" style="color: #ff4d4d;">@thebake.boozys</a></li>
+        </ul>
+        
+        <p>After visiting The Bake, consider exploring the surrounding Sannomiya area, Kobe's vibrant downtown district. You'll find excellent shopping at nearby Center Gai and Motomachi Shopping Street, or venture slightly north to see the historic Kitano Ijinkan district with its preserved foreign residences.</p>
+      </div>
+      
+      <a href="../food.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Food Guide</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Review carousel functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const slides = document.querySelector('.review-slides');
+      const dots = document.querySelectorAll('.carousel-dot');
+      const prevBtn = document.querySelector('.carousel-prev');
+      const nextBtn = document.querySelector('.carousel-next');
+      let currentSlide = 0;
+      const totalSlides = document.querySelectorAll('.review-slide').length;
+      
+      // Function to update slide position
+      function showSlide(index) {
+        if (index < 0) index = totalSlides - 1;
+        if (index >= totalSlides) index = 0;
+        
+        currentSlide = index;
+        slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+        
+        // Update active dot
+        dots.forEach((dot, i) => {
+          dot.classList.toggle('active', i === currentSlide);
+        });
+      }
+      
+      // Set up event listeners for dots
+      dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => showSlide(i));
+      });
+      
+      // Set up event listeners for arrows
+      prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
+      nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
+      
+      // Auto-rotate slides every 5 seconds
+      setInterval(() => {
+        showSlide(currentSlide + 1);
+      }, 5000);
+    });
+  </script>
+  
+  <script src="../script.js"></script>
+</body>
+</html> 

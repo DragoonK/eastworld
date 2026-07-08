@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kichi Kichi Omurice - Eastworld Restaurant Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Additional styles specific to restaurant reviews */
+    .restaurant-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+      .restaurant-info {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .restaurant-details {
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .detail-row {
+      display: flex;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+    }
+    
+    .detail-label {
+      font-weight: 600;
+      min-width: 120px;
+      color: #333;
+    }
+    
+    .detail-value {
+      flex: 1;
+      color: #555;
+    }
+    
+    .rating {
+      margin-bottom: 1rem;
+    }
+    
+    .star {
+      color: #ddd;
+      font-size: 1.5rem;
+    }
+    
+    .star.filled {
+      color: #FFD700;
+    }
+    
+    .half-star {
+      position: relative;
+    }
+    
+    .half-star .fas.fa-star-half {
+      color: #FFD700;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    
+    .score-label {
+      margin-left: 0.5rem;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .map-container {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .map-container iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+    }
+    
+    .photos-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .photo-item {
+      border-radius: 8px;
+      overflow: hidden;
+      height: 150px;
+    }
+    
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .photo-item img:hover {
+      transform: scale(1.05);
+    }
+    
+    .review-section {
+      margin: 2rem 0;
+      padding: 2rem;
+      background: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    /* Booking button styles */
+    .booking-button {
+      display: block;
+      background-color: #ff4d4d;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      margin: 1.5rem 0;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    
+    .booking-button:hover {
+      background-color: #e63939;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    /* Review carousel styles */
+    .review-carousel {
+      position: relative;
+      margin: 2rem 0;
+      overflow: hidden;
+      padding: 1rem 0;
+    }
+    
+    .review-slides {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    
+    .review-slide {
+      min-width: 100%;
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .reviewer-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #f0f0f0;
+      padding-bottom: 0.8rem;
+    }
+    
+    .reviewer-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 0.8rem;
+    }
+    
+    .reviewer-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding-top: 0.2rem;
+    }
+    
+    .review-date {
+      color: #888;
+      font-size: 0.75rem;
+      margin-top: 0.1rem;
+    }
+    
+    .review-rating {
+      display: flex;
+      margin-top: 0.2rem;
+    }
+    
+    .review-rating i {
+      font-size: 0.8rem;
+      margin-right: 2px;
+    }
+    
+    .carousel-nav {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+    
+    .carousel-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ddd;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .carousel-dot.active {
+      background: #ff4d4d;
+    }
+    
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.7);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+    
+    .carousel-prev {
+      left: 10px;
+    }
+    
+    .carousel-next {
+      right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../food.html" class="nav-item active">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="content-container">
+    <div class="content-header">
+      <span class="content-category">YOSHOKU</span>
+      <h1 class="content-title">Kichi Kichi Omurice - The Legendary Fluffy Omelette</h1>
+      
+      <!-- Rating Section -->
+      <div class="rating">
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="score-label">4.8/5.0</span>
+      </div>
+    </div>
+    
+    <div class="hero-container">
+      <img class="content-hero" src="https://www.kyotostation.com/wp-content/uploads/2022/08/Kichi-Kichi-Omelette-01.jpg" alt="Kichi Kichi Omurice" 
+      onerror="this.onerror=null; 
+      this.parentElement.innerHTML = '<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#333;color:white;font-size:1.5rem;text-align:center;padding:2rem;\'>Kichi Kichi Omurice</div>';">
+    </div>
+    
+    <!-- Booking Button -->
+    <a href="#booking-form" class="booking-button">
+      <i class="fas fa-calendar-alt"></i> RESERVE A TABLE
+    </a>
+    
+    <!-- Restaurant Information Section -->
+    <div class="restaurant-info">
+      <div class="restaurant-details">
+        <h2>Restaurant Details</h2>
+        
+        <div class="detail-row">
+          <div class="detail-label">Address:</div>
+          <div class="detail-value">185-4 Zaimokucho, Sanjo Pontocho Higashi-iru, Nakagyo-ku, Kyoto 604-8017, Japan</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Hours:</div>
+          <div class="detail-value">5:00 PM - 10:00 PM (Last order at 9:30 PM)<br>Closed on Wednesdays</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Phone:</div>
+          <div class="detail-value">+81 75-211-1484</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Price Range:</div>
+          <div class="detail-value">¥3,000-4,000 ($25-35) per person</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Cuisine:</div>
+          <div class="detail-value">Yoshoku (Western-inspired Japanese), Omurice</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Reservations:</div>
+          <div class="detail-value">Essential, must be made 1-2 months in advance</div>
+        </div>
+        
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">How to Get There</h3>
+        <p>From Kyoto Station:</p>
+        <ul style="margin-bottom: 1rem; padding-left: 1.5rem;">
+          <li>Take the Karasuma Subway Line to Sanjo Station</li>
+          <li>Exit the station and walk east along Sanjo Street for about 10 minutes</li>
+          <li>Turn right when you reach Pontocho Alley</li>
+          <li>Kichi Kichi is located on the east side of Pontocho</li>
+        </ul>
+      </div>
+      
+      <div class="map-container">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3267.861559115847!2d135.76835497608984!3d35.00833377384594!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x600108935fffff01%3A0x371c8251c8c30a36!2sKichi%20Kichi!5e0!3m2!1sen!2sjp!4v1693313096483!5m2!1sen!2sjp" 
+        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+    
+    <div class="content-text">
+      <h2>Internet Fame and Culinary Artistry</h2>
+      
+      <p>Kichi Kichi has become an international sensation thanks to viral videos of chef-owner Motokichi Yukimura's theatrical omurice preparation. What was once a small neighborhood restaurant hidden in Kyoto's atmospheric Pontocho district is now a must-visit destination for food enthusiasts from around the world.</p>
+      
+      <p>The restaurant specializes in omurice—a beloved yoshoku (Western-influenced Japanese) dish consisting of seasoned fried rice topped with a delicate omelette. While omurice can be found throughout Japan, Chef Yukimura's version stands apart for both its exquisite technique and showmanship.</p>
+      
+      <div class="photos-container">
+        <div class="photo-item">
+          <img src="https://soranews24.com/wp-content/uploads/sites/3/2019/06/OK-6.png" alt="Chef Yukimura preparing omurice">
+        </div>
+        <div class="photo-item">
+          <img src="https://www.japan-guide.com/g22/2158_03.jpg" alt="Omurice with demi-glace sauce">
+        </div>
+        <div class="photo-item">
+          <img src="https://static.independent.co.uk/s3fs-public/thumbnails/image/2017/08/03/15/chef-yukimura-gif-1.gif" alt="The famous omelette slice">
+        </div>
+        <div class="photo-item">
+          <img src="https://www.tsunagujapan.com/wp-content/uploads/2019/09/Kichikichi-1.jpg" alt="Interior of Kichi Kichi restaurant">
+        </div>
+      </div>
+      
+      <h2>The Art of Performance Cooking</h2>
+      
+      <p>What makes dining at Kichi Kichi a unique experience is Chef Yukimura's performative approach to cooking. Dressed in his signature bow tie and suspenders, he prepares each omurice with flair and precision at the open counter while engaging with guests.</p>
+      
+      <p>The highlight of the performance is the creation of the omelette itself. Using a special technique that requires years of practice, Chef Yukimura cooks the eggs to a precise consistency—firm enough to hold their shape but still remarkably soft and creamy inside. With dramatic flourish, he places the golden dome of the omelette atop the rice and makes a precise incision, causing it to unfold and blanket the rice in a cascade of silky egg.</p>
+      
+      <p>The final touch is a generous pour of rich demi-glace sauce, which complements the mild flavor of the eggs and the savory-sweet notes of the rice.</p>
+      
+      <div class="content-quote">
+        "I don't just serve omurice—I serve memories. When people see the omelette unfold, their faces light up with childlike joy. That moment of pure happiness is why I continue to perfect my craft after all these years." - Chef Motokichi Yukimura
+      </div>
+      
+      <!-- User Reviews Carousel -->
+      <h2>Customer Reviews</h2>
+      
+      <div class="review-carousel">
+        <div class="carousel-arrow carousel-prev">
+          <i class="fas fa-chevron-left"></i>
+        </div>
+        
+        <div class="review-slides">
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Jennifer P.</div>
+                <div class="review-date">Visited May 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"Dining at Kichi Kichi was the highlight of our trip to Kyoto! Chef Yukimura is not only a masterful cook but a wonderful host with a charming sense of humor. We managed to book seats at the counter (definitely request these when making a reservation) and had a perfect view of his famous omurice preparation. The moment when he sliced the omelette and it draped over the rice was even more magical in person than in videos. The taste lived up to the presentation—the eggs were impossibly light and creamy, and the demi-glace sauce added rich depth to every bite. Worth every effort to secure a reservation."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Makoto S.</div>
+                <div class="review-date">Visited February 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"As a Japanese who grew up eating omurice, I was curious if Kichi Kichi could justify its fame and price point. I'm happy to report that it absolutely does. Chef Yukimura has elevated a casual comfort food into something truly special. The rice base is perfectly seasoned with a hint of sweetness that balances the rich demi-glace. What impressed me most was the consistent quality—every customer receives the same meticulous attention to detail. Despite the restaurant's popularity with tourists, it maintains an authentic feeling and hasn't compromised on quality. A rare example of a place that deserves its viral status."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Daniel K.</div>
+                <div class="review-date">Visited April 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="far fa-star" style="color: #ddd;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"The omurice at Kichi Kichi is undeniably excellent—the eggs are exactly as soft and heavenly as they appear in videos, and the chicken rice underneath is flavorful and well-seasoned. Chef Yukimura is a consummate host who makes each guest feel special despite the language barrier. My only hesitation in giving a perfect rating is the price point relative to what omurice typically costs in Japan, but you're paying for both the food and the experience. I also appreciated that they offer other dishes beyond the signature omurice—the hamburger steak was fantastic as well. Book well in advance; we secured our reservation three months ahead."</p>
+          </div>
+        </div>
+        
+        <div class="carousel-arrow carousel-next">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+        
+        <div class="carousel-nav">
+          <div class="carousel-dot active"></div>
+          <div class="carousel-dot"></div>
+          <div class="carousel-dot"></div>
+        </div>
+      </div>
+      
+      <h2>Menu Highlights</h2>
+      
+      <p>While Kichi Kichi's fame rests primarily on its signature omurice, the restaurant offers a concise menu of other yoshoku classics. All dishes showcase Chef Yukimura's meticulous approach to Western-inspired Japanese comfort food:</p>
+      
+      <ul>
+        <li><strong>Classic Omurice</strong> - ¥2,700 - The signature dish featuring chicken rice topped with the famous fluffy omelette and demi-glace sauce</li>
+        <li><strong>Tomato Sauce Omurice</strong> - ¥2,700 - A variation with tangy tomato sauce instead of demi-glace</li>
+        <li><strong>Hamburg Steak</strong> - ¥2,900 - Japanese-style hamburger served with demi-glace and seasonal vegetables</li>
+        <li><strong>Hayashi Rice</strong> - ¥2,500 - Beef stew with onions in a rich red wine sauce served with rice</li>
+        <li><strong>Crème Caramel</strong> - ¥800 - A silky smooth classic dessert that showcases Chef Yukimura's mastery of perfect texture</li>
+      </ul>
+      
+      <p>Beverage options include:</p>
+      <ul>
+        <li>Japanese Beer - ¥700</li>
+        <li>House Wine (Red/White) - ¥900 per glass</li>
+        <li>Sake Selection - from ¥1,000</li>
+        <li>Soft Drinks - ¥500</li>
+      </ul>
+      
+      <div class="review-section">
+        <h2>Eastworld's Review</h2>
+        
+        <h3>Food Quality: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>The legendary omurice deserves its reputation—the textural contrast between the silky, almost custard-like eggs and the perfectly cooked rice creates a harmonious dish that elevates comfort food to an art form. The demi-glace sauce adds depth without overwhelming the delicate flavor of the eggs.</p>
+        
+        <h3>Performance Value: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Chef Yukimura's theatrical preparation adds immeasurable value to the dining experience. His genuine passion for his craft and interaction with guests creates moments of joy that extend far beyond the food itself.</p>
+        
+        <h3>Atmosphere: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>The tiny restaurant has a charming, intimate atmosphere. With only 10 seats around the counter, every guest has a front-row view of the action. One star deducted only for the cramped quarters, which can feel a bit tight for larger diners.</p>
+        
+        <h3>Service: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Despite the language barrier, Chef Yukimura and his staff provide warm, attentive service. They readily accommodate dietary restrictions when notified in advance and ensure every guest feels welcome.</p>
+        
+        <h3>Value: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>At ¥2,700 for the signature omurice, Kichi Kichi's prices are high compared to standard omurice elsewhere. However, considering the quality, craftsmanship, and entertainment value, most guests feel they received a fair value for their investment.</p>
+        
+        <h3>Overall: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Kichi Kichi offers a quintessential example of Japanese attention to detail and hospitality. For travelers to Kyoto seeking not just a meal but a memorable culinary experience, this tiny restaurant delivers outsized joy and satisfaction.</p>
+      </div>
+      
+      <h2>Tips for Visitors</h2>
+      
+      <ul>
+        <li>Make reservations 1-2 months in advance; the restaurant only seats 10 people at a time</li>
+        <li>Request counter seating specifically for the best view of Chef Yukimura's performance</li>
+        <li>The restaurant is small and can be difficult to find; allow extra time to locate it</li>
+        <li>Consider dining early in your Kyoto trip in case you want to return for a second visit</li>
+        <li>While the chef speaks limited English, he communicates effectively through gestures and simple phrases</li>
+        <li>Photography is welcome, but be respectful of other diners' experience</li>
+        <li>Come with an appetite—portions are generous</li>
+        <li>International credit cards are accepted</li>
+      </ul>
+      
+      <!-- Booking Form -->
+      <div id="booking-form" class="review-section">
+        <h2>Reservation Information</h2>
+        <p>Reservations for Kichi Kichi are essential and can be made by phone or through your hotel concierge. Due to high demand, booking 1-2 months in advance is recommended.</p>
+        
+        <h3>Booking Contact:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Phone: +81 75-211-1484 (Japanese language only)</li>
+          <li>Hours for phone reservations: 2:00 PM - 5:00 PM daily except Wednesdays</li>
+        </ul>
+        
+        <p>For English-speaking guests, we recommend:</p>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Asking your hotel concierge to make the reservation on your behalf</li>
+          <li>Using a reservation service like <a href="https://www.tableall.com/" target="_blank" style="color: #ff4d4d;">TableAll</a> (additional fee applies)</li>
+          <li>Contacting the Eastworld concierge service at <a href="mailto:concierge@eastworld.com" style="color: #ff4d4d;">concierge@eastworld.com</a></li>
+        </ul>
+        
+        <p>When making reservations, specify if you prefer counter seating (recommended for the full experience) and be prepared to provide your credit card information for confirmation.</p>
+      </div>
+      
+      <a href="../food.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Food Guide</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Review carousel functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const slides = document.querySelector('.review-slides');
+      const dots = document.querySelectorAll('.carousel-dot');
+      const prevBtn = document.querySelector('.carousel-prev');
+      const nextBtn = document.querySelector('.carousel-next');
+      let currentSlide = 0;
+      const totalSlides = document.querySelectorAll('.review-slide').length;
+      
+      // Function to update slide position
+      function showSlide(index) {
+        if (index < 0) index = totalSlides - 1;
+        if (index >= totalSlides) index = 0;
+        
+        currentSlide = index;
+        slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+        
+        // Update active dot
+        dots.forEach((dot, i) => {
+          dot.classList.toggle('active', i === currentSlide);
+        });
+      }
+      
+      // Set up event listeners for dots
+      dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => showSlide(i));
+      });
+      
+      // Set up event listeners for arrows
+      prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
+      nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
+      
+      // Auto-rotate slides every 5 seconds
+      setInterval(() => {
+        showSlide(currentSlide + 1);
+      }, 5000);
+    });
+  </script>
+  
+  <script src="../script.js"></script>
+</body>
+</html> 

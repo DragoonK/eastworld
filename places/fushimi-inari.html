@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fushimi Inari Taisha - Eastworld Wonders</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Wonder page specific styles */
+    .wonder-hero {
+      height: 70vh;
+      background-image: url('https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+    }
+    
+    .wonder-hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+    }
+    
+    .wonder-hero-content {
+      position: relative;
+      z-index: 2;
+      padding: 3rem;
+      width: 100%;
+      color: white;
+    }
+    
+    .wonder-title {
+      font-size: 3.5rem;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+    
+    .wonder-location {
+      display: flex;
+      align-items: center;
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+    }
+    
+    .wonder-location i {
+      margin-right: 0.5rem;
+    }
+    
+    .wonder-meta {
+      display: flex;
+      gap: 2rem;
+      margin-top: 1.5rem;
+    }
+    
+    .wonder-meta-item {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .meta-label {
+      font-size: 0.9rem;
+      opacity: 0.8;
+      margin-bottom: 0.3rem;
+    }
+    
+    .meta-value {
+      font-size: 1.2rem;
+      font-weight: 500;
+    }
+    
+    .wonder-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+    
+    .wonder-section {
+      margin-bottom: 4rem;
+    }
+    
+    .section-title {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      padding-bottom: 0.8rem;
+    }
+    
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 70px;
+      height: 3px;
+      background-color: #000;
+    }
+    
+    .wonder-text {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: #333;
+      margin-bottom: 1.5rem;
+    }
+    
+    .wonder-quote {
+      font-style: italic;
+      font-size: 1.2rem;
+      margin: 2rem 0;
+      padding: 1.5rem 2.5rem;
+      border-left: 4px solid #000;
+      background-color: #f8f8f8;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    
+    .wonder-image-container {
+      margin: 2.5rem 0;
+    }
+    
+    .wonder-image {
+      width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+    }
+    
+    .caption {
+      font-size: 0.95rem;
+      color: #555;
+      margin-top: 0.8rem;
+      text-align: center;
+      font-style: italic;
+    }
+    
+    .facts-container {
+      background-color: #f5f5f5;
+      padding: 2.5rem;
+      border-radius: 10px;
+      margin: 3rem 0;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    
+    .facts-title {
+      font-size: 1.8rem;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+    
+    .facts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1.8rem;
+    }
+    
+    .fact-item {
+      padding: 1.8rem;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .fact-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 14px rgba(0,0,0,0.1);
+    }
+    
+    .fact-icon {
+      font-size: 2.2rem;
+      margin-bottom: 1.2rem;
+      color: #444;
+    }
+    
+    .fact-title {
+      font-size: 1.2rem;
+      margin-bottom: 0.8rem;
+      font-weight: 600;
+    }
+    
+    .fact-text {
+      font-size: 1rem;
+      color: #555;
+      line-height: 1.6;
+    }
+    
+    .visitor-info-container {
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      padding: 3rem;
+      border-radius: 12px;
+      margin: 4rem 0;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .visitor-info-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 8px;
+      background: linear-gradient(90deg, #e66465, #9198e5);
+    }
+    
+    .visitor-info-title {
+      font-size: 2rem;
+      margin-bottom: 2rem;
+      text-align: center;
+      color: #333;
+    }
+    
+    .visitor-info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+    
+    .visitor-info-item {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .visitor-info-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    }
+    
+    .info-icon {
+      font-size: 2.2rem;
+      margin-bottom: 1.5rem;
+      color: #555;
+      display: block;
+      text-align: center;
+    }
+    
+    .info-title {
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+      text-align: center;
+      color: #333;
+      font-weight: 600;
+    }
+    
+    .info-content {
+      font-size: 1rem;
+      color: #555;
+      line-height: 1.7;
+    }
+    
+    .info-list {
+      list-style-type: none;
+      padding: 0;
+      margin: 1rem 0;
+    }
+    
+    .info-list li {
+      padding: 0.6rem 0;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .info-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .ticket-category {
+      font-weight: 600;
+    }
+    
+    .transportation-options {
+      margin-top: 1.5rem;
+    }
+    
+    .transport-option {
+      margin-bottom: 1.2rem;
+      padding-bottom: 1.2rem;
+      border-bottom: 1px dashed #ddd;
+    }
+    
+    .transport-option:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    
+    .transport-name {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+    }
+    
+    .transport-name i {
+      margin-right: 0.8rem;
+      color: #666;
+    }
+    
+    .transport-details {
+      color: #666;
+      margin-left: 2rem;
+      font-size: 0.95rem;
+    }
+    
+    .tips-container {
+      background-color: #fff8e1;
+      padding: 2.5rem;
+      border-radius: 10px;
+      margin: 3rem 0;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      border-left: 5px solid #ffd54f;
+    }
+    
+    .tips-title {
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      color: #333;
+    }
+    
+    .tips-list {
+      list-style-type: none;
+      padding: 0;
+    }
+    
+    .tips-list li {
+      padding: 1rem 0;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      display: flex;
+      align-items: flex-start;
+    }
+    
+    .tips-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .tips-list li i {
+      color: #ffc107;
+      margin-right: 1rem;
+      font-size: 1.2rem;
+      margin-top: 0.2rem;
+    }
+    
+    .cta-section {
+      text-align: center;
+      margin: 5rem 0;
+      padding: 3.5rem;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    }
+    
+    .cta-title {
+      font-size: 2.2rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .cta-text {
+      font-size: 1.2rem;
+      margin-bottom: 2.5rem;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.7;
+    }
+    
+    .cta-btn {
+      display: inline-block;
+      background-color: #000;
+      color: white;
+      padding: 1.2rem 2.5rem;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      letter-spacing: 1px;
+    }
+    
+    .cta-btn:hover {
+      background-color: #333;
+      transform: translateY(-5px);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+    }
+    
+    .related-section {
+      margin: 5rem 0;
+    }
+    
+    .related-title {
+      font-size: 2rem;
+      margin-bottom: 2.5rem;
+      text-align: center;
+      position: relative;
+      padding-bottom: 1rem;
+    }
+    
+    .related-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background-color: #000;
+    }
+    
+    .related-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2.5rem;
+    }
+    
+    .related-card {
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .related-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.18);
+    }
+    
+    .related-img {
+      height: 220px;
+      width: 100%;
+      object-fit: cover;
+    }
+    
+    .related-content {
+      padding: 1.8rem;
+    }
+    
+    .related-category {
+      font-size: 0.85rem;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 0.8rem;
+      font-weight: 600;
+    }
+    
+    .related-card-title {
+      font-size: 1.3rem;
+      margin-bottom: 0.8rem;
+      line-height: 1.4;
+    }
+    
+    .related-description {
+      font-size: 0.95rem;
+      color: #555;
+      line-height: 1.6;
+    }
+    
+    @media (max-width: 768px) {
+      .related-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .facts-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .wonder-title {
+        font-size: 2.8rem;
+      }
+      
+      .wonder-location {
+        font-size: 1rem;
+      }
+      
+      .visitor-info-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../food.html" class="nav-item">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../places.html" class="nav-item active">PLACES</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <div class="wonder-hero">
+      <div class="wonder-hero-content">
+        <h1 class="wonder-title">Fushimi Inari Taisha</h1>
+        <div class="wonder-location">
+          <i class="fas fa-map-marker-alt"></i> Kyoto, Japan
+        </div>
+        <p>The mesmerizing shrine of a thousand vermilion torii gates winding through the sacred Mount Inari</p>
+        <div class="wonder-meta">
+          <div class="wonder-meta-item">
+            <span class="meta-label">CATEGORY</span>
+            <span class="meta-value">Shrine</span>
+          </div>
+          <div class="wonder-meta-item">
+            <span class="meta-label">FOUNDED</span>
+            <span class="meta-value">711 CE</span>
+          </div>
+          <div class="wonder-meta-item">
+            <span class="meta-label">TORII GATES</span>
+            <span class="meta-value">~10,000</span>
+          </div>
+          <div class="wonder-meta-item">
+            <span class="meta-label">UNESCO STATUS</span>
+            <span class="meta-value">Cultural Asset</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="wonder-content">
+      <section class="wonder-section">
+        <h2 class="section-title">Overview</h2>
+        <div class="section-content">
+          <p>Fushimi Inari Taisha stands as one of Japan's most iconic and visually striking Shinto shrines. Founded in 711 CE, this ancient sacred site is dedicated to Inari, the Shinto deity of rice, agriculture, business, and prosperity. The shrine complex sprawls across the wooded slopes of Mount Inari, creating a mystical journey through thousands of vermilion torii gates that form tunnels along the mountain paths.</p>
+          
+          <p>The most distinctive feature of Fushimi Inari is undoubtedly the estimated 10,000 vibrant orange-red torii gates that line the network of trails leading up the sacred mountain. Each gate has been donated by a Japanese business, with the name of the donor and date of donation inscribed on the back. This practice dates back to the Edo period (1603-1868), when businesses would donate torii gates in gratitude for their prosperity and in hope of continued success.</p>
+          
+          <div class="wonder-image-container">
+            <img src="https://images.unsplash.com/photo-1584839401519-6012d1a06740?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="Torii Gates at Fushimi Inari" class="wonder-image">
+            <p class="caption">The mesmerizing tunnels of vermilion torii gates that wind up Mount Inari, creating one of Japan's most photographed landscapes.</p>
+          </div>
+        </div>
+      </section>
+      
+      <section class="wonder-section">
+        <h2 class="section-title">History</h2>
+        <div class="section-content">
+          <p>The shrine's origins date back to the early 8th century, though it was relocated to its current site in 816 CE. According to legend, a god appeared on the mountain carrying rice in its mouth, inspiring the name Inari, which translates to "rice load." Throughout Japanese history, Inari has evolved to become not only the deity of agriculture but also the patron of businesspeople and merchants, explaining the thousands of torii gate donations from businesses seeking prosperity.</p>
+          
+          <p>Fushimi Inari Taisha serves as the headquarters for all of Japan's approximately 30,000 Inari shrines. Its enduring popularity crosses centuries and cultural changes, remaining one of Japan's most visited spiritual sites. The fox (kitsune) figures seen throughout the shrine are believed to be Inari's messengers, and visitors will encounter many stone fox statues during their journey up the mountain.</p>
+          
+          <p class="wonder-quote">"Walking through the endless vermilion torii gates at Fushimi Inari is to traverse a liminal space between our world and the sacred realm of the kami, where time seems to stand still and the mundane gives way to the mystical." - Japanese Cultural Heritage Foundation</p>
+          
+          <p>Beyond its religious significance, Fushimi Inari has become a cultural icon, appearing in numerous films, literature, and art. Its distinctive torii gates have become one of the most recognizable symbols of Japan, drawing visitors from around the world who seek both its spiritual essence and its photogenic beauty.</p>
+          
+          <div class="wonder-image-container">
+            <img src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="Fox statues at Fushimi Inari" class="wonder-image">
+            <p class="caption">Fox (kitsune) statues serve as guardians and messengers of Inari throughout the shrine complex.</p>
+          </div>
+        </div>
+      </section>
+      
+      <div class="facts-container">
+        <h3 class="facts-title">Fascinating Facts About Fushimi Inari</h3>
+        <div class="facts-grid">
+          <div class="fact-item">
+            <div class="fact-icon"><i class="fas fa-torii-gate"></i></div>
+            <h4 class="fact-title">10,000 Torii Gates</h4>
+            <p class="fact-text">The shrine complex contains an estimated 10,000 vermilion torii gates, each donated by a business or individual seeking prosperity.</p>
+          </div>
+          
+          <div class="fact-item">
+            <div class="fact-icon"><i class="fas fa-mountain"></i></div>
+            <h4 class="fact-title">Sacred Mountain</h4>
+            <p class="fact-text">The complete hiking trail to the summit of Mount Inari is 4 kilometers (2.5 miles) and takes approximately 2-3 hours to complete round trip.</p>
+          </div>
+          
+          <div class="fact-item">
+            <div class="fact-icon"><i class="fas fa-history"></i></div>
+            <h4 class="fact-title">Ancient Origins</h4>
+            <p class="fact-text">Founded in 711 CE, Fushimi Inari is one of Japan's oldest Shinto shrines and has maintained its religious importance for over 1,300 years.</p>
+          </div>
+          
+          <div class="fact-item">
+            <div class="fact-icon"><i class="fas fa-paw"></i></div>
+            <h4 class="fact-title">Fox Messengers</h4>
+            <p class="fact-text">The kitsune (fox) statues seen throughout the shrine are believed to be Inari's messengers, often depicted holding symbolic items like rice or keys in their mouths.</p>
+          </div>
+          
+          <div class="fact-item">
+            <div class="fact-icon"><i class="fas fa-clock"></i></div>
+            <h4 class="fact-title">24/7 Access</h4>
+            <p class="fact-text">Unlike many Japanese attractions, Fushimi Inari is open 24 hours a day, 365 days a year, allowing visitors to experience it at dawn, dusk, or under moonlight.</p>
+          </div>
+          
+          <div class="fact-item">
+            <div class="fact-icon"><i class="fas fa-film"></i></div>
+            <h4 class="fact-title">Cultural Icon</h4>
+            <p class="fact-text">The shrine gained international fame after being featured in the movie "Memoirs of a Geisha" and has since become one of Japan's most photographed locations.</p>
+          </div>
+        </div>
+      </div>
+      
+      <section class="wonder-section">
+        <h2 class="section-title">The Shrine Experience</h2>
+        <div class="section-content">
+          <p>A visit to Fushimi Inari Taisha typically begins at the shrine's main entrance, marked by the imposing Romon Gate. The main shrine buildings are located at the base of the mountain, featuring beautiful traditional architecture painted in the shrine's signature vermilion color. After exploring the main shrine complex, visitors begin their ascent up Mount Inari through the famous corridors of torii gates.</p>
+          
+          <p>The most photographed section is Senbon Torii (thousands of torii gates), which begins shortly after the main shrine buildings. These densely packed gates create two parallel tunnels of vibrant orange-red that wind up the mountainside, creating a mesmerizing visual effect as sunlight filters through the gaps between gates.</p>
+          
+          <p>As visitors climb higher, they encounter numerous smaller sub-shrines, each with their own collection of torii gates and fox statues. Along the path are several rest areas and viewpoints offering spectacular views of Kyoto. At roughly the halfway point is Yotsutsuji intersection, which provides panoramic views of the city and a good opportunity to decide whether to continue to the summit or begin the descent.</p>
+          
+          <div class="wonder-image-container">
+            <img src="https://images.unsplash.com/photo-1492571350019-22de08371fd3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="Mountain paths at Fushimi Inari" class="wonder-image">
+            <p class="caption">The mountain paths wind through forest and stone, offering quiet moments of contemplation away from the more crowded lower areas.</p>
+          </div>
+        </div>
+      </section>
+      
+      <section class="wonder-section">
+        <h2 class="section-title">Visitor Information</h2>
+        <div class="practical-info">
+          <div class="info-card">
+            <h3 class="info-card-title"><i class="fas fa-info-circle"></i> Essential Information</h3>
+            <ul class="info-list">
+              <li>
+                <div class="info-label">Opening Hours</div>
+                <div class="info-value">24 hours, 365 days a year<br>Main office: 9:00 AM - 5:00 PM</div>
+              </li>
+              <li>
+                <div class="info-label">Admission Fee</div>
+                <div class="info-value">Free</div>
+              </li>
+              <li>
+                <div class="info-label">Location</div>
+                <div class="info-value">68 Fukakusa Yabunouchicho, Fushimi Ward, Kyoto, Japan</div>
+              </li>
+              <li>
+                <div class="info-label">Recommended Duration</div>
+                <div class="info-value">2-3 hours (partial hike), 3-5 hours (full mountain hike)</div>
+              </li>
+              <li>
+                <div class="info-label">Nearest Stations</div>
+                <div class="info-value">JR Inari Station (JR Nara Line)<br>Fushimi Inari Station (Keihan Main Line)</div>
+              </li>
+            </ul>
+          </div>
+          
+          <div class="info-card">
+            <h3 class="info-card-title"><i class="fas fa-lightbulb"></i> Travel Tips</h3>
+            <ul class="tips-list">
+              <li>Visit early morning (before 8 AM) or evening (after 5 PM) to avoid crowds and get better photos.</li>
+              <li>Wear comfortable walking shoes with good grip, as paths can be steep and sometimes slippery.</li>
+              <li>Bring a water bottle, especially if hiking during summer, as it gets hot and humid.</li>
+              <li>Allow at least 2-3 hours for a proper visit, including time to hike at least partway up the mountain.</li>
+              <li>Try the unique Inari-zushi (sweet tofu pockets filled with rice) at food stalls near the entrance.</li>
+              <li>If you want to hike to the summit, expect a 2-3 hour round trip from the main shrine.</li>
+              <li>The most iconic photo spots are in the Senbon Torii area, just after the main shrine buildings.</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="map-container">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3268.5393830691207!2d135.77042821523398!3d34.9673866804472!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38670c52b989c549%3A0xbf23f8ceb50202f0!2sFushimi%20Inari%20Taisha!5e0!3m2!1sen!2sus!4v1677649091583!5m2!1sen!2sus" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+      </section>
+      
+      <div class="tips-container">
+        <h3 class="tips-title">Visitor Tips</h3>
+        <ul class="tips-list">
+          <li>
+            <i class="fas fa-lightbulb"></i>
+            <span>Wear comfortable walking shoes with good grip, as the mountain paths can be steep and sometimes slippery, especially after rain.</span>
+          </li>
+          <li>
+            <i class="fas fa-lightbulb"></i>
+            <span>Bring a bottle of water and some snacks, particularly if you plan to hike all the way to the summit. There are vending machines and small shops, but prices increase as you ascend.</span>
+          </li>
+          <li>
+            <i class="fas fa-lightbulb"></i>
+            <span>Allow at least 2-3 hours for a proper visit, including time to explore the main shrine complex and hike at least partway up the mountain.</span>
+          </li>
+          <li>
+            <i class="fas fa-lightbulb"></i>
+            <span>Consider visiting during a light rain or just after, when fewer tourists are present and the moss-covered stone lanterns and paths have a mystical, ethereal quality.</span>
+          </li>
+          <li>
+            <i class="fas fa-lightbulb"></i>
+            <span>Try the unique Inari-zushi (sweet tofu pockets filled with vinegared rice) at one of the food stalls near the shrine entrance—it's the traditional food associated with Inari shrines.</span>
+          </li>
+          <li>
+            <i class="fas fa-lightbulb"></i>
+            <span>Be respectful when taking photographs, especially around people who are actively praying or participating in religious ceremonies.</span>
+          </li>
+        </ul>
+      </div>
+      
+      <section class="wonder-section">
+        <h2 class="section-title">Spiritual Experience</h2>
+        <p class="wonder-text">Beyond its visual appeal, Fushimi Inari remains a deeply significant religious site for many Japanese people who come to pray for business success, good harvests, and family prosperity. Visitors will often see locals participating in various Shinto rituals, from clapping and bowing at the main shrine to offering coins and writing ema (wooden prayer plaques) with their wishes and hopes.</p>
+        
+        <p class="wonder-text">Throughout the complex, you'll notice small shrines with miniature torii gates, stones, and various offerings. These are dedicated to Inari and the fox messengers. Some visitors place small red bibs or hats on fox statues as offerings, while others leave food items, particularly fried tofu (believed to be a favorite of foxes).</p>
+        
+        <p class="wonder-text">While the shrine has undoubtedly become a major tourist attraction, it maintains its sacred atmosphere, especially as you climb higher up the mountain where fewer tourists venture. Here, in the quiet of the forest with just the occasional sound of a distant bell or the whisper of wind through the torii gates, visitors can connect with the spiritual essence that has drawn pilgrims to Mount Inari for more than a millennium.</p>
+      </section>
+      
+      <div class="cta-section">
+        <h3 class="cta-title">Plan Your Visit to Fushimi Inari</h3>
+        <p class="cta-text">Ready to experience the mystical beauty of Fushimi Inari's thousand torii gates? Let us help you create the perfect Kyoto itinerary with insider tips, local guides, and exclusive experiences.</p>
+        <div class="cta-buttons">
+          <a href="guides/kyoto-guide.html" class="cta-btn">Explore Kyoto Guide</a>
+          <a href="pyt-ai.html?destination=fushimi-inari" class="cta-btn" style="background-color: #444; margin-left: 15px;">Plan Custom Trip</a>
+        </div>
+      </div>
+      
+      <section class="related-section">
+        <h3 class="related-title">Explore More Japanese Wonders</h3>
+        <div class="related-grid">
+          <a href="kinkakuji.html" class="related-card">
+            <img src="https://images.unsplash.com/photo-1585837575652-267cbc187ec3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="Kinkakuji Golden Pavilion" class="related-img">
+            <div class="related-content">
+              <span class="related-category">TEMPLE</span>
+              <h4 class="related-card-title">Kinkakuji: The Golden Pavilion</h4>
+              <p class="related-description">Discover Kyoto's dazzling Zen temple covered in gold leaf, reflected perfectly in a peaceful pond.</p>
+            </div>
+          </a>
+          
+          <a href="tokyo-skytree.html" class="related-card">
+            <img src="https://images.unsplash.com/photo-1557547143-47b1bcb4e52c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="Tokyo Skytree" class="related-img">
+            <div class="related-content">
+              <span class="related-category">LANDMARK</span>
+              <h4 class="related-card-title">Tokyo Skytree: City Views</h4>
+              <p class="related-description">Enjoy breathtaking panoramic views of Tokyo from Japan's tallest structure.</p>
+            </div>
+          </a>
+          
+          <a href="arashiyama-bamboo.html" class="related-card">
+            <img src="https://images.unsplash.com/photo-1607619662634-3ac55ec0e215?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="Arashiyama Bamboo Grove" class="related-img">
+            <div class="related-content">
+              <span class="related-category">NATURE</span>
+              <h4 class="related-card-title">Arashiyama Bamboo Grove</h4>
+              <p class="related-description">Wander through a magical forest of soaring bamboo stalks in western Kyoto.</p>
+            </div>
+          </a>
+        </div>
+      </section>
+      
+      <section class="wonder-section">
+        <h2 class="section-title">Gallery</h2>
+        <div class="gallery">
+          <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1493780474015-ba834fd0ce2f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Torii Gate Tunnels at Fushimi Inari">
+          </div>
+          <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="Fox Statues at Fushimi Inari">
+          </div>
+          <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1604846887565-640d2f99d05e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="Main Shrine Buildings">
+          </div>
+          <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1528360983277-13d401cdc186?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Torii Gates at Sunset">
+          </div>
+          <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1558862107-d33f7a1e7634?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Views from Mount Inari">
+          </div>
+          <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1606312614849-20d286310701?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80" alt="Shrine Offerings">
+          </div>
+        </div>
+      </section>
+    </div>
+    
+    <section class="related-wonders">
+      <h2 class="section-title" style="text-align: center; margin-bottom: 2rem;">Other Japanese Wonders You Might Like</h2>
+      <div class="related-wonders-grid">
+        <a href="tokyo-skytree.html" class="wonder-card">
+          <div class="wonder-card-img">
+            <img src="https://images.unsplash.com/photo-1557547143-47b1bcb4e52c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="Tokyo Skytree">
+          </div>
+          <div class="wonder-card-content">
+            <div class="wonder-card-category">MODERN</div>
+            <h3 class="wonder-card-title">Tokyo Skytree</h3>
+            <p class="wonder-card-description">Japan's tallest structure offering breathtaking panoramic views of Tokyo.</p>
+            <div class="wonder-card-location"><i class="fas fa-map-marker-alt"></i> Tokyo, Japan</div>
+          </div>
+        </a>
+        
+        <a href="arashiyama-bamboo.html" class="wonder-card">
+          <div class="wonder-card-img">
+            <img src="https://images.unsplash.com/photo-1607619662634-3ac55ec0e215?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="Arashiyama Bamboo Grove">
+          </div>
+          <div class="wonder-card-content">
+            <div class="wonder-card-category">NATURE</div>
+            <h3 class="wonder-card-title">Arashiyama Bamboo Grove</h3>
+            <p class="wonder-card-description">A magical forest of soaring bamboo stalks in western Kyoto.</p>
+            <div class="wonder-card-location"><i class="fas fa-map-marker-alt"></i> Kyoto, Japan</div>
+          </div>
+        </a>
+        
+        <a href="../guides/kyoto-guide.html" class="wonder-card">
+          <div class="wonder-card-img">
+            <img src="https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Kyoto Guide">
+          </div>
+          <div class="wonder-card-content">
+            <div class="wonder-card-category">GUIDE</div>
+            <h3 class="wonder-card-title">Kyoto City Guide</h3>
+            <p class="wonder-card-description">Explore more wonders in Japan's cultural heart.</p>
+            <div class="wonder-card-location"><i class="fas fa-map-marker-alt"></i> Kyoto, Japan</div>
+          </div>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="../script.js"></script>
+</body>
+</html> 

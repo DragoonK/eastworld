@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Forbidden City - Eastworld Wonders</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Wonder page specific styles */
+    .wonder-hero {
+      height: 70vh;
+      background-image: url('https://images.unsplash.com/photo-1599707254554-027aeb4deacd?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+    }
+    
+    .wonder-hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+    }
+    
+    .wonder-hero-content {
+      position: relative;
+      z-index: 2;
+      padding: 3rem;
+      width: 100%;
+      color: white;
+    }
+    
+    .wonder-title {
+      font-size: 3.5rem;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+    
+    .wonder-location {
+      display: flex;
+      align-items: center;
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+    }
+    
+    .wonder-location i {
+      margin-right: 0.5rem;
+    }
+    
+    .wonder-meta {
+      display: flex;
+      gap: 2rem;
+      margin-top: 1.5rem;
+    }
+    
+    .wonder-meta-item {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .meta-label {
+      font-size: 0.9rem;
+      opacity: 0.8;
+      margin-bottom: 0.3rem;
+    }
+    
+    .meta-value {
+      font-size: 1.2rem;
+      font-weight: 500;
+    }
+    
+    .wonder-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+    
+    .wonder-section {
+      margin-bottom: 4rem;
+    }
+    
+    .section-title {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .section-content {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      color: #333;
+    }
+    
+    .section-content p {
+      margin-bottom: 1.5rem;
+    }
+
+    /* Gallery styles */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .gallery-item {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .gallery-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+    }
+    
+    .gallery-item img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      display: block;
+    }
+    
+    /* Visitor information */
+    .practical-info {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .info-card {
+      background: #f9f9f9;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    
+    .info-card-title {
+      font-size: 1.2rem;
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+    }
+    
+    .info-card-title i {
+      margin-right: 0.5rem;
+      color: #e74c3c;
+    }
+    
+    .info-list, .tips-list {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .info-list li {
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .info-list li:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    
+    .info-label {
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      color: #444;
+    }
+    
+    .tips-list li {
+      margin-bottom: 0.8rem;
+      padding-left: 1.5rem;
+      position: relative;
+    }
+    
+    .tips-list li:before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: #e74c3c;
+      font-weight: bold;
+    }
+    
+    .map-container {
+      margin-top: 2rem;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    /* Related wonders section */
+    .related-wonders {
+      background: #f9f9f9;
+      padding: 3rem 1.5rem;
+    }
+    
+    .related-wonders-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .wonder-card {
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      text-decoration: none;
+      color: inherit;
+    }
+    
+    .wonder-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+    }
+    
+    .wonder-card-img {
+      height: 200px;
+      overflow: hidden;
+    }
+    
+    .wonder-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    
+    .wonder-card:hover .wonder-card-img img {
+      transform: scale(1.05);
+    }
+    
+    .wonder-card-content {
+      padding: 1.5rem;
+    }
+    
+    .wonder-card-category {
+      font-size: 0.8rem;
+      color: #e74c3c;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+    
+    .wonder-card-title {
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .wonder-card-description {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 1rem;
+    }
+    
+    .wonder-card-location {
+      font-size: 0.9rem;
+      color: #888;
+      display: flex;
+      align-items: center;
+    }
+    
+    .wonder-card-location i {
+      margin-right: 0.5rem;
+      font-size: 0.8rem;
+    }
+    
+    /* Facts grid */
+    .facts-container {
+      background: #f9f9f9;
+      padding: 2rem;
+      border-radius: 8px;
+      margin-bottom: 4rem;
+    }
+    
+    .facts-title {
+      font-size: 1.8rem;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    .facts-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    
+    .fact-item {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      transition: transform 0.3s ease;
+    }
+    
+    .fact-item:hover {
+      transform: translateY(-5px);
+    }
+    
+    .fact-icon {
+      font-size: 2rem;
+      color: #e74c3c;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    
+    .fact-title {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+    
+    .fact-text {
+      font-size: 0.95rem;
+      color: #555;
+      line-height: 1.5;
+    }
+    
+    /* Responsive fixes */
+    @media (max-width: 768px) {
+      .wonder-meta {
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+      
+      .wonder-meta-item {
+        flex-basis: calc(50% - 1rem);
+      }
+      
+      .facts-grid,
+      .gallery,
+      .practical-info,
+      .related-wonders-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .wonder-hero-content {
+        padding: 2rem 1.5rem;
+      }
+      
+      .wonder-title {
+        font-size: 2.5rem;
+      }
+      
+      .facts-grid,
+      .gallery,
+      .practical-info,
+      .related-wonders-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../food.html" class="nav-item">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../places.html" class="nav-item active">PLACES</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <div class="wonder-hero">
+      <div class="wonder-hero-content">
+        <h1 class="wonder-title">Forbidden City</h1>
+        <div class="wonder-location">
+          <i class="fas fa-map-marker-alt"></i> Beijing, China
+        </div>
+        <p>The world's largest imperial palace complex and a masterpiece of Chinese architecture</p>
+        <div class="wonder-meta">
+          <div class="wonder-meta-item">
+            <span class="meta-label">CATEGORY</span>
+            <span class="meta-value">Historical</span>
+          </div>
+          <div class="wonder-meta-item">
+            <span class="meta-label">BUILT</span>
+            <span class="meta-value">1406-1420</span>
+          </div>
+          <div class="wonder-meta-item">
+            <span class="meta-label">AREA</span>
+            <span class="meta-value">180 acres</span>
+          </div>
+          <div class="wonder-meta-item">
+            <span class="meta-label">UNESCO STATUS</span>
+            <span class="meta-value">World Heritage Site</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="wonder-content">
+      <section class="wonder-section">
+        <h2 class="section-title">Overview</h2>
+        <div class="section-content">
+          <p>The Forbidden City, located in the heart of Beijing, is the world's largest palace complex and China's most magnificent imperial architecture. Built between 1406 and 1420 during the Ming Dynasty, it served as the imperial palace for 24 emperors during the Ming and Qing dynasties (1368-1911). The Forbidden City was declared a World Heritage Site in 1987 and is listed by UNESCO as the largest collection of preserved ancient wooden structures in the world.</p>
+        
+          <p>Spanning an impressive 180 acres, the complex consists of 980 buildings with 8,886 rooms, surrounded by a 52-meter-wide moat and a 10-meter-high wall. The layout of the Forbidden City follows traditional Chinese feng shui principles, with all buildings arranged in a precise symmetrical order to symbolize the supreme power of the emperor granted from heaven.</p>
+        
+          <p>For almost 500 years, the Forbidden City was home to emperors and their households, as well as the ceremonial and political center of Chinese government. Ordinary citizens were forbidden from entering the complex without special permission, hence its name. Today, it houses the Palace Museum, which contains an extensive collection of artwork and artifacts from the Ming and Qing dynasties, making it one of the most visited museums in the world.</p>
+        </div>
+      </section>
+      
+      <section class="wonder-section">
+        <h2 class="section-title">History</h2>
+        <div class="section-content">
+          <p>The history of the Forbidden City begins with the third Ming Emperor, Yongle, who decided to move the capital from Nanjing to Beijing. Construction began in 1406 and required more than a million workers, including 100,000 artisans, to complete the palace in 1420. The complex was built to serve as the center of the imperial court and the empire.</p>
+        
+          <p>Throughout its history, the Forbidden City witnessed the reign of 24 emperors: 14 of the Ming dynasty and 10 of the Qing dynasty. Each emperor contributed to the expansion and renovation of the palace complex, adding buildings, gardens, and artwork that reflected their personal tastes and the artistic styles of their eras.</p>
+        
+          <div class="wonder-image-container">
+            <img src="https://images.unsplash.com/photo-1584091275561-e08273333847?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="Aerial view of the Forbidden City" class="wonder-image">
+            <p class="caption">Aerial view showing the vast scale and symmetrical layout of the Forbidden City complex.</p>
+          </div>
+        
+          <p>In 1644, when the Manchu-led Qing forces captured Beijing, the last Ming emperor, Chongzhen, committed suicide by hanging himself on Coal Hill, behind the Forbidden City. The Qing Dynasty then established their rule, and continued using the Forbidden City as the imperial palace. Under their rule, the palace underwent significant renovations and expansions.</p>
+        
+          <p>The Forbidden City's role as the home of emperors ended in 1912 when Puyi, the last emperor of China, abdicated following the Xinhai Revolution. However, he was allowed to continue living in the Inner Court until 1924, when he was finally expelled by warlord Feng Yuxiang. In 1925, the Palace Museum was established within the Forbidden City.</p>
+        
+          <p>During the Second Sino-Japanese War, many of the palace's treasures were evacuated to prevent them from falling into Japanese hands. After the founding of the People's Republic of China in 1949, the Forbidden City came under the control of the new government and has since been meticulously preserved as a cultural and historical icon.</p>
+        </div>
+      </section>
+      
+      <div class="facts-container">
+        <h3 class="facts-title">Fascinating Facts About the Forbidden City</h3>
+        <div class="facts-grid">
+          <div class="fact-item">
+            <div class="fact-icon"><i class="fas fa-building"></i></div>
+            <h4 class="fact-title">Architectural Marvel</h4>
+            <p class="fact-text">The Forbidden City contains 980 buildings with approximately 8,886 rooms, making it the largest collection of preserved ancient wooden structures in the world.</p>
+          </div>
+          
+          <div class="fact-item">
+            <div class="fact-icon"><i class="fas fa-dragon"></i></div>
+            <h4 class="fact-title">9,999 Rooms</h4>
+            <p class="fact-text">According to legend, the Forbidden City was designed to have 9,999 rooms, just short of the mythical 10,000 rooms in heaven. In reality, it has 8,886 rooms.</p>
+          </div>
+          
+          <div class="fact-item">
+            <div class="fact-icon"><i class="fas fa-paint-brush"></i></div>
+            <h4 class="fact-title">Symbolic Colors</h4>
+            <p class="fact-text">The dominant colors are red and yellow - red walls symbolize good fortune and happiness, while yellow roof tiles represent imperial power, as yellow was exclusively reserved for the emperor.</p>
+          </div>
+          
+          <div class="fact-item">
+            <div class="fact-icon"><i class="fas fa-fire"></i></div>
+            <h4 class="fact-title">Fire Prevention</h4>
+            <p class="fact-text">Over 300 bronze water vats are placed throughout the complex for fire prevention. During winter, the water was kept heated to prevent freezing in Beijing's cold climate.</p>
+          </div>
+          
+          <div class="fact-item">
+            <div class="fact-icon"><i class="fas fa-archway"></i></div>
+            <h4 class="fact-title">Nail-less Construction</h4>
+            <p class="fact-text">Many of the wooden structures in the Forbidden City were built without using a single nail, instead utilizing intricate interlocking wooden brackets called dougong.</p>
+          </div>
+          
+          <div class="fact-item">
+            <div class="fact-icon"><i class="fas fa-gem"></i></div>
+            <h4 class="fact-title">Art Collection</h4>
+            <p class="fact-text">The Palace Museum houses over 1.8 million pieces of art, including paintings, ceramics, antiquities, and bronze ware, about one-fifth of China's total cultural relics.</p>
+          </div>
+        </div>
+      </div>
+      
+      <section class="wonder-section">
+        <h2 class="section-title">Architecture and Layout</h2>
+        <div class="section-content">
+          <p>The Forbidden City is renowned for its traditional Chinese palatial architecture, characterized by its axial symmetry and hierarchical design that reflects ancient Chinese philosophical and religious principles. The complex is divided into two main parts: the Outer Court for ceremonial purposes and the Inner Court where the emperor and his family lived.</p>
+          
+          <h3 style="font-size: 1.5rem; margin: 1.5rem 0 0.5rem 0;">The Outer Court</h3>
+          <p>The Outer Court, also known as the Front Court, is located at the southern end of the complex and was where the emperor conducted state affairs and held ceremonial events. It consists of three main buildings:</p>
+          
+          <p><strong>Hall of Supreme Harmony (Taihedian)</strong>: The largest and most important building in the Forbidden City, standing on a three-tiered marble terrace. It was used for grand ceremonies, such as the emperor's birthday, coronations, and dispatching generals to war. The hall contains the Dragon Throne, from which the emperor would preside over ceremonies.</p>
+          
+          <p><strong>Hall of Central Harmony (Zhonghedian)</strong>: A smaller square hall used by the emperor to prepare and rest before formal ceremonies at the Hall of Supreme Harmony or before proceeding to the Temple of Heaven for the annual prayer for good harvest.</p>
+          
+          <p><strong>Hall of Preserving Harmony (Baohedian)</strong>: Used for banquets and later for imperial examinations. In front of this hall is a massive 200-ton marble carving of dragons playing with pearls, transported to Beijing from distant quarries via artificially created ice roads in winter.</p>
+        
+        <div class="wonder-image-container">
+            <img src="https://images.unsplash.com/photo-1571263888471-5195824bae39?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="Hall of Supreme Harmony" class="wonder-image">
+            <p class="caption">The magnificent Hall of Supreme Harmony, the largest hall in the Forbidden City and the ceremonial center of imperial power.</p>
+        </div>
+        
+          <h3 style="font-size: 1.5rem; margin: 1.5rem 0 0.5rem 0;">The Inner Court</h3>
+          <p>The Inner Court, located behind the Outer Court, was the residential area for the emperor and his family. It is centered on three main structures:</p>
+          
+          <p><strong>Palace of Heavenly Purity (Qianqinggong)</strong>: Originally the residence of the emperor, it later became a place where he held audiences with his ministers and handled daily affairs.</p>
+          
+          <p><strong>Hall of Union (Jiaotaidian)</strong>: A smaller hall connecting the other two main buildings, used to store the imperial seals and where the empress hosted banquets for imperial concubines during festivals.</p>
+          
+          <p><strong>Palace of Earthly Tranquility (Kunninggong)</strong>: Originally the empress's residence, later converted into a Shamanistic shrine.</p>
+          
+          <p>Surrounding these main buildings are six eastern palaces and six western palaces, which were residences for imperial concubines, princes, and princesses. The Inner Court also includes the Imperial Garden, a classical Chinese garden with fine landscaping, ancient trees, and various pavilions and halls.</p>
+        </div>
+      </section>
+      
+      <section class="wonder-section">
+        <h2 class="section-title">Cultural Significance</h2>
+        <div class="section-content">
+          <p>The Forbidden City stands as the supreme symbol of traditional Chinese architecture and culture. It represents the culmination of the development of classical Chinese and East Asian architecture, and has influenced cultural and architectural developments in East Asia and beyond. As a UNESCO World Heritage site, it embodies the convergence of China's architectural achievements and cultural traditions.</p>
+          
+          <h3 style="font-size: 1.5rem; margin: 1.5rem 0 0.5rem 0;">Imperial Symbolism</h3>
+          <p>Every element of the Forbidden City's design carries symbolic meaning. The number of rooms, the layout of buildings, and even the decorative features all reflect Chinese cosmology, philosophy, and the political ideology of imperial power. For instance, the complex contains symbolic references to the Four Symbols of Chinese astronomy and the Twenty-Eight Mansions, as well as representations of dragons and phoenixes, which symbolize the emperor and empress respectively.</p>
+          
+          <p>The entire complex is arranged to emphasize the central axis, symbolizing the central role of the emperor as the Son of Heaven and the mediator between Heaven and Earth. Yellow roof tiles, reserved exclusively for imperial buildings, symbolize the supreme power of the emperor. The layout of the buildings, with the most important structures along the central axis, represents the hierarchical order of imperial China.</p>
+          
+          <h3 style="font-size: 1.5rem; margin: 1.5rem 0 0.5rem 0;">Cultural Preservation</h3>
+          <p>Today, as the Palace Museum, the Forbidden City plays a crucial role in preserving and presenting Chinese cultural heritage. It houses an extensive collection of artwork and artifacts, including ceramics, paintings, bronzes, timepieces, jade, and ancient books. Many of these treasures were part of the imperial collection, while others have been added through acquisitions and donations.</p>
+          
+          <p>The Palace Museum has undertaken significant conservation efforts to maintain the integrity of this historical site. Restoration projects have been carried out to preserve the ancient wooden structures, artwork, and gardens. These efforts ensure that future generations can continue to appreciate this magnificent symbol of Chinese imperial history and culture.</p>
+              </div>
+      </section>
+      
+      <section class="wonder-section">
+        <h2 class="section-title">Gallery</h2>
+        <div class="gallery">
+          <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1599707254554-027aeb4deacd?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80" alt="Gate of Divine Might at the Forbidden City">
+              </div>
+          <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1583309219338-7c7ccb657211?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="Imperial roof decorations featuring dragons">
+              </div>
+          <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1624967681540-e92059e04346?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="Interior hall with imperial throne">
+            </div>
+          <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1565838694388-09f9ade6cbb9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Forbidden City bridge and moat">
+          </div>
+          <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1584087121533-e83bd315d32e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="Ornate bronze lions guarding the palace">
+            </div>
+          <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1559991522-34ade19e1d6f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="The corner tower of the Forbidden City">
+          </div>
+        </div>
+      </section>
+      
+      <section class="wonder-section">
+        <h2 class="section-title">Visitor Information</h2>
+        <div class="practical-info">
+          <div class="info-card">
+            <h3 class="info-card-title"><i class="fas fa-info-circle"></i> Essential Information</h3>
+            <ul class="info-list">
+              <li>
+                <div class="info-label">Opening Hours</div>
+                <div class="info-value">April to October: 8:30 AM - 5:00 PM<br>November to March: 8:30 AM - 4:30 PM<br>Closed on Mondays (except for national holidays)</div>
+          </li>
+          <li>
+                <div class="info-label">Admission Fee</div>
+                <div class="info-value">April to October: ¥60 ($9 USD)<br>November to March: ¥40 ($6 USD)<br>Additional fee for the Treasure Gallery and Clock Exhibition Hall</div>
+          </li>
+          <li>
+                <div class="info-label">Location</div>
+                <div class="info-value">4 Jingshan Front St, Dongcheng District, Beijing, China</div>
+          </li>
+          <li>
+                <div class="info-label">Recommended Duration</div>
+                <div class="info-value">3-4 hours for a comprehensive visit</div>
+          </li>
+          <li>
+                <div class="info-label">Nearest Metro</div>
+                <div class="info-value">Tiananmen East (Line 1) or Tiananmen West (Line 1)</div>
+          </li>
+        </ul>
+      </div>
+      
+          <div class="info-card">
+            <h3 class="info-card-title"><i class="fas fa-lightbulb"></i> Travel Tips</h3>
+            <ul class="tips-list">
+              <li>Purchase tickets online in advance to avoid long queues, especially during peak tourist season.</li>
+              <li>Enter through the Meridian Gate (south gate) and exit through the Gate of Divine Prowess (north gate) to follow the traditional route.</li>
+              <li>Wear comfortable shoes as you'll be walking extensively on stone surfaces.</li>
+              <li>Consider hiring an audio guide or a knowledgeable tour guide to fully appreciate the historical significance.</li>
+              <li>Avoid visiting during major Chinese holidays like National Day (October 1-7) and Spring Festival, when crowds are at their peak.</li>
+              <li>Visit early in the morning to avoid crowds and have better lighting for photography.</li>
+              <li>The Palace Museum now offers night tours on select dates, providing a rare opportunity to see the Forbidden City illuminated.</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="map-container">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3036.0664338455166!2d116.39021767645518!3d39.91647797152661!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x35f052e0438058c1%3A0x36176a69665892a3!2sForbidden%20City!5e0!3m2!1sen!2sus!4v1704531275941!5m2!1sen!2sus" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+      </section>
+      </div>
+      
+    <section class="related-wonders">
+      <h2 class="section-title" style="text-align: center; margin-bottom: 2rem;">Other Chinese Wonders You Might Like</h2>
+      <div class="related-wonders-grid">
+        <a href="great-wall.html" class="wonder-card">
+          <div class="wonder-card-img">
+            <img src="https://images.unsplash.com/photo-1508804185872-d7badad00f7d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80" alt="Great Wall of China">
+          </div>
+          <div class="wonder-card-content">
+            <div class="wonder-card-category">HISTORICAL</div>
+            <h3 class="wonder-card-title">Great Wall of China</h3>
+            <p class="wonder-card-description">Ancient defensive structure spanning thousands of miles across China.</p>
+            <div class="wonder-card-location"><i class="fas fa-map-marker-alt"></i> Beijing, China</div>
+            </div>
+          </a>
+          
+        <a href="terracotta-warriors.html" class="wonder-card">
+          <div class="wonder-card-img">
+            <img src="https://images.unsplash.com/photo-1549867499-c530333a6881?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="Terracotta Warriors">
+          </div>
+          <div class="wonder-card-content">
+            <div class="wonder-card-category">HISTORICAL</div>
+            <h3 class="wonder-card-title">Terracotta Warriors</h3>
+            <p class="wonder-card-description">Army of life-sized clay soldiers guarding China's first emperor.</p>
+            <div class="wonder-card-location"><i class="fas fa-map-marker-alt"></i> Xi'an, China</div>
+            </div>
+          </a>
+          
+        <a href="../guides/beijing-guide.html" class="wonder-card">
+          <div class="wonder-card-img">
+            <img src="https://images.unsplash.com/photo-1583309219901-71423ea576a4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="Beijing Guide">
+          </div>
+          <div class="wonder-card-content">
+            <div class="wonder-card-category">GUIDE</div>
+            <h3 class="wonder-card-title">Beijing City Guide</h3>
+            <p class="wonder-card-description">Explore more wonders in China's historic capital city.</p>
+            <div class="wonder-card-location"><i class="fas fa-map-marker-alt"></i> Beijing, China</div>
+            </div>
+          </a>
+        </div>
+      </section>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="../script.js"></script>
+</body>
+</html> 

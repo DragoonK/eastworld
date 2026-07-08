@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EASTWORLD - Phnom Penh City Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* City Guide specific styles */
+    .guide-hero {
+      height: 500px;
+      background-image: url('https://images.unsplash.com/photo-1610974046353-dc4775b5ae2f?q=80&w=1470&auto=format&fit=crop');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 3rem;
+    }
+    
+    .guide-hero-content {
+      text-align: center;
+      color: white;
+      position: relative;
+      z-index: 2;
+      padding: 2rem;
+      max-width: 800px;
+      background-color: rgba(0, 0, 0, 0.6);
+    }
+    
+    .guide-hero::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(0deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.2) 100%);
+    }
+    
+    .guide-hero h1 {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      letter-spacing: 3px;
+    }
+    
+    .guide-hero p {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    
+    .guide-intro {
+      max-width: 800px;
+      margin: 0 auto 3rem;
+      padding: 0 1rem;
+      line-height: 1.8;
+    }
+    
+    .guide-section {
+      margin-bottom: 4rem;
+    }
+    
+    .guide-section-title {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: 2.2rem;
+      letter-spacing: 1px;
+    }
+    
+    .guide-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+    
+    .guide-card {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+    
+    .guide-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .guide-card-img {
+      height: 200px;
+      overflow: hidden;
+    }
+    
+    .guide-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    
+    .guide-card:hover .guide-card-img img {
+      transform: scale(1.05);
+    }
+    
+    .guide-card-content {
+      padding: 1.5rem;
+    }
+    
+    .guide-card h3 {
+      margin-bottom: 0.5rem;
+      font-size: 1.2rem;
+    }
+    
+    .guide-card-meta {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      color: #666;
+    }
+    
+    .guide-card-meta i {
+      margin-right: 0.3rem;
+    }
+    
+    .guide-card-meta span {
+      margin-right: 1rem;
+    }
+    
+    .guide-card p {
+      color: #555;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    
+    .guide-map {
+      width: 100%;
+      height: 400px;
+      border: none;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+    }
+    
+    .guide-tips {
+      background-color: #f8f8f8;
+      padding: 2rem;
+      border-radius: 8px;
+      margin-bottom: 3rem;
+    }
+    
+    .guide-tips h3 {
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+    
+    .guide-tips-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+    
+    .guide-tip-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+    }
+    
+    .guide-tip-item i {
+      margin-right: 0.5rem;
+      color: #000;
+      margin-top: 0.25rem;
+    }
+    
+    .guide-download {
+      text-align: center;
+      margin: 3rem 0;
+      padding: 2rem;
+      background-color: #f0f0f0;
+      border-radius: 8px;
+    }
+    
+    .guide-download h3 {
+      margin-bottom: 1rem;
+      font-size: 1.8rem;
+    }
+    
+    .guide-download-btn {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 1rem 2rem;
+      background-color: #000;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+    
+    .guide-download-btn:hover {
+      background-color: #333;
+    }
+    
+    @media (max-width: 768px) {
+      .guide-hero h1 {
+        font-size: 3rem;
+      }
+      
+      .guide-hero p {
+        font-size: 1rem;
+      }
+      
+      .guide-section-title {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../food.html" class="nav-item">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../login.html" class="nav-item">LOGIN</a>
+        <a href="../register.html" class="nav-item">REGISTER</a>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="guide-hero">
+      <div class="guide-hero-content">
+        <h1>PHNOM PENH</h1>
+        <p>Cambodia's resilient capital where ancient traditions and modern aspirations blend along the banks of the mighty Mekong</p>
+      </div>
+    </section>
+    
+    <section class="guide-intro">
+      <p>Phnom Penh, Cambodia's bustling capital, sits at the confluence of the Mekong and Tonlé Sap rivers. Once known as the "Pearl of Asia," this city of contrasts combines French colonial architecture with grand Khmer buildings, Buddhist temples, and modern developments.</p>
+      
+      <p>Having emerged from a turbulent recent history, today's Phnom Penh is a vibrant, evolving metropolis where traditional markets buzz alongside hip cafés and restaurants. While the city preserves important historical sites documenting Cambodia's tragic past, it also embraces the future with dynamic arts, culture, and culinary scenes that make it one of Southeast Asia's most fascinating capitals to explore.</p>
+    </section>
+    
+    <section class="guide-section">
+      <h2 class="guide-section-title">TOP ATTRACTIONS</h2>
+      
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://media.istockphoto.com/id/1125640492/photo/royal-palace.jpg?s=612x612&w=0&k=20&c=zI3R_0YzUEYd_uJdwn3vR2r1_nluiKFGNKg4RlZ3XS8=" alt="Royal Palace">
+          </div>
+          <div class="guide-card-content">
+            <h3>Royal Palace & Silver Pagoda</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Sangkat Chey Chumneah</span>
+              <i class="far fa-clock"></i><span>8:00-17:00</span>
+            </div>
+            <p>The magnificent Royal Palace complex houses the residence of the King and the spectacular Silver Pagoda, featuring a floor made of 5,000 silver tiles and a life-sized gold Buddha adorned with 9,584 diamonds.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://media.istockphoto.com/id/637069304/photo/tuol-sleng-genocide-museum-in-phnom-penh.jpg?s=612x612&w=0&k=20&c=AUeT8oeHCaZxmZgxDqqI1pnT97o316-nKcYo2yuMoGI=" alt="Tuol Sleng Genocide Museum">
+          </div>
+          <div class="guide-card-content">
+            <h3>Tuol Sleng Genocide Museum</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Tuol Sleng</span>
+              <i class="far fa-clock"></i><span>8:00-17:00</span>
+            </div>
+            <p>A former high school converted into the infamous S-21 prison during the Khmer Rouge regime, now preserving the memory of Cambodia's tragic history with sobering exhibits and survivor testimonies.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://media.istockphoto.com/id/637086892/photo/central-market-in-phnom-penh.jpg?s=612x612&w=0&k=20&c=zG5JabSvGzbKp9j1Guzk89Tg2RDh6aNTOjnv3lCYXmM=" alt="Central Market">
+          </div>
+          <div class="guide-card-content">
+            <h3>Central Market (Phsar Thmei)</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Phsar Thmei</span>
+              <i class="far fa-clock"></i><span>7:00-18:00</span>
+            </div>
+            <p>A distinctive Art Deco building housing a bustling market where you can find everything from fresh produce and street food to jewelry, electronics, and traditional Khmer crafts.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://media.istockphoto.com/id/518572342/photo/national-museum-of-cambodia-in-phnom-penh.jpg?s=612x612&w=0&k=20&c=Q0Zk4OEdpTNhpnYLMRgDK4KXXzM4bsY2AvPvUOQR4xM=" alt="National Museum">
+          </div>
+          <div class="guide-card-content">
+            <h3>National Museum of Cambodia</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Near Royal Palace</span>
+              <i class="far fa-clock"></i><span>8:00-17:00</span>
+            </div>
+            <p>Housed in a traditional terracotta structure, this museum displays the world's finest collection of Khmer sculptures, artifacts, and art spanning from prehistoric times to the post-Angkor period.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://media.istockphoto.com/id/637087118/photo/wat-phnom-temple-in-phnom-penh.jpg?s=612x612&w=0&k=20&c=_0RYEgVcpUwkGnLgLcNk0JZsEe5G8qO9UMt6tNUr_Yw=" alt="Wat Phnom">
+          </div>
+          <div class="guide-card-content">
+            <h3>Wat Phnom</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Wat Phnom District</span>
+              <i class="far fa-clock"></i><span>7:00-18:30</span>
+            </div>
+            <p>The sacred temple that gave the city its name, set on a small hill with ornate stupas, Buddha statues, and beautifully painted murals. A popular spot for locals to pray for good luck.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://media.istockphoto.com/id/1185448103/photo/waterfront-of-phnom-penh-in-cambodia.jpg?s=612x612&w=0&k=20&c=ksllh52i_U2H6mSsBJ-Rp3a0_TUO7xQPR4mZIQR0CRU=" alt="Riverside Promenade">
+          </div>
+          <div class="guide-card-content">
+            <h3>Riverside Promenade</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Sisowath Quay</span>
+              <i class="far fa-clock"></i><span>Always accessible</span>
+            </div>
+            <p>A vibrant 3km stretch along the Tonlé Sap River with parks, cafés, restaurants, and bars. Perfect for sunset strolls and observing local life, especially during evening exercise classes.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="guide-section">
+      <h2 class="guide-section-title">WHERE TO EAT</h2>
+      
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://media.istockphoto.com/id/1159992039/photo/fish-amok-curry-steamed-in-banana-leaf-bowl-cambodian-khmer-traditional-food.jpg?s=612x612&w=0&k=20&c=kIPk1AOo3JxPOoIiUd8UiJK2l0Wd6k2KIXsz0QoECU0=" alt="Romdeng Restaurant">
+          </div>
+          <div class="guide-card-content">
+            <h3>Romdeng Restaurant</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Street 174</span>
+              <i class="fas fa-dollar-sign"></i><span>$$</span>
+            </div>
+            <p>Set in a beautiful colonial building, this social enterprise restaurant serves authentic Cambodian cuisine including Fish Amok and adventurous options like fried tarantulas, while supporting former street youth.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://media.istockphoto.com/id/509480162/photo/phnom-penh-cambodia-may-21-2015-unidentified-people-eating-inside.jpg?s=612x612&w=0&k=20&c=E4FuFLVnMNGV0YKrYGcTkpkeBbMdGLfIWKbhwAJXTwY=" alt="FCC Phnom Penh">
+          </div>
+          <div class="guide-card-content">
+            <h3>Foreign Correspondents' Club (FCC)</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Sisowath Quay</span>
+              <i class="fas fa-dollar-sign"></i><span>$$$</span>
+            </div>
+            <p>A legendary riverside institution with colonial charm, offering excellent cocktails and a menu blending Western and Asian cuisines, along with stunning Mekong views from the terrace.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://media.istockphoto.com/id/682582456/photo/bbq-skewers-on-sale-at-phnom-penh-night-market.jpg?s=612x612&w=0&k=20&c=e6WMID8RifnGLQRzlrTD6Ud0yvmCK5_hLjBgMUFhQpM=" alt="Night Market">
+          </div>
+          <div class="guide-card-content">
+            <h3>Phnom Penh Night Market</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Riverside</span>
+              <i class="fas fa-dollar-sign"></i><span>$</span>
+            </div>
+            <p>Experience authentic Cambodian street food at this lively market where you can sit on mats while sampling grilled meats, seafood, fruit shakes, and local snacks amid a festive atmosphere.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://media.istockphoto.com/id/1307136757/photo/frying-khmer-noodles-with-beef-and-vegetables.jpg?s=612x612&w=0&k=20&c=vdNZZdBMFFDsOF6mDi1uKH7DjPnW9_9LWm2IaKr2pvs=" alt="Malis Restaurant">
+          </div>
+          <div class="guide-card-content">
+            <h3>Malis Restaurant</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Norodom Blvd</span>
+              <i class="fas fa-dollar-sign"></i><span>$$$</span>
+            </div>
+            <p>Led by master chef Luu Meng, this elegant restaurant serves "living Cambodian cuisine" that revives traditional recipes lost during the Khmer Rouge era, using the finest local ingredients.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="guide-section">
+      <h2 class="guide-section-title">WHERE TO STAY</h2>
+      
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/53145940.jpg?k=f2f88f5b81e0c2d7c7110fca44bf4fd39b9e5eb560b4da9790334bd5109a410a&o=&hp=1" alt="Raffles Hotel Le Royal">
+          </div>
+          <div class="guide-card-content">
+            <h3>Raffles Hotel Le Royal</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Daun Penh</span>
+              <i class="fas fa-star"></i><span>5-star heritage</span>
+            </div>
+            <p>Cambodia's most prestigious address since 1929, this historic landmark hotel offers timeless elegance with colonial charm, tropical gardens, and exceptional service in the heart of the city.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/322191374.jpg?k=e9bba362ced4f2fe1f077546bb4b09a4dd2408685ba4aabbc3179876c455532b&o=&hp=1" alt="Rosewood Phnom Penh">
+          </div>
+          <div class="guide-card-content">
+            <h3>Rosewood Phnom Penh</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Vattanac Capital Tower</span>
+              <i class="fas fa-star"></i><span>5-star luxury</span>
+            </div>
+            <p>Ultra-luxury hotel occupying the top floors of Cambodia's tallest building, featuring breathtaking city views, exquisite dining options, and a stunning sky bar with an outdoor terrace.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/72170975.jpg?k=2de2a60e6db3a336ec3b787474a3e2c6a65c8684d96a2b2762b9b13a50c6d074&o=&hp=1" alt="Patio Hotel & Urban Resort">
+          </div>
+          <div class="guide-card-content">
+            <h3>Patio Hotel & Urban Resort</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>BKK1</span>
+              <i class="fas fa-star"></i><span>4-star boutique</span>
+            </div>
+            <p>A tranquil oasis in the bustling city with a rooftop infinity pool offering panoramic views, comfortable rooms with local touches, and a great location near cafés and restaurants.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/257112716.jpg?k=e6b0a89dd6e8c2bdee4fe5ab02c2fa58a39ca17c53b0784f6b2d31d5621a1ad0&o=&hp=1" alt="Pavilion Hotel">
+          </div>
+          <div class="guide-card-content">
+            <h3>Pavilion Hotel</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Near Royal Palace</span>
+              <i class="fas fa-star"></i><span>4-star heritage</span>
+            </div>
+            <p>A collection of restored colonial villas once owned by Cambodian royalty, offering lush gardens, two swimming pools, and art deco interiors just steps from the Royal Palace.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="guide-section">
+      <h2 class="guide-section-title">GETTING AROUND</h2>
+      
+      <div class="guide-map">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d125058.91939851165!2d104.8121544016113!3d11.579972591575248!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3109513dc76a6be3%3A0x9c010ee85ab525bb!2sPhnom%20Penh%2C%20Cambodia!5e0!3m2!1sen!2sus!4v1693378652574!5m2!1sen!2sus" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+      
+      <div class="guide-tips">
+        <h3>Local Transportation Tips</h3>
+        <div class="guide-tips-list">
+          <div class="guide-tip-item">
+            <i class="fas fa-motorcycle"></i>
+            <p>Tuk-tuks are the quintessential way to get around Phnom Penh, with fares typically ranging from $2-4 per trip. Negotiate the price before starting your journey.</p>
+          </div>
+          
+          <div class="guide-tip-item">
+            <i class="fas fa-taxi"></i>
+            <p>Ride-hailing apps like PassApp and Grab are popular, offering air-conditioned cars and tuk-tuks with fixed fares and no need for haggling.</p>
+          </div>
+          
+          <div class="guide-tip-item">
+            <i class="fas fa-bicycle"></i>
+            <p>Several companies offer bicycle rentals, providing an eco-friendly way to explore the relatively flat city, especially along the scenic riverside area.</p>
+          </div>
+          
+          <div class="guide-tip-item">
+            <i class="fas fa-ship"></i>
+            <p>River ferries and boat cruises offer a refreshing perspective of the city, particularly enjoyable at sunset when the city lights begin to twinkle along the riverbank.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="guide-download">
+      <h3>Download the Complete Phnom Penh City Guide</h3>
+      <p>Get our comprehensive 30-page guide to Phnom Penh with detailed itineraries, maps, and insider recommendations.</p>
+      <p>Available as a PDF for your convenience - take it with you offline!</p>
+      <a href="#" class="guide-download-btn">Download Guide (PDF) - $9.99</a>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+  
+  <script src="../script.js"></script>
+</body>
+</html> 

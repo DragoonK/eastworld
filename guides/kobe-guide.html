@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EASTWORLD - Kobe City Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* City Guide specific styles */
+    .guide-hero {
+      height: 500px;
+      background-image: url('https://www.feel-kobe.jp/common/img/facilities/nature_views_kv_pic01.jpg');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 3rem;
+    }
+    
+    .guide-hero-content {
+      text-align: center;
+      color: white;
+      position: relative;
+      z-index: 2;
+      padding: 2rem;
+      max-width: 800px;
+      background-color: rgba(0, 0, 0, 0.6);
+    }
+    
+    .guide-hero::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(0deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.2) 100%);
+    }
+    
+    .guide-hero h1 {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      letter-spacing: 3px;
+    }
+    
+    .guide-hero p {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    
+    .guide-intro {
+      max-width: 800px;
+      margin: 0 auto 3rem;
+      padding: 0 1rem;
+      line-height: 1.8;
+    }
+    
+    .guide-section {
+      margin-bottom: 4rem;
+    }
+    
+    .guide-section-title {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: 2.2rem;
+      letter-spacing: 1px;
+    }
+    
+    .guide-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+    
+    .guide-card {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+    
+    .guide-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .guide-card-img {
+      height: 200px;
+      overflow: hidden;
+    }
+    
+    .guide-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    
+    .guide-card:hover .guide-card-img img {
+      transform: scale(1.05);
+    }
+    
+    .guide-card-content {
+      padding: 1.5rem;
+    }
+    
+    .guide-card h3 {
+      margin-bottom: 0.5rem;
+      font-size: 1.2rem;
+    }
+    
+    .guide-card-meta {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      color: #666;
+    }
+    
+    .guide-card-meta i {
+      margin-right: 0.3rem;
+    }
+    
+    .guide-card-meta span {
+      margin-right: 1rem;
+    }
+    
+    .guide-card p {
+      color: #555;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    
+    .guide-map {
+      width: 100%;
+      height: 400px;
+      border: none;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+    }
+    
+    .guide-tips {
+      background-color: #f8f8f8;
+      padding: 2rem;
+      border-radius: 8px;
+      margin-bottom: 3rem;
+    }
+    
+    .guide-tips h3 {
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+    
+    .guide-tips-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+    
+    .guide-tip-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+    }
+    
+    .guide-tip-item i {
+      margin-right: 0.5rem;
+      color: #000;
+      margin-top: 0.25rem;
+    }
+    
+    .guide-download {
+      text-align: center;
+      margin: 3rem 0;
+      padding: 2rem;
+      background-color: #f0f0f0;
+      border-radius: 8px;
+    }
+    
+    .guide-download h3 {
+      margin-bottom: 1rem;
+      font-size: 1.8rem;
+    }
+    
+    .guide-download-btn {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 1rem 2rem;
+      background-color: #000;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+    
+    .guide-download-btn:hover {
+      background-color: #333;
+    }
+    
+    @media (max-width: 768px) {
+      .guide-hero h1 {
+        font-size: 3rem;
+      }
+      
+      .guide-hero p {
+        font-size: 1rem;
+      }
+      
+      .guide-section-title {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../food.html" class="nav-item">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../login.html" class="nav-item">LOGIN</a>
+        <a href="../register.html" class="nav-item">REGISTER</a>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="guide-hero">
+      <div class="guide-hero-content">
+        <h1>KOBE</h1>
+        <p>A sophisticated port city nestled between mountains and sea, offering a blend of international influences and traditional Japanese charm.</p>
+      </div>
+    </section>
+    
+    <section class="guide-intro">
+      <p>Kobe, Japan's sixth-largest city, is nestled between the Rokko Mountain Range and Osaka Bay. Known for its cosmopolitan atmosphere, international history, and world-famous beef, Kobe offers visitors a unique blend of Eastern and Western influences. The city rebuilt itself with remarkable resilience after the devastating Great Hanshin Earthquake of 1995, and today stands as one of Japan's most attractive and livable cities.</p>
+      
+      <p>From historic districts like Kitano, lined with Western-style mansions from the late 19th century, to the modern harborfront at Meriken Park, Kobe showcases Japan's harmonious integration of global influences while maintaining its distinct cultural identity.</p>
+    </section>
+    
+    <section class="guide-section">
+      <h2 class="guide-section-title">TOP ATTRACTIONS</h2>
+      
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://www.japan-guide.com/g18/6551_01.jpg" alt="Kobe Harborland">
+          </div>
+          <div class="guide-card-content">
+            <h3>Kobe Harborland</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Harborland</span>
+              <i class="far fa-clock"></i><span>Open daily</span>
+            </div>
+            <p>A shopping and entertainment complex along the waterfront with spectacular views of Kobe Port Tower and the city skyline, especially beautiful at night.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://www.japan-guide.com/g18/6650_01.jpg" alt="Kitano Ijinkan District">
+          </div>
+          <div class="guide-card-content">
+            <h3>Kitano Ijinkan District</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Kitano</span>
+              <i class="far fa-clock"></i><span>9:00-17:00</span>
+            </div>
+            <p>Historic area featuring Western-style mansions (ijinkan) built by foreign merchants in the late 19th century when Kobe was opened to foreign trade.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://www.japan-guide.com/g18/6553_01.jpg" alt="Kobe Port Tower">
+          </div>
+          <div class="guide-card-content">
+            <h3>Kobe Port Tower</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Meriken Park</span>
+              <i class="far fa-clock"></i><span>9:00-21:00</span>
+            </div>
+            <p>The distinctive red landmark of Kobe's skyline, offering panoramic views of the city, port, and Osaka Bay from its observation decks.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://www.japan-guide.com/g18/6652_01.jpg" alt="Nunobiki Herb Garden">
+          </div>
+          <div class="guide-card-content">
+            <h3>Nunobiki Herb Garden</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Rokko Mountain</span>
+              <i class="far fa-clock"></i><span>10:00-17:00</span>
+            </div>
+            <p>Japan's largest herb garden with approximately 75,000 herbs and flowers, accessible via the Shin-Kobe Ropeway with stunning city views during the ascent.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://www.japan-guide.com/g18/6661_01.jpg" alt="Arima Onsen">
+          </div>
+          <div class="guide-card-content">
+            <h3>Arima Onsen</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>North of Kobe</span>
+              <i class="far fa-clock"></i><span>Various hours</span>
+            </div>
+            <p>One of Japan's oldest hot spring resorts, famous for its gold (kinsen) and silver (ginsen) spring waters, rich in minerals with therapeutic properties.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://cdn.jrailpass.com/wp-content/uploads/2019/09/rjp_blog_akashi-kaikyo-bridge-1-e1568115172584.jpg" alt="Akashi Kaikyo Bridge">
+          </div>
+          <div class="guide-card-content">
+            <h3>Akashi Kaikyo Bridge</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>West of Kobe</span>
+              <i class="far fa-clock"></i><span>Bridge Exhibition: 9:00-17:00</span>
+            </div>
+            <p>The world's longest suspension bridge connecting Kobe to Awaji Island. Visit the Bridge Exhibition Center to learn about its construction.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="guide-section">
+      <h2 class="guide-section-title">WHERE TO EAT</h2>
+      
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://media-cdn.tripadvisor.com/media/photo-s/12/f0/3a/ca/photo0jpg.jpg" alt="Steakland Kobe">
+          </div>
+          <div class="guide-card-content">
+            <h3>Steakland Kobe</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Sannomiya</span>
+              <i class="fas fa-yen-sign"></i><span>¥¥¥</span>
+            </div>
+            <p>Enjoy authentic Kobe beef teppanyaki at this popular restaurant with skilled chefs cooking right before your eyes.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://media-cdn.tripadvisor.com/media/photo-s/1c/50/13/af/caption.jpg" alt="Kobe Plaisir">
+          </div>
+          <div class="guide-card-content">
+            <h3>Kobe Plaisir</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Kitano</span>
+              <i class="fas fa-yen-sign"></i><span>¥¥¥¥</span>
+            </div>
+            <p>Upscale restaurant in a renovated Western-style mansion serving elaborate Kobe beef courses with fine wine pairings.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://media-cdn.tripadvisor.com/media/photo-s/1a/71/a8/a0/photo0jpg.jpg" alt="Nankin-machi Marketplace">
+          </div>
+          <div class="guide-card-content">
+            <h3>Nankin-machi (Chinatown)</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Central Kobe</span>
+              <i class="fas fa-yen-sign"></i><span>¥-¥¥</span>
+            </div>
+            <p>Kobe's vibrant Chinatown district with numerous restaurants and street food vendors offering authentic Chinese cuisine.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://miro.medium.com/v2/resize:fit:1400/1*2cFcBnrm5F0QXnnyEccUtA.jpeg" alt="Hyogo Cuisine Asahi">
+          </div>
+          <div class="guide-card-content">
+            <h3>Hyogo Cuisine Asahi</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Motomachi</span>
+              <i class="fas fa-yen-sign"></i><span>¥¥</span>
+            </div>
+            <p>Traditional Japanese restaurant specializing in fresh seafood from Osaka Bay and seasonal local ingredients.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="guide-section">
+      <h2 class="guide-section-title">WHERE TO STAY</h2>
+      
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/383217083.jpg?k=2eff02ab8e1b5f8d1d133b8a06fe0a9e6f1c47b96b5b8fb41f42a74fe0d8fa67&o=&hp=1" alt="Hotel La Suite Kobe Harborland">
+          </div>
+          <div class="guide-card-content">
+            <h3>Hotel La Suite Kobe Harborland</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Harborland</span>
+              <i class="fas fa-star"></i><span>5-star luxury</span>
+            </div>
+            <p>Luxury hotel with spacious rooms offering stunning harbor views, spa facilities, and excellent dining options.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/31193729.jpg?k=b8c79d8e0429224f77c4c4987482a426d6e64ed45150aed65b0bab9eeed31c5c&o=&hp=1" alt="Oriental Hotel">
+          </div>
+          <div class="guide-card-content">
+            <h3>Oriental Hotel</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Sannomiya</span>
+              <i class="fas fa-star"></i><span>4-star</span>
+            </div>
+            <p>Historic hotel with elegant rooms, multiple restaurants, and convenient location near shopping and transportation hubs.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/281657478.jpg?k=86cbafce7bcc8d0bd014606934535ac59c22fd6cc16f1d7c2db9c9d579ce9b77&o=&hp=1" alt="Arima Onsen Taketoritei Maruyama">
+          </div>
+          <div class="guide-card-content">
+            <h3>Taketoritei Maruyama</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Arima Onsen</span>
+              <i class="fas fa-star"></i><span>Traditional ryokan</span>
+            </div>
+            <p>Traditional Japanese inn with private hot spring baths, tatami rooms, and kaiseki cuisine in the historic Arima hot spring resort.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/45753587.jpg?k=38404eafe7c9e6f97f89b9807b54a7b39a9a18c94f5fd2a3e630a2ba9cc67adb&o=&hp=1" alt="Hotel Okura Kobe">
+          </div>
+          <div class="guide-card-content">
+            <h3>Hotel Okura Kobe</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Port Island</span>
+              <i class="fas fa-star"></i><span>4-star</span>
+            </div>
+            <p>Elegant high-rise hotel with panoramic city and bay views, multiple restaurants, and easy access to the airport.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="guide-section">
+      <h2 class="guide-section-title">GETTING AROUND</h2>
+      
+      <div class="guide-map">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d104926.55532888357!2d135.0910253217774!3d34.69122232929252!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60008fca5932bb79%3A0xae31d0d60e2bdd8!2sKobe%2C%20Hyogo%2C%20Japan!5e0!3m2!1sen!2sus!4v1693375097641!5m2!1sen!2sus" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+      
+      <div class="guide-tips">
+        <h3>Local Transportation Tips</h3>
+        <div class="guide-tips-list">
+          <div class="guide-tip-item">
+            <i class="fas fa-subway"></i>
+            <p>The Kobe Municipal Subway and JR lines connect major areas of the city. Consider the Kobe City Loop Bus for tourist attractions.</p>
+          </div>
+          
+          <div class="guide-tip-item">
+            <i class="fas fa-train"></i>
+            <p>The Hankyu, Hanshin, and JR lines provide easy connections to Osaka (15-30 minutes) and Kyoto (approximately 1 hour).</p>
+          </div>
+          
+          <div class="guide-tip-item">
+            <i class="fas fa-bus"></i>
+            <p>The City Loop Bus is convenient for tourists, stopping at major attractions with English announcements.</p>
+          </div>
+          
+          <div class="guide-tip-item">
+            <i class="fas fa-cable-car"></i>
+            <p>The Shin-Kobe Ropeway offers a scenic way to access Nunobiki Herb Garden and enjoy panoramic city views.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="guide-download">
+      <h3>Download the Complete Kobe City Guide</h3>
+      <p>Get our comprehensive 25-page guide to Kobe with detailed itineraries, maps, and insider recommendations.</p>
+      <p>Available as a PDF for your convenience - take it with you offline!</p>
+      <a href="#" class="guide-download-btn">Download Guide (PDF) - $9.99</a>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+  
+  <script src="../script.js"></script>
+</body>
+</html> 

@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Steakland Kobe - Eastworld Restaurant Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Additional styles specific to restaurant reviews */
+    .restaurant-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+      .restaurant-info {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .restaurant-details {
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .detail-row {
+      display: flex;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+    }
+    
+    .detail-label {
+      font-weight: 600;
+      min-width: 120px;
+      color: #333;
+    }
+    
+    .detail-value {
+      flex: 1;
+      color: #555;
+    }
+    
+    .rating {
+      margin-bottom: 1rem;
+    }
+    
+    .star {
+      color: #ddd;
+      font-size: 1.5rem;
+    }
+    
+    .star.filled {
+      color: #FFD700;
+    }
+    
+    .half-star {
+      position: relative;
+    }
+    
+    .half-star .fas.fa-star-half {
+      color: #FFD700;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    
+    .score-label {
+      margin-left: 0.5rem;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .map-container {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .map-container iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+    }
+    
+    .photos-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .photo-item {
+      border-radius: 8px;
+      overflow: hidden;
+      height: 150px;
+    }
+    
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .photo-item img:hover {
+      transform: scale(1.05);
+    }
+    
+    .review-section {
+      margin: 2rem 0;
+      padding: 2rem;
+      background: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    /* Booking button styles */
+    .booking-button {
+      display: block;
+      background-color: #ff4d4d;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      margin: 1.5rem 0;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    
+    .booking-button:hover {
+      background-color: #e63939;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    /* Review carousel styles */
+    .review-carousel {
+      position: relative;
+      margin: 2rem 0;
+      overflow: hidden;
+      padding: 1rem 0;
+    }
+    
+    .review-slides {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    
+    .review-slide {
+      min-width: 100%;
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .reviewer-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #f0f0f0;
+      padding-bottom: 0.8rem;
+    }
+    
+    .reviewer-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 0.8rem;
+    }
+    
+    .reviewer-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding-top: 0.2rem;
+    }
+    
+    .review-date {
+      color: #888;
+      font-size: 0.75rem;
+      margin-top: 0.1rem;
+    }
+    
+    .review-rating {
+      display: flex;
+      margin-top: 0.2rem;
+    }
+    
+    .review-rating i {
+      font-size: 0.8rem;
+      margin-right: 2px;
+    }
+    
+    .carousel-nav {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+    
+    .carousel-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ddd;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .carousel-dot.active {
+      background: #ff4d4d;
+    }
+    
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.7);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+    
+    .carousel-prev {
+      left: 10px;
+    }
+    
+    .carousel-next {
+      right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../food.html" class="nav-item active">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="content-container">
+    <div class="content-header">
+      <span class="content-category">KOBE BEEF</span>
+      <h1 class="content-title">Steakland Kobe - Affordable Authentic Kobe Beef Experience</h1>
+      
+      <!-- Rating Section -->
+      <div class="rating">
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star">
+          <i class="far fa-star"></i>
+        </span>
+        <span class="score-label">4.0/5.0</span>
+      </div>
+    </div>
+    
+    <div class="hero-container">
+      <img class="content-hero" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2019/03/26/0843/Kobe-Beef-Steakland-P007-Cooking-Show.jpg/Kobe-Beef-Steakland-P007-Cooking-Show.16x9.jpg" alt="Kobe Beef Teppanyaki" 
+      onerror="this.onerror=null; 
+      this.parentElement.innerHTML = '<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#333;color:white;font-size:1.5rem;text-align:center;padding:2rem;\'>Steakland Kobe</div>';">
+    </div>
+    
+    <!-- Visitor Information Button -->
+    <a href="#visitor-info" class="booking-button">
+      <i class="fas fa-info-circle"></i> VISITOR INFORMATION
+    </a>
+    
+    <!-- Restaurant Information Section -->
+    <div class="restaurant-info">
+      <div class="restaurant-details">
+        <h2>Restaurant Details</h2>
+        
+        <div class="detail-row">
+          <div class="detail-label">Address:</div>
+          <div class="detail-value">1-2-4 Shimoyamate-dori, Chuo-ku, Kobe 650-0011, Japan (Main Branch)</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Hours:</div>
+          <div class="detail-value">Lunch: 11:30 AM - 3:00 PM<br>Dinner: 5:00 PM - 10:00 PM<br>Open daily</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Phone:</div>
+          <div class="detail-value">+81 78-331-3397</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Price Range:</div>
+          <div class="detail-value">Lunch sets: ¥3,500-5,500 ($25-40)<br>Dinner sets: ¥7,000-11,000 ($50-80) per person</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Cuisine:</div>
+          <div class="detail-value">Japanese, Teppanyaki, Kobe Beef, Steakhouse</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Reservations:</div>
+          <div class="detail-value">Recommended for dinner<br>Can be made by phone or through hotel concierge</div>
+        </div>
+        
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">Multiple Locations</h3>
+        <p>Steakland has several branches in Kobe, with the main one located near Sannomiya Station:</p>
+        <ul style="margin-bottom: 1rem; padding-left: 1.5rem;">
+          <li>Main Branch: Shimoyamate-dori (closest to Sannomiya Station)</li>
+          <li>Kitanozaka Branch: Near Shin-Kobe Station</li>
+          <li>Harborland Branch: In the Harborland shopping district</li>
+        </ul>
+      </div>
+      
+      <div class="map-container">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3280.378558459446!2d135.1910631!3d34.6911991!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60008ef3d83a957f%3A0xd28af3b60e14d2f3!2sSteakland%20Main%20Store!5e0!3m2!1sen!2sus!4v1693230090086!5m2!1sen!2sus" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+    
+    <div class="content-text">
+      <h2>Accessible Excellence: Authentic Kobe Beef Without the Sticker Shock</h2>
+      
+      <p>When it comes to experiencing authentic Kobe beef in its namesake city, many travelers face a dilemma: indulge in the world-famous delicacy and blow their travel budget, or skip it entirely. Steakland offers the perfect middle ground—genuine, certified Kobe beef prepared teppanyaki-style at prices that, while still special-occasion territory, won't require a second mortgage.</p>
+      
+      <p>Established over 30 years ago, Steakland has built its reputation on making authentic Kobe beef accessible to a wider audience. Unlike ultra-high-end establishments that can charge upwards of ¥30,000 ($200+) per person, Steakland offers set meals starting around ¥3,500 for lunch and ¥7,000 for dinner—still a splurge by everyday standards, but a manageable one for many travelers seeking to experience one of Japan's most celebrated culinary treasures.</p>
+      
+      <div class="photos-container">
+        <div class="photo-item">
+          <img src="https://www.tokyoweekender.com/wp-content/uploads/2019/12/kobe-beef.jpg" alt="Kobe Beef Cut">
+        </div>
+        <div class="photo-item">
+          <img src="https://media-cdn.tripadvisor.com/media/photo-s/0f/f2/1a/3a/photo2jpg.jpg" alt="Chef at Teppanyaki Grill">
+        </div>
+        <div class="photo-item">
+          <img src="https://media-cdn.tripadvisor.com/media/photo-s/12/ec/a5/bb/chef-preparing-vegetables.jpg" alt="Side Dishes">
+        </div>
+        <div class="photo-item">
+          <img src="https://media-cdn.tripadvisor.com/media/photo-s/0e/59/79/a9/lunch-set.jpg" alt="Complete Lunch Set">
+        </div>
+      </div>
+      
+      <h2>The Teppanyaki Experience</h2>
+      
+      <p>Steakland delivers its Kobe beef via the theatrical teppanyaki cooking style—where skilled chefs prepare your meal on a flat iron grill right before your eyes. This interactive dining experience adds entertainment value while also allowing you to witness the care with which the precious beef is handled.</p>
+      
+      <p>The restaurant features a horseshoe-shaped counter surrounding the teppan grill, with diners seated around the perimeter watching as chefs deftly slice, season, and cook the beef to each guest's preferred doneness. The sizzle of the meat hitting the hot grill surface, the expert knife work, and the precise timing are all part of the performance.</p>
+      
+      <p>While not as elaborate as some teppanyaki shows that incorporate knife-flipping tricks and flaming onion volcanoes, Steakland's chefs focus on the essentials: properly showcasing the quality of the beef through skilled cooking techniques. They typically prepare the meal in sequence—starting with appetizers and vegetables, moving to the main event (the Kobe beef), and finishing with garlic rice prepared using the flavorful remnants on the grill.</p>
+      
+      <h2>Understanding Real Kobe Beef</h2>
+      
+      <p>What makes Steakland particularly valuable is its commitment to serving genuine, certified Kobe beef—a distinction that matters tremendously in a market rife with misleading claims. True Kobe beef comes exclusively from Tajima strain Wagyu cattle raised in Japan's Hyogo Prefecture according to strict guidelines. Each cut receives a 10-digit identification number that can be traced back to the individual cow, and the meat is graded on a scale that considers marbling, color, fat quality, and more.</p>
+      
+      <p>Steakland proudly displays its certification and often shows diners the raw cuts with their identification numbers before cooking. This transparency is reassuring in a world where the term "Kobe beef" is frequently misused. What you're getting here is the real deal—beef from the region that made Wagyu famous globally, known for its exceptional marbling, melt-in-your-mouth texture, and rich, buttery flavor.</p>
+      
+      <div class="content-quote">
+        "Kobe beef should not be only for the wealthy. It's our philosophy that this special product of our region should be accessible to anyone who comes to visit Kobe. We use careful portion control and efficient operations to offer genuine A4-grade Kobe beef at prices that let travelers experience this cultural treasure without emptying their wallets." - Steakland Manager
+      </div>
+      
+      <!-- User Reviews Carousel -->
+      <h2>Customer Reviews</h2>
+      
+      <div class="review-carousel">
+        <div class="carousel-arrow carousel-prev">
+          <i class="fas fa-chevron-left"></i>
+        </div>
+        
+        <div class="review-slides">
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">David R.</div>
+                <div class="review-date">Visited March 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"We specifically traveled to Kobe to try authentic Kobe beef and chose Steakland based on recommendations about its value. We visited for lunch (arrived right at 11:30 opening) and were seated immediately at the counter. The chef showed us the raw beef with its certification number before cooking, which was reassuring. We both chose the ¥5,500 lunch set with 130g of Kobe beef sirloin, which came with appetizers, grilled vegetables, rice, soup, and dessert. The beef was unlike anything I've had before—incredibly tender and rich, with fat that melted like butter. The portion was perfect—enough to truly experience the quality without being excessive. Our chef spoke limited English but communicated well about cooking preferences. The entire meal lasted about 75 minutes, and we left completely satisfied. At $40 per person, it was still a splurge for us, but vastly more affordable than Kobe beef experiences in other places. If you're going to try Kobe beef once in your life, this is the place to do it—authentic, reasonably priced (for what it is), and in the city that gave the beef its name."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Naomi T.</div>
+                <div class="review-date">Visited January 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="far fa-star" style="color: #ddd;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"As someone who lives in Osaka, I occasionally visit Steakland when I have visitors who want to try Kobe beef without spending a fortune. Their lunch sets offer particularly good value, though they serve slightly smaller portions than at dinner. On my recent visit, I chose the ¥4,500 lunch set with 100g of Kobe beef tenderloin. The beef was excellently prepared—tender and flavorful with beautiful marbling. The accompanying garlic chips and wasabi added nice flavor accents. For those unfamiliar with high-grade Japanese beef, be aware that it's quite rich, and the fat content is high (that's what makes it special). The chef cooks it medium-rare by default, which is perfect for showcasing its qualities. The sides are simple but good—grilled bean sprouts, zucchini, and mushrooms, plus a small bowl of rice, miso soup, and a light dessert. The atmosphere is casual and relatively fast-paced, not a lingering fine-dining experience. If you're expecting the absolute pinnacle of Kobe beef, you might want to visit one of the more expensive specialized restaurants, but for a genuine, satisfying introduction to this famous delicacy without breaking the bank, Steakland delivers solid value."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Thomas L.</div>
+                <div class="review-date">Visited April 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="far fa-star" style="color: #ddd;"></i>
+                  <i class="far fa-star" style="color: #ddd;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"I visited Steakland's main branch during a day trip to Kobe from Osaka. Made a dinner reservation through my hotel for 6:30 PM and was seated promptly at the teppanyaki counter. I ordered the ¥8,500 dinner set with 130g of Kobe beef sirloin. First, the positives: the beef was legitimately good—tender, flavorful, and with the signature marbling that Kobe beef is famous for. The chef prepared it skillfully medium-rare, and it was easily the best beef I've had in Japan. Now, the drawbacks: the overall experience felt somewhat rushed and assembly-line like. The restaurant was packed, and while I appreciated the efficiency, I was hoping for a more special dining atmosphere given the price point. The side dishes were unremarkable—basic vegetables, a small salad, and soup. For the price, I expected a bit more refinement in the overall meal. My biggest disappointment was the portion size—130g (about 4.5 oz) disappeared quickly, and I left feeling I could have eaten more. That said, I recognize that Kobe beef is expensive, and Steakland is offering it at a more accessible price than many places. If your primary goal is to try authentic Kobe beef without spending a fortune, this place works well. But if you're looking for a memorable fine-dining experience with more atmosphere, you might want to save up for one of the premium Kobe beef restaurants."</p>
+          </div>
+        </div>
+        
+        <div class="carousel-arrow carousel-next">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+        
+        <div class="carousel-nav">
+          <div class="carousel-dot active"></div>
+          <div class="carousel-dot"></div>
+          <div class="carousel-dot"></div>
+        </div>
+      </div>
+      
+      <h2>Menu Highlights</h2>
+      
+      <p>Steakland offers set meals at various price points, allowing diners to experience Kobe beef according to their budget:</p>
+      
+      <h3>Lunch Sets (11:30 AM - 3:00 PM)</h3>
+      <ul>
+        <li><strong>Standard Kobe Beef Lunch (¥3,500)</strong> - 80g of Kobe beef sirloin with standard sides</li>
+        <li><strong>Special Kobe Beef Lunch (¥4,500)</strong> - 100g of Kobe beef sirloin or tenderloin</li>
+        <li><strong>Premium Kobe Beef Lunch (¥5,500)</strong> - 130g of Kobe beef sirloin with premium sides</li>
+        <li><strong>Kobe Beef & Seafood Combination (¥6,500)</strong> - 80g of Kobe beef with lobster or scallops</li>
+      </ul>
+      
+      <h3>Dinner Sets (5:00 PM - 10:00 PM)</h3>
+      <ul>
+        <li><strong>Standard Kobe Beef Dinner (¥7,000)</strong> - 100g of Kobe beef sirloin with appetizers and sides</li>
+        <li><strong>Special Kobe Beef Dinner (¥8,500)</strong> - 130g of Kobe beef sirloin or 100g of tenderloin</li>
+        <li><strong>Premium Kobe Beef Dinner (¥11,000)</strong> - 150g of Kobe beef sirloin or 130g of tenderloin</li>
+        <li><strong>Kobe Beef & Seafood Combination (¥12,000)</strong> - 100g of Kobe beef with lobster and jumbo shrimp</li>
+      </ul>
+      
+      <p>All sets typically include:</p>
+      <ul>
+        <li>Appetizers (salad, small seafood item)</li>
+        <li>Assorted grilled vegetables</li>
+        <li>Garlic chips and various condiments</li>
+        <li>Rice (often prepared on the grill with beef drippings at the end)</li>
+        <li>Miso soup</li>
+        <li>Dessert (typically a light fruit-based item)</li>
+      </ul>
+      
+      <div class="review-section">
+        <h2>Eastworld's Review</h2>
+        
+        <h3>Beef Quality: <span style="color: #FFD700;">★★★★½</span></h3>
+        <p>Steakland serves genuine, certified Kobe beef that delivers on its reputation for exceptional tenderness, marbling, and flavor. While they may not offer the absolute highest grades available (focusing on A4 rather than the ultra-premium A5), the quality is excellent and represents the true character of authentic Kobe beef.</p>
+        
+        <h3>Preparation: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>The teppanyaki chefs demonstrate solid technique, cooking the beef with precision to highlight its natural qualities. The preparation isn't as flashy or theatrical as some teppanyaki establishments but focuses appropriately on the beef itself. The standard medium-rare cooking brings out the optimal texture and flavor.</p>
+        
+        <h3>Value: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>For the opportunity to experience authentic certified Kobe beef, Steakland offers exceptional value. While still a splurge by everyday standards, their pricing is remarkably accessible compared to other Kobe beef establishments, particularly during lunch service. Portion sizes are modest but sufficient to appreciate the quality.</p>
+        
+        <h3>Supporting Dishes: <span style="color: #FFD700;">★★★</span></h3>
+        <p>The accompanying items are competently prepared but fairly basic—standard grilled vegetables, soup, and simple sides that don't detract from but also don't particularly enhance the main attraction. The garlic rice prepared at the end using the beef drippings is a flavorful highlight.</p>
+        
+        <h3>Atmosphere: <span style="color: #FFD700;">★★★</span></h3>
+        <p>The restaurant is clean and well-maintained but relatively utilitarian, with a focus on efficient service rather than ambiance. The counter seating around the teppan grill provides good views of the cooking process but creates a casual rather than intimate dining environment. During peak hours, the atmosphere can feel somewhat rushed.</p>
+        
+        <h3>Overall: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>Steakland successfully delivers on its core promise: making authentic Kobe beef accessible to a broader audience. It offers a genuine, satisfying introduction to this world-famous delicacy without the exclusivity or extreme prices of high-end establishments. For travelers seeking to experience real Kobe beef in its hometown without breaking their travel budget, Steakland provides a compelling opportunity worth building into your Kobe itinerary.</p>
+      </div>
+      
+      <h2>Tips for Visitors</h2>
+      
+      <ul>
+        <li><strong>Lunch vs. Dinner:</strong> Lunch offers significantly better value for nearly identical quality, with set menus starting at ¥3,500 compared to ¥7,000 for dinner</li>
+        <li><strong>Timing:</strong> Arrive right at opening (11:30 AM for lunch, 5:00 PM for dinner) to avoid waits, especially at the main branch</li>
+        <li><strong>Reservations:</strong> Recommended for dinner; can be made through your hotel concierge or by phone</li>
+        <li><strong>Certification:</strong> Don't hesitate to ask to see the beef's certification number before cooking—it's part of the experience</li>
+        <li><strong>Cooking Preference:</strong> Medium-rare is recommended to best appreciate Kobe beef's qualities, but chefs will accommodate your preference</li>
+        <li><strong>Portion Expectations:</strong> Set realistic expectations about portion sizes—they're adequate but not large, especially for the lower-priced sets</li>
+        <li><strong>Photography:</strong> Taking photos of your meal is welcome and common among both Japanese and international guests</li>
+        <li><strong>English Menus:</strong> Available at all locations, making ordering straightforward for international visitors</li>
+      </ul>
+      
+      <!-- Visitor Information -->
+      <div id="visitor-info" class="review-section">
+        <h2>Visitor Information</h2>
+        <p>Here's what you need to know when planning your visit to Steakland:</p>
+        
+        <h3>Getting There:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li><strong>Main Branch:</strong> 5-minute walk from Sannomiya Station (JR, Hanshin, Hankyu, or Municipal Subway)</li>
+          <li><strong>Kitanozaka Branch:</strong> 7-minute walk from Shin-Kobe Station (Shinkansen, Subway)</li>
+          <li><strong>Harborland Branch:</strong> 5-minute walk from Kobe Station (JR Line)</li>
+        </ul>
+        
+        <h3>Making Reservations:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Lunch: Generally not required, but advisable on weekends</li>
+          <li>Dinner: Recommended, especially at the main branch</li>
+          <li>Phone reservation: +81 78-331-3397 (Some English spoken)</li>
+          <li>Hotel concierge: The easiest option for international visitors</li>
+        </ul>
+        
+        <h3>Payment Information:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Major credit cards accepted (Visa, Mastercard, JCB, American Express)</li>
+          <li>Cash (Japanese yen) also accepted</li>
+          <li>No additional service charge or taxes added to menu prices</li>
+          <li>Tipping is not customary in Japan and not expected</li>
+        </ul>
+        
+        <h3>Special Considerations:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Seating is primarily at the teppanyaki counter around the grill</li>
+          <li>Limited private table seating is available but needs to be requested in advance</li>
+          <li>The restaurant can accommodate basic dietary restrictions if notified in advance</li>
+          <li>A typical meal lasts 60-90 minutes</li>
+        </ul>
+        
+        <h3>When in Kobe:</h3>
+        <p>Steakland is conveniently located for combining with other Kobe attractions:</p>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>The main branch is in the downtown shopping district near Sannomiya</li>
+          <li>The Kitanozaka branch is near the Shin-Kobe Ropeway and Herb Gardens</li>
+          <li>The Harborland branch is in the waterfront shopping and entertainment area</li>
+        </ul>
+        
+        <p>For travelers arriving in Kobe on a day trip from Osaka or Kyoto, having lunch at Steakland and then exploring the city's other attractions makes for an efficient itinerary.</p>
+      </div>
+      
+      <a href="../food.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Food Guide</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Review carousel functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const slides = document.querySelector('.review-slides');
+      const dots = document.querySelectorAll('.carousel-dot');
+      const prevBtn = document.querySelector('.carousel-prev');
+      const nextBtn = document.querySelector('.carousel-next');
+      let currentSlide = 0;
+      const totalSlides = document.querySelectorAll('.review-slide').length;
+      
+      // Function to update slide position
+      function showSlide(index) {
+        if (index < 0) index = totalSlides - 1;
+        if (index >= totalSlides) index = 0;
+        
+        currentSlide = index;
+        slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+        
+        // Update active dot
+        dots.forEach((dot, i) => {
+          dot.classList.toggle('active', i === currentSlide);
+        });
+      }
+      
+      // Set up event listeners for dots
+      dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => showSlide(i));
+      });
+      
+      // Set up event listeners for arrows
+      prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
+      nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
+      
+      // Auto-rotate slides every 5 seconds
+      setInterval(() => {
+        showSlide(currentSlide + 1);
+      }, 5000);
+    });
+  </script>
+  
+  <script src="../script.js"></script>
+</body>
+</html> 

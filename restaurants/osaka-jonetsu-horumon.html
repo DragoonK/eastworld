@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jonetsu Horumon - Eastworld Restaurant Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Additional styles specific to restaurant reviews */
+    .restaurant-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+      .restaurant-info {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .restaurant-details {
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .detail-row {
+      display: flex;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+    }
+    
+    .detail-label {
+      font-weight: 600;
+      min-width: 120px;
+      color: #333;
+    }
+    
+    .detail-value {
+      flex: 1;
+      color: #555;
+    }
+    
+    .rating {
+      margin-bottom: 1rem;
+    }
+    
+    .star {
+      color: #ddd;
+      font-size: 1.5rem;
+    }
+    
+    .star.filled {
+      color: #FFD700;
+    }
+    
+    .half-star {
+      position: relative;
+    }
+    
+    .half-star .fas.fa-star-half {
+      color: #FFD700;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    
+    .score-label {
+      margin-left: 0.5rem;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .map-container {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .map-container iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+    }
+    
+    .photos-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .photo-item {
+      border-radius: 8px;
+      overflow: hidden;
+      height: 150px;
+    }
+    
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .photo-item img:hover {
+      transform: scale(1.05);
+    }
+    
+    .review-section {
+      margin: 2rem 0;
+      padding: 2rem;
+      background: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    /* Booking button styles */
+    .booking-button {
+      display: block;
+      background-color: #ff4d4d;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      margin: 1.5rem 0;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    
+    .booking-button:hover {
+      background-color: #e63939;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    /* Review carousel styles */
+    .review-carousel {
+      position: relative;
+      margin: 2rem 0;
+      overflow: hidden;
+      padding: 1rem 0;
+    }
+    
+    .review-slides {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    
+    .review-slide {
+      min-width: 100%;
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .reviewer-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #f0f0f0;
+      padding-bottom: 0.8rem;
+    }
+    
+    .reviewer-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 0.8rem;
+    }
+    
+    .reviewer-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding-top: 0.2rem;
+    }
+    
+    .review-date {
+      color: #888;
+      font-size: 0.75rem;
+      margin-top: 0.1rem;
+    }
+    
+    .review-rating {
+      display: flex;
+      margin-top: 0.2rem;
+    }
+    
+    .review-rating i {
+      font-size: 0.8rem;
+      margin-right: 2px;
+    }
+    
+    .carousel-nav {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+    
+    .carousel-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ddd;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .carousel-dot.active {
+      background: #ff4d4d;
+    }
+    
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.7);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+    
+    .carousel-prev {
+      left: 10px;
+    }
+    
+    .carousel-next {
+      right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../food.html" class="nav-item active">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="content-container">
+    <div class="content-header">
+      <span class="content-category">YAKINIKU</span>
+      <h1 class="content-title">Jonetsu Horumon - Exceptional Offal Yakiniku in Osaka</h1>
+      
+      <!-- Rating Section -->
+      <div class="rating">
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star half-star">
+          <i class="far fa-star"></i>
+          <i class="fas fa-star-half"></i>
+        </span>
+        <span class="score-label">4.7/5.0</span>
+      </div>
+    </div>
+    
+    <div class="hero-container">
+      <img class="content-hero" src="https://tabelog.com/imgview/original?id=r9132397764033" alt="Jonetsu Horumon interior" 
+      onerror="this.onerror=null; 
+      this.parentElement.innerHTML = '<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#333;color:white;font-size:1.5rem;text-align:center;padding:2rem;\'>Jonetsu Horumon</div>';">
+    </div>
+    
+    <!-- Booking Button -->
+    <a href="#visitor-info" class="booking-button">
+      <i class="fas fa-info-circle"></i> VISITOR INFORMATION
+    </a>
+    
+    <!-- Restaurant Information Section -->
+    <div class="restaurant-info">
+      <div class="restaurant-details">
+        <h2>Restaurant Details</h2>
+        
+        <div class="detail-row">
+          <div class="detail-label">Address:</div>
+          <div class="detail-value">1-2-9 Dotonbori, Chuo-ku, Osaka 542-0071, Japan</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Hours:</div>
+          <div class="detail-value">5:00 PM - 1:00 AM (Mon-Thu)<br>5:00 PM - 3:00 AM (Fri-Sat)<br>5:00 PM - 12:00 AM (Sun)</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Phone:</div>
+          <div class="detail-value">+81 6-6212-2929</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Price Range:</div>
+          <div class="detail-value">¥3,000-5,000 ($25-40) per person</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Cuisine:</div>
+          <div class="detail-value">Japanese Yakiniku, Horumon (Offal)</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Reservations:</div>
+          <div class="detail-value">Highly recommended, especially on weekends</div>
+        </div>
+        
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">How to Get There</h3>
+        <p>From Namba Station:</p>
+        <ul style="margin-bottom: 1rem; padding-left: 1.5rem;">
+          <li>Take the north exit from Namba Station</li>
+          <li>Walk north for about 7 minutes toward Dotonbori</li>
+          <li>Turn right onto Dotonbori Street</li>
+          <li>The restaurant is on the second floor of a building with a prominent sign in Japanese (情熱ホルモン)</li>
+        </ul>
+      </div>
+      
+      <div class="map-container">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3281.0055642266607!2d135.5004632!3d34.6685268!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6000e712dd2b6ead%3A0x7dbd89f42139d7f8!2sJONETSU%20HORUMON%20DOTOMBORI!5e0!3m2!1sen!2sus!4v1693230090086!5m2!1sen!2sus" 
+        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+    
+    <div class="content-text">
+      <h2>Osaka's Premier Horumon Yakiniku Experience</h2>
+      
+      <p>Jonetsu Horumon, whose name translates roughly to "Passionate Offal," has earned its reputation as one of Osaka's most beloved yakiniku destinations specializing in horumon (offal). Located in the bustling entertainment district of Dotonbori, this restaurant offers an authentic and flavorful introduction to a distinctive style of Japanese barbecue focusing on various cuts of offal that most Western restaurants discard.</p>
+      
+      <p>The restaurant's philosophy centers on presenting the highest quality horumon cuts, meticulously prepared through special marination techniques that enhance flavor while reducing any potentially off-putting elements. The result is a menu that appeals to both horumon enthusiasts and curious newcomers willing to expand their culinary horizons.</p>
+      
+      <div class="photos-container">
+        <div class="photo-item">
+          <img src="https://media-cdn.tripadvisor.com/media/photo-s/1d/4b/e0/db/caption.jpg" alt="Assorted horumon platter">
+        </div>
+        <div class="photo-item">
+          <img src="https://media-cdn.tripadvisor.com/media/photo-s/10/e0/04/76/photo0jpg.jpg" alt="Grilling meat at table">
+        </div>
+        <div class="photo-item">
+          <img src="https://media-cdn.tripadvisor.com/media/photo-s/11/34/30/83/jonetsu-horumon-dotonbori.jpg" alt="Restaurant interior">
+        </div>
+        <div class="photo-item">
+          <img src="https://media-cdn.tripadvisor.com/media/photo-s/1c/05/13/36/yakiniku.jpg" alt="Sizzling beef on grill">
+        </div>
+      </div>
+      
+      <h2>The Art of Horumon Cuisine</h2>
+      
+      <p>For the uninitiated, horumon refers to various organ meats and offal cuts that are particularly prized in Osaka's food culture. Each cut has its own distinct texture and flavor profile—from the rich, buttery taste of liver to the pleasant chewiness of heart or the distinctive character of intestines—and Jonetsu Horumon expertly prepares each to maximize its appeal.</p>
+      
+      <p>What sets Jonetsu apart from other yakiniku establishments is their comprehensive understanding of how to prepare these speciality cuts. Each piece is carefully trimmed, cleaned, and marinated using proprietary techniques developed over years. Their marinades often incorporate a balanced blend of sweet, salty, and umami flavors that complement the natural taste of each cut without overwhelming it.</p>
+      
+      <p>The dining experience is interactive and social, with each table equipped with a smokeless charcoal grill. The staff provides guidance on optimal cooking times for each cut, ensuring that even first-time visitors can achieve perfect results. Complementary dipping sauces, ranging from tangy ponzu to rich tare (a sweet soy-based sauce), allow diners to customize each bite to their preference.</p>
+      
+      <div class="content-quote">
+        "At Jonetsu, we believe in honoring the entire animal by showcasing cuts that are often overlooked but offer incredible depth of flavor. Our mission is to introduce more people to the amazing world of horumon cuisine through careful preparation and education. When someone tries liver or heart for the first time and their eyes light up in surprise at how delicious it is—that's what drives our passion." - Chef Tanaka, Head Chef at Jonetsu Horumon
+      </div>
+      
+      <!-- User Reviews Carousel -->
+      <h2>Customer Reviews</h2>
+      
+      <div class="review-carousel">
+        <div class="carousel-arrow carousel-prev">
+          <i class="fas fa-chevron-left"></i>
+        </div>
+        
+        <div class="review-slides">
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Ryan K.</div>
+                <div class="review-date">Visited July 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"My first experience with horumon cuisine couldn't have been better! I was hesitant about trying organ meats, but our server was incredibly patient in explaining each cut and how to cook it. The marinades were outstanding—they brought out the natural flavors without masking them. We tried the tongue, heart, and a special marinated liver that absolutely blew me away. The atmosphere was energetic with just the right amount of smokiness from the grills, and despite being in the tourist-heavy Dotonbori area, the restaurant felt authentically local. I particularly appreciated how they offered an English menu with detailed explanations of each cut. A must-visit for anyone looking to experience this unique aspect of Osakan cuisine!"</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Naoki T.</div>
+                <div class="review-date">Visited June 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"As a horumon enthusiast who has tried countless yakiniku places across Japan, I can confidently say Jonetsu ranks among the top specialists in Kansai. Their attention to detail in preparation is evident in every bite—the intestines (particularly the 'shiro' variety) are perfectly cleaned without any off-flavors, and their signature marinade for liver transforms it into something even non-liver fans enjoy. What impressed me most was their consistency; I've visited multiple times over the years and the quality never wavers. The staff is knowledgeable about sake pairings as well, recommending an excellent junmai that complemented the rich flavors perfectly. While not the cheapest option in Dotonbori, the quality-to-price ratio makes it excellent value. Reservations are essential on weekends!"</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Claire M.</div>
+                <div class="review-date">Visited May 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="far fa-star" style="color: #ddd;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"Jonetsu Horumon offers an excellent introduction to offal cuisine, even for the initially reluctant. We ordered the 'Beginner's Selection' platter which offered a variety of more approachable cuts alongside some adventurous options. The standout was definitely the 'tare' marinated tongue—incredibly tender and flavorful. The restaurant has a lively, somewhat boisterous atmosphere which adds to the fun experience. Our only small complaint was that the ventilation could be better; we left with our clothes smelling quite strongly of smoke despite the supposedly 'smokeless' grills. That said, the staff was wonderfully accommodating of our limited Japanese, providing an illustrated cooking guide for each cut. The plum wine (umeshu) they recommended paired beautifully with the meal. Overall, a memorable dining experience that I'd definitely recommend."</p>
+          </div>
+        </div>
+        
+        <div class="carousel-arrow carousel-next">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+        
+        <div class="carousel-nav">
+          <div class="carousel-dot active"></div>
+          <div class="carousel-dot"></div>
+          <div class="carousel-dot"></div>
+        </div>
+      </div>
+      
+      <h2>Menu Highlights</h2>
+      
+      <p>While Jonetsu Horumon's menu rotates seasonally and based on availability, several signature dishes have become permanent fixtures:</p>
+      
+      <ul>
+        <li><strong>Jonetsu Special Platter (¥3,800)</strong> - A curated selection of the restaurant's finest horumon cuts, ideal for first-time visitors wanting to experience a variety</li>
+        <li><strong>Premium Marinated Liver (¥980)</strong> - Their signature dish featuring exceptionally fresh liver in a sweet-savory marinade that transforms the texture and flavor</li>
+        <li><strong>Tare-Marinated Tongue (¥1,200)</strong> - Thinly sliced beef tongue in a proprietary marinade, meant to be quickly seared for maximum tenderness</li>
+        <li><strong>Harami (Outside Skirt) (¥1,300)</strong> - A more familiar cut for those new to yakiniku, featuring well-marbled diaphragm meat with a rich flavor</li>
+        <li><strong>Shiro (Small Intestine) (¥980)</strong> - A horumon specialty with a pleasant chewy texture and rich flavor that intensifies when grilled</li>
+        <li><strong>Beginner's Selection (¥2,800)</strong> - Curated for newcomers to horumon cuisine, featuring more approachable cuts with detailed cooking instructions</li>
+        <li><strong>Kimchi Platter (¥680)</strong> - House-made kimchi that offers a refreshing, spicy counterpoint to the rich meat</li>
+        <li><strong>Garlic Rice (¥580)</strong> - A perfect end to the meal, featuring rice stir-fried with garlic and drippings from the yakiniku</li>
+      </ul>
+      
+      <p>The drink menu is equally thoughtful, offering selections specifically chosen to complement the unique flavors of horumon:</p>
+      
+      <ul>
+        <li><strong>Craft Beer Selection (¥780-980)</strong> - Including several local Osaka breweries</li>
+        <li><strong>Premium Sake (¥800-1,500)</strong> - With staff recommendations based on your food selections</li>
+        <li><strong>Shochu Varieties (¥700-1,200)</strong> - Traditional distilled spirits that pair well with grilled meats</li>
+        <li><strong>Highballs (¥580-780)</strong> - Refreshing whisky sodas that cleanse the palate between rich bites</li>
+      </ul>
+      
+      <div class="review-section">
+        <h2>Eastworld's Review</h2>
+        
+        <h3>Food Quality: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Jonetsu Horumon elevates offal cuisine to an art form. Their meticulous preparation methods result in exceptionally clean flavors that showcase the inherent qualities of each cut. Marinades are thoughtfully balanced, and the meat quality is consistently excellent.</p>
+        
+        <h3>Authenticity: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>This is a genuine Osakan horumon experience, unchanged for the tourist market. The restaurant maintains traditional preparation techniques while making the experience accessible to international visitors through good English support.</p>
+        
+        <h3>Value: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>While not inexpensive (expect to pay ¥3,500-5,000 per person with drinks), the quality-to-price ratio is excellent considering the premium ingredients, specialized preparation, and attentive service. Portion sizes are satisfying without being excessive.</p>
+        
+        <h3>Atmosphere: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>The restaurant strikes a good balance between energetic and comfortable. The slightly smoky, lively atmosphere contributes to the authentic experience, though the ventilation could be improved. Seating is comfortable, and the layout offers enough privacy for conversation while maintaining the communal energy yakiniku is known for.</p>
+        
+        <h3>Service: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>The staff demonstrates exceptional knowledge of their specialized cuisine and shows genuine enthusiasm for introducing newcomers to horumon. Despite language barriers, they're adept at guiding international guests through the menu and cooking process with patience and humor.</p>
+        
+        <h3>Overall: <span style="color: #FFD700;">★★★★½</span></h3>
+        <p>Jonetsu Horumon offers one of Osaka's most distinctive dining experiences. For culinary adventurers, it presents the perfect opportunity to explore a beloved local specialty in an environment that's both authentic and accessible. First-time visitors to Japan seeking to venture beyond typical tourist fare will find it particularly rewarding.</p>
+      </div>
+      
+      <h2>Tips for Visitors</h2>
+      
+      <ul>
+        <li>Make reservations at least 2-3 days in advance, especially for weekend visits</li>
+        <li>Consider visiting for early dinner (5-6 PM) when the restaurant is less crowded</li>
+        <li>Don't hesitate to ask for cooking guidance—staff are accustomed to first-time visitors</li>
+        <li>The "Beginner's Selection" is an excellent choice for those new to horumon</li>
+        <li>Pace yourself with ordering—you can always add more dishes as you go</li>
+        <li>Try at least one of their recommended sake pairings to enhance the experience</li>
+        <li>Remember that different cuts require different cooking times—follow staff recommendations</li>
+        <li>Save room for the garlic rice, which makes an excellent finale to the meal</li>
+        <li>Wear casual clothes that you don't mind having a slight smoky scent afterward</li>
+      </ul>
+      
+      <!-- Visitor Information -->
+      <div id="visitor-info" class="review-section">
+        <h2>Visitor Information</h2>
+        
+        <h3>Reservations:</h3>
+        <p>Reservations are strongly recommended and can be made through:</p>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Phone: +81 6-6212-2929 (some English spoken)</li>
+          <li>Online: Through their website (Japanese only) or via hotel concierge services</li>
+          <li>Many hotels in Osaka can assist with making reservations for international guests</li>
+        </ul>
+        
+        <h3>English Support:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>English menus with photos and descriptions are available</li>
+          <li>Most staff have basic English communication skills</li>
+          <li>Pictorial cooking guides are provided for international guests</li>
+        </ul>
+        
+        <h3>Payment Information:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Major credit cards accepted (Visa, Mastercard, JCB, Amex)</li>
+          <li>Cash (Japanese yen) is also accepted</li>
+          <li>No service charge, but 10% consumption tax will be added to your bill</li>
+        </ul>
+        
+        <p>While in Dotonbori, consider exploring the area before or after your meal. The vibrant entertainment district comes alive at night with neon signs, street food stalls, and shopping opportunities, making it the perfect setting for your yakiniku adventure.</p>
+      </div>
+      
+      <a href="../food.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Food Guide</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Review carousel functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const slides = document.querySelector('.review-slides');
+      const dots = document.querySelectorAll('.carousel-dot');
+      const prevBtn = document.querySelector('.carousel-prev');
+      const nextBtn = document.querySelector('.carousel-next');
+      let currentSlide = 0;
+      const totalSlides = document.querySelectorAll('.review-slide').length;
+      
+      // Function to update slide position
+      function showSlide(index) {
+        if (index < 0) index = totalSlides - 1;
+        if (index >= totalSlides) index = 0;
+        
+        currentSlide = index;
+        slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+        
+        // Update active dot
+        dots.forEach((dot, i) => {
+          dot.classList.toggle('active', i === currentSlide);
+        });
+      }
+      
+      // Set up event listeners for dots
+      dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => showSlide(i));
+      });
+      
+      // Set up event listeners for arrows
+      prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
+      nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
+      
+      // Auto-rotate slides every 5 seconds
+      setInterval(() => {
+        showSlide(currentSlide + 1);
+      }, 5000);
+    });
+  </script>
+  
+  <script src="../script.js"></script>
+</body>
+</html> 

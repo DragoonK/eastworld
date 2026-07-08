@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Narisawa - Eastworld Restaurant Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Additional styles specific to restaurant reviews */
+    .restaurant-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+      .restaurant-info {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .restaurant-details {
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .detail-row {
+      display: flex;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+    }
+    
+    .detail-label {
+      font-weight: 600;
+      min-width: 120px;
+      color: #333;
+    }
+    
+    .detail-value {
+      flex: 1;
+      color: #555;
+    }
+    
+    .rating {
+      margin-bottom: 1rem;
+    }
+    
+    .star {
+      color: #ddd;
+      font-size: 1.5rem;
+    }
+    
+    .star.filled {
+      color: #FFD700;
+    }
+    
+    .half-star {
+      position: relative;
+    }
+    
+    .half-star .fas.fa-star-half {
+      color: #FFD700;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    
+    .score-label {
+      margin-left: 0.5rem;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .map-container {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .map-container iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+    }
+    
+    .photos-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .photo-item {
+      border-radius: 8px;
+      overflow: hidden;
+      height: 150px;
+    }
+    
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .photo-item img:hover {
+      transform: scale(1.05);
+    }
+    
+    .review-section {
+      margin: 2rem 0;
+      padding: 2rem;
+      background: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    /* Booking button styles */
+    .booking-button {
+      display: block;
+      background-color: #ff4d4d;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      margin: 1.5rem 0;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    
+    .booking-button:hover {
+      background-color: #e63939;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    /* Review carousel styles */
+    .review-carousel {
+      position: relative;
+      margin: 2rem 0;
+      overflow: hidden;
+      padding: 1rem 0;
+    }
+    
+    .review-slides {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    
+    .review-slide {
+      min-width: 100%;
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .reviewer-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #f0f0f0;
+      padding-bottom: 0.8rem;
+    }
+    
+    .reviewer-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 0.8rem;
+    }
+    
+    .reviewer-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding-top: 0.2rem;
+    }
+    
+    .review-date {
+      color: #888;
+      font-size: 0.75rem;
+      margin-top: 0.1rem;
+    }
+    
+    .review-rating {
+      display: flex;
+      margin-top: 0.2rem;
+    }
+    
+    .review-rating i {
+      font-size: 0.8rem;
+      margin-right: 2px;
+    }
+    
+    .carousel-nav {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+    
+    .carousel-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ddd;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .carousel-dot.active {
+      background: #ff4d4d;
+    }
+    
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.7);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+    
+    .carousel-prev {
+      left: 10px;
+    }
+    
+    .carousel-next {
+      right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../food.html" class="nav-item active">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="content-container">
+    <div class="content-header">
+      <span class="content-category">INNOVATIVE JAPANESE</span>
+      <h1 class="content-title">Narisawa - Celebrating Japanese Nature Through Cuisine</h1>
+      
+      <!-- Rating Section -->
+      <div class="rating">
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="score-label">4.9/5.0</span>
+      </div>
+    </div>
+    
+    <div class="hero-container">
+      <img class="content-hero" src="https://www.theworlds50best.com/filestore/jpg/Narisawa-2019-5-interior.jpg" alt="Narisawa Interior" 
+      onerror="this.onerror=null; 
+      this.parentElement.innerHTML = '<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#333;color:white;font-size:1.5rem;text-align:center;padding:2rem;\'>Narisawa Tokyo</div>';">
+    </div>
+    
+    <!-- Booking Button -->
+    <a href="#booking-form" class="booking-button">
+      <i class="fas fa-calendar-alt"></i> RESERVE A TABLE
+    </a>
+    
+    <!-- Restaurant Information Section -->
+    <div class="restaurant-info">
+      <div class="restaurant-details">
+        <h2>Restaurant Details</h2>
+        
+        <div class="detail-row">
+          <div class="detail-label">Address:</div>
+          <div class="detail-value">Minami Aoyama 2-6-15, Minato-ku, Tokyo 107-0062, Japan</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Hours:</div>
+          <div class="detail-value">Lunch: 12:00 PM - 1:30 PM (Last seating)<br>Dinner: 6:30 PM - 8:00 PM (Last seating)<br>Closed on Sundays and public holidays</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Phone:</div>
+          <div class="detail-value">+81 3-5785-0799</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Price Range:</div>
+          <div class="detail-value">¥40,000-50,000 ($280-350) per person for tasting menu</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Cuisine:</div>
+          <div class="detail-value">Innovative Japanese, Sustainable Gastronomy</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Reservations:</div>
+          <div class="detail-value">Essential, book 2-3 months in advance</div>
+        </div>
+        
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">How to Get There</h3>
+        <p>From Aoyama-Itchome Station:</p>
+        <ul style="margin-bottom: 1rem; padding-left: 1.5rem;">
+          <li>Take Exit 4 from Aoyama-Itchome Station (Ginza, Hanzomon, or Oedo Lines)</li>
+          <li>Walk west along Aoyama-dori Avenue for approximately 5 minutes</li>
+          <li>Turn left onto Miyuki-dori Street</li>
+          <li>Narisawa is located on your right, in a discreet building with minimal signage</li>
+        </ul>
+      </div>
+      
+      <div class="map-container">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3241.4499114161736!2d139.71800047600755!3d35.6693382387681!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60188c83474d9b8f%3A0x59b7c8460385c488!2sNarisawa!5e0!3m2!1sen!2sus!4v1693230090086!5m2!1sen!2sus" 
+        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+    
+    <div class="content-text">
+      <h2>Sustainable Gastronomy at the Forefront</h2>
+      
+      <p>Narisawa, led by visionary chef Yoshihiro Narisawa, stands at the pinnacle of Japanese haute cuisine. Since opening in 2003, the restaurant has earned two Michelin stars and consistently ranks among the World's 50 Best Restaurants. What distinguishes Narisawa is its unique philosophy of "Innovative Satoyama Cuisine" – a culinary approach that celebrates Japan's diverse natural landscapes and sustainability.</p>
+      
+      <p>Chef Narisawa draws inspiration from satoyama, the border zones between mountain foothills and flat arable land in Japan, which represent the harmony between people and nature. His cuisine tells the story of Japanese terroir – from forests and oceans to farms and fields – through meticulously crafted dishes that honor natural ingredients while showcasing advanced culinary techniques.</p>
+      
+      <div class="photos-container">
+        <div class="photo-item">
+          <img src="https://www.theworlds50best.com/filestore/jpg/W50BR2018-25-Narisawa-3.jpg" alt="Narisawa signature dish">
+        </div>
+        <div class="photo-item">
+          <img src="https://www.theworlds50best.com/filestore/jpg/Narisawa-dish4.jpg" alt="Forest-inspired plate">
+        </div>
+        <div class="photo-item">
+          <img src="https://www.finedininglovers.com/sites/g/files/xknfdk626/files/styles/im_landscape_16_9_1280/public/2021-08/Yoshihiro%20Narisawa%20chef%27s%20table.jpg?itok=9FJZwxIJ" alt="Chef Yoshihiro Narisawa">
+        </div>
+        <div class="photo-item">
+          <img src="https://metropolisjapan.com/wp-content/uploads/2018/03/narisawa-bread-of-the-forest-floor.jpg" alt="Bread of the Forest">
+        </div>
+      </div>
+      
+      <h2>A Journey Through Japanese Ecosystems</h2>
+      
+      <p>Dining at Narisawa is an immersive experience that engages all the senses. The seasonal tasting menu, which changes throughout the year, takes diners on a conceptual tour of Japan's diverse ecosystems. The restaurant's minimalist interior, with its neutral tones and subtle natural elements, provides a serene backdrop that keeps the focus firmly on the extraordinary food.</p>
+      
+      <p>Chef Narisawa's culinary style is characterized by his deep respect for ingredients, innovative techniques, and artistic presentation. Dishes might showcase the essence of Japanese forests through a "soil soup" made with purified dirt, or celebrate the ocean with sustainably caught seafood prepared using both ancient and cutting-edge methods. While the cuisine has French influences from Chef Narisawa's training, the soul of each creation is distinctly Japanese.</p>
+      
+      <p>Sustainability is not a mere buzzword at Narisawa but the core principle guiding every aspect of the restaurant. From carefully sourcing ingredients from small producers who share the chef's environmental values to minimizing food waste and even developing sustainable packaging for takeaway items during the pandemic, Narisawa demonstrates that haute cuisine can coexist with environmental responsibility.</p>
+      
+      <div class="content-quote">
+        "My aim is to express the richness of Japanese nature through my cooking. By connecting diners with the landscapes where ingredients originate, I hope to inspire a deeper appreciation for our environment and the importance of protecting it for future generations." - Chef Yoshihiro Narisawa
+      </div>
+      
+      <!-- User Reviews Carousel -->
+      <h2>Customer Reviews</h2>
+      
+      <div class="review-carousel">
+        <div class="carousel-arrow carousel-prev">
+          <i class="fas fa-chevron-left"></i>
+        </div>
+        
+        <div class="review-slides">
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Michael W.</div>
+                <div class="review-date">Visited May 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"Narisawa provided one of the most memorable dining experiences of my life. The 'Bread of the Forest' was a revelation – watching the dough ferment and bake at the table, then tasting bread with such profound depth of flavor fundamentally changed my understanding of what bread can be. Every course told a story of Japanese ecosystems with extraordinary precision and creativity. I was particularly moved by how the meal created sensory connections to landscapes I'd visited in Japan – a dish of mountain vegetables genuinely transported me back to hiking in the Japanese Alps. The service staff demonstrated impressive knowledge, explaining each dish's connection to nature with genuine passion. Worth every yen of its considerable price."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Tomoko K.</div>
+                <div class="review-date">Visited April 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"As a Japanese diner with high expectations for kaiseki cuisine, Narisawa still managed to surprise and delight me. Chef Narisawa's approach honors our culinary traditions while boldly reimagining them through a contemporary and global lens. The spring menu featured ingredients from my home prefecture of Ishikawa, prepared with techniques I'd never encountered. I appreciated how the staff took time to explain the origin of each ingredient and the producers behind them – this connection to the human element of food production added emotional resonance to an already exceptional meal. The sake pairing was expertly curated, featuring small producers whose philosophy matched the restaurant's commitment to sustainability."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Sophie L.</div>
+                <div class="review-date">Visited March 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star-half-alt" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"Our dinner at Narisawa was the culinary highlight of our Japan trip. The restaurant's 'Beneficial and Sustainable' theme resonated throughout the experience, from the first canapé to the final bite of dessert. The langoustine dish, with shellfish so fresh it was still moving minutes before serving, exemplified Chef Narisawa's commitment to immediacy and respect for ingredients. Each course offered a perfect balance of technical brilliance, visual beauty, and pure deliciousness. My only slight reservation was that the pacing felt somewhat rushed during the early courses, though this improved as the meal progressed. The wine pairing featured some surprising choices that worked brilliantly, especially a biodynamic Jura wine paired with the forest-inspired dish. Expensive, yes, but an experience that will stay with me for years."</p>
+          </div>
+        </div>
+        
+        <div class="carousel-arrow carousel-next">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+        
+        <div class="carousel-nav">
+          <div class="carousel-dot active"></div>
+          <div class="carousel-dot"></div>
+          <div class="carousel-dot"></div>
+        </div>
+      </div>
+      
+      <h2>Signature Experiences</h2>
+      
+      <p>While Narisawa's menu evolves with the seasons and the chef's inspiration, several iconic creations have become emblematic of the restaurant's philosophy:</p>
+      
+      <ul>
+        <li><strong>Bread of the Forest</strong> - A signature experience where bread dough ferments and bakes at the table, releasing aromas of the forest and developing a moss-like crust</li>
+        <li><strong>Satoyama Scenery</strong> - A landscape on a plate that represents the boundary between mountain and village, featuring foraged plants and vegetables</li>
+        <li><strong>Sustainable Langoustine</strong> - Live langoustine presented in a glass dome filled with seawater mist, then prepared with minimal intervention to showcase its natural sweetness</li>
+        <li><strong>Soil Soup</strong> - An innovative creation made with purified soil, revealing the profound connection between land and flavor</li>
+        <li><strong>Essence of the Forest</strong> - A dish that distills forest aromas and flavors through various techniques, often featuring pine, oak, or cedar elements</li>
+        <li><strong>Matured Wagyu Beef</strong> - Japanese beef aged using Chef Narisawa's unique methods to enhance flavor, often accompanied by seasonal vegetables from the same region as the beef</li>
+      </ul>
+      
+      <div class="review-section">
+        <h2>Eastworld's Review</h2>
+        
+        <h3>Food Quality: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Narisawa achieves a rare balance of technical virtuosity and soulful depth. The ingredients are impeccable, sourced with extraordinary care and prepared with precision that enhances rather than masks their natural qualities. Each dish offers a harmonious interplay of flavors, textures, and temperatures.</p>
+        
+        <h3>Innovation: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Chef Narisawa continues to push boundaries with his unique approach to sustainability and nature-inspired cuisine. His techniques—some borrowed from molecular gastronomy, others entirely his own invention—serve a greater purpose beyond mere novelty, connecting diners to Japan's natural environment in profound ways.</p>
+        
+        <h3>Atmosphere: <span style="color: #FFD700;">★★★★½</span></h3>
+        <p>The minimalist dining room creates a serene environment that allows the food to take center stage. While not as overtly luxurious as some restaurants of similar caliber, the thoughtful design elements reflect the natural themes of the cuisine and create an appropriately contemplative setting.</p>
+        
+        <h3>Service: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>The service team demonstrates exceptional knowledge and intuition, explaining complex concepts with clarity and adjusting their approach to match each diner's level of interest. The timing of courses is orchestrated with precision, and special requests are accommodated gracefully.</p>
+        
+        <h3>Value: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>At approximately ¥45,000 ($320) for the tasting menu before beverages, Narisawa represents a significant investment. However, considering the quality of ingredients, labor-intensive preparations, and the holistic experience created, it delivers fair value for a world-class gastronomic journey.</p>
+        
+        <h3>Overall: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Narisawa stands as one of Japan's most important restaurants, offering a deeply thoughtful cuisine that honors tradition while boldly innovating. For travelers seeking to understand the intersection of Japanese culinary heritage, sustainability, and avant-garde gastronomy, Narisawa provides an unparalleled experience.</p>
+      </div>
+      
+      <h2>Tips for Visitors</h2>
+      
+      <ul>
+        <li>Make reservations exactly two months in advance when they open—tables are typically claimed within minutes</li>
+        <li>Opt for the wine or sake pairing, which is expertly curated to complement the unique flavors of each course</li>
+        <li>Allow at least 3 hours for the full dining experience</li>
+        <li>Inform the restaurant of any dietary restrictions when booking—the kitchen can accommodate most needs with advance notice</li>
+        <li>Consider a lunch reservation, which offers a similar experience to dinner at a slightly lower price point</li>
+        <li>Don't plan demanding activities after your meal—the experience is best enjoyed when you can fully focus on each course</li>
+        <li>Photography is permitted, but the restaurant encourages diners to be present in the moment and experience dishes at their optimal temperature</li>
+      </ul>
+      
+      <!-- Booking Form -->
+      <div id="booking-form" class="review-section">
+        <h2>Reservation Information</h2>
+        <p>Reservations for Narisawa can be made through the following methods:</p>
+        
+        <h3>Booking Contact:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Official website: <a href="https://www.narisawa-yoshihiro.com/en/reservation" target="_blank" style="color: #ff4d4d;">www.narisawa-yoshihiro.com</a></li>
+          <li>Phone: +81 3-5785-0799 (Japanese language preferred)</li>
+          <li>Email: info@narisawa-yoshihiro.com</li>
+        </ul>
+        
+        <p>For international guests, we recommend:</p>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Using the online reservation system on their website, which opens exactly two months in advance at 10:00 AM Japan time</li>
+          <li>Asking your hotel concierge to assist with securing a reservation</li>
+          <li>Booking through a specialized concierge service like <a href="https://www.tableall.com/" target="_blank" style="color: #ff4d4d;">TableAll</a> (additional fee applies) or contacting the Eastworld concierge service</li>
+        </ul>
+        
+        <p>A credit card is required to secure your reservation. Cancellations must be made at least three days in advance to avoid a cancellation fee.</p>
+        
+        <p>When making your reservation, be sure to mention any dietary restrictions or allergies so the kitchen can prepare appropriate alternatives.</p>
+      </div>
+      
+      <a href="../food.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Food Guide</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Review carousel functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const slides = document.querySelector('.review-slides');
+      const dots = document.querySelectorAll('.carousel-dot');
+      const prevBtn = document.querySelector('.carousel-prev');
+      const nextBtn = document.querySelector('.carousel-next');
+      let currentSlide = 0;
+      const totalSlides = document.querySelectorAll('.review-slide').length;
+      
+      // Function to update slide position
+      function showSlide(index) {
+        if (index < 0) index = totalSlides - 1;
+        if (index >= totalSlides) index = 0;
+        
+        currentSlide = index;
+        slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+        
+        // Update active dot
+        dots.forEach((dot, i) => {
+          dot.classList.toggle('active', i === currentSlide);
+        });
+      }
+      
+      // Set up event listeners for dots
+      dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => showSlide(i));
+      });
+      
+      // Set up event listeners for arrows
+      prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
+      nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
+      
+      // Auto-rotate slides every 5 seconds
+      setInterval(() => {
+        showSlide(currentSlide + 1);
+      }, 5000);
+    });
+  </script>
+  
+  <script src="../script.js"></script>
+</body>
+</html> 

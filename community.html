@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EASTWORLD - EW HUB</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Community page specific styles */
+    .section-header {
+      text-align: center;
+      margin: 2rem 0;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .section-title {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      letter-spacing: 1px;
+    }
+    
+    .section-description {
+      color: #555;
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .community-layout {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    @media (max-width: 768px) {
+      .community-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .forum-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .forum-filters {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .forum-filter {
+      background: transparent;
+      border: none;
+      padding: 0.3rem 0.7rem;
+      cursor: pointer;
+      font-size: 0.9rem;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+    }
+
+    .forum-filter:hover, .forum-filter.active {
+      background: #f2f2f2;
+    }
+
+    .new-post-btn {
+      background: #000;
+      color: white;
+      border: none;
+      padding: 0.7rem 1.2rem;
+      border-radius: 4px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .new-post-btn:hover {
+      background: #333;
+    }
+
+    .discussion-board {
+      margin-bottom: 3rem;
+    }
+
+    .topic {
+      margin-bottom: 1.5rem;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      overflow: hidden;
+      transition: box-shadow 0.3s ease;
+    }
+
+    .topic:hover {
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+
+    .topic-header {
+      padding: 1.2rem;
+      background: #f9f9f9;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .topic-title {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    .topic-meta {
+      display: flex;
+      gap: 1rem;
+      font-size: 0.85rem;
+      color: #777;
+    }
+
+    .topic-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .topic-author {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+
+    .author-name {
+      font-weight: 600;
+      color: #333;
+      font-size: 0.9rem;
+    }
+
+    .author-date {
+      font-size: 0.8rem;
+      color: #999;
+    }
+
+    .topic-content {
+      padding: 1.2rem;
+      font-size: 0.95rem;
+      color: #555;
+      line-height: 1.5;
+    }
+
+    .topic-footer {
+      padding: 0.8rem 1.2rem;
+      background: #f5f5f5;
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+    }
+
+    .topic-categories {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .topic-category {
+      background: #e6e6e6;
+      padding: 0.3rem 0.6rem;
+      border-radius: 3px;
+      white-space: nowrap;
+    }
+
+    .topic-actions {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .topic-action {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+
+    .topic-action:hover {
+      color: #000;
+    }
+
+    .comments-section {
+      padding: 1rem 1.2rem;
+      background: #f9f9f9;
+      border-top: 1px solid #eee;
+    }
+
+    .comments-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .comment {
+      padding: 1rem 0;
+      border-top: 1px solid #eee;
+      display: grid;
+      grid-template-columns: 40px 1fr;
+      gap: 1rem;
+    }
+
+    .comment-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      overflow: hidden;
+    }
+
+    .comment-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .comment-content {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .comment-author {
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .comment-date {
+      font-size: 0.8rem;
+      color: #999;
+      font-weight: normal;
+    }
+
+    .comment-text {
+      line-height: 1.5;
+      margin-bottom: 0.5rem;
+    }
+
+    .comment-actions {
+      display: flex;
+      gap: 1rem;
+      font-size: 0.8rem;
+      color: #777;
+    }
+
+    .comment-action {
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+
+    .comment-action:hover {
+      color: #000;
+    }
+
+    .add-comment {
+      margin-top: 1.5rem;
+      display: flex;
+      gap: 1rem;
+    }
+
+    .comment-input {
+      flex: 1;
+      padding: 0.8rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      resize: none;
+      font-family: inherit;
+      font-size: 0.9rem;
+    }
+
+    .comment-submit {
+      background: #000;
+      color: white;
+      border: none;
+      padding: 0 1.2rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      font-weight: 600;
+    }
+
+    .comment-submit:hover {
+      background: #333;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 20px;
+      align-self: start;
+    }
+
+    .sidebar-section {
+      background: #f9f9f9;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .sidebar-title {
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #eee;
+    }
+
+    .trending-topics {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .trending-topic {
+      font-size: 0.9rem;
+    }
+
+    .trending-topic a {
+      color: #333;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .trending-topic a:hover {
+      color: #000;
+      text-decoration: underline;
+    }
+
+    .trending-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: #999;
+      margin-top: 0.2rem;
+    }
+
+    .trending-category {
+      color: #555;
+    }
+
+    .popular-categories {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .category-tag {
+      background: #eee;
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .category-tag:hover {
+      background: #ddd;
+    }
+
+    .community-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 0.2rem;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: #777;
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 2rem;
+    }
+
+    .page-btn {
+      width: 35px;
+      height: 35px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .page-btn:hover, .page-btn.active {
+      background: #000;
+      color: white;
+      border-color: #000;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="food.html" class="nav-item">FOOD</a>
+        <a href="stays.html" class="nav-item">STAYS</a>
+        <a href="places.html" class="nav-item">PLACES</a>
+        <a href="products.html" class="nav-item">PRODUCTS</a>
+        <a href="cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="login.html" class="nav-item">LOGIN</a>
+          <a href="register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="content-container">
+    <section class="section-header">
+      <h1 class="section-title">EASTWORLD HUB</h1>
+      <p class="section-description">Connect with fellow travelers, share your experiences, and discover insider tips from our global community of Asia enthusiasts.</p>
+    </section>
+
+    <div class="community-layout">
+      <div class="main-content">
+        <div class="forum-header">
+          <div class="forum-filters">
+            <button class="forum-filter active">All Topics</button>
+            <button class="forum-filter">Travel Tips</button>
+            <button class="forum-filter">Food & Dining</button>
+            <button class="forum-filter">Culture</button>
+            <button class="forum-filter">Photography</button>
+          </div>
+          <button class="new-post-btn"><i class="fas fa-plus"></i> New Topic</button>
+        </div>
+
+        <div class="discussion-board">
+          <div class="topic">
+            <div class="topic-header">
+              <div>
+                <h3 class="topic-title">What are must-try street foods in Bangkok?</h3>
+                <div class="topic-meta">
+                  <span class="topic-meta-item"><i class="far fa-comment"></i> 28 replies</span>
+                  <span class="topic-meta-item"><i class="far fa-eye"></i> 342 views</span>
+                </div>
+              </div>
+              <div class="topic-author">
+                <div class="author-name">JessicaT</div>
+                <div class="author-date">Posted 2 days ago</div>
+              </div>
+            </div>
+            <div class="topic-content">
+              <p>I'm planning a trip to Bangkok next month and I want to try as many authentic street foods as possible. I've heard so much about the street food scene there, but I'm not sure where to start or what to prioritize. Any recommendations for must-try dishes or specific areas/markets that are known for great street food? Also, any tips for a first-timer navigating the street food scene would be much appreciated!</p>
+            </div>
+            <div class="topic-footer">
+              <div class="topic-categories">
+                <span class="topic-category">Food & Dining</span>
+                <span class="topic-category">Thailand</span>
+              </div>
+              <div class="topic-actions">
+                <span class="topic-action"><i class="far fa-heart"></i> 24</span>
+                <span class="topic-action"><i class="far fa-bookmark"></i> Save</span>
+                <span class="topic-action"><i class="fas fa-share"></i> Share</span>
+              </div>
+            </div>
+            <div class="comments-section">
+              <div class="comments-header">
+                <span>Top Comments</span>
+                <span>View all 28 comments</span>
+              </div>
+              <div class="comment">
+                <div class="comment-avatar">
+                  <img src="https://randomuser.me/api/portraits/men/43.jpg" alt="User avatar">
+                </div>
+                <div class="comment-content">
+                  <div class="comment-author">
+                    <div>ThaiExplorer</div>
+                    <div class="comment-date">1 day ago</div>
+                  </div>
+                  <div class="comment-text">
+                    <p>Don't miss Pad Thai from the street vendors at Thip Samai, it's legendary! Also try Mango Sticky Rice at any night market, Som Tam (papaya salad), and boat noodles at Victory Monument. For areas, definitely check out Yaowarat (Chinatown) in the evening, Chatuchak Weekend Market, and Or Tor Kor Market for some of the best street food experiences.</p>
+                  </div>
+                  <div class="comment-actions">
+                    <span class="comment-action"><i class="far fa-heart"></i> 12</span>
+                    <span class="comment-action"><i class="far fa-comment"></i> Reply</span>
+                  </div>
+                </div>
+              </div>
+              <div class="comment">
+                <div class="comment-avatar">
+                  <img src="https://randomuser.me/api/portraits/women/22.jpg" alt="User avatar">
+                </div>
+                <div class="comment-content">
+                  <div class="comment-author">
+                    <div>AsiaFoodie</div>
+                    <div class="comment-date">23 hours ago</div>
+                  </div>
+                  <div class="comment-text">
+                    <p>As someone who goes to Bangkok at least twice a year, I'd suggest always looking for places with lines of locals. My personal favorites are the coconut ice cream served in a coconut shell, grilled pork skewers (Moo Ping), and crispy pancakes (Khanom Buang). For safety, make sure the food is cooked fresh in front of you, and carry hand sanitizer!</p>
+                  </div>
+                  <div class="comment-actions">
+                    <span class="comment-action"><i class="far fa-heart"></i> 8</span>
+                    <span class="comment-action"><i class="far fa-comment"></i> Reply</span>
+                  </div>
+                </div>
+              </div>
+              <div class="add-comment">
+                <textarea class="comment-input" placeholder="Add your comment..."></textarea>
+                <button class="comment-submit">Post</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="topic">
+            <div class="topic-header">
+              <div>
+                <h3 class="topic-title">Recommendations for photography spots in Kyoto?</h3>
+                <div class="topic-meta">
+                  <span class="topic-meta-item"><i class="far fa-comment"></i> 16 replies</span>
+                  <span class="topic-meta-item"><i class="far fa-eye"></i> 189 views</span>
+                </div>
+              </div>
+              <div class="topic-author">
+                <div class="author-name">PhotonomadX</div>
+                <div class="author-date">Posted 4 days ago</div>
+              </div>
+            </div>
+            <div class="topic-content">
+              <p>I'm visiting Kyoto next spring during cherry blossom season and want to capture some unique photos beyond the usual tourist spots. I'll have about 5 days there and am willing to wake up early or stay out late for the right shots. Any photographers have recommendations for lesser-known spots or specific times to visit the popular locations for the best lighting/fewer crowds?</p>
+            </div>
+            <div class="topic-footer">
+              <div class="topic-categories">
+                <span class="topic-category">Photography</span>
+                <span class="topic-category">Japan</span>
+              </div>
+              <div class="topic-actions">
+                <span class="topic-action"><i class="far fa-heart"></i> 17</span>
+                <span class="topic-action"><i class="far fa-bookmark"></i> Save</span>
+                <span class="topic-action"><i class="fas fa-share"></i> Share</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="topic">
+            <div class="topic-header">
+              <div>
+                <h3 class="topic-title">How to navigate Seoul's subway system as a first-timer?</h3>
+                <div class="topic-meta">
+                  <span class="topic-meta-item"><i class="far fa-comment"></i> 22 replies</span>
+                  <span class="topic-meta-item"><i class="far fa-eye"></i> 276 views</span>
+                </div>
+              </div>
+              <div class="topic-author">
+                <div class="author-name">SeoulSearcher</div>
+                <div class="author-date">Posted 1 week ago</div>
+              </div>
+            </div>
+            <div class="topic-content">
+              <p>I'll be in Seoul for 10 days next month and plan to use the subway as my main mode of transportation. The system looks extensive but a bit intimidating! Any advice on apps to use, how to purchase tickets, subway etiquette, or tips for efficiently getting around? Also, is it worth getting a T-money card for such a short trip?</p>
+            </div>
+            <div class="topic-footer">
+              <div class="topic-categories">
+                <span class="topic-category">Travel Tips</span>
+                <span class="topic-category">South Korea</span>
+              </div>
+              <div class="topic-actions">
+                <span class="topic-action"><i class="far fa-heart"></i> 19</span>
+                <span class="topic-action"><i class="far fa-bookmark"></i> Save</span>
+                <span class="topic-action"><i class="fas fa-share"></i> Share</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="topic">
+            <div class="topic-header">
+              <div>
+                <h3 class="topic-title">Traditional vs. modern aspects of Chinese opera</h3>
+                <div class="topic-meta">
+                  <span class="topic-meta-item"><i class="far fa-comment"></i> 7 replies</span>
+                  <span class="topic-meta-item"><i class="far fa-eye"></i> 98 views</span>
+                </div>
+              </div>
+              <div class="topic-author">
+                <div class="author-name">OperaEnthusiast</div>
+                <div class="author-date">Posted 3 days ago</div>
+              </div>
+            </div>
+            <div class="topic-content">
+              <p>I've recently become interested in Chinese opera and I'm curious about how it's evolving in the modern context. How are contemporary performers balancing traditional elements with modern influences? Are there any innovative productions that are pushing boundaries while still respecting the art form? Also, any recommendations for performances I should try to see if I'm visiting Beijing or Shanghai?</p>
+            </div>
+            <div class="topic-footer">
+              <div class="topic-categories">
+                <span class="topic-category">Culture</span>
+                <span class="topic-category">China</span>
+              </div>
+              <div class="topic-actions">
+                <span class="topic-action"><i class="far fa-heart"></i> 11</span>
+                <span class="topic-action"><i class="far fa-bookmark"></i> Save</span>
+                <span class="topic-action"><i class="fas fa-share"></i> Share</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pagination">
+          <div class="page-btn"><i class="fas fa-chevron-left"></i></div>
+          <div class="page-btn active">1</div>
+          <div class="page-btn">2</div>
+          <div class="page-btn">3</div>
+          <div class="page-btn">4</div>
+          <div class="page-btn"><i class="fas fa-chevron-right"></i></div>
+        </div>
+      </div>
+
+      <div class="sidebar">
+        <div class="sidebar-section">
+          <h3 class="sidebar-title">Trending Topics</h3>
+          <div class="trending-topics">
+            <div class="trending-topic">
+              <a href="#">Best time to visit Japan's less crowded natural attractions?</a>
+              <div class="trending-meta">
+                <span>42 replies</span>
+                <span class="trending-category">Travel Tips</span>
+              </div>
+            </div>
+            <div class="trending-topic">
+              <a href="#">Opinion: Are high-end hotels in Southeast Asia worth the splurge?</a>
+              <div class="trending-meta">
+                <span>36 replies</span>
+                <span class="trending-category">Stays</span>
+              </div>
+            </div>
+            <div class="trending-topic">
+              <a href="#">Shanghai's hidden cocktail bars - share your discoveries!</a>
+              <div class="trending-meta">
+                <span>29 replies</span>
+                <span class="trending-category">Food & Dining</span>
+              </div>
+            </div>
+            <div class="trending-topic">
+              <a href="#">Cultural etiquette in Buddhist temples - questions from a first-timer</a>
+              <div class="trending-meta">
+                <span>23 replies</span>
+                <span class="trending-category">Culture</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <h3 class="sidebar-title">Popular Categories</h3>
+          <div class="popular-categories">
+            <div class="category-tag">Travel Tips</div>
+            <div class="category-tag">Food & Dining</div>
+            <div class="category-tag">Photography</div>
+            <div class="category-tag">Culture</div>
+            <div class="category-tag">Japan</div>
+            <div class="category-tag">South Korea</div>
+            <div class="category-tag">Thailand</div>
+            <div class="category-tag">China</div>
+            <div class="category-tag">Accommodations</div>
+            <div class="category-tag">Solo Travel</div>
+            <div class="category-tag">Transportation</div>
+            <div class="category-tag">Shopping</div>
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <h3 class="sidebar-title">Community Stats</h3>
+          <div class="community-stats">
+            <div class="stat-item">
+              <div class="stat-value">15,324</div>
+              <div class="stat-label">Members</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">1,872</div>
+              <div class="stat-label">Topics</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">32,671</div>
+              <div class="stat-label">Replies</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">237</div>
+              <div class="stat-label">Online Now</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    // Forum filter functionality
+    document.querySelectorAll('.forum-filter').forEach(button => {
+      button.addEventListener('click', () => {
+        // Remove active class from all buttons
+        document.querySelectorAll('.forum-filter').forEach(btn => {
+          btn.classList.remove('active');
+        });
+        
+        // Add active class to clicked button
+        button.classList.add('active');
+        
+        // In a real application, this would filter the topics
+        // based on the selected category
+      });
+    });
+
+    // Pagination functionality
+    document.querySelectorAll('.page-btn').forEach(button => {
+      button.addEventListener('click', () => {
+        if (!button.classList.contains('active') && !button.querySelector('i')) {
+          document.querySelectorAll('.page-btn').forEach(btn => {
+            btn.classList.remove('active');
+          });
+          
+          button.classList.add('active');
+          
+          // In a real application, this would load the corresponding page
+        }
+      });
+    });
+
+    // Like functionality
+    document.querySelectorAll('.topic-action, .comment-action').forEach(action => {
+      if (action.innerHTML.includes('fa-heart')) {
+        action.addEventListener('click', () => {
+          const icon = action.querySelector('i');
+          if (icon.classList.contains('far')) {
+            icon.classList.remove('far');
+            icon.classList.add('fas');
+            let count = parseInt(action.textContent.trim());
+            action.innerHTML = `<i class="fas fa-heart"></i> ${count + 1}`;
+          } else {
+            icon.classList.remove('fas');
+            icon.classList.add('far');
+            let count = parseInt(action.textContent.trim());
+            action.innerHTML = `<i class="far fa-heart"></i> ${count - 1}`;
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html> 

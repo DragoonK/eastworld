@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EASTWORLD - Phuket City Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css' rel='stylesheet' />
+  <style>
+    /* City Guide specific styles */
+    .guide-hero {
+      height: 500px;
+      background-image: url('https://images.unsplash.com/photo-1589394815804-964ed0be2eb5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 3rem;
+    }
+    
+    .guide-hero-content {
+      text-align: center;
+      color: white;
+      position: relative;
+      z-index: 2;
+      padding: 2rem;
+      max-width: 800px;
+      background-color: rgba(0, 0, 0, 0.6);
+    }
+    
+    .guide-hero::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(0deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.2) 100%);
+    }
+    
+    .guide-hero h1 {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      letter-spacing: 3px;
+    }
+    
+    .guide-hero p {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    
+    .guide-intro {
+      max-width: 800px;
+      margin: 0 auto 3rem;
+      padding: 0 1rem;
+      line-height: 1.8;
+    }
+    
+    .guide-section {
+      margin-bottom: 4rem;
+    }
+    
+    .guide-section-title {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: 2.2rem;
+      letter-spacing: 1px;
+    }
+    
+    .guide-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+    
+    .guide-card {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+    
+    .guide-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .guide-card-img {
+      height: 200px;
+      overflow: hidden;
+    }
+    
+    .guide-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    
+    .guide-card:hover .guide-card-img img {
+      transform: scale(1.05);
+    }
+    
+    .guide-card-content {
+      padding: 1.5rem;
+    }
+    
+    .guide-card h3 {
+      margin-bottom: 0.5rem;
+      font-size: 1.2rem;
+    }
+    
+    .guide-card-meta {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      color: #666;
+    }
+    
+    .guide-card-meta i {
+      margin-right: 0.3rem;
+    }
+    
+    .guide-card-meta span {
+      margin-right: 1rem;
+    }
+    
+    .guide-card p {
+      color: #555;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    
+    .guide-map {
+      width: 100%;
+      height: 500px;
+      border: none;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+    }
+    
+    .guide-tips {
+      background-color: #f8f8f8;
+      padding: 2rem;
+      border-radius: 8px;
+      margin-bottom: 3rem;
+    }
+    
+    .guide-tips h3 {
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+    
+    .guide-tips-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+    
+    .guide-tip-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+    }
+    
+    .guide-tip-item i {
+      margin-right: 0.5rem;
+      color: #000;
+      margin-top: 0.25rem;
+    }
+    
+    .guide-download {
+      text-align: center;
+      margin: 3rem 0;
+      padding: 2rem;
+      background-color: #f0f0f0;
+      border-radius: 8px;
+    }
+    
+    .guide-download h3 {
+      margin-bottom: 1rem;
+      font-size: 1.8rem;
+    }
+    
+    .guide-download-btn {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 1rem 2rem;
+      background-color: #000;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+    
+    .guide-download-btn:hover {
+      background-color: #333;
+    }
+    
+    .guide-map {
+      width: 100%;
+      height: 500px;
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../food.html" class="nav-item">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+  
+  <main class="content-container">
+    <div class="guide-hero">
+      <div class="guide-hero-content">
+        <h1>PHUKET</h1>
+        <p>Thailand's largest island offers a paradise of pristine beaches, azure waters, and vibrant culture amidst lush tropical landscapes.</p>
+      </div>
+    </div>
+    
+    <section class="guide-intro">
+      <p>Phuket, the "Pearl of the Andaman," is Thailand's largest island and a world-renowned tropical paradise. This 49 km long and 21 km wide island features dramatic karst formations, powder-white beaches, and crystal-clear waters on its western coast, while its eastern shores offer a more relaxed atmosphere with mangrove forests and fishing villages.</p>
+      
+      <p>Beyond its natural splendor, Phuket boasts a rich cultural tapestry shaped by Thai, Chinese, and Portuguese influences. The island's heart, Phuket Town, charms visitors with its colorful Sino-Portuguese architecture, street art, and lively markets. From luxurious beachfront resorts to world-class diving sites, bustling nightlife districts to serene Buddhist temples, Phuket offers a diverse range of experiences that cater to every type of traveler.</p>
+    </section>
+    
+    <section class="guide-section">
+      <h2 class="guide-section-title">TOP ATTRACTIONS</h2>
+      
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://images.unsplash.com/photo-1596703686390-108808b01a73?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80" alt="Phang Nga Bay">
+          </div>
+          <div class="guide-card-content">
+            <h3>Phang Nga Bay</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Northeast of Phuket</span>
+              <i class="far fa-clock"></i><span>Day tours available</span>
+            </div>
+            <p>A breathtaking bay dotted with limestone karsts rising dramatically from emerald-green waters. The area gained fame as "James Bond Island" after appearing in "The Man with the Golden Gun." Explore by traditional longtail boat, kayak through caves, or visit floating Muslim fishing villages.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://images.unsplash.com/photo-1559493867-a63891abcaed?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80" alt="Old Phuket Town">
+          </div>
+          <div class="guide-card-content">
+            <h3>Old Phuket Town</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Central Phuket</span>
+              <i class="far fa-clock"></i><span>Best explored early morning or late afternoon</span>
+            </div>
+            <p>The island's cultural heart, featuring well-preserved Sino-Portuguese architecture from the tin-mining boom of the 19th century. Explore colorful shophouses, hidden cafes, street art, and boutiques along Thalang, Dibuk, and Soi Romanee streets, and visit the Thai Hua Museum to learn about local history.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1839&q=80" alt="Big Buddha">
+          </div>
+          <div class="guide-card-content">
+            <h3>Big Buddha</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Chalong</span>
+              <i class="far fa-clock"></i><span>8:00-19:30 (Daily)</span>
+            </div>
+            <p>A 45-meter-tall marble Buddha statue perched atop Nakkerd Hill, visible from much of southern Phuket. This spiritual site offers panoramic views of the island, Chalong Bay, and nearby islands. Visitors can sponsor marble slabs used in construction and write messages on them.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://images.unsplash.com/photo-1540411003967-af56b79be677?ixlib=rb-4.0.3&auto=format&fit=crop&w=1964&q=80" alt="Patong Beach">
+          </div>
+          <div class="guide-card-content">
+            <h3>Patong Beach</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>West Coast</span>
+              <i class="far fa-clock"></i><span>Open 24 hours</span>
+            </div>
+            <p>Phuket's most famous beach and nightlife center, offering a 3 km stretch of golden sand. By day, enjoy swimming, jet-skiing, and parasailing; by night, explore Bangla Road's walking street with its bars, clubs, and shows. The area also features the Jungceylon shopping mall and countless restaurants.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://images.unsplash.com/photo-1570544820842-e77e191ead41?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80" alt="Phi Phi Islands">
+          </div>
+          <div class="guide-card-content">
+            <h3>Phi Phi Islands</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Southeast of Phuket</span>
+              <i class="far fa-clock"></i><span>Day tours available</span>
+            </div>
+            <p>A tropical archipelago made famous by the film "The Beach." Though technically in Krabi province, these stunning islands are a popular day trip from Phuket. Visit Maya Bay, Pileh Lagoon, and Monkey Beach, and enjoy snorkeling in clear turquoise waters teeming with marine life.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://images.unsplash.com/photo-1585130401366-9ee5cd752186?ixlib=rb-4.0.3&auto=format&fit=crop&w=1964&q=80" alt="Wat Chalong">
+          </div>
+          <div class="guide-card-content">
+            <h3>Wat Chalong</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Chalong</span>
+              <i class="far fa-clock"></i><span>7:00-17:00</span>
+            </div>
+            <p>Phuket's largest and most important Buddhist temple, dedicated to two revered monks known for their healing abilities. The elaborate complex includes several buildings, a 60m-tall chedi containing a bone fragment of the Buddha, and beautiful pagodas adorned with murals depicting Buddha's life.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="guide-section">
+      <h2 class="guide-section-title">WHERE TO EAT</h2>
+      
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://media.cntraveler.com/photos/59dc0a967d7d506d67f362b8/master/w_960%2Cc_limit/Trisara-PRU-2017.jpg" alt="PRU Restaurant">
+          </div>
+          <div class="guide-card-content">
+            <h3>PRU Restaurant</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Thalang</span>
+              <i class="fas fa-dollar-sign"></i><span>$$$$</span>
+            </div>
+            <p>Phuket's first and only Michelin-starred restaurant, located at Trisara resort. Chef Jimmy Ophorst's "farm-to-table" approach showcases sustainable Thai ingredients in an innovative tasting menu. The restaurant's name stands for "Plant, Raise, Understand," reflecting its eco-conscious philosophy.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://media-cdn.tripadvisor.com/media/photo-s/16/25/9d/c3/ta-khai-at-rosewood-phuket.jpg" alt="Ta Khai">
+          </div>
+          <div class="guide-card-content">
+            <h3>Ta Khai</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Patong</span>
+              <i class="fas fa-dollar-sign"></i><span>$$$</span>
+            </div>
+            <p>A rustic-luxe seafood restaurant at Rosewood Phuket featuring traditional Thai cuisine in a magical garden setting. Dishes are prepared by a husband-and-wife chef team using century-old recipes and fresh local seafood, creating an authentic dining experience under the stars.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://www.willflyforfood.net/wp-content/uploads/2019/07/raya-thai-restaurant-phuket.jpg" alt="Raya Restaurant">
+          </div>
+          <div class="guide-card-content">
+            <h3>Raya Restaurant</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Phuket Town</span>
+              <i class="fas fa-dollar-sign"></i><span>$$</span>
+            </div>
+            <p>Set in a restored 130-year-old Sino-Portuguese mansion, this local institution serves authentic southern Thai cuisine. Don't miss their signature crab curry with thin rice noodles, caramelized pork belly, and spicy Phuket-style stir-fried noodles—dishes that have attracted Thai royalty.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://media-cdn.tripadvisor.com/media/photo-s/11/66/55/61/bang-pae-seafood.jpg" alt="Bang Pae Seafood">
+          </div>
+          <div class="guide-card-content">
+            <h3>Bang Pae Seafood</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>East Coast</span>
+              <i class="fas fa-dollar-sign"></i><span>$$</span>
+            </div>
+            <p>A hidden gem on Phuket's less-developed east coast, nestled alongside a mangrove forest. This open-air restaurant serves incredibly fresh seafood caught daily, prepared in Thai style. Signature dishes include grilled fish with lemongrass, steamed crab, and tom yum goong.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="guide-section">
+      <h2 class="guide-section-title">WHERE TO STAY</h2>
+      
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/223648066.jpg?k=d58798afbae56c84df99129aee5a1dfc21c1d0f62ef06836a4adf20e2ef12a11&o=&hp=1" alt="Amanpuri">
+          </div>
+          <div class="guide-card-content">
+            <h3>Amanpuri</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Surin Beach</span>
+              <i class="fas fa-star"></i><span>5-star ultra luxury</span>
+            </div>
+            <p>Aman's original resort, celebrating 30+ years as Phuket's most exclusive address. Set on a secluded peninsula, this sanctuary features elegant pavilions and villas inspired by traditional Thai architecture, multiple restaurants, a holistic wellness center, a private beach, and exceptional service.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/224278400.jpg?k=c9c66871ee1f4f38bf419f4ef9e477e81e6e673c4f6cf4cd51ab05d2baeefb51&o=&hp=1" alt="Sri Panwa">
+          </div>
+          <div class="guide-card-content">
+            <h3>Sri Panwa</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Cape Panwa</span>
+              <i class="fas fa-star"></i><span>5-star luxury</span>
+            </div>
+            <p>A stylish luxury villa resort perched on a peninsula at Phuket's southernmost tip. Each villa features a private infinity pool with breathtaking views. The resort is famous for its Baba Nest rooftop bar—often rated among the world's best—and its Cool Spa with panoramic treatment rooms.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/168845911.jpg?k=0c20c48a7f16ea53a0f5ba7a1496ddfe7e9a765f80b32f1e0fa1eb023b19ebc0&o=&hp=1" alt="The Slate">
+          </div>
+          <div class="guide-card-content">
+            <h3>The Slate</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Nai Yang Beach</span>
+              <i class="fas fa-star"></i><span>5-star design hotel</span>
+            </div>
+            <p>A design-focused resort inspired by Phuket's tin mining history, designed by Bill Bensley. The property blends industrial elements with luxurious touches in its uniquely styled suites and pool villas. Located near the airport yet tranquil, it offers eight restaurants, three pools, and a pristine beach.</p>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="guide-card-img">
+            <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/204859441.jpg?k=fddee57eaf0432383a4326b311a7116b82a0147c5b7884f74407e9ac1c72fa2f&o=&hp=1" alt="The Memory at On On Hotel">
+          </div>
+          <div class="guide-card-content">
+            <h3>The Memory at On On Hotel</h3>
+            <div class="guide-card-meta">
+              <i class="fas fa-map-marker-alt"></i><span>Phuket Town</span>
+              <i class="fas fa-star"></i><span>Boutique heritage hotel</span>
+            </div>
+            <p>Phuket's oldest hotel (established 1927) and featured in "The Beach" film, this beautifully restored Sino-Portuguese property offers a range of accommodations from budget to boutique rooms. Its central location in Old Town makes it perfect for exploring historical streets and local cuisine.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="guide-section">
+      <h2 class="guide-section-title">GETTING AROUND</h2>
+      
+      <div class="guide-map" id="phuketMap"></div>
+      
+      <div class="guide-tips">
+        <h3>Local Transportation Tips</h3>
+        <div class="guide-tips-list">
+          <div class="guide-tip-item">
+            <i class="fas fa-car-side"></i>
+            <p>Rent a car or scooter for maximum freedom exploring the island. International driver's license required, and drive on the left side. Daily car rental rates start around 1,000 baht, motorbikes from 200 baht. Always check insurance coverage and wear helmets on scooters.</p>
+          </div>
+          
+          <div class="guide-tip-item">
+            <i class="fas fa-truck"></i>
+            <p>Songthaews (converted pickup trucks) serve as shared taxis with bench seating, following set routes between beaches and Phuket Town. Fares range from 30-50 baht for short trips. Flag one down along main roads, but confirm price before boarding.</p>
+          </div>
+          
+          <div class="guide-tip-item">
+            <i class="fas fa-taxi"></i>
+            <p>Metered taxis are available but drivers often prefer fixed fares. Use the Grab app for fair pricing (typically 300-600 baht between beaches) or negotiate with taxis in advance. Airport taxis have fixed rates posted at the official booth.</p>
+          </div>
+          
+          <div class="guide-tip-item">
+            <i class="fas fa-shuttle-van"></i>
+            <p>Airport buses connect Phuket International Airport to Phuket Town for 100 baht, while hotel-operated and shared minivan services provide affordable connections between popular areas (150-200 baht per person).</p>
+          </div>
+          
+          <div class="guide-tip-item">
+            <i class="fas fa-motorcycle"></i>
+            <p>Motorcycle taxis (riders with colored vests) offer quick transportation for short distances. Always negotiate the fare before riding (typically 50-100 baht) and request a helmet. Good for navigating traffic in busy areas.</p>
+          </div>
+          
+          <div class="guide-tip-item">
+            <i class="fas fa-sailboat"></i>
+            <p>Long-tail boats and speedboats are essential for island-hopping and accessing isolated beaches. Arrange through your hotel or at major beaches. Group tours are economical, while private charters offer flexibility at a premium.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="guide-download">
+      <h3>Download the Complete Phuket Island Guide</h3>
+      <p>Get our comprehensive 55-page guide to Phuket with detailed beach reviews, seasonal advice, dining recommendations, and off-the-beaten-path experiences.</p>
+      <p>Available as a PDF for your convenience - take it with you offline!</p>
+      <a href="#" class="guide-download-btn">Download Guide (PDF) - $12.99</a>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+  
+  <script src='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js'></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize Mapbox for Phuket
+      mapboxgl.accessToken = 'pk.eyJ1IjoiZWFzdHdvcmxkIiwiYSI6ImNscDg5c3dsaDBrN3YyanBsZzV1dmg0OG0ifQ.9h-PyeATCU2zO9L43WHBEw';
+      const map = new mapboxgl.Map({
+        container: 'phuketMap',
+        style: 'mapbox://styles/mapbox/streets-v12',
+        center: [98.3923, 7.8804], // Phuket coordinates
+        zoom: 10,
+        pitch: 60, // Add 3D perspective
+        bearing: 30
+      });
+      
+      // Add 3D buildings layer
+      map.on('load', function() {
+        // Add 3D buildings layer
+        const layers = map.getStyle().layers;
+        
+        // Find the index of the first symbol layer
+        let firstSymbolId;
+        for (const layer of layers) {
+          if (layer.type === 'symbol') {
+            firstSymbolId = layer.id;
+            break;
+          }
+        }
+        
+        // Add 3D buildings
+        map.addLayer({
+          'id': '3d-buildings',
+          'source': 'composite',
+          'source-layer': 'building',
+          'filter': ['==', 'extrude', 'true'],
+          'type': 'fill-extrusion',
+          'minzoom': 15,
+          'paint': {
+            'fill-extrusion-color': '#aaa',
+            'fill-extrusion-height': [
+              'interpolate', ['linear'], ['zoom'],
+              15, 0,
+              15.05, ['get', 'height']
+            ],
+            'fill-extrusion-base': [
+              'interpolate', ['linear'], ['zoom'],
+              15, 0,
+              15.05, ['get', 'min_height']
+            ],
+            'fill-extrusion-opacity': 0.6
+          }
+        }, firstSymbolId);
+        
+        // Add navigation controls
+        map.addControl(new mapboxgl.NavigationControl());
+        
+        // Add key attraction markers
+        const attractions = [
+          { name: 'Patong Beach', coordinates: [98.2945, 7.8965], description: 'Popular beach and nightlife area' },
+          { name: 'Big Buddha', coordinates: [98.3122, 7.8217], description: 'Iconic 45m marble statue' },
+          { name: 'Old Phuket Town', coordinates: [98.3875, 7.8870], description: 'Historic district with colonial architecture' },
+          { name: 'Wat Chalong', coordinates: [98.3418, 7.8460], description: 'Most important Buddhist temple' },
+          { name: 'Phi Phi Islands', coordinates: [98.7718, 7.7407], description: 'Day trip to stunning archipelago' },
+          { name: 'Phang Nga Bay', coordinates: [98.5052, 8.2741], description: 'Famous for limestone karsts' }
+        ];
+        
+        attractions.forEach(spot => {
+          // Create popup content
+          const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(
+            `<strong>${spot.name}</strong><br>${spot.description}`
+          );
+          
+          // Add marker
+          new mapboxgl.Marker({ color: '#ff4d4d' })
+            .setLngLat(spot.coordinates)
+            .setPopup(popup)
+            .addTo(map);
+        });
+        
+        // Start with a fly-to animation
+        map.flyTo({
+          center: [98.3073, 7.8784], // Centered on Phuket
+          zoom: 10,
+          pitch: 65,
+          bearing: 45,
+          duration: 5000
+        });
+      });
+    });
+  </script>
+  <script src="../script.js"></script>
+</body>
+</html> 

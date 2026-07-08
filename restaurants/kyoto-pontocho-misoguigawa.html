@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pontocho Misoguigawa - Eastworld Restaurant Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Additional styles specific to restaurant reviews */
+    .restaurant-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+      .restaurant-info {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .restaurant-details {
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .detail-row {
+      display: flex;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+    }
+    
+    .detail-label {
+      font-weight: 600;
+      min-width: 120px;
+      color: #333;
+    }
+    
+    .detail-value {
+      flex: 1;
+      color: #555;
+    }
+    
+    .rating {
+      margin-bottom: 1rem;
+    }
+    
+    .star {
+      color: #ddd;
+      font-size: 1.5rem;
+    }
+    
+    .star.filled {
+      color: #FFD700;
+    }
+    
+    .half-star {
+      position: relative;
+    }
+    
+    .half-star .fas.fa-star-half {
+      color: #FFD700;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    
+    .score-label {
+      margin-left: 0.5rem;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .map-container {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .map-container iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+    }
+    
+    .photos-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .photo-item {
+      border-radius: 8px;
+      overflow: hidden;
+      height: 150px;
+    }
+    
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .photo-item img:hover {
+      transform: scale(1.05);
+    }
+    
+    .review-section {
+      margin: 2rem 0;
+      padding: 2rem;
+      background: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    /* Booking button styles */
+    .booking-button {
+      display: block;
+      background-color: #ff4d4d;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      margin: 1.5rem 0;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    
+    .booking-button:hover {
+      background-color: #e63939;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    /* Review carousel styles */
+    .review-carousel {
+      position: relative;
+      margin: 2rem 0;
+      overflow: hidden;
+      padding: 1rem 0;
+    }
+    
+    .review-slides {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    
+    .review-slide {
+      min-width: 100%;
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .reviewer-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #f0f0f0;
+      padding-bottom: 0.8rem;
+    }
+    
+    .reviewer-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 0.8rem;
+    }
+    
+    .reviewer-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding-top: 0.2rem;
+    }
+    
+    .review-date {
+      color: #888;
+      font-size: 0.75rem;
+      margin-top: 0.1rem;
+    }
+    
+    .review-rating {
+      display: flex;
+      margin-top: 0.2rem;
+    }
+    
+    .review-rating i {
+      font-size: 0.8rem;
+      margin-right: 2px;
+    }
+    
+    .carousel-nav {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+    
+    .carousel-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ddd;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .carousel-dot.active {
+      background: #ff4d4d;
+    }
+    
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.7);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+    
+    .carousel-prev {
+      left: 10px;
+    }
+    
+    .carousel-next {
+      right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../food.html" class="nav-item active">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="content-container">
+    <div class="content-header">
+      <span class="content-category">FUSION</span>
+      <h1 class="content-title">Pontocho Misoguigawa - Kyoto's French-Kaiseki Masterpiece</h1>
+      
+      <!-- Rating Section -->
+      <div class="rating">
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star half-star">
+          <i class="far fa-star"></i>
+          <i class="fas fa-star-half"></i>
+        </span>
+        <span class="score-label">4.5/5.0</span>
+      </div>
+    </div>
+    
+    <div class="hero-container">
+      <img class="content-hero" src="https://images.squarespace-cdn.com/content/v1/573287c2cf80a1de52b40a9c/1470121997492-ZPVUMHV3MV0X6JKF0PL4/image-asset.jpeg" alt="Elegant French-Inspired Kaiseki Dish" 
+      onerror="this.onerror=null; 
+      this.parentElement.innerHTML = '<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#333;color:white;font-size:1.5rem;text-align:center;padding:2rem;\'>Pontocho Misoguigawa Kyoto</div>';">
+    </div>
+    
+    <!-- Visitor Information Button -->
+    <a href="#visitor-info" class="booking-button">
+      <i class="fas fa-info-circle"></i> VISITOR INFORMATION
+    </a>
+    
+    <!-- Restaurant Information Section -->
+    <div class="restaurant-info">
+      <div class="restaurant-details">
+        <h2>Restaurant Details</h2>
+        
+        <div class="detail-row">
+          <div class="detail-label">Address:</div>
+          <div class="detail-value">502 Pontocho-dori, Nakagyo-ku, Kyoto 604-8016, Japan</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Hours:</div>
+          <div class="detail-value">Lunch: 12:00 PM - 2:30 PM (Last order 1:00 PM)<br>Dinner: 5:30 PM - 10:00 PM (Last order 8:00 PM)<br>Closed Wednesdays</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Phone:</div>
+          <div class="detail-value">+81 75-211-3369</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Price Range:</div>
+          <div class="detail-value">Lunch courses: ¥6,000-10,000 ($40-70)<br>Dinner courses: ¥15,000-25,000 ($100-170) per person</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Cuisine:</div>
+          <div class="detail-value">French-Japanese Fusion, Kaiseki, Fine Dining</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Reservations:</div>
+          <div class="detail-value">Essential - book at least 2-4 weeks in advance<br>Contact directly by phone or through your hotel concierge</div>
+        </div>
+        
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">Dress Code</h3>
+        <p>Smart casual to formal. Many guests dress elegantly for dinner. No shorts, sandals, or overly casual attire.</p>
+        
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">How to Get There</h3>
+        <p>Located in the historic Pontocho alley, alongside the Kamogawa River:</p>
+        <ul style="margin-bottom: 1rem; padding-left: 1.5rem;">
+          <li>From Kawaramachi or Kyoto Shiyakusho-mae Stations: 5-minute walk</li>
+          <li>Enter Pontocho alley from Shijo-dori and walk north</li>
+          <li>The restaurant is on the east side of the alley, facing the Kamogawa River</li>
+          <li>Look for the entrance with a traditional lantern and noren (fabric dividers)</li>
+        </ul>
+      </div>
+      
+      <div class="map-container">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3268.022168782127!2d135.7687451!3d35.0081195!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x600108955b8a4005%3A0xce64fc7a21e6e54c!2sMisoguigawa!5e0!3m2!1sen!2sus!4v1693230090086!5m2!1sen!2sus" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+    
+    <div class="content-text">
+      <h2>A Cultural Bridge Through Cuisine</h2>
+      
+      <p>Nestled in Kyoto's historic Pontocho alley, Misoguigawa represents a remarkable culinary dialogue between East and West. Occupying a beautifully preserved traditional townhouse (machiya) overlooking the Kamogawa River, this extraordinary restaurant has pioneered a unique form of fusion cuisine: French cooking techniques applied to Japanese kaiseki traditions and ingredients. The result is neither French nor Japanese, but rather a harmonious marriage that honors both culinary traditions while creating something entirely distinctive.</p>
+      
+      <p>Established over 40 years ago, Misoguigawa's enduring presence in Kyoto's competitive dining scene speaks to its commitment to excellence and innovation. The restaurant's owners made the bold decision to merge French haute cuisine with the seasonal, meticulously presented aesthetic of kaiseki—Japan's most refined dining tradition—at a time when such cross-cultural culinary experiments were exceedingly rare. Today, it stands as one of Japan's most respected Franco-Japanese establishments, having earned numerous accolades including Michelin recognition.</p>
+      
+      <div class="photos-container">
+        <div class="photo-item">
+          <img src="https://media-cdn.tripadvisor.com/media/photo-s/0a/eb/e0/06/caption.jpg" alt="Elegantly Plated Fusion Dish">
+        </div>
+        <div class="photo-item">
+          <img src="https://media-cdn.tripadvisor.com/media/photo-s/11/38/81/f8/photo0jpg.jpg" alt="Traditional Tatami Dining Room">
+        </div>
+        <div class="photo-item">
+          <img src="https://media-cdn.tripadvisor.com/media/photo-s/09/f1/f3/9e/photo0jpg.jpg" alt="Delicate Dessert Course">
+        </div>
+        <div class="photo-item">
+          <img src="https://media-cdn.tripadvisor.com/media/photo-s/17/15/0e/e8/img-20190401-220631-largejpg.jpg" alt="River View from Restaurant">
+        </div>
+      </div>
+      
+      <h2>The Perfect Harmony of French Technique and Japanese Sensibility</h2>
+      
+      <p>What distinguishes Misoguigawa is not merely the combination of French and Japanese elements, but the thoughtful integration that respects both traditions. Diners experience neither French cuisine with Japanese accents nor Japanese food with French flourishes, but rather a seamless fusion that draws on the strengths of both culinary philosophies. French cooking methods—particularly classic sauces and preparation techniques—are applied to seasonal Japanese ingredients, presented with the aesthetic sensibility and progression of a traditional kaiseki meal.</p>
+      
+      <p>The dining experience follows the kaiseki structure, with multiple carefully sequenced small courses that build upon one another to create a narrative of flavors, textures, and visual presentations. However, each dish incorporates French techniques: a delicate dashi consommé might be finished with a touch of cognac; Kyoto vegetables could be served with a perfect beurre blanc; or local wagyu beef might be accompanied by a reduction sauce that marries red wine with soy and mirin.</p>
+      
+      <p>Presentation is exquisite, with each dish carefully arranged on handcrafted ceramics or lacquerware chosen specifically to complement the food's colors and textures. The seasonal focus—a cornerstone of both kaiseki and French haute cuisine—means the menu changes frequently, sometimes daily, to showcase the finest available ingredients at their peak freshness.</p>
+      
+      <div class="content-quote">
+        "At Misoguigawa, we do not simply place French food in Japanese vessels or add Japanese ingredients to French recipes. Our philosophy is about finding the harmonious intersection of two great culinary traditions—where the precision of French technique enhances the seasonal purity of Japanese ingredients, and where the aesthetic principles of kaiseki elevate the sensory pleasure of French gastronomy. It is a conversation between cultures, spoken through food." - Chef Teruo Inoue
+      </div>
+      
+      <!-- User Reviews Carousel -->
+      <h2>Customer Reviews</h2>
+      
+      <div class="review-carousel">
+        <div class="carousel-arrow carousel-prev">
+          <i class="fas fa-chevron-left"></i>
+        </div>
+        
+        <div class="review-slides">
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Alexandra D.</div>
+                <div class="review-date">Visited April 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"Our dinner at Misoguigawa was the highlight of our two-week journey through Japan. I made reservations three months in advance through our hotel concierge, and they secured us a private room overlooking the Kamogawa River during cherry blossom season—an experience I'll treasure forever. Upon arrival, we were greeted warmly and guided through a traditional entrance to our tatami room where we sat on cushions at a low table. The service was impeccable—attentive yet discreet, with detailed explanations of each course in excellent English. We chose the premium seasonal kaiseki course (¥22,000), which included around 8 exquisite courses. The standout dishes were a lobster soup with yuzu foam that perfectly balanced French technique with Japanese flavors, and Omi beef served with a red wine reduction infused with Japanese mushrooms. The wine pairing (additional ¥12,000) was exceptional and thoughtfully selected to complement the fusion cuisine. Yes, this is undoubtedly a splurge, but for a once-in-a-lifetime dining experience that showcases the highest expression of two culinary traditions, it was worth every yen. If your budget allows for only one luxury meal in Kyoto, make it Misoguigawa."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Hiroshi M.</div>
+                <div class="review-date">Visited January 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="far fa-star" style="color: #ddd;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"As a long-time resident of Kyoto and someone who appreciates both traditional kaiseki and French cuisine, I've been to Misoguigawa multiple times over the years for special occasions. Their lunch course (¥8,000) offers excellent value compared to dinner while maintaining the same quality and attention to detail. The winter menu this year featured a remarkable chawan-mushi (savory egg custard) with black truffle and a hint of foie gras—a perfect example of their fusion approach. The restaurant itself is a beautifully preserved machiya with different dining rooms, some Western-style with chairs and tables, others traditional Japanese with tatami floors. The riverside location in Pontocho adds to the ambiance, particularly in the evening when the alley is illuminated by lanterns. Service maintains the formality expected of high-end Japanese establishments while being more approachable than some purely traditional kaiseki restaurants. My only critique would be that some dishes play it somewhat safe in their fusion approach—I occasionally wish they would take more risks with the integration of the two cuisines. That said, their consistent excellence over decades speaks to their mastery of this unique culinary style, and they remain one of Kyoto's most sophisticated dining experiences."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Michael L.</div>
+                <div class="review-date">Visited March 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star-half-alt" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"Dining at Misoguigawa offers something unique—a genuine cultural dialogue through cuisine that has been refined over decades. As a food writer who has experienced both traditional kaiseki and French gastronomy throughout Japan, I found their fusion approach remarkably successful. We visited for an early spring dinner and selected the Miyabi course (¥18,000). The progression of courses followed kaiseki principles but incorporated French techniques throughout: a seasonal soup combining dashi with a classic consommé technique; a sashimi course elevated with French-inspired vinaigrettes; and a magnificent duck breast cooked perfectly medium-rare (unusual in traditional Japanese cuisine) with a sauce that married red wine reduction with Japanese citrus notes. The interior of the restaurant is quietly elegant, with private and semi-private dining areas that create an intimate atmosphere. Our server was knowledgeable about both cuisines and spoke enough English to explain the nuances of each dish. The pace was leisurely—our meal lasted nearly three hours—allowing time to appreciate each course. While the price point is certainly high, it reflects the quality of ingredients, skilled preparation, and overall experience. One practical note: wear comfortable clothing that allows you to sit on floor cushions if you're seated in a traditional room, though they do offer Western-style seating upon request when booking."</p>
+          </div>
+        </div>
+        
+        <div class="carousel-arrow carousel-next">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+        
+        <div class="carousel-nav">
+          <div class="carousel-dot active"></div>
+          <div class="carousel-dot"></div>
+          <div class="carousel-dot"></div>
+        </div>
+      </div>
+      
+      <h2>Menu Highlights</h2>
+      
+      <p>Misoguigawa offers seasonal set menus rather than à la carte options. While specific dishes change regularly based on available ingredients, these are representative examples of their Franco-Japanese approach:</p>
+      
+      <ul>
+        <li><strong>Lunch Courses (¥6,000-10,000)</strong> - More accessible pricing but with the same attention to detail as dinner service</li>
+        <li><strong>Miyabi Dinner Course (¥18,000)</strong> - The signature multi-course experience showcasing their classic fusion approach</li>
+        <li><strong>Premium Seasonal Course (¥22,000-25,000)</strong> - The most comprehensive dining experience featuring luxury ingredients and the chef's most innovative creations</li>
+        <li><strong>Amuse-Bouche</strong> - Often a trio of small bites that immediately establish the French-Japanese dialogue</li>
+        <li><strong>Seasonal Soup</strong> - Perhaps a dashi-based consommé finished with cognac or a French velouté infused with Japanese citrus</li>
+        <li><strong>Sashimi Course</strong> - Premium fish prepared in the traditional Japanese manner but accompanied by French-inspired accents</li>
+        <li><strong>Vegetable Composition</strong> - Kyoto's famous seasonal vegetables prepared using French techniques</li>
+        <li><strong>Seafood Course</strong> - Often featuring local fish with a classic French sauce adapted with Japanese ingredients</li>
+        <li><strong>Meat Course</strong> - Typically Japanese wagyu or seasonal game prepared with French cooking methods</li>
+        <li><strong>Pre-Dessert</strong> - A palate cleanser that might incorporate Japanese ingredients like yuzu or seasonal fruits</li>
+        <li><strong>Dessert</strong> - French pastry techniques applied to Japanese flavors and aesthetics</li>
+        <li><strong>Wine and Sake Pairings</strong> - Optional but recommended enhancement to the dining experience (¥8,000-12,000)</li>
+      </ul>
+      
+      <div class="review-section">
+        <h2>Eastworld's Review</h2>
+        
+        <h3>Culinary Excellence: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Misoguigawa achieves a remarkable synthesis of French technique and Japanese sensibility. Each dish demonstrates masterful execution, precise flavor balance, and thoughtful integration of both culinary traditions. The kitchen's ability to harmonize seemingly disparate cooking philosophies results in a dining experience that feels both innovative and timeless.</p>
+        
+        <h3>Atmosphere: <span style="color: #FFD700;">★★★★½</span></h3>
+        <p>The traditional machiya setting creates an authentic sense of place, with different dining areas offering varying levels of privacy. Rooms overlooking the Kamogawa River are particularly atmospheric, especially during cherry blossom season or in the evening when the river area is illuminated. The décor strikes a balance between minimalist Japanese aesthetics and subtle French elegance.</p>
+        
+        <h3>Service: <span style="color: #FFD700;">★★★★½</span></h3>
+        <p>Service embodies the best of Japanese hospitality—attentive, graceful, and anticipatory without being intrusive. Staff members are knowledgeable about both culinary traditions and can explain the nuances of each dish in detail. While some servers have limited English proficiency, they make sincere efforts to communicate effectively with international guests.</p>
+        
+        <h3>Value: <span style="color: #FFD700;">★★★½</span></h3>
+        <p>Misoguigawa is undeniably expensive, placing it among Kyoto's priciest dining establishments. However, the exceptional quality of ingredients, labor-intensive preparation, elegant setting, and overall uniqueness of the experience justify the cost for special occasions. The lunch courses offer better value while maintaining the same quality standards.</p>
+        
+        <h3>Uniqueness: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Few restaurants anywhere achieve such a seamless and respectful fusion of distinct culinary traditions. Misoguigawa doesn't merely borrow elements from each cuisine but creates a coherent new expression that honors both lineages. For diners seeking a unique gastronomic experience that could only exist in Kyoto, Misoguigawa delivers memorably.</p>
+        
+        <h3>Overall: <span style="color: #FFD700;">★★★★½</span></h3>
+        <p>Misoguigawa represents the highest expression of Franco-Japanese fusion cuisine, offering a once-in-a-lifetime dining experience that epitomizes the cultural sophistication of Kyoto. While the price point limits its accessibility, those able to splurge will be rewarded with a meal that perfectly captures the dialogue between two of the world's greatest culinary traditions. For special occasions or culinary enthusiasts seeking to experience the pinnacle of fusion cuisine, Misoguigawa stands as an essential destination.</p>
+      </div>
+      
+      <h2>Tips for Visitors</h2>
+      
+      <ul>
+        <li><strong>Reservations:</strong> Essential and should be made 2-4 weeks in advance, or further during peak tourist seasons</li>
+        <li><strong>Booking Method:</strong> Reserve through your hotel concierge if possible, as they may have established relationships with the restaurant</li>
+        <li><strong>Budget Considerations:</strong> Consider lunch for a more affordable experience that maintains the same quality</li>
+        <li><strong>Seating Preferences:</strong> Request river-view seating when making your reservation for the best experience</li>
+        <li><strong>Dining Style:</strong> Specify whether you prefer Western-style seating or traditional tatami seating when booking</li>
+        <li><strong>Dietary Restrictions:</strong> Communicate any dietary restrictions or allergies when making your reservation</li>
+        <li><strong>Timing:</strong> Allow 2-3 hours for dinner as courses are served at a measured pace</li>
+        <li><strong>Dress Code:</strong> Smart casual to formal attire is appropriate; many Japanese guests dress elegantly</li>
+        <li><strong>Photography:</strong> Discreet photography of your food is generally acceptable, but ask permission first</li>
+        <li><strong>Language:</strong> Basic English is spoken by staff, but bringing a Japanese phrasebook or translation app can be helpful</li>
+      </ul>
+      
+      <!-- Visitor Information -->
+      <div id="visitor-info" class="review-section">
+        <h2>Visitor Information</h2>
+        <p>Here's what you need to know when planning your visit to Pontocho Misoguigawa:</p>
+        
+        <h3>Making Reservations:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Reservations are essential and should be made 2-4 weeks in advance</li>
+          <li>For international visitors, booking through your hotel concierge is recommended</li>
+          <li>Direct phone reservations: +81 75-211-3369 (Limited English)</li>
+          <li>When booking, specify your seating preference (Western or traditional tatami)</li>
+          <li>Request riverside seating for the optimal experience</li>
+        </ul>
+        
+        <h3>Special Considerations:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Traditional tatami rooms require removing shoes and sitting on floor cushions</li>
+          <li>Western-style tables with chairs are available for those with mobility concerns</li>
+          <li>The restaurant can usually accommodate common dietary restrictions with advance notice</li>
+          <li>Private dining rooms are available for groups or special occasions</li>
+        </ul>
+        
+        <h3>Payment Information:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Major credit cards accepted (Visa, Mastercard, American Express, JCB)</li>
+          <li>Cash (Japanese yen) is also accepted</li>
+          <li>Service charge may be added to your bill</li>
+          <li>Tipping is not customary or expected in Japan</li>
+        </ul>
+        
+        <h3>The Pontocho Experience:</h3>
+        <p>Misoguigawa is located in Pontocho, one of Kyoto's most atmospheric dining districts. This narrow pedestrian alley runs parallel to the Kamogawa River and is lined with traditional restaurants and teahouses. Many establishments, including Misoguigawa, have terraces overlooking the river that are especially popular during summer months. Consider arriving early for your reservation to stroll through this historic area, particularly beautiful in the evening when lanterns illuminate the alley.</p>
+        
+        <h3>Seasonal Considerations:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Cherry blossom season (late March to early April): Book months in advance</li>
+          <li>Autumn foliage season (November): Similarly high demand</li>
+          <li>Summer (July-August): River-view terraces may be open (kawadoko dining)</li>
+          <li>Winter (December-February): Generally easier to secure reservations</li>
+        </ul>
+      </div>
+      
+      <a href="../food.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Food Guide</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Review carousel functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const slides = document.querySelector('.review-slides');
+      const dots = document.querySelectorAll('.carousel-dot');
+      const prevBtn = document.querySelector('.carousel-prev');
+      const nextBtn = document.querySelector('.carousel-next');
+      let currentSlide = 0;
+      const totalSlides = document.querySelectorAll('.review-slide').length;
+      
+      // Function to update slide position
+      function showSlide(index) {
+        if (index < 0) index = totalSlides - 1;
+        if (index >= totalSlides) index = 0;
+        
+        currentSlide = index;
+        slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+        
+        // Update active dot
+        dots.forEach((dot, i) => {
+          dot.classList.toggle('active', i === currentSlide);
+        });
+      }
+      
+      // Set up event listeners for dots
+      dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => showSlide(i));
+      });
+      
+      // Set up event listeners for arrows
+      prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
+      nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
+      
+      // Auto-rotate slides every 5 seconds
+      setInterval(() => {
+        showSlide(currentSlide + 1);
+      }, 5000);
+    });
+  </script>
+  
+  <script src="../script.js"></script>
+</body>
+</html> 

@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kobe Oyster House - Eastworld Restaurant Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Additional styles specific to restaurant reviews */
+    .restaurant-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+      .restaurant-info {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .restaurant-details {
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .detail-row {
+      display: flex;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+    }
+    
+    .detail-label {
+      font-weight: 600;
+      min-width: 120px;
+      color: #333;
+    }
+    
+    .detail-value {
+      flex: 1;
+      color: #555;
+    }
+    
+    .rating {
+      margin-bottom: 1rem;
+    }
+    
+    .star {
+      color: #ddd;
+      font-size: 1.5rem;
+    }
+    
+    .star.filled {
+      color: #FFD700;
+    }
+    
+    .half-star {
+      position: relative;
+    }
+    
+    .half-star .fas.fa-star-half {
+      color: #FFD700;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    
+    .score-label {
+      margin-left: 0.5rem;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .map-container {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .map-container iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+    }
+    
+    .photos-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .photo-item {
+      border-radius: 8px;
+      overflow: hidden;
+      height: 150px;
+    }
+    
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .photo-item img:hover {
+      transform: scale(1.05);
+    }
+    
+    .review-section {
+      margin: 2rem 0;
+      padding: 2rem;
+      background: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    /* Booking button styles */
+    .booking-button {
+      display: block;
+      background-color: #ff4d4d;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      margin: 1.5rem 0;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    
+    .booking-button:hover {
+      background-color: #e63939;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    /* Review carousel styles */
+    .review-carousel {
+      position: relative;
+      margin: 2rem 0;
+      overflow: hidden;
+      padding: 1rem 0;
+    }
+    
+    .review-slides {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    
+    .review-slide {
+      min-width: 100%;
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .reviewer-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #f0f0f0;
+      padding-bottom: 0.8rem;
+    }
+    
+    .reviewer-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 0.8rem;
+    }
+    
+    .reviewer-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding-top: 0.2rem;
+    }
+    
+    .review-date {
+      color: #888;
+      font-size: 0.75rem;
+      margin-top: 0.1rem;
+    }
+    
+    .review-rating {
+      display: flex;
+      margin-top: 0.2rem;
+    }
+    
+    .review-rating i {
+      font-size: 0.8rem;
+      margin-right: 2px;
+    }
+    
+    .carousel-nav {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+    
+    .carousel-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ddd;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .carousel-dot.active {
+      background: #ff4d4d;
+    }
+    
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.7);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+    
+    .carousel-prev {
+      left: 10px;
+    }
+    
+    .carousel-next {
+      right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../food.html" class="nav-item active">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="content-container">
+    <div class="content-header">
+      <span class="content-category">SEAFOOD</span>
+      <h1 class="content-title">Kobe Oyster House - Premium Seafood & Champagne Experience</h1>
+      
+      <!-- Rating Section -->
+      <div class="rating">
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star half-star">
+          <i class="far fa-star"></i>
+          <i class="fas fa-star-half"></i>
+        </span>
+        <span class="star"><i class="far fa-star"></i></span>
+        <span class="score-label">3.4/5.0</span>
+      </div>
+    </div>
+    
+    <div class="hero-container">
+      <img class="content-hero" src="https://tblg.k-img.com/restaurant/images/Rvw/154346/640x640_rect_154346820.jpg" alt="Kobe Oyster House with fresh oysters and champagne" 
+      onerror="this.onerror=null; 
+      this.parentElement.innerHTML = '<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#333;color:white;font-size:1.5rem;text-align:center;padding:2rem;\'>Kobe Oyster House</div>';">
+    </div>
+    
+    <!-- Visitor Information Button -->
+    <a href="#visitor-info" class="booking-button">
+      <i class="fas fa-info-circle"></i> VISITOR INFORMATION
+    </a>
+    
+    <!-- Restaurant Information Section -->
+    <div class="restaurant-info">
+      <div class="restaurant-details">
+        <h2>Restaurant Details</h2>
+        
+        <div class="detail-row">
+          <div class="detail-label">Address:</div>
+          <div class="detail-value">Kobe Hankyu Building West Wing 1F, 4-2-1 Kanocho, Chuo-ku, Kobe, Hyogo 650-0001, Japan</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Hours:</div>
+          <div class="detail-value">11:00 AM - 11:00 PM (L.O. Food 10:00 PM, Drinks 10:30 PM)<br>Open daily</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Phone:</div>
+          <div class="detail-value">+81 50-5872-9227 (Reservations)<br>+81 78-595-9905 (Direct)</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Price Range:</div>
+          <div class="detail-value">Dinner: ¥5,000-¥5,999 per person<br>Lunch: ¥2,000-¥2,999 per person</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Cuisine:</div>
+          <div class="detail-value">Oyster Bar, Spanish-style Bar, Italian</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Reservations:</div>
+          <div class="detail-value">Recommended, especially for dinner<br>Online reservations available</div>
+        </div>
+        
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">Fresh Oysters & Premium Champagne</h3>
+        <p>Opened in April 2021, Kobe Oyster House has quickly become a destination for seafood lovers in the Sannomiya district. Specializing in carefully selected raw oysters paired with champagne and other fine beverages, this stylish establishment offers both indoor and terrace seating for an elevated dining experience.</p>
+      </div>
+      
+      <div class="map-container">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3280.459501293408!2d135.19261767631894!3d34.69519937292902!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60008ef5f7fe4493%3A0x2ec3f5a51dd9d1c9!2sKobe%20Sannomiya%20Oyster%20House!5e0!3m2!1sen!2sus!4v1693470878654!5m2!1sen!2sus" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+    
+    <div class="content-text">
+      <h2>A Premier Oyster Destination in the Heart of Kobe</h2>
+      
+      <p>Conveniently located just 89 meters from Sannomiya Station in the bustling heart of Kobe, Kobe Oyster House offers a sophisticated yet accessible seafood experience focusing on premium oysters and complementary fare. Opened in April 2021, this stylish establishment has quickly established itself as a go-to destination for oyster enthusiasts and those looking to explore the delicate flavors of fresh seafood paired with fine wines and champagne.</p>
+      
+      <p>The restaurant occupies a prime location in the Kobe Hankyu Building's West Wing, where diners can enjoy their meal in the modern interior or, weather permitting, on the inviting terrace that seats 12. The sleek, contemporary design creates an atmosphere that's both upscale and comfortable, making it suitable for special occasions as well as casual gatherings with friends or family.</p>
+      
+      <div class="photos-container">
+        <div class="photo-item">
+          <img src="https://tblg.k-img.com/restaurant/images/Rvw/154346/640x640_rect_154346541.jpg" alt="Fresh Oyster Selection">
+        </div>
+        <div class="photo-item">
+          <img src="https://tblg.k-img.com/restaurant/images/Rvw/144599/640x640_rect_144599023.jpg" alt="Seafood Platter">
+        </div>
+        <div class="photo-item">
+          <img src="https://tblg.k-img.com/restaurant/images/Rvw/96486/640x640_rect_96486294.jpg" alt="Restaurant Interior">
+        </div>
+        <div class="photo-item">
+          <img src="https://tblg.k-img.com/restaurant/images/Rvw/143924/640x640_rect_143924500.jpg" alt="Champagne and Wine Selection">
+        </div>
+      </div>
+      
+      <h2>Exceptional Seafood with a Focus on Premium Oysters</h2>
+      
+      <p>At Kobe Oyster House, the spotlight is firmly on meticulously selected oysters that showcase the best of what Japan's coastal waters have to offer, supplemented by outstanding international varieties when in season. The restaurant's dedication to freshness and quality is evident in their daily sourcing practices, ensuring that only the finest specimens reach your table.</p>
+      
+      <p>The culinary team at Kobe Oyster House understands that the joy of oysters lies in their natural flavors, which is why they're served simply, allowing their briny sweetness to shine through. For those who prefer to enhance the experience, the restaurant offers a selection of mignonette sauces and condiments that complement rather than overwhelm the delicate taste of the oysters.</p>
+      
+      <p>Beyond oysters, the menu features a thoughtfully curated selection of seafood dishes with both Japanese and Mediterranean influences. From fresh seafood carpaccio and ceviche to beautifully prepared fish main courses, the kitchen demonstrates a skilled hand with seafood in all its forms. The restaurant also offers non-seafood options to accommodate diverse preferences, including quality meats and vegetable dishes that receive the same attentive preparation as their oceanic counterparts.</p>
+      
+      <p>What truly sets Kobe Oyster House apart is their exceptional beverage program designed to elevate the dining experience. Their sommelier has assembled an impressive selection of champagnes, sparkling wines, and still whites that pair beautifully with seafood. The restaurant offers two notable all-you-can-drink plans featuring premium options, including the higher-tier plan that includes Moët & Chandon champagne—perfect for celebrations or simply indulging in life's pleasures.</p>
+      
+      <div class="content-quote">
+        "Kobe Oyster House perfectly captures the essence of coastal dining with its impeccable selection of oysters and seafood. The care taken in sourcing and presenting each dish is evident from the first bite, and their champagne pairings elevate the experience to something truly special. It's a wonderful addition to Kobe's already impressive dining scene." - Hyogo Gourmet Magazine
+      </div>
+      
+      <!-- User Reviews Carousel -->
+      <h2>Customer Reviews</h2>
+      
+      <div class="review-carousel">
+        <div class="carousel-arrow carousel-prev">
+          <i class="fas fa-chevron-left"></i>
+        </div>
+        
+        <div class="review-slides">
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Sophia K.</div>
+                <div class="review-date">Visited May 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="far fa-star" style="color: #ddd;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"As someone who considers themselves an oyster aficionado, I was thrilled to discover Kobe Oyster House during my recent visit to Japan. The selection of oysters was impressive, featuring varieties from different regions of Japan as well as some international options. Each was impeccably fresh and served at the perfect temperature. We opted for the all-you-can-drink plan that included Moët & Chandon, which was an excellent value considering the quality. The staff was knowledgeable about both the oysters and the wine pairings, offering thoughtful recommendations throughout our meal. The restaurant itself has a sophisticated yet relaxed atmosphere, and we loved being able to sit on the terrace overlooking the busy Sannomiya district. Beyond oysters, we tried the seafood pasta and grilled fish, both of which were excellent. My only minor critique would be that the restaurant became quite busy during dinner service, which occasionally affected the attentiveness of service. Still, this was a standout dining experience during our time in Kobe and well worth the price point."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Takashi M.</div>
+                <div class="review-date">Visited March 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star-half-alt" style="color: #FFD700;"></i>
+                  <i class="far fa-star" style="color: #ddd;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"I visited Kobe Oyster House for a business lunch and was pleasantly surprised by their weekday lunch options. They offer a more affordable lunch menu that still delivers on quality, making it possible to enjoy premium seafood without the dinner price tag. We started with a half dozen assorted oysters, each clearly identified by region and featuring distinct flavor profiles. The server was helpful in explaining the characteristics of each variety. For the main course, I had their seafood risotto, which was rich with the flavors of the sea and perfectly cooked to a creamy consistency. My colleagues tried the fish of the day and the seafood pasta, both receiving high praise. The atmosphere during lunch was calm and conducive to business discussion, with well-spaced tables and moderate noise levels. The restaurant has a contemporary design with comfortable seating and natural light from the large windows. While not inexpensive even at lunch, the quality and execution justified the price point. This would be an excellent choice for a business lunch when aiming to impress clients or for a special midday treat. I'm looking forward to returning for dinner to try their more extensive evening menu and champagne offerings."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Emma L.</div>
+                <div class="review-date">Visited April 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="far fa-star" style="color: #ddd;"></i>
+                  <i class="far fa-star" style="color: #ddd;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"My partner and I were excited to try Kobe Oyster House based on recommendations, but our experience was somewhat mixed. On the positive side, the quality of the oysters was excellent—incredibly fresh with that perfect ocean flavor. We tried six different varieties, and each was distinct and properly shucked. The champagne selection lived up to expectations as well, with several good options by the glass. However, we found the non-oyster portions of our meal less impressive. The seafood pasta was under-seasoned, and the portion size was smaller than expected for the price point. Service was another area where our experience was inconsistent. While some staff members were attentive and knowledgeable, others seemed rushed and less familiar with the menu. The atmosphere is lovely though, especially if you can secure a table on the terrace. The restaurant has a sophisticated vibe without feeling stuffy. Overall, I'd return specifically for oysters and drinks, but would probably skip the other menu items in favor of trying another restaurant for a full dinner. Worth visiting if you're an oyster enthusiast, but manage your expectations for the complete dining experience."</p>
+          </div>
+        </div>
+        
+        <div class="carousel-arrow carousel-next">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+        
+        <div class="carousel-nav">
+          <div class="carousel-dot active"></div>
+          <div class="carousel-dot"></div>
+          <div class="carousel-dot"></div>
+        </div>
+      </div>
+      
+      <h2>Menu Highlights</h2>
+      
+      <p>Kobe Oyster House offers a seafood-focused menu with oysters as the star attraction:</p>
+      
+      <ul>
+        <li><strong>Daily Oyster Selection (Market Price)</strong> - Fresh oysters from various Japanese regions, served with mignonette sauce and lemon</li>
+        <li><strong>Oyster Sampler (¥2,800)</strong> - Six different varieties of oysters for comparison tasting</li>
+        <li><strong>Seafood Platter (¥4,500)</strong> - Assortment of fresh seafood including oysters, shrimp, clams, and daily specials</li>
+        <li><strong>Oysters Rockefeller (¥1,800)</strong> - Baked oysters with spinach, herb butter, and breadcrumbs</li>
+        <li><strong>Fresh Seafood Carpaccio (¥1,600)</strong> - Thinly sliced fresh catch with citrus dressing and sea salt</li>
+        <li><strong>Seafood Pasta (¥2,200)</strong> - Linguine with assorted seafood in white wine or tomato sauce</li>
+        <li><strong>Grilled Seasonal Fish (¥2,400-3,200)</strong> - Market-fresh fish prepared simply to highlight its natural flavors</li>
+        <li><strong>Champagne All-You-Can-Drink Plan (¥5,478)</strong> - Two-hour premium beverage service including Moët & Chandon</li>
+        <li><strong>Standard All-You-Can-Drink Plan (¥4,378)</strong> - Two-hour beverage service with sparkling wine, beer, cocktails, and more</li>
+        <li><strong>Weekday Lunch Set (¥1,800-2,500)</strong> - Seasonal seafood selections with soup, salad, and coffee</li>
+      </ul>
+      
+      <div class="review-section">
+        <h2>Eastworld's Review</h2>
+        
+        <h3>Food Quality: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>Kobe Oyster House excels in its specialty—fresh, high-quality oysters that are properly handled and beautifully presented. The seafood offerings in general are fresh and well-prepared, though some of the cooked dishes lack the same finesse as the raw bar items. When sticking to the restaurant's strengths—particularly the oysters and crudo—diners will be rewarded with exceptional flavors that showcase the natural quality of the ingredients.</p>
+        
+        <h3>Value: <span style="color: #FFD700;">★★★</span></h3>
+        <p>As expected with a specialty seafood restaurant, prices reflect the premium nature of the ingredients. While the dinner experience falls into the higher price bracket, the all-you-can-drink plans offer good value, especially for champagne lovers. The weekday lunch options provide a more accessible entry point for those wanting to experience the restaurant without the higher dinner prices.</p>
+        
+        <h3>Atmosphere: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>The contemporary, stylish interior creates an upscale yet comfortable environment perfect for both special occasions and casual dining. The terrace seating is particularly appealing when weather permits, offering a pleasant al fresco option in the heart of Sannomiya. The restaurant achieves a good balance between sophistication and accessibility, avoiding the stuffiness sometimes associated with high-end seafood establishments.</p>
+        
+        <h3>Service: <span style="color: #FFD700;">★★★</span></h3>
+        <p>Service can be inconsistent, particularly during busy periods. When at its best, the staff demonstrates good knowledge of the menu and offers thoughtful recommendations for both food and beverage pairings. However, attentiveness can waver during peak hours, occasionally resulting in longer waits between courses or for beverage refills.</p>
+        
+        <h3>Authenticity: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>While oyster bars are not traditionally Japanese, Kobe Oyster House successfully blends international oyster bar concepts with Japanese sensibilities regarding ingredient quality and presentation. The focus on domestic oyster varieties alongside international options provides a distinctly Japanese perspective on this global cuisine, making the experience feel authentic to its Kobe location.</p>
+        
+        <h3>Overall: <span style="color: #FFD700;">★★★½</span></h3>
+        <p>Kobe Oyster House delivers a refined seafood experience centered around excellently sourced and prepared oysters. While the restaurant may not hit the highest notes across all aspects of the dining experience, it succeeds in its primary mission of showcasing premium oysters in an elegant setting. For seafood enthusiasts visiting Kobe, particularly those with an appreciation for oysters and champagne, this restaurant offers a worthwhile addition to the itinerary. Those seeking the best value should consider the lunch service or focus their evening order on the raw bar specialties where the kitchen's strengths are most evident.</p>
+      </div>
+      
+      <h2>Tips for Visitors</h2>
+      
+      <ul>
+        <li><strong>Reservations:</strong> Highly recommended for dinner service, especially on weekends and holidays</li>
+        <li><strong>Seating:</strong> Request terrace seating when making a reservation if weather is favorable</li>
+        <li><strong>Timing:</strong> Weekday lunches offer a more relaxed atmosphere and better value</li>
+        <li><strong>Oyster Sampling:</strong> Ask for the day's special varieties—they often have limited quantities of seasonal oysters not listed on the regular menu</li>
+        <li><strong>Beverage Strategy:</strong> The all-you-can-drink plans represent good value if you plan to have multiple drinks</li>
+        <li><strong>Menu Navigation:</strong> Focus on raw and simply prepared seafood items where the quality of ingredients shines brightest</li>
+        <li><strong>Payment:</strong> Credit cards accepted (VISA, MasterCard, JCB, AMEX, Diners); PayPay also available</li>
+        <li><strong>Language:</strong> Some English menus available; staff can typically accommodate basic English requests</li>
+      </ul>
+      
+      <!-- Visitor Information -->
+      <div id="visitor-info" class="review-section">
+        <h2>Visitor Information</h2>
+        <p>Here's what you need to know when planning your visit to Kobe Oyster House:</p>
+        
+        <h3>Getting There:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>From Hankyu Kobe-Sannomiya Station: Go down to the 1st floor from the East ticket gate, find EKIZO Block B. The restaurant is on the corner, a short walk from EKIZO on your left.</li>
+          <li>From JR Sannomiya Station: Approximately 7-minute walk</li>
+          <li>From Hanshin Kobe-Sannomiya Station: Approximately 5-minute walk</li>
+          <li>From Municipal Subway Sannomiya Station: Approximately 6-minute walk</li>
+          <li>Located just 89 meters from Sannomiya, in the Kobe Hankyu Building West Wing 1F</li>
+        </ul>
+        
+        <h3>Hours of Operation:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Open daily: 11:00 AM - 11:00 PM</li>
+          <li>Last order for food: 10:00 PM</li>
+          <li>Last order for drinks: 10:30 PM</li>
+          <li>Weekday lunch specials available: 11:00 AM - 3:00 PM (Monday-Friday)</li>
+        </ul>
+        
+        <h3>Facilities:</h3>
+        <p>The restaurant offers:</p>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Total of 60 seats, including 12 terrace seats</li>
+          <li>Non-smoking throughout</li>
+          <li>Box seats available for groups of 4</li>
+          <li>Stylish interior with counter seating and comfortable sofa options</li>
+          <li>Power outlets available for charging devices</li>
+          <li>Private use available for groups of 20-50 people (seated) or up to 100 people (standing)</li>
+        </ul>
+        
+        <h3>Nearby Attractions:</h3>
+        <p>Combine your visit to Kobe Oyster House with nearby points of interest:</p>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Sannomiya Center Gai Shopping Street: 2-minute walk</li>
+          <li>Ikuta Shrine: 10-minute walk</li>
+          <li>Kobe Harborland: 15-minute walk</li>
+          <li>Nankinmachi (Kobe Chinatown): 8-minute walk</li>
+          <li>Meriken Park: 20-minute walk or short taxi ride</li>
+        </ul>
+        
+        <h3>Additional Information:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Family-friendly, welcoming both preschoolers and school-age children</li>
+          <li>No parking available; public transportation recommended</li>
+          <li>Established April 22, 2021</li>
+          <li>Online reservations recommended through Tabelog: <a href="https://tabelog.com/en/hyogo/A2801/A280101/28059912/party/" target="_blank">Kobe Oyster House Reservations</a></li>
+        </ul>
+      </div>
+      
+      <a href="../food.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Food Guide</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Review carousel functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const slides = document.querySelector('.review-slides');
+      const dots = document.querySelectorAll('.carousel-dot');
+      const prevBtn = document.querySelector('.carousel-prev');
+      const nextBtn = document.querySelector('.carousel-next');
+      let currentSlide = 0;
+      const totalSlides = document.querySelectorAll('.review-slide').length;
+      
+      // Function to update slide position
+      function showSlide(index) {
+        if (index < 0) index = totalSlides - 1;
+        if (index >= totalSlides) index = 0;
+        
+        currentSlide = index;
+        slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+        
+        // Update active dot
+        dots.forEach((dot, i) => {
+          dot.classList.toggle('active', i === currentSlide);
+        });
+      }
+      
+      // Set up event listeners for dots
+      dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => showSlide(i));
+      });
+      
+      // Set up event listeners for arrows
+      prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
+      nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
+      
+      // Auto-rotate slides every 5 seconds
+      setInterval(() => {
+        showSlide(currentSlide + 1);
+      }, 5000);
+    });
+  </script>
+  
+  <script src="../script.js"></script>
+</body>
+</html> 

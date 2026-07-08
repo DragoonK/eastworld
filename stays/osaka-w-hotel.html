@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>W Osaka - Eastworld Hotel Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Additional styles specific to hotel reviews */
+    .hotel-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+      .hotel-info {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .hotel-details {
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .detail-row {
+      display: flex;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+    }
+    
+    .detail-label {
+      font-weight: 600;
+      min-width: 120px;
+      color: #333;
+    }
+    
+    .detail-value {
+      flex: 1;
+      color: #555;
+    }
+    
+    .rating {
+      margin-bottom: 1rem;
+    }
+    
+    .star {
+      color: #ddd;
+      font-size: 1.5rem;
+    }
+    
+    .star.filled {
+      color: #FFD700;
+    }
+    
+    .half-star {
+      position: relative;
+    }
+    
+    .half-star .fas.fa-star-half {
+      color: #FFD700;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    
+    .score-label {
+      margin-left: 0.5rem;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .map-container {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .map-container iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+    }
+    
+    .photos-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .photo-item {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .photo-item img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+    }
+    
+    /* Review Categories - NEW FEATURE */
+    .review-categories {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      border-bottom: 2px solid #eee;
+    }
+    
+    .category-tab {
+      padding: 1rem 2rem;
+      background: #f5f5f5;
+      border: none;
+      border-radius: 8px 8px 0 0;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      color: #666;
+    }
+    
+    .category-tab.active {
+      background: #ff4d4d;
+      color: white;
+      transform: translateY(2px);
+    }
+    
+    .category-tab:hover:not(.active) {
+      background: #e0e0e0;
+    }
+    
+    .review-content {
+      display: none;
+    }
+    
+    .review-content.active {
+      display: block;
+    }
+    
+    .category-intro {
+      background: linear-gradient(135deg, #ff4d4d, #ff6b6b);
+      color: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+    
+    .category-intro h3 {
+      margin: 0 0 0.5rem 0;
+      font-size: 1.3rem;
+    }
+    
+    .category-intro p {
+      margin: 0;
+      opacity: 0.9;
+    }
+    
+    .review-carousel {
+      position: relative;
+      overflow: hidden;
+      margin: 2rem 0;
+    }
+    
+    .review-slides {
+      display: flex;
+      transition: transform 0.3s ease;
+    }
+    
+    .review-slide {
+      min-width: 100%;
+      padding: 2rem;
+      background: #fafafa;
+      border-radius: 8px;
+      margin-right: 1rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .reviewer-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      gap: 1rem;
+    }
+    
+    .reviewer-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ff4d4d, #ff6b6b);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+    
+    .reviewer-name {
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: #333;
+    }
+    
+    .review-date {
+      color: #888;
+      font-size: 0.9rem;
+    }
+    
+    .review-rating {
+      margin-top: 0.25rem;
+    }
+    
+    .review-rating i {
+      font-size: 0.8rem;
+      margin-right: 2px;
+    }
+    
+    .carousel-nav {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+    
+    .carousel-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ddd;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .carousel-dot.active {
+      background: #ff4d4d;
+    }
+    
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.7);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+    
+    .carousel-prev {
+      left: 10px;
+    }
+    
+    .carousel-next {
+      right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../food.html" class="nav-item">FOOD</a>
+        <a href="../stays.html" class="nav-item active">STAYS</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="content-container">
+    <div class="content-header">
+      <span class="content-category">LIFESTYLE LUXURY</span>
+      <h1 class="content-title">W Osaka - Vibrant Design-Forward Luxury</h1>
+      
+      <!-- Rating Section -->
+      <div class="rating">
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star half-star">
+          <i class="far fa-star"></i>
+          <i class="fas fa-star-half"></i>
+        </span>
+        <span class="score-label">4.4/5.0</span>
+      </div>
+    </div>
+    
+    <div class="hero-container">
+      <img class="content-hero" src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1f/8c/83/20/w-osaka.jpg" alt="W Osaka Exterior" 
+      onerror="this.onerror=null; 
+      this.parentElement.innerHTML = '<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#333;color:white;font-size:1.5rem;text-align:center;padding:2rem;\'>W Osaka</div>';">
+    </div>
+    
+    <!-- Booking Button -->
+    <a href="#booking-form" class="booking-button">
+      <i class="fas fa-calendar-alt"></i> BOOK YOUR STAY
+    </a>
+    
+    <!-- Hotel Information Section -->
+    <div class="hotel-info">
+      <div class="hotel-details">
+        <h2>Hotel Details</h2>
+        
+        <div class="detail-row">
+          <div class="detail-label">Address:</div>
+          <div class="detail-value">4-1-3 Minami-Hommachi, Chuo-ku, Osaka 541-0054, Japan</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Check-in:</div>
+          <div class="detail-value">3:00 PM</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Check-out:</div>
+          <div class="detail-value">12:00 PM</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Phone:</div>
+          <div class="detail-value">+81 6-4963-7500</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Price Range:</div>
+          <div class="detail-value">$380-750 per night</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Style:</div>
+          <div class="detail-value">Vibrant Lifestyle Luxury Hotel</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Amenities:</div>
+          <div class="detail-value">Rooftop Pool, WOOBAR, Spa, Fitness, Multiple Restaurants</div>
+        </div>
+        
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">How to Get There</h3>
+        <p>From Kansai Airport:</p>
+        <ul style="margin-bottom: 1rem; padding-left: 1.5rem;">
+          <li>Airport Express to Namba Station (45 minutes)</li>
+          <li>Subway to Honmachi Station (10 minutes)</li>
+          <li>2-minute walk to hotel</li>
+          <li>Direct taxi service available (1 hour, $100-150)</li>
+        </ul>
+      </div>
+      
+      <div class="map-container">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3281.234567891234!2d135.51234567890123!3d34.678901234567891!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6000e7123456789b%3A0x234567890abcdef1!2sW%20Osaka!5e0!3m2!1sen!2sjp!4v1693320290088!5m2!1sen!2sjp" 
+        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+    
+    <div class="content-text">
+      <h2>Where Bold Design Meets Osaka Energy</h2>
+      
+      <p>W Osaka bursts onto the scene as the city's most distinctive luxury hotel, bringing Marriott's signature W brand aesthetic to Japan's culinary capital. Since opening in 2021, this 27-story tower has become a magnet for design enthusiasts, creative professionals, and travelers seeking an experience that perfectly captures Osaka's vibrant, unconventional spirit.</p>
+      
+      <p>The hotel's design philosophy revolves around "Whatever/Whenever" service and bold architectural statements that challenge traditional luxury hospitality norms. From the dramatic lobby featuring local art installations to the Instagram-worthy WOOBAR with panoramic city views, every space is crafted to stimulate, inspire, and surprise.</p>
+      
+      <div class="photos-container">
+        <div class="photo-item">
+          <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1f/8c/83/25/w-osaka-room.jpg" alt="W Osaka Stylish Room">
+        </div>
+        <div class="photo-item">
+          <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1f/8c/83/30/w-osaka-woobar.jpg" alt="W Osaka WOOBAR">
+        </div>
+        <div class="photo-item">
+          <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1f/8c/83/35/w-osaka-pool.jpg" alt="W Osaka Rooftop Pool">
+        </div>
+        <div class="photo-item">
+          <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1f/8c/83/40/w-osaka-lobby.jpg" alt="W Osaka Vibrant Lobby">
+        </div>
+      </div>
+      
+      <h2>Luxury Redefined Through Vibrant Innovation</h2>
+      
+      <p>W Osaka's 337 rooms and suites showcase bold color palettes, cutting-edge technology, and playful design elements that reflect both international sophistication and local Osakan creativity. The hotel's standout feature is the rooftop infinity pool offering 360-degree views of the city, creating an urban oasis that feels worlds away from the bustling streets below.</p>
+      
+      <p>The property houses several distinctive dining and entertainment venues, including the signature WOOBAR, which has quickly become Osaka's most buzzworthy rooftop destination. The hotel's spa combines traditional Japanese wellness practices with modern treatments, while the state-of-the-art fitness center caters to health-conscious travelers who refuse to compromise their routines.</p>
+      
+      <div class="content-quote">
+        "W Osaka isn't just accommodation—it's a lifestyle destination that amplifies the energy, creativity, and unstoppable spirit of modern Japan. We're here to fuel passion and inspire whatever's next." - Hotel Management
+      </div>
+      
+      <!-- REVIEWS WITH LOCAL VS TOURIST CATEGORIES -->
+      <h2>Guest Reviews</h2>
+      
+      <div class="review-categories">
+        <button class="category-tab active" onclick="showCategory('locals')">
+          <i class="fas fa-home"></i> Local Reviews
+        </button>
+        <button class="category-tab" onclick="showCategory('tourists')">
+          <i class="fas fa-plane"></i> Tourist Reviews
+        </button>
+      </div>
+      
+      <!-- LOCAL REVIEWS -->
+      <div id="locals" class="review-content active">
+        <div class="category-intro">
+          <h3><i class="fas fa-home"></i> Local Perspective</h3>
+          <p>Reviews from fashion-forward locals and creative professionals in Osaka's design scene</p>
+        </div>
+        
+        <div class="review-carousel" id="locals-carousel">
+          <div class="carousel-arrow carousel-prev" onclick="prevSlide('locals')">
+            <i class="fas fa-chevron-left"></i>
+          </div>
+          
+          <div class="review-slides">
+            <div class="review-slide">
+              <div class="reviewer-info">
+                <div class="reviewer-avatar">AS</div>
+                <div>
+                  <div class="reviewer-name">Akira S. - Creative Director</div>
+                  <div class="review-date">Stayed February 2024</div>
+                  <div class="review-rating">
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star-half-alt" style="color: #FFD700;"></i>
+                  </div>
+                </div>
+              </div>
+              <p>"W Osaka finally gives us locals a luxury hotel that matches our city's creative energy. The design aesthetic speaks to Japan's youth culture while maintaining sophistication—it's like staying inside a high-end art installation. WOOBAR has become my go-to spot for client meetings; the atmosphere is inspiring without being pretentious. The staff genuinely understands both international luxury standards and local cultural nuances. What I love most is how they showcase local artists and designers throughout the property. The only minor issue is that weekend rates can be quite steep during peak seasons."</p>
+            </div>
+            
+            <div class="review-slide">
+              <div class="reviewer-info">
+                <div class="reviewer-avatar">MH</div>
+                <div>
+                  <div class="reviewer-name">Megumi H. - Fashion Entrepreneur</div>
+                  <div class="review-date">Stayed January 2024</div>
+                  <div class="review-rating">
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="far fa-star" style="color: #ddd;"></i>
+                  </div>
+                </div>
+              </div>
+              <p>"I hosted a fashion week event at W Osaka and was thoroughly impressed by their attention to detail and understanding of contemporary luxury. The event spaces are Instagram-perfect, and the technical capabilities are flawless. The rooftop pool area provided the perfect backdrop for our product launch. Staff are incredibly stylish and professional—they truly embody the W brand ethos. The room technology is cutting-edge, and the mood lighting options are perfect for content creation. My guests loved the bold, unapologetically modern aesthetic that's so different from traditional Japanese luxury hotels."</p>
+            </div>
+            
+            <div class="review-slide">
+              <div class="reviewer-info">
+                <div class="reviewer-avatar">TK</div>
+                <div>
+                  <div class="reviewer-name">Takeshi K. - Tech Executive</div>
+                  <div class="review-date">Stayed December 2023</div>
+                  <div class="review-rating">
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                  </div>
+                </div>
+              </div>
+              <p>"W Osaka represents everything I love about modern Japan—innovation, style, and exceptional service. The business facilities are outstanding, with meeting rooms that inspire creativity rather than induce boredom. The Whatever/Whenever service philosophy really delivers; staff helped arrange everything from late-night restaurant reservations to exclusive cultural experiences. The fitness center and spa are world-class, and the pool deck is the perfect place to unwind after intense business days. This hotel understands that luxury travelers want experiences, not just amenities."</p>
+            </div>
+          </div>
+          
+          <div class="carousel-arrow carousel-next" onclick="nextSlide('locals')">
+            <i class="fas fa-chevron-right"></i>
+          </div>
+          
+          <div class="carousel-nav">
+            <div class="carousel-dot active"></div>
+            <div class="carousel-dot"></div>
+            <div class="carousel-dot"></div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- TOURIST REVIEWS -->
+      <div id="tourists" class="review-content">
+        <div class="category-intro">
+          <h3><i class="fas fa-plane"></i> Tourist Experience</h3>
+          <p>Reviews from international travelers seeking bold luxury and Instagram-worthy experiences</p>
+        </div>
+        
+        <div class="review-carousel" id="tourists-carousel">
+          <div class="carousel-arrow carousel-prev" onclick="prevSlide('tourists')">
+            <i class="fas fa-chevron-left"></i>
+          </div>
+          
+          <div class="review-slides">
+            <div class="review-slide">
+              <div class="reviewer-info">
+                <div class="reviewer-avatar">ES</div>
+                <div>
+                  <div class="reviewer-name">Emma S. - Travel Influencer</div>
+                  <div class="review-date">Stayed March 2024</div>
+                  <div class="review-rating">
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                  </div>
+                </div>
+              </div>
+              <p>"W Osaka completely exceeded my expectations! This hotel is a content creator's dream—every corner is perfectly designed for photos, but it never feels gimmicky or superficial. The rooftop pool with the city skyline backdrop is absolutely stunning, and WOOBAR offers some of the most creative cocktails I've experienced in Asia. The staff went above and beyond to help me capture amazing content while respecting other guests. The room design is bold and sophisticated, with the most comfortable bed I've slept in during my entire Japan trip. This hotel perfectly captures the modern, creative spirit of Osaka."</p>
+            </div>
+            
+            <div class="review-slide">
+              <div class="reviewer-info">
+                <div class="reviewer-avatar">MR</div>
+                <div>
+                  <div class="reviewer-name">Marcus & Riley - Luxury Travelers</div>
+                  <div class="review-date">Stayed February 2024</div>
+                  <div class="review-rating">
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star-half-alt" style="color: #FFD700;"></i>
+                  </div>
+                </div>
+              </div>
+              <p>"After staying at W Hotels worldwide, W Osaka stands out as one of the most exciting properties in the portfolio. The hotel perfectly balances luxury with playfulness—sophisticated enough for our business needs, yet vibrant enough to feel like a vacation. The concierge arranged incredible dining experiences at exclusive local restaurants we never could have accessed independently. The spa treatments incorporate traditional Japanese techniques with modern luxury amenities. The Whatever/Whenever service philosophy really shines—staff anticipated our needs and exceeded every expectation. This hotel makes Osaka feel like the coolest city in Asia."</p>
+            </div>
+            
+            <div class="review-slide">
+              <div class="reviewer-info">
+                <div class="reviewer-avatar">JA</div>
+                <div>
+                  <div class="reviewer-name">James A. - Design Professional</div>
+                  <div class="review-date">Stayed January 2024</div>
+                  <div class="review-rating">
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="fas fa-star" style="color: #FFD700;"></i>
+                    <i class="far fa-star" style="color: #ddd;"></i>
+                  </div>
+                </div>
+              </div>
+              <p>"As someone who evaluates hotel design professionally, W Osaka impressed me with its thoughtful integration of bold aesthetics and functional luxury. The public spaces are masterfully designed to encourage social interaction while maintaining intimacy. The art installations throughout the property showcase both international and local talent beautifully. Room technology is seamlessly integrated—everything works intuitively without overwhelming the space. The fitness and pool facilities are exceptional for a city hotel. My only minor criticism is that some design elements feel slightly forced, but overall this property sets a new standard for luxury lifestyle hotels in Asia."</p>
+            </div>
+          </div>
+          
+          <div class="carousel-arrow carousel-next" onclick="nextSlide('tourists')">
+            <i class="fas fa-chevron-right"></i>
+          </div>
+          
+          <div class="carousel-nav">
+            <div class="carousel-dot active"></div>
+            <div class="carousel-dot"></div>
+            <div class="carousel-dot"></div>
+          </div>
+        </div>
+      </div>
+      
+      <h2>Room Categories</h2>
+      
+      <p>W Osaka offers vibrant luxury accommodations designed to inspire and energize:</p>
+      
+      <ul>
+        <li><strong>Wonderful Room ($380-480/night)</strong> - 42m² rooms with bold design, city views, and signature W amenities</li>
+        <li><strong>Spectacular Room ($480-580/night)</strong> - 42m² corner rooms on higher floors with enhanced city panoramas</li>
+        <li><strong>Fabulous Suite ($650-850/night)</strong> - 84m² suites with separate living area and premium lifestyle amenities</li>
+        <li><strong>WOW Suite ($1,000-1,200/night)</strong> - 168m² penthouse with private terrace and bespoke design elements</li>
+      </ul>
+      
+      <div class="review-section">
+        <h2>Eastworld's Review</h2>
+        
+        <h3>Design & Innovation: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Exceptional contemporary design that pushes luxury hotel boundaries. Bold, Instagram-worthy spaces that never sacrifice functionality for style.</p>
+        
+        <h3>Location & Accessibility: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>Excellent central location with easy access to business districts and cultural attractions. Well-connected to transportation networks.</p>
+        
+        <h3>Service & Experience: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Whatever/Whenever service philosophy delivers genuinely personalized experiences. Staff excel at anticipating guest needs and creating memorable moments.</p>
+        
+        <h3>Facilities & Amenities: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Outstanding rooftop pool, world-class spa, cutting-edge fitness center, and multiple distinctive dining venues. Each facility is destination-worthy.</p>
+        
+        <h3>Value: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>Premium pricing reflects unique design and service quality. Excellent value for travelers seeking distinctive luxury experiences.</p>
+        
+        <h3>Overall: <span style="color: #FFD700;">★★★★☆</span></h3>
+        <p>W Osaka successfully reimagines luxury hospitality for the modern traveler, offering an energizing and unforgettable experience in Japan's most dynamic city.</p>
+      </div>
+      
+      <h2>Tips for Guests</h2>
+      
+      <ul>
+        <li>Book rooftop pool access in advance during peak seasons—it's incredibly popular</li>
+        <li>Visit WOOBAR during sunset for the most spectacular city views and photo opportunities</li>
+        <li>Take advantage of the Whatever/Whenever service for unique local experiences</li>
+        <li>The spa's signature treatments combine traditional Japanese techniques with modern luxury</li>
+        <li>Room mood lighting can be customized via the in-room tablet—perfect for content creation</li>
+        <li>Ask about local art tours and creative workshops available exclusively to guests</li>
+        <li>The hotel's social media team can help arrange professional photo sessions</li>
+      </ul>
+      
+      <!-- Booking Form -->
+      <div id="booking-form" class="review-section">
+        <h2>Booking Information</h2>
+        <p>Reserve your bold luxury experience at W Osaka through these channels:</p>
+        
+        <h3>Direct Booking:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Phone: +81 6-4963-7500</li>
+          <li>Email: <a href="mailto:w.osaka@marriott.com" style="color: #ff4d4d;">w.osaka@marriott.com</a></li>
+          <li>Website: <a href="https://www.wosaka.com" target="_blank" style="color: #ff4d4d;">www.wosaka.com</a></li>
+        </ul>
+        
+        <h3>Lifestyle Booking Options:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Marriott Bonvoy (exclusive member experiences)</li>
+          <li>W Insider access (special events and amenities)</li>
+          <li>Eastworld lifestyle concierge (curated experiences and insider access)</li>
+        </ul>
+        
+        <p>For VIP experiences, exclusive events, or creative collaborations, contact our lifestyle specialists at <a href="mailto:lifestyle@eastworld.com" style="color: #ff4d4d;">lifestyle@eastworld.com</a>.</p>
+      </div>
+      
+      <a href="../stays.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Stays Guide</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Review category switching
+    function showCategory(category) {
+      // Hide all content
+      document.querySelectorAll('.review-content').forEach(content => {
+        content.classList.remove('active');
+      });
+      
+      // Remove active from all tabs
+      document.querySelectorAll('.category-tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      
+      // Show selected content
+      document.getElementById(category).classList.add('active');
+      
+      // Add active to selected tab
+      event.target.classList.add('active');
+    }
+
+    // Carousel functionality for each category
+    const carousels = {
+      locals: { currentSlide: 0, totalSlides: 3 },
+      tourists: { currentSlide: 0, totalSlides: 3 }
+    };
+
+    function showSlide(category, index) {
+      const carousel = carousels[category];
+      if (index < 0) index = carousel.totalSlides - 1;
+      if (index >= carousel.totalSlides) index = 0;
+      
+      carousel.currentSlide = index;
+      const slides = document.querySelector(`#${category}-carousel .review-slides`);
+      slides.style.transform = `translateX(-${carousel.currentSlide * 100}%)`;
+      
+      // Update active dot
+      const dots = document.querySelectorAll(`#${category}-carousel .carousel-dot`);
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === carousel.currentSlide);
+      });
+    }
+
+    function prevSlide(category) {
+      showSlide(category, carousels[category].currentSlide - 1);
+    }
+
+    function nextSlide(category) {
+      showSlide(category, carousels[category].currentSlide + 1);
+    }
+
+    // Set up event listeners for dots
+    document.addEventListener('DOMContentLoaded', function() {
+      ['locals', 'tourists'].forEach(category => {
+        const dots = document.querySelectorAll(`#${category}-carousel .carousel-dot`);
+        dots.forEach((dot, i) => {
+          dot.addEventListener('click', () => showSlide(category, i));
+        });
+      });
+    });
+  </script>
+  
+  <script src="../script.js"></script>
+</body>
+</html> 

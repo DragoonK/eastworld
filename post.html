@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eastworld</title>
+  <link rel="stylesheet" href="home.css">
+</head>
+<body>
+
+  <header>
+    <nav class="main-nav">
+      <div class="nav-links">
+        <a href="food.html">FOOD</a>
+        <a href="stays.html">STAYS</a>
+        <a href="places.html">PLACES</a>
+        <a href="products.html">PRODUCTS</a>
+        <a href="cities.html">CITIES</a>
+      </div>
+      <a href="index.html" class="logo">EASTWORLD</a>
+      <div class="nav-links">
+        <a href="ew-events.html">EW EVENTS</a>
+        <a href="community.html">EW HUB</a>
+        <a href="login.html">LOGIN</a>
+        <a href="register.html">REGISTER</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="post-page">
+    <article id="post-container">
+      <p class="posts-status">Loading&hellip;</p>
+    </article>
+    <a href="index.html" class="back-link">&#8592; Back to Homepage</a>
+  </main>
+
+  <footer>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    async function loadPost() {
+      const container = document.getElementById('post-container');
+      const id = new URLSearchParams(window.location.search).get('id');
+
+      if (!id) {
+        container.innerHTML = '<p class="posts-status">No post specified.</p>';
+        return;
+      }
+
+      try {
+        const response = await fetch(`/api/posts/${id}`);
+        if (response.status === 404) {
+          container.innerHTML = '<p class="posts-status">Post not found.</p>';
+          return;
+        }
+        if (!response.ok) throw new Error(`API returned ${response.status}`);
+
+        const post = await response.json();
+        document.title = `${post.title} - Eastworld`;
+
+        // Content is stored as plain text; blank lines separate paragraphs.
+        const paragraphs = post.content
+          .split(/\n\s*\n/)
+          .map(p => `<p>${p.trim()}</p>`)
+          .join('');
+
+        container.innerHTML = `
+          <span class="category">${post.category}</span>
+          <h1>${post.title}</h1>
+          <img class="post-hero" src="${post.image_url}" alt="${post.title}">
+          <div class="post-body">${paragraphs}</div>
+        `;
+      } catch (err) {
+        container.innerHTML = `
+          <p class="posts-status">
+            Couldn't load this post. Is the backend running?<br>
+            Start it with: <code>cd backend &amp;&amp; python3 app.py</code>
+          </p>`;
+      }
+    }
+
+    loadPost();
+  </script>
+</body>
+</html>

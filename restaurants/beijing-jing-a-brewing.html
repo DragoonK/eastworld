@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jing-A Brewing Co. - Eastworld Beijing Restaurant Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Restaurant-specific styles */
+    .restaurant-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+      .restaurant-info {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .restaurant-details {
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .detail-row {
+      display: flex;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+    }
+    
+    .detail-label {
+      font-weight: 600;
+      min-width: 120px;
+      color: #333;
+    }
+    
+    .detail-value {
+      flex: 1;
+      color: #555;
+    }
+    
+    .map-container {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .map-container iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+    }
+    
+    .beer-section {
+      margin: 2rem 0;
+      background: #f6f6f6;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .beer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+    
+    .beer-card {
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+    
+    .beer-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .beer-image {
+      height: 200px;
+      overflow: hidden;
+    }
+    
+    .beer-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .beer-card:hover .beer-image img {
+      transform: scale(1.05);
+    }
+    
+    .beer-details {
+      padding: 1.5rem;
+    }
+    
+    .beer-name {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #222;
+    }
+    
+    .beer-style {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 0.5rem;
+    }
+    
+    .beer-abv {
+      font-size: 0.9rem;
+      color: #888;
+      margin-bottom: 0.5rem;
+    }
+    
+    .beer-description {
+      font-size: 0.95rem;
+      line-height: 1.5;
+      color: #555;
+      margin-bottom: 1rem;
+    }
+    
+    .beer-award {
+      display: inline-block;
+      background: #f0f0f0;
+      font-size: 0.8rem;
+      padding: 0.3rem 0.6rem;
+      border-radius: 4px;
+      color: #666;
+      margin-right: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .gold {
+      background: #ffd700;
+      color: #333;
+    }
+    
+    .silver {
+      background: #c0c0c0;
+      color: #333;
+    }
+    
+    .bronze {
+      background: #cd7f32;
+      color: white;
+    }
+    
+    .photos-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .photo-item {
+      border-radius: 8px;
+      overflow: hidden;
+      height: 150px;
+    }
+    
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .photo-item img:hover {
+      transform: scale(1.05);
+    }
+    
+    .menu-highlights {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+    
+    @media (max-width: 768px) {
+      .menu-highlights {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .menu-item {
+      background: #fff;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    
+    .menu-item h3 {
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+      color: #1a1a1a;
+    }
+    
+    .menu-item .description {
+      color: #666;
+      font-size: 0.95rem;
+      margin-bottom: 0.8rem;
+    }
+    
+    .menu-item .price {
+      font-weight: 600;
+      color: #1a1a1a;
+    }
+    
+    .booking-button {
+      display: block;
+      background-color: #ff4d4d;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      margin: 1.5rem 0;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    
+    .booking-button:hover {
+      background-color: #e63939;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    .tap-list {
+      background: #222;
+      color: white;
+      padding: 2rem;
+      border-radius: 8px;
+      margin: 2rem 0;
+    }
+    
+    .tap-list h2 {
+      color: white;
+      border-bottom: 1px solid #444;
+      padding-bottom: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .tap-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.8rem 0;
+      border-bottom: 1px solid #333;
+    }
+    
+    .tap-name {
+      font-weight: 600;
+    }
+    
+    .tap-details {
+      color: #aaa;
+      font-size: 0.9rem;
+    }
+    
+    .review-section {
+      margin: 2rem 0;
+      padding: 2rem;
+      background: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .content-quote {
+      font-style: italic;
+      padding: 1.5rem;
+      background: #f5f5f5;
+      border-left: 4px solid #ff4d4d;
+      margin: 1.5rem 0;
+      line-height: 1.6;
+    }
+    
+    .review-carousel {
+      position: relative;
+      margin: 2rem 0;
+      overflow: hidden;
+      padding: 1rem 0;
+    }
+    
+    .review-slides {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    
+    .review-slide {
+      min-width: 100%;
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .reviewer-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #f0f0f0;
+      padding-bottom: 0.8rem;
+    }
+    
+    .reviewer-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding-top: 0.2rem;
+    }
+    
+    .review-date {
+      color: #888;
+      font-size: 0.75rem;
+      margin-top: 0.1rem;
+    }
+    
+    .carousel-nav {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+    
+    .carousel-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ddd;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .carousel-dot.active {
+      background: #ff4d4d;
+    }
+    
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.7);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+    
+    .carousel-prev {
+      left: 10px;
+    }
+    
+    .carousel-next {
+      right: 10px;
+    }
+    
+    .event-card {
+      background: #f8f8f8;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      border-left: 4px solid #ff4d4d;
+    }
+    
+    .event-date {
+      font-weight: 600;
+      color: #ff4d4d;
+      margin-bottom: 0.5rem;
+    }
+    
+    .tour-info {
+      background: #f5f7fa;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin: 2rem 0;
+      border: 1px solid #e0e0e0;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../food.html" class="nav-item active">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="content-container">
+    <div class="content-header">
+      <span class="content-category">CRAFT BEER</span>
+      <h1 class="content-title">Jing-A Brewing Co. - Beijing's Craft Beer Pioneer</h1>
+      <div class="rating">
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star half-star">
+          <i class="far fa-star"></i>
+          <i class="fas fa-star-half"></i>
+        </span>
+        <span class="score-label">4.7/5.0</span>
+      </div>
+    </div>
+
+    <div class="hero-container">
+      <img class="content-hero" src="https://images.chinahighlights.com/allpicture/2019/01/d89e7eb0347949c1816b0d31_cut_750x400_39.jpg" alt="Jing-A Brewing taproom with customers enjoying craft beer" 
+      onerror="this.onerror=null;this.parentElement.innerHTML='<div style=\'background:#1a1a1a; color:white; padding:2rem; text-align:center\'>Jing-A Brewing Co.</div>';">
+    </div>
+    
+    <!-- Booking Button -->
+    <a href="#visitor-info" class="booking-button">
+      <i class="fas fa-info-circle"></i> VISITOR INFORMATION
+    </a>
+
+    <div class="restaurant-info">
+      <div class="restaurant-details">
+        <h2>Brewery Details</h2>
+        <div class="detail-row">
+          <div class="detail-label">Address:</div>
+          <div class="detail-value">57 Xingfucun Zhong Lu, Chaoyang District, Beijing (Flagship Location)</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Hours:</div>
+          <div class="detail-value">
+            Monday-Thursday: 3:00 PM - 12:00 AM<br>
+            Friday-Saturday: 12:00 PM - 2:00 AM<br>
+            Sunday: 12:00 PM - 12:00 AM
+          </div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Phone:</div>
+          <div class="detail-value">+86 10-6501-8883</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Price Range:</div>
+          <div class="detail-value">
+            Draft Beers: ¥50-80 ($7-12) per pint<br>
+            Food: ¥60-200 ($9-30) per item
+          </div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Cuisine:</div>
+          <div class="detail-value">Gastropub, International, Fusion</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Reservations:</div>
+          <div class="detail-value">Recommended for groups of 6+ people</div>
+        </div>
+        
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">How to Get There</h3>
+        <p>From Tuanjiehu Metro Station:</p>
+        <ul style="margin-bottom: 1rem; padding-left: 1.5rem;">
+          <li>Take Line 10 to Tuanjiehu Station, use Exit A</li>
+          <li>Walk west along Xingfucun Middle Road for about 10 minutes</li>
+          <li>The brewery is located on the south side of the street</li>
+          <li>Look for the industrial-style entrance with Jing-A signage</li>
+        </ul>
+      </div>
+      <div class="map-container">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3053.098!2d116.446!3d39.933!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x35f1ac09e863aa8d%3A0x10fe5c3bf25b2aab!2sJing-A%20Brewing%20Co.!5e0!3m2!1sen!2sus!4v1693230090086!5m2!1sen!2sus" allowfullscreen loading="lazy"></iframe>
+      </div>
+    </div>
+
+    <div class="content-text">
+      <h2>Beijing's Craft Beer Revolution</h2>
+      
+      <p>In a city known more for its imperial history than its brewing culture, Jing-A Brewing Co. has spearheaded nothing short of a craft beer revolution in Beijing. Founded in 2012 by expats Alex Acker and Kristian Li, what began as a home brewing experiment has grown into one of China's most influential craft breweries, known for its innovative takes on traditional styles and unique beers that incorporate Chinese ingredients and brewing traditions.</p>
+      
+      <p>Named after the historic "Jing-A" license plate designation for Beijing vehicles, the brewery proudly celebrates its connection to the Chinese capital while pushing the boundaries of what Chinese craft beer can be. Their flagship taproom in the trendy Sanlitun area has become a gathering place for both expats and Chinese beer enthusiasts, creating a cultural bridge through shared appreciation of quality brewing.</p>
+      
+      <div class="photos-container">
+        <div class="photo-item">
+          <img src="https://media-cdn.tripadvisor.com/media/photo-s/10/c8/ca/a5/jing-a-brewing-taproom.jpg" alt="Jing-A interior bar counter">
+        </div>
+        <div class="photo-item">
+          <img src="https://www.beijing-visitor.com/f/uploads/jing-a_1.jpg" alt="Beer flights and tasting">
+        </div>
+        <div class="photo-item">
+          <img src="https://i0.wp.com/beijingboyce.com/wp-content/uploads/2018/09/IMG_2918.jpg" alt="Brewing tanks">
+        </div>
+        <div class="photo-item">
+          <img src="https://media-cdn.tripadvisor.com/media/photo-s/10/c8/ca/9d/jing-a-brewing-taproom.jpg" alt="Outdoor seating area">
+        </div>
+      </div>
+      
+      <h2>The Brewery: Where East Meets West</h2>
+      
+      <p>Walking into Jing-A's flagship location, visitors immediately sense the brewery's unique positioning at the crossroads of Western craft brewing tradition and Chinese cultural context. The industrial-chic design features exposed brick, concrete floors, and brewing equipment visible behind glass walls, creating a contemporary atmosphere that still feels distinctly Beijing.</p>
+      
+      <p>The space is divided into several areas, including a main bar, communal tables, a more intimate seating section, and a seasonal outdoor patio. The decor includes subtle nods to Beijing culture—vintage posters, artistic representations of hutong architecture, and creative uses of traditional Chinese design elements reimagined in a modern context.</p>
+
+      <div class="content-quote">
+        "We didn't want to create just another generic craft brewery that could be anywhere in the world. Beijing is in our name and our DNA. We're constantly thinking about how to integrate local ingredients, flavors, and cultural references into our beers in ways that are authentic rather than gimmicky. When people visit our taproom, we want them to experience something that could only exist in China's capital." - Alex Acker, Co-founder of Jing-A Brewing Co.
+      </div>
+      
+      <h2>Innovative Beers with Chinese Character</h2>
+      
+      <p>What truly sets Jing-A apart in the global craft beer landscape is its creative integration of Chinese ingredients and brewing traditions. The brewery regularly collaborates with local tea producers, spice merchants, and even traditional Chinese medicine practitioners to source unique ingredients that become the highlights of their signature brews.</p>
+      
+      <div class="beer-section">
+        <h2>Signature Beers</h2>
+        <p>Jing-A maintains a rotating selection of about 16 beers on tap at any given time, with these signature brews appearing regularly:</p>
+        
+        <div class="beer-grid">
+          <div class="beer-card">
+            <div class="beer-image">
+              <img src="https://jingabrewing.com/wp-content/uploads/2019/05/worker-pale-bottle.jpg" alt="Worker's Pale Ale" onerror="this.src='https://placehold.co/300x200/222/fff?text=Worker%27s+Pale+Ale'">
+            </div>
+            <div class="beer-details">
+              <div class="beer-name">Worker's Pale Ale</div>
+              <div class="beer-style">American Pale Ale</div>
+              <div class="beer-abv">5.5% ABV | 45 IBU</div>
+              <div class="beer-description">Their flagship beer, featuring a balance of American hop character with a clean, crisp finish. Designed to appeal to both craft enthusiasts and newcomers.</div>
+              <div class="beer-award gold">Gold Medal - Asia Beer Championship 2019</div>
+            </div>
+          </div>
+          
+          <div class="beer-card">
+            <div class="beer-image">
+              <img src="https://jingabrewing.com/wp-content/uploads/2019/05/Koji-Red-Ale-bottle.jpg" alt="Koji Red Ale" onerror="this.src='https://placehold.co/300x200/222/fff?text=Koji+Red+Ale'">
+            </div>
+            <div class="beer-details">
+              <div class="beer-name">Koji Red Ale</div>
+              <div class="beer-style">Red Ale with Koji Rice</div>
+              <div class="beer-abv">6.5% ABV | 25 IBU</div>
+              <div class="beer-description">Inspired by ancient Chinese fermentation techniques, this unique red ale uses koji rice (used in traditional Chinese rice wine) to create subtle umami notes that complement the malt sweetness.</div>
+              <div class="beer-award silver">Silver Medal - Brussels Beer Challenge 2020</div>
+            </div>
+          </div>
+          
+          <div class="beer-card">
+            <div class="beer-image">
+              <img src="https://jingabrewing.com/wp-content/uploads/2019/05/Mandarine-wheat.jpg" alt="Mandarin Wheat" onerror="this.src='https://placehold.co/300x200/222/fff?text=Mandarin+Wheat'">
+            </div>
+            <div class="beer-details">
+              <div class="beer-name">Mandarin Wheat</div>
+              <div class="beer-style">Wheat Beer with Citrus</div>
+              <div class="beer-abv">4.8% ABV | 15 IBU</div>
+              <div class="beer-description">A refreshing wheat beer infused with Sichuan mandarin orange peel, providing bright citrus notes that perfectly complement the beer's natural wheat character.</div>
+              <div class="beer-award">Fan Favorite - Beijing Craft Beer Festival 2021</div>
+            </div>
+          </div>
+          
+          <div class="beer-card">
+            <div class="beer-image">
+              <img src="https://jingabrewing.com/wp-content/uploads/2019/05/flying-fist-bottle.jpg" alt="Flying Fist IPA" onerror="this.src='https://placehold.co/300x200/222/fff?text=Flying+Fist+IPA'">
+            </div>
+            <div class="beer-details">
+              <div class="beer-name">Flying Fist IPA</div>
+              <div class="beer-style">India Pale Ale</div>
+              <div class="beer-abv">6.5% ABV | 65 IBU</div>
+              <div class="beer-description">A bold, hop-forward IPA featuring aromatic American hops with notes of tropical fruit, pine, and citrus. The brewery's answer to the global IPA trend, executed with precision.</div>
+              <div class="beer-award gold">Gold Medal - Asia Beer Awards 2022</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <h3>Experimental and Seasonal Releases</h3>
+      
+      <p>Beyond their core lineup, Jing-A has gained a reputation for boundary-pushing experimental brews that often appear for limited runs. These have included:</p>
+      
+      <ul>
+        <li><strong>Hutong Clan Imperial Stout</strong> - Aged in Chinese baijiu liquor barrels, creating a complex beer with notes of dark chocolate, licorice, and the distinctive sorghum character of baijiu</li>
+        <li><strong>Qu Brew Sour Ale</strong> - Using traditional Chinese fermentation starters (qu) to create a unique mixed-fermentation sour beer</li>
+        <li><strong>Jing-A x Mijiaya Historical Ale</strong> - A collaboration with archaeologists to recreate a 5,000-year-old Chinese beer recipe discovered in Shaanxi Province</li>
+        <li><strong>Beijing Bikini Watermelon Wheat</strong> - A summer seasonal celebrating the Beijing tradition of men rolling up their shirts to cool off in summer heat</li>
+        <li><strong>Airpocalypse Double IPA</strong> - A tongue-in-cheek beer whose price fluctuates based on Beijing's daily air quality readings</li>
+      </ul>
+      
+      <div class="tap-list">
+        <h2>Current Tap List (updated weekly)</h2>
+        <div class="tap-item">
+          <div class="tap-name">Worker's Pale Ale</div>
+          <div class="tap-details">American Pale Ale | 5.5% ABV</div>
+        </div>
+        <div class="tap-item">
+          <div class="tap-name">Flying Fist IPA</div>
+          <div class="tap-details">India Pale Ale | 6.5% ABV</div>
+        </div>
+        <div class="tap-item">
+          <div class="tap-name">Mandarin Wheat</div>
+          <div class="tap-details">Wheat Beer with Citrus | 4.8% ABV</div>
+        </div>
+        <div class="tap-item">
+          <div class="tap-name">Koji Red Ale</div>
+          <div class="tap-details">Red Ale with Koji Rice | 6.5% ABV</div>
+        </div>
+        <div class="tap-item">
+          <div class="tap-name">Beijing IPA</div>
+          <div class="tap-details">Session IPA | 4.5% ABV</div>
+        </div>
+        <div class="tap-item">
+          <div class="tap-name">Black Velvet Vanilla Stout</div>
+          <div class="tap-details">Milk Stout | 5.8% ABV</div>
+        </div>
+        <div class="tap-item">
+          <div class="tap-name">Sit Down Lager</div>
+          <div class="tap-details">Munich Helles | 4.2% ABV</div>
+        </div>
+        <div class="tap-item">
+          <div class="tap-name">Long March Saison</div>
+          <div class="tap-details">Farmhouse Ale | 6.2% ABV</div>
+        </div>
+        <div class="tap-item">
+          <div class="tap-name">Guizhou Gose</div>
+          <div class="tap-details">Sour Ale with Guizhou Salt | 4.3% ABV</div>
+        </div>
+        <div class="tap-item">
+          <div class="tap-name">Full Moon Double IPA</div>
+          <div class="tap-details">Imperial IPA | 8.5% ABV</div>
+        </div>
+      </div>
+      
+      <div class="tour-info">
+        <h3>Brewery Tours</h3>
+        <p>Jing-A offers guided brewery tours at their production facility in Tongzhou District every Saturday at 2 PM. The 90-minute tour includes:</p>
+        <ul>
+          <li>A walkthrough of the brewing process</li>
+          <li>Background on Jing-A's brewing philosophy and history</li>
+          <li>Guided tasting of 5 different beers</li>
+          <li>Souvenir Jing-A glass</li>
+          <li>10% discount on merchandise</li>
+        </ul>
+        <p>Cost: ¥150 per person (approximately $22 USD)<br>
+        Advance reservation required: tours@jingabrewing.com</p>
+      </div>
+
+      <h2>Gastropub Fare with Global Influences</h2>
+      
+      <p>While beer is the primary focus, Jing-A also offers a comprehensive food menu that complements their brewing program. The kitchen team takes a similarly innovative approach, creating gastropub fare that blends Western comfort food with Chinese influences and ingredients.</p>
+      
+      <div class="menu-highlights">
+        <div class="menu-item">
+          <h3>Xinjiang Cumin Lamb Burger</h3>
+          <div class="description">A fusion favorite combining the spiced lamb of China's Xinjiang region with a Western-style burger format, topped with yogurt sauce, pickled vegetables, and served on a toasted sesame bun.</div>
+          <div class="price">¥85 ($12)</div>
+        </div>
+        <div class="menu-item">
+          <h3>Sichuan Spice Dry Rub Wings</h3>
+          <div class="description">Crispy chicken wings tossed in a house-made spice blend featuring the numbing Sichuan peppercorn, served with a cooling cucumber yogurt dip.</div>
+          <div class="price">¥65 ($9)</div>
+        </div>
+        <div class="menu-item">
+          <h3>Hutong Pizzas</h3>
+          <div class="description">Thin-crust pizzas with unconventional toppings that reference Beijing cuisine, such as the "Peking Duck Pizza" with hoisin sauce, cucumber, and crispy duck.</div>
+          <div class="price">¥95-120 ($14-18)</div>
+        </div>
+        <div class="menu-item">
+          <h3>Mapo Tofu Loaded Fries</h3>
+          <div class="description">A playful reimagining of the classic Sichuan dish as a bar snack, featuring crispy fries topped with spicy mapo tofu sauce, green onions, and Sichuan pepper.</div>
+          <div class="price">¥68 ($10)</div>
+        </div>
+      </div>
+      
+      <p>The menu includes vegetarian and vegan options, and the kitchen is willing to accommodate dietary restrictions when possible. Food is served until one hour before closing, with a limited late-night menu available on weekends.</p>
+      
+      <h2>Community and Events</h2>
+      
+      <p>Jing-A has built more than just a brewery—they've created a community hub that hosts regular events bringing together beer enthusiasts, expats, and locals. The brewery has become an important cultural bridge in Beijing, creating shared experiences through a mutual appreciation of craft beer.</p>
+      
+      <div class="event-card">
+        <div class="event-date">Monthly: Every Third Thursday</div>
+        <h3>8x8 Brewing Project Sessions</h3>
+        <p>A collaborative event featuring eight different brewers (both professional and skilled homebrewers) presenting special small-batch creations for tasting and discussion.</p>
+      </div>
+      
+      <div class="event-card">
+        <div class="event-date">Annual: May</div>
+        <h3>Jing-A Beer Festival</h3>
+        <p>An annual celebration bringing together craft breweries from across China and Asia for a weekend of tastings, food pairings, live music, and brewing workshops.</p>
+      </div>
+      
+      <div class="event-card">
+        <div class="event-date">Weekly: Wednesdays</div>
+        <h3>Beer School</h3>
+        <p>Educational sessions focusing on different beer styles, brewing techniques, or ingredients, with guided tastings and Q&A with the brewing team.</p>
+      </div>
+      
+      <h2>The Rise of Chinese Craft Beer</h2>
+      
+      <p>Jing-A's success is emblematic of the broader craft beer movement taking root in China's major cities. In just over a decade, Beijing has gone from having virtually no craft beer scene to hosting dozens of microbreweries, with Jing-A leading the charge in terms of innovation, quality, and cultural integration.</p>
+      
+      <p>The brewery's influence extends beyond Beijing as they've helped cultivate a nationwide network of craft brewers through collaborations, festivals, and knowledge sharing. They've also gained international recognition, with their beers appearing at festivals in the United States, Europe, and throughout Asia.</p>
+      
+      <p>For visitors to Beijing, Jing-A offers a window into contemporary Chinese urban culture—one that respects tradition while enthusiastically embracing global influences and reimagining them in a uniquely Chinese context.</p>
+      
+      <!-- Customer Reviews Carousel -->
+      <h2>Customer Reviews</h2>
+      
+      <div class="review-carousel">
+        <div class="carousel-arrow carousel-prev">
+          <i class="fas fa-chevron-left"></i>
+        </div>
+        
+        <div class="review-slides">
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Michael L.</div>
+                <div class="review-date">Visited September 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"As a craft beer enthusiast who's visited breweries across four continents, I found Jing-A to be genuinely world-class. Their core beers are executed flawlessly, but what really impressed me were the experimental brews incorporating Chinese ingredients. The Hutong Clan Imperial Stout aged in baijiu barrels was unlike anything I've ever tasted—complex, challenging, and ultimately rewarding. The taproom has a great atmosphere with a mix of locals and expats, and the staff were extremely knowledgeable about their products. Don't miss the brewery tour if you have time! The food menu is excellent too—the Xinjiang lamb burger paired perfectly with their Mandarin Wheat beer. A must-visit destination for any beer lover in Beijing."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Liu Wei</div>
+                <div class="review-date">Visited July 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="far fa-star" style="color: #ddd;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"As a local Beijinger, I've watched the craft beer scene grow from nothing to what it is today, and Jing-A has been at the forefront of this movement. Their beers offer something different from the mass-market lagers that dominated before, with much more complex flavors and interesting ingredients. I particularly enjoy their seasonal releases that incorporate traditional Chinese elements—the Osmanthus Honey Ale they released during Mid-Autumn Festival was exceptional. The atmosphere is casual and welcoming to Chinese customers, though prices are definitely on the high side compared to local bars. The food menu successfully bridges Western and Chinese tastes. My only criticism would be that during peak hours, it can be very crowded with long waits for seating."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Sarah K.</div>
+                <div class="review-date">Visited August 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star-half" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"Jing-A was recommended by friends living in Beijing, and it exceeded my expectations. The venue has a great industrial-chic vibe similar to craft breweries in Brooklyn or Portland, but with subtle Chinese design elements that give it a unique character. I tried a flight of four beers, and each was excellent with distinct flavor profiles. The Worker's Pale Ale was approachable yet complex, while the Koji Red Ale was unlike any beer I've had before. The staff spoke excellent English and were happy to make recommendations based on my preferences. We ordered several food items to share, and the Sichuan wings were a standout—crispy, flavorful, and with that distinctive numbing spice. A great spot to unwind after sightseeing and experience a different side of Beijing's food and drink culture."</p>
+          </div>
+        </div>
+        
+        <div class="carousel-arrow carousel-next">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+        
+        <div class="carousel-nav">
+          <div class="carousel-dot active"></div>
+          <div class="carousel-dot"></div>
+          <div class="carousel-dot"></div>
+        </div>
+      </div>
+      
+      <div class="review-section">
+        <h2>Eastworld's Review</h2>
+        
+        <h3>Beer Quality: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Jing-A produces craft beers that stand up to international standards while establishing a uniquely Chinese identity. Their core lineup demonstrates technical precision and consistency, while their experimental offerings showcase creativity and risk-taking that pushes the envelope of what craft beer can be in China.</p>
+        
+        <h3>Food Quality: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>The gastropub menu successfully complements the beer selection with well-executed fusion dishes that incorporate Chinese flavors in approachable formats. While the focus is clearly on the brewery operation, the food program doesn't feel like an afterthought, offering thoughtful pairings and high-quality execution.</p>
+        
+        <h3>Authenticity: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Despite being founded by expats, Jing-A has successfully created an experience that feels genuinely rooted in Beijing. Their incorporation of Chinese ingredients, brewing traditions, and cultural references goes beyond surface-level appropriation to demonstrate real engagement with and respect for local culture.</p>
+        
+        <h3>Value: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>At ¥50-80 for a pint, prices are higher than local Chinese beers but comparable to craft beer prices in major cities worldwide. The quality justifies the cost, though budget-conscious travelers should look for their weekday happy hour offerings to maximize value.</p>
+        
+        <h3>Atmosphere: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>The taproom strikes a perfect balance between contemporary industrial-chic brewery aesthetics and subtle Chinese design elements. The space works equally well for casual drinks, business meetings, or social gatherings, with different seating areas accommodating various needs.</p>
+        
+        <h3>Service: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>Staff are knowledgeable about the beer offerings and capable of making recommendations based on guest preferences. English is widely spoken, making the experience accessible to international visitors. Service can slow during peak hours when the venue reaches capacity.</p>
+        
+        <h3>Overall: <span style="color: #FFD700;">★★★★½</span></h3>
+        <p>Jing-A Brewing Co. represents the best of Beijing's contemporary food and beverage scene—internationally informed but locally rooted, innovative while respecting tradition. For visitors seeking to experience the city beyond its historic sites, Jing-A offers a window into the creative energy of modern Beijing.</p>
+      </div>
+      
+      <!-- Visitor Information -->
+      <div id="visitor-info" class="review-section">
+        <h2>Visitor Information</h2>
+        
+        <h3>Multiple Locations:</h3>
+        <p>Jing-A operates several venues across Beijing, with the following being most convenient for visitors:</p>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li><strong>Flagship Brewpub:</strong> 57 Xingfucun Zhong Lu, Chaoyang District (most extensive beer selection and full food menu)</li>
+          <li><strong>Jing-A Taproom at 1949:</strong> Courtyard 4, Gongti Bei Lu, Chaoyang District (centrally located near Sanlitun shopping district)</li>
+          <li><strong>Jing-A at TRB Copper:</strong> 59 Donghuangchenggen Beijie, Dongcheng District (near the Forbidden City, limited beer selection but historic location)</li>
+        </ul>
+        
+        <h3>Reservations:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Walk-ins are accepted and common for small groups</li>
+          <li>Reservations recommended for groups of 6+ people, especially on weekends</li>
+          <li>To reserve: info@jingabrewing.com or +86 10-6501-8883</li>
+          <li>For brewery tours, reservations are required at least 48 hours in advance</li>
+        </ul>
+        
+        <h3>English Support:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>All locations have English-speaking staff</li>
+          <li>Menus are available in both Chinese and English</li>
+          <li>Brewery tours can be conducted in English</li>
+        </ul>
+        
+        <h3>Payment Information:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Major credit cards accepted (Visa, Mastercard, American Express)</li>
+          <li>WeChat Pay and Alipay accepted and widely used by locals</li>
+          <li>Cash (Chinese Yuan) also accepted</li>
+          <li>No splitting of checks for large groups</li>
+        </ul>
+        
+        <h3>Best Times to Visit:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Weekday afternoons are quietest for those wanting to chat with staff about the beers</li>
+          <li>Happy Hour: Monday-Friday, 4-7 PM (¥10-20 off select pints)</li>
+          <li>Weekend evenings are busiest with a lively atmosphere but potential waits for seating</li>
+          <li>Beer School sessions (Wednesdays at 7 PM) offer educational value for enthusiasts</li>
+          <li>Check their social media for special events and tap takeovers</li>
+        </ul>
+        
+        <p>Jing-A's locations are all accessible via Beijing's extensive subway system. The flagship location is a 10-minute walk from Tuanjiehu Station on Line 10. For visitors with limited time in Beijing, the TRB Copper location allows you to combine craft beer sampling with nearby sightseeing at the Forbidden City and Jingshan Park.</p>
+      </div>
+      
+      <a href="../food.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Food Guide</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Review carousel functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const slides = document.querySelector('.review-slides');
+      const dots = document.querySelectorAll('.carousel-dot');
+      const prevBtn = document.querySelector('.carousel-prev');
+      const nextBtn = document.querySelector('.carousel-next');
+      let currentSlide = 0;
+      const totalSlides = document.querySelectorAll('.review-slide').length;
+      
+      // Function to update slide position
+      function showSlide(index) {
+        if (index < 0) index = totalSlides - 1;
+        if (index >= totalSlides) index = 0;
+        
+        currentSlide = index;
+        slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+        
+        // Update active dot
+        dots.forEach((dot, i) => {
+          dot.classList.toggle('active', i === currentSlide);
+        });
+      }
+      
+      // Set up event listeners for dots
+      dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => showSlide(i));
+      });
+      
+      // Set up event listeners for arrows
+      prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
+      nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
+      
+      // Auto-rotate slides every 5 seconds
+      setInterval(() => {
+        showSlide(currentSlide + 1);
+      }, 5000);
+    });
+  </script>
+  
+  <script src="../script.js"></script>
+</body>
+</html> 

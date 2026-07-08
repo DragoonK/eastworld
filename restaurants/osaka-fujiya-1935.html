@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fujiya 1935 - Eastworld Restaurant Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Additional styles specific to restaurant reviews */
+    .restaurant-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+      .restaurant-info {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .restaurant-details {
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .detail-row {
+      display: flex;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+    }
+    
+    .detail-label {
+      font-weight: 600;
+      min-width: 120px;
+      color: #333;
+    }
+    
+    .detail-value {
+      flex: 1;
+      color: #555;
+    }
+    
+    .rating {
+      margin-bottom: 1rem;
+    }
+    
+    .star {
+      color: #ddd;
+      font-size: 1.5rem;
+    }
+    
+    .star.filled {
+      color: #FFD700;
+    }
+    
+    .half-star {
+      position: relative;
+    }
+    
+    .half-star .fas.fa-star-half {
+      color: #FFD700;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    
+    .score-label {
+      margin-left: 0.5rem;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .map-container {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .map-container iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+    }
+    
+    .photos-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .photo-item {
+      border-radius: 8px;
+      overflow: hidden;
+      height: 150px;
+    }
+    
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .photo-item img:hover {
+      transform: scale(1.05);
+    }
+    
+    .review-section {
+      margin: 2rem 0;
+      padding: 2rem;
+      background: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    /* Booking button styles */
+    .booking-button {
+      display: block;
+      background-color: #ff4d4d;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      margin: 1.5rem 0;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    
+    .booking-button:hover {
+      background-color: #e63939;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    /* Review carousel styles */
+    .review-carousel {
+      position: relative;
+      margin: 2rem 0;
+      overflow: hidden;
+      padding: 1rem 0;
+    }
+    
+    .review-slides {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    
+    .review-slide {
+      min-width: 100%;
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .reviewer-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #f0f0f0;
+      padding-bottom: 0.8rem;
+    }
+    
+    .reviewer-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 0.8rem;
+    }
+    
+    .reviewer-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding-top: 0.2rem;
+    }
+    
+    .review-date {
+      color: #888;
+      font-size: 0.75rem;
+      margin-top: 0.1rem;
+    }
+    
+    .review-rating {
+      display: flex;
+      margin-top: 0.2rem;
+    }
+    
+    .review-rating i {
+      font-size: 0.8rem;
+      margin-right: 2px;
+    }
+    
+    .carousel-nav {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+    
+    .carousel-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ddd;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .carousel-dot.active {
+      background: #ff4d4d;
+    }
+    
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.7);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+    
+    .carousel-prev {
+      left: 10px;
+    }
+    
+    .carousel-next {
+      right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../food.html" class="nav-item active">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="content-container">
+    <div class="content-header">
+      <span class="content-category">FINE DINING</span>
+      <h1 class="content-title">Fujiya 1935 - Boundary-Pushing Three-Michelin-Star Innovation</h1>
+      
+      <!-- Rating Section -->
+      <div class="rating">
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="score-label">4.9/5.0</span>
+      </div>
+    </div>
+    
+    <div class="hero-container">
+      <img class="content-hero" src="https://axwwgrkdco.cloudimg.io/v7/__gmpics__/3d67f35b03054654ad8a9f6b8b0b3693" alt="Fujiya 1935 dish" 
+      onerror="this.onerror=null; 
+      this.parentElement.innerHTML = '<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#333;color:white;font-size:1.5rem;text-align:center;padding:2rem;\'>Fujiya 1935</div>';">
+    </div>
+    
+    <!-- Booking Button -->
+    <a href="#visitor-info" class="booking-button">
+      <i class="fas fa-info-circle"></i> VISITOR INFORMATION
+    </a>
+    
+    <!-- Restaurant Information Section -->
+    <div class="restaurant-info">
+      <div class="restaurant-details">
+        <h2>Restaurant Details</h2>
+        
+        <div class="detail-row">
+          <div class="detail-label">Address:</div>
+          <div class="detail-value">2-4-14 Yariyamachi, Chuo-ku, Osaka 540-0027, Japan</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Hours:</div>
+          <div class="detail-value">
+            Lunch: 12:00 PM - 2:00 PM (last seating)<br>
+            Dinner: 6:00 PM - 8:00 PM (last seating)<br>
+            Closed on Wednesdays
+          </div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Phone:</div>
+          <div class="detail-value">+81 6-6941-2483</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Price Range:</div>
+          <div class="detail-value">Lunch: ¥18,000+ ($120+)<br>Dinner: ¥28,000+ ($190+) per person</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Cuisine:</div>
+          <div class="detail-value">Innovative, Contemporary European with Japanese influences</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Reservations:</div>
+          <div class="detail-value">Essential - Book 2-3 months in advance</div>
+        </div>
+        
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">About Fujiya 1935</h3>
+        <p>Fujiya 1935 is a three-Michelin-starred restaurant that has evolved from its origins as a simple udon shop founded in 1935 to become one of Japan's most innovative dining destinations. Under the guidance of Chef Tetsuya Fujiwara, the restaurant creates boundary-pushing cuisine that blends European techniques with Japanese sensibilities and ingredients. With its minimalist design, focus on handcrafted elements, and ever-evolving tasting menu, Fujiya 1935 offers a serene and contemplative dining experience.</p>
+      </div>
+      
+      <div class="map-container">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3280.3879261618713!2d135.51992857617903!3d34.70017367280329!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6000e7381240067d%3A0xd4d01f551cc0e30a!2sFujiya1935!5e0!3m2!1sen!2sus!4v1698209075784!5m2!1sen!2sus" 
+        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+    
+    <div class="content-text">
+      <h2>From Udon Shop to Culinary Pioneer</h2>
+      
+      <p>The story of Fujiya 1935 is one of remarkable evolution and reinvention. As the name suggests, the establishment began in 1935 as a simple udon noodle shop founded by the Fujiwara family. Over the decades, each generation added their own vision while respecting the foundations laid by their predecessors. The restaurant's current incarnation represents the third generation's ambitious reimagining of what Japanese dining can be.</p>
+      
+      <p>Chef Tetsuya Fujiwara, who took over the family business in the early 2000s, made the bold decision to transform the restaurant into a place of culinary experimentation and innovation. After studying in Europe and working with several renowned chefs, he returned with a vision to create a uniquely Japanese interpretation of contemporary fine dining. His efforts were rewarded with three Michelin stars in 2012, an accolade the restaurant has maintained ever since.</p>
+      
+      <div class="photos-container">
+        <div class="photo-item">
+          <img src="https://axwwgrkdco.cloudimg.io/v7/__gmpics__/6ed57cc2bc354f998ac9180a5e76b433" alt="Chef Tetsuya Fujiwara">
+        </div>
+        <div class="photo-item">
+          <img src="https://axwwgrkdco.cloudimg.io/v7/__gmpics__/2097f8aa37004a1ea25e4da29aeb6a50" alt="Innovative dish at Fujiya 1935">
+        </div>
+        <div class="photo-item">
+          <img src="https://axwwgrkdco.cloudimg.io/v7/__gmpics__/d13db97cca3a4c0a82adefce713c9a69" alt="Fujiya 1935 dining room">
+        </div>
+        <div class="photo-item">
+          <img src="https://axwwgrkdco.cloudimg.io/v7/__gmpics__/1069e5cc5b9c433ea88d5bfdda43e115" alt="Seasonal creation at Fujiya 1935">
+        </div>
+      </div>
+      
+      <h2>Minimalist Aesthetics, Maximum Flavor</h2>
+      
+      <p>Walking into Fujiya 1935, guests are immediately struck by the serene minimalism of the space. The restaurant occupies a renovated townhouse with pristine white walls, natural wood elements, and subtle decorative touches that create a calm, focused environment. This aesthetic philosophy extends to the presentation of the food—Chef Fujiwara embraces the concept of "essential minimalism," stripping away the unnecessary to highlight what truly matters.</p>
+      
+      <p>The cuisine at Fujiya 1935 defies easy categorization. While the techniques often draw from European traditions (particularly Spanish and Italian influences), the sensibility and many ingredients are distinctly Japanese. Chef Fujiwara is known for his deep respect for ingredients, working closely with local farmers and producers to showcase the finest seasonal produce. Many items come from the restaurant's own garden or are foraged from the surrounding countryside.</p>
+      
+      <p>What truly distinguishes Fujiya 1935 is its commitment to pushing boundaries while maintaining a profound respect for tradition. Dishes might incorporate fermentation, smoke, unusual texture contrasts, or unexpected temperature variations, yet they always remain grounded in an understanding of what makes food fundamentally satisfying. The bread course, for example, has become legendary—house-made sourdough that undergoes a three-day fermentation process, resulting in a revelation of flavor and texture.</p>
+      
+      <div class="content-quote">
+        "I believe that true innovation must be rooted in understanding and respecting tradition. My goal is not to shock diners, but to create moments of genuine discovery—when something familiar suddenly reveals new dimensions. In this way, a meal becomes a journey of reconnection with food and with ourselves." - Chef Tetsuya Fujiwara
+      </div>
+      
+      <!-- User Reviews Carousel -->
+      <h2>Customer Reviews</h2>
+      
+      <div class="review-carousel">
+        <div class="carousel-arrow carousel-prev">
+          <i class="fas fa-chevron-left"></i>
+        </div>
+        
+        <div class="review-slides">
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Michael R.</div>
+                <div class="review-date">Visited April 2024</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"Our meal at Fujiya 1935 was the highlight of our Japan trip. From the moment we entered the serene space, every detail was handled with exquisite care. The bread course alone would make this place worth visiting—I've never experienced bread with such depth of flavor. Chef Fujiwara's creations balance technical brilliance with genuine emotion; a seemingly simple vegetable dish brought unexpected tears to my eyes. The staff guided us through each course with knowledge and warmth. What impressed me most was how the innovative techniques always served the purpose of enhancing flavor rather than showing off. This isn't just a great Japanese restaurant; it's a great restaurant, period. Worth every penny of the splurge."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Haruka S.</div>
+                <div class="review-date">Visited February 2024</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"As someone who has dined at most of Japan's three-star establishments, I can say that Fujiya 1935 stands apart in its approach. There's an understated confidence here that's rare. Chef Fujiwara doesn't need to dazzle with luxury ingredients or elaborate presentations; instead, he transforms humble ingredients into profound experiences. A dish of local mushrooms had more complexity than most truffle-laden creations elsewhere. The wine pairing was impeccable, with several unusual selections that perfectly complemented the food. While many Japanese fine dining restaurants feel bound by tradition, Fujiya 1935 feels liberated by it. The restaurant's journey from udon shop to culinary innovator mirrors Osaka's own evolution—preserving essence while embracing change."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Elena C.</div>
+                <div class="review-date">Visited March 2024</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star-half-alt" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"Fujiya 1935 was an exceptional dining experience that I'm still thinking about weeks later. The bread service deserves its legendary status—I've never tasted anything like it. Each course was thought-provoking and delicious, with fascinating textural contrasts. I particularly appreciated how the meal built in intensity, with flavors that complemented rather than competed with each other. The staff were knowledgeable and attentive without being intrusive. My only slight criticism would be that the dining room, while beautiful, was a bit too quiet at times, creating moments where we felt self-conscious about our conversation. That said, the food speaks volumes, and Chef Fujiwara's unique vision makes this an essential destination for anyone serious about contemporary cuisine."</p>
+          </div>
+        </div>
+        
+        <div class="carousel-arrow carousel-next">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+        
+        <div class="carousel-nav">
+          <div class="carousel-dot active"></div>
+          <div class="carousel-dot"></div>
+          <div class="carousel-dot"></div>
+        </div>
+      </div>
+      
+      <h2>Menu Experience</h2>
+      
+      <p>Fujiya 1935 offers a single tasting menu that evolves with the seasons, typically comprising 10-12 courses. While specific dishes change regularly based on ingredient availability and Chef Fujiwara's inspiration, certain signature approaches and techniques define the Fujiya 1935 experience:</p>
+      
+      <ul>
+        <li><strong>Legendary Bread Service</strong> - House-made sourdough that undergoes a 72-hour fermentation, served with a selection of custom-made butters and oils</li>
+        <li><strong>Vegetable Forward Cuisine</strong> - Elaborate preparations that elevate vegetables to star status, often incorporating multiple cooking techniques for a single ingredient</li>
+        <li><strong>Textural Explorations</strong> - Dishes that play with contrasting textures in unexpected ways, creating multidimensional mouthfeel experiences</li>
+        <li><strong>Handcrafted Elements</strong> - Every component, from the plates to the bread to the vinegars, is crafted in-house or by artisanal partners</li>
+        <li><strong>Innovative Seafood Preparations</strong> - Particularly celebrated for treatments of local fish that preserve purity of flavor while introducing unexpected elements</li>
+        <li><strong>Contemplative Desserts</strong> - Sweet courses that favor subtlety and nuance over excessive sweetness</li>
+      </ul>
+      
+      <p>The full dining experience includes:</p>
+      <ul>
+        <li><strong>Seasonal Tasting Menu</strong> - 10-12 courses (¥28,000+ per person for dinner)</li>
+        <li><strong>Wine Pairing</strong> - Expertly curated selection with both conventional and natural wines (¥15,000+ per person)</li>
+        <li><strong>Non-Alcoholic Pairing</strong> - House-made infusions, juices, and fermented beverages (¥8,000+ per person)</li>
+      </ul>
+      
+      <div class="review-section">
+        <h2>Eastworld's Review</h2>
+        
+        <h3>Food Quality: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Chef Fujiwara's cuisine represents the pinnacle of innovative dining in Japan. Each dish demonstrates extraordinary technical mastery while maintaining a clear focus on flavor above all else. The kitchen's work with fermentation and bread-making alone would distinguish this restaurant, but combined with their vegetable-forward approach and impeccable sourcing, the result is truly exceptional. The progression of the menu creates a coherent narrative that builds throughout the meal.</p>
+        
+        <h3>Atmosphere: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>The minimalist, serene dining room creates the perfect environment for focusing on the food without distraction. Natural materials, thoughtful lighting, and subtle design elements reflect the same philosophy evident in the cuisine. The peaceful atmosphere encourages diners to slow down and engage fully with each course. The spacing between tables ensures privacy and maintains the contemplative mood throughout the meal.</p>
+        
+        <h3>Service: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Service at Fujiya 1935 achieves that rare balance of being meticulously precise yet warmly human. Staff demonstrate exceptional knowledge of the menu's components and philosophy, as well as the beverage pairings. Their timing is impeccable, and they show remarkable sensitivity to each table's rhythm and mood. The service team enhances the dining experience without ever becoming its focus.</p>
+        
+        <h3>Value: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>While Fujiya 1935 represents a significant investment, the value proposition is clear: this is a truly singular dining experience crafted with extraordinary attention to detail and the finest ingredients. The fact that much of the menu focuses on transforming humble ingredients rather than relying on luxury items reflects the restaurant's genuine commitment to innovation rather than ostentation. The price reflects not just the food but the complete sensory journey.</p>
+        
+        <h3>Location: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>Located in a quiet residential area of central Osaka, Fujiya 1935 provides a retreat from the city's bustling commercial districts. The townhouse setting in a neighborhood with historical character adds to the sense of discovery. While not as immediately accessible to tourists as restaurants in major commercial hubs, the location is part of the experience, allowing the restaurant to maintain its focused, intimate atmosphere.</p>
+        
+        <h3>Overall: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Fujiya 1935 represents the perfect fusion of innovation and soulfulness in contemporary dining. Chef Fujiwara has created a restaurant that honors its humble origins while fearlessly exploring new culinary territory. For those seeking not just exceptional food but a genuinely thought-provoking dining experience that engages all the senses, Fujiya 1935 stands as an essential destination in Japan's culinary landscape.</p>
+      </div>
+      
+      <h2>Tips for Visitors</h2>
+      
+      <ul>
+        <li>Reservations are essential and should be made 2-3 months in advance through your hotel concierge or a specialized booking service</li>
+        <li>The full experience typically lasts about 2.5-3 hours; plan your schedule accordingly</li>
+        <li>Smart casual attire is appropriate; the restaurant maintains an elegant but not overly formal atmosphere</li>
+        <li>The wine and non-alcoholic pairings are highly recommended to experience the full vision of the restaurant</li>
+        <li>Photography is permitted, but guests are encouraged to be discreet and respectful of other diners</li>
+        <li>Come with an open mind and willingness to try unfamiliar flavors and textures</li>
+        <li>If you have dietary restrictions, communicate them clearly when booking - the kitchen can accommodate most needs with advance notice</li>
+        <li>Ask questions about the dishes and ingredients - the staff are knowledgeable and enjoy sharing the stories behind the food</li>
+      </ul>
+      
+      <!-- Visitor Information -->
+      <div id="visitor-info" class="review-section">
+        <h2>Visitor Information</h2>
+        <p>Here's what you need to know when planning your visit to Fujiya 1935:</p>
+        
+        <h3>Location & Access:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Address: 2-4-14 Yariyamachi, Chuo-ku, Osaka 540-0027, Japan</li>
+          <li>10-minute walk from Tanimachi 4-chome Station (Tanimachi and Chuo Lines)</li>
+          <li>15-minute walk from Shinsaibashi Station (Midosuji Line)</li>
+          <li>Taxi is recommended, especially for evening visits</li>
+        </ul>
+        
+        <h3>Reservations:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Reservations open two months in advance and fill quickly</li>
+          <li>Book through your hotel concierge or a specialized restaurant booking service</li>
+          <li>A credit card is required to secure your reservation</li>
+          <li>Cancellation policy: Cancellations within 3 days of your reservation may incur a charge</li>
+          <li>The restaurant seats approximately 20-24 guests per service</li>
+        </ul>
+        
+        <h3>Hours of Operation:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Lunch: 12:00 PM - 2:00 PM (last seating)</li>
+          <li>Dinner: 6:00 PM - 8:00 PM (last seating)</li>
+          <li>Closed on Wednesdays</li>
+          <li>Occasional holiday closures - check the website for updates</li>
+        </ul>
+        
+        <h3>Additional Information:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Credit cards accepted: Visa, Mastercard, American Express, JCB</li>
+          <li>Smart casual dress code</li>
+          <li>Japanese and English languages supported</li>
+          <li>Dining duration: Approximately 2.5-3 hours</li>
+          <li>Official website: <a href="http://fujiya1935.com/" target="_blank" style="color: #ff4d4d;">www.fujiya1935.com</a></li>
+        </ul>
+        
+        <p>After your meal at Fujiya 1935, consider taking a leisurely stroll through the historic Osaka Castle Park, which is relatively nearby. The quiet residential neighborhood surrounding the restaurant also offers a glimpse into everyday Osaka life away from the tourist centers, providing a nice contrast to the more commercial areas of the city.</p>
+      </div>
+      
+      <a href="../food.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Food Guide</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Review carousel functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const slides = document.querySelector('.review-slides');
+      const dots = document.querySelectorAll('.carousel-dot');
+      const prevBtn = document.querySelector('.carousel-prev');
+      const nextBtn = document.querySelector('.carousel-next');
+      let currentSlide = 0;
+      const totalSlides = document.querySelectorAll('.review-slide').length;
+      
+      // Function to update slide position
+      function showSlide(index) {
+        if (index < 0) index = totalSlides - 1;
+        if (index >= totalSlides) index = 0;
+        
+        currentSlide = index;
+        slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+        
+        // Update active dot
+        dots.forEach((dot, i) => {
+          dot.classList.toggle('active', i === currentSlide);
+        });
+      }
+      
+      // Set up event listeners for dots
+      dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => showSlide(i));
+      });
+      
+      // Set up event listeners for arrows
+      prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
+      nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
+      
+      // Auto-rotate slides every 5 seconds
+      setInterval(() => {
+        showSlide(currentSlide + 1);
+      }, 5000);
+    });
+  </script>
+  
+  <script src="../script.js"></script>
+</body>
+</html> 

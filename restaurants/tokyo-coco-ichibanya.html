@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en" class="content-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CoCo Ichibanya - Eastworld Restaurant Guide</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Additional styles specific to restaurant reviews */
+    .restaurant-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+      .restaurant-info {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .restaurant-details {
+      background: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .detail-row {
+      display: flex;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+    }
+    
+    .detail-label {
+      font-weight: 600;
+      min-width: 120px;
+      color: #333;
+    }
+    
+    .detail-value {
+      flex: 1;
+      color: #555;
+    }
+    
+    .rating {
+      margin-bottom: 1rem;
+    }
+    
+    .star {
+      color: #ddd;
+      font-size: 1.5rem;
+    }
+    
+    .star.filled {
+      color: #FFD700;
+    }
+    
+    .half-star {
+      position: relative;
+    }
+    
+    .half-star .fas.fa-star-half {
+      color: #FFD700;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    
+    .score-label {
+      margin-left: 0.5rem;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .map-container {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .map-container iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+    }
+    
+    .photos-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .photo-item {
+      border-radius: 8px;
+      overflow: hidden;
+      height: 150px;
+    }
+    
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .photo-item img:hover {
+      transform: scale(1.05);
+    }
+    
+    .review-section {
+      margin: 2rem 0;
+      padding: 2rem;
+      background: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    /* Booking button styles */
+    .booking-button {
+      display: block;
+      background-color: #ff4d4d;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      margin: 1.5rem 0;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    
+    .booking-button:hover {
+      background-color: #e63939;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    /* Review carousel styles */
+    .review-carousel {
+      position: relative;
+      margin: 2rem 0;
+      overflow: hidden;
+      padding: 1rem 0;
+    }
+    
+    .review-slides {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    
+    .review-slide {
+      min-width: 100%;
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .reviewer-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #f0f0f0;
+      padding-bottom: 0.8rem;
+    }
+    
+    .reviewer-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 0.8rem;
+    }
+    
+    .reviewer-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding-top: 0.2rem;
+    }
+    
+    .review-date {
+      color: #888;
+      font-size: 0.75rem;
+      margin-top: 0.1rem;
+    }
+    
+    .review-rating {
+      display: flex;
+      margin-top: 0.2rem;
+    }
+    
+    .review-rating i {
+      font-size: 0.8rem;
+      margin-right: 2px;
+    }
+    
+    .carousel-nav {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+    
+    .carousel-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ddd;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .carousel-dot.active {
+      background: #ff4d4d;
+    }
+    
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.7);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+    
+    .carousel-prev {
+      left: 10px;
+    }
+    
+    .carousel-next {
+      right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="main-nav">
+      <div class="nav-left">
+        <a href="../places.html" class="nav-item">PLACES</a>
+        <a href="../food.html" class="nav-item active">FOOD</a>
+        <a href="../stays.html" class="nav-item">STAYS</a>
+        <a href="../products.html" class="nav-item">PRODUCTS</a>
+        <a href="../cities.html" class="nav-item">CITIES</a>
+      </div>
+      <div class="logo">
+        <a href="../index.html" class="nav-item">
+          <h1>EASTWORLD</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <a href="../ew-events.html" class="nav-item">EW EVENTS</a>
+        <a href="../community.html" class="nav-item">EW HUB</a>
+        <span class="nav-divider"></span>
+        <div class="login-register-stack">
+          <a href="../login.html" class="nav-item">LOGIN</a>
+          <a href="../register.html" class="nav-item">REGISTER</a>
+        </div>
+        <a href="#" class="nav-item search-icon"><i class="fas fa-search"></i></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="content-container">
+    <div class="content-header">
+      <span class="content-category">CURRY</span>
+      <h1 class="content-title">CoCo Ichibanya - Japan's Customizable Curry Paradise</h1>
+      
+      <!-- Rating Section -->
+      <div class="rating">
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star filled"><i class="fas fa-star"></i></span>
+        <span class="star">
+          <i class="far fa-star"></i>
+        </span>
+        <span class="score-label">4.0/5.0</span>
+      </div>
+    </div>
+    
+    <div class="hero-container">
+      <img class="content-hero" src="https://images.squarespace-cdn.com/content/v1/573287c2cf80a1de52b40a9c/1465440538072-KJUUWP4HLI4HDUSY1ZJD/image-asset.jpeg" alt="CoCo Ichibanya Curry Rice Dish" 
+      onerror="this.onerror=null; 
+      this.parentElement.innerHTML = '<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#333;color:white;font-size:1.5rem;text-align:center;padding:2rem;\'>CoCo Ichibanya Tokyo</div>';">
+    </div>
+    
+    <!-- Visitor Information Button -->
+    <a href="#visitor-info" class="booking-button">
+      <i class="fas fa-info-circle"></i> VISITOR INFORMATION
+    </a>
+    
+    <!-- Restaurant Information Section -->
+    <div class="restaurant-info">
+      <div class="restaurant-details">
+        <h2>Restaurant Details</h2>
+        
+        <div class="detail-row">
+          <div class="detail-label">Address:</div>
+          <div class="detail-value">1-23-1 Kabukicho, Shinjuku-ku, Tokyo 160-0021, Japan (Shinjuku branch - one of many)</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Hours:</div>
+          <div class="detail-value">10:30 AM - 11:00 PM<br>Open daily (hours may vary slightly by location)</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Phone:</div>
+          <div class="detail-value">+81 3-3202-3707 (Shinjuku branch)</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Price Range:</div>
+          <div class="detail-value">¥800-1,500 ($5.50-10.50) per person<br>Average meal: ¥1,100 ($7.50)</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Cuisine:</div>
+          <div class="detail-value">Japanese, Curry, Fast-Casual, Budget-Friendly</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Reservations:</div>
+          <div class="detail-value">Not accepted - casual dining format</div>
+        </div>
+        
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">Multiple Locations</h3>
+        <p>CoCo Ichibanya has over 1,300 locations across Japan, including more than 200 in the Tokyo area. Some popular Tokyo branches include:</p>
+        <ul style="margin-bottom: 1rem; padding-left: 1.5rem;">
+          <li>Shinjuku (East Exit, Kabukicho, multiple locations)</li>
+          <li>Shibuya (near Crossing, Center-gai)</li>
+          <li>Tokyo Station (Yaesu Underground Mall)</li>
+          <li>Akihabara (near Electric Town exit)</li>
+          <li>Ikebukuro (East and West sides)</li>
+        </ul>
+        
+        <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">How to Find a Branch</h3>
+        <ul style="margin-bottom: 1rem; padding-left: 1.5rem;">
+          <li>Look for the distinctive yellow and brown logo and signage</li>
+          <li>Often located near major train stations and shopping districts</li>
+          <li>English "CoCo CURRY" signs are visible at most locations</li>
+          <li>Official website has a store locator (Japanese only): <a href="https://www.ichibanya.co.jp/shop/" target="_blank">www.ichibanya.co.jp/shop/</a></li>
+        </ul>
+      </div>
+      
+      <div class="map-container">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3240.2649015650797!2d139.7010389!3d35.6956505!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60188cd9c7d7bfbb%3A0x5a3eff2a96f639e!2sCoCo%20ICHIBANYA%20Kabuki-cho!5e0!3m2!1sen!2sus!4v1693230090086!5m2!1sen!2sus" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+    
+    <div class="content-text">
+      <h2>Japan's Beloved Curry Chain: A National Institution</h2>
+      
+      <p>Since opening its first restaurant in 1978, CoCo Ichibanya (commonly called "CoCoIchi" by locals) has grown to become Japan's largest curry restaurant chain and a beloved national institution. What began as a small shop in Aichi Prefecture has expanded to over 1,300 locations across Japan and has even spread internationally to countries including the United States, China, Thailand, and the United Kingdom.</p>
+      
+      <p>While Japan is renowned for its traditional cuisine, curry rice (karē raisu) holds a special place in the country's modern food culture. Introduced via British naval officers in the late 19th century, Japanese-style curry has evolved into a distinct national dish that bears little resemblance to its Indian origins. CoCo Ichibanya has been instrumental in popularizing this Japanese adaptation, serving a mild, thick curry sauce that's sweeter and less spicy than its South Asian counterpart.</p>
+      
+      <div class="photos-container">
+        <div class="photo-item">
+          <img src="https://resources.matcha-jp.com/resize/720x2000/2022/03/05-128278.webp" alt="Customizable Curry Menu">
+        </div>
+        <div class="photo-item">
+          <img src="https://resources.matcha-jp.com/resize/720x2000/2019/09/28-84704.jpeg" alt="Katsu Curry Set">
+        </div>
+        <div class="photo-item">
+          <img src="https://resources.matcha-jp.com/resize/720x2000/2022/03/05-128282.webp" alt="Curry with Various Toppings">
+        </div>
+        <div class="photo-item">
+          <img src="https://resources.matcha-jp.com/resize/720x2000/2022/03/05-128286.webp" alt="Restaurant Interior">
+        </div>
+      </div>
+      
+      <h2>The Ultimate Customizable Dining Experience</h2>
+      
+      <p>What truly sets CoCo Ichibanya apart from other curry restaurants is its unparalleled approach to customization. The chain revolutionized the fast-casual dining scene in Japan by allowing customers to personalize virtually every aspect of their meal. This "have it your way" philosophy has made CoCo Ichibanya particularly popular with both locals and tourists who appreciate the ability to tailor their curry experience to their exact preferences.</p>
+      
+      <p>The ordering system is remarkably flexible, allowing diners to select:</p>
+      
+      <ul>
+        <li><strong>Spice Level:</strong> From mild (level 1) to extremely spicy (level 10), with the option to go even hotter with special "danger" levels that require signing a waiver</li>
+        <li><strong>Rice Portion:</strong> From 200g to 600g, with options to increase or decrease by 100g increments</li>
+        <li><strong>Main Toppings:</strong> Choose from over 30 options including pork cutlet (katsu), hamburger, chicken, seafood, vegetables, cheese, and more</li>
+        <li><strong>Extra Toppings:</strong> Add-ons like boiled eggs, natto (fermented soybeans), corn, spinach, or additional cheese</li>
+        <li><strong>Curry Sauce Variations:</strong> Options like beef keema curry, vegetable curry, seafood curry, or "dragon" curry (extra spicy)</li>
+      </ul>
+      
+      <p>This customization system means there are literally thousands of possible combinations, ensuring that even regular customers can try something new with each visit. This adaptability also makes CoCo Ichibanya an excellent choice for groups with varied dietary preferences or spice tolerances.</p>
+      
+      <div class="content-quote">
+        "Our philosophy has always been that curry should be for everyone. By letting customers create their perfect dish—whether they want it mild or fiery hot, light or hearty, vegetarian or meat-focused—we've turned a simple comfort food into an experience that people can personalize and make their own." - CoCo Ichibanya representative
+      </div>
+      
+      <!-- User Reviews Carousel -->
+      <h2>Customer Reviews</h2>
+      
+      <div class="review-carousel">
+        <div class="carousel-arrow carousel-prev">
+          <i class="fas fa-chevron-left"></i>
+        </div>
+        
+        <div class="review-slides">
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Michael T.</div>
+                <div class="review-date">Visited March 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"CoCo Ichibanya was a lifesaver during our two-week trip across Japan! As someone who travels with picky eaters, finding a restaurant that pleases everyone can be challenging, but CoCoIchi became our go-to spot whenever we needed a reliable, affordable meal. We visited multiple locations (Shibuya, Asakusa, and Kyoto), and the consistency was impressive. The order format is easy to navigate even with limited Japanese—the picture menus and spice level chart made customization straightforward. I usually went for the chicken katsu curry (level 3 spice with extra vegetables), while my partner preferred the hamburger curry at level 1. The portions are generous, especially if you upgrade your rice size. Most of our meals were around ¥1,100-1,300 per person, which felt like excellent value compared to many other restaurants in Tokyo. The restaurants are clean, service is quick, and many locations have English-speaking staff. Perfect for a casual lunch or dinner when you need a break from more adventurous eating!"</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Yuki N.</div>
+                <div class="review-date">Visited January 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="far fa-star" style="color: #ddd;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"As a Japanese person who has grown up with CoCo Ichibanya, I see it as our version of comfort food—reliable, satisfying, and nostalgic. It's not fine dining by any means, but it fills an important place in our food culture. For visitors to Japan, I think CoCoIchi offers a good introduction to Japanese-style curry, which is quite different from Indian or Thai curries. The customization options are what make it special—I like mine with level 4 spice, cheese, and spinach added. One tip for tourists: the spice levels might be stronger than you expect! Level 5 is already quite spicy for most people, and going beyond that is challenging unless you really love heat. Most Japanese people order levels 1-3. Another tip: many locations offer a lunch special until around 3pm with slightly discounted prices. The Shinjuku and Shibuya branches tend to have more English support, but the ordering system with photos makes it easy in any location. It's not the absolute best curry in Japan, but it's consistently good and perfect when you need a quick, filling meal during a day of sightseeing."</p>
+          </div>
+          
+          <div class="review-slide">
+            <div class="reviewer-info">
+              <div>
+                <div class="reviewer-name">Sophia L.</div>
+                <div class="review-date">Visited April 2023</div>
+                <div class="review-rating">
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="fas fa-star" style="color: #FFD700;"></i>
+                  <i class="far fa-star" style="color: #ddd;"></i>
+                  <i class="far fa-star" style="color: #ddd;"></i>
+                </div>
+              </div>
+            </div>
+            <p>"I have mixed feelings about CoCo Ichibanya. On one hand, it was incredibly convenient and budget-friendly during our Tokyo trip. On the other hand, the curry itself wasn't particularly special compared to other Japanese curries I've had. We visited the Akihabara location twice during our stay. The famous customization is indeed impressive—I tried both the vegetable curry and the seafood curry, experimenting with different spice levels (2 and 4). Level 4 was pleasantly spicy without being overwhelming. The portions are generous, especially if you upgrade your rice. The restaurant was clean and service was efficient, if not particularly warm. My main criticism would be that while the curry is good, it has that chain restaurant quality to it—a bit predictable and lacking the depth you might find at a specialized curry shop. Still, I appreciated the vegetarian options, which can be harder to find in Japan. It's definitely convenient to have as an option when exploring the city, especially since they have locations everywhere, but I wouldn't consider it a culinary highlight of Japan. Think of it as Japan's version of fast-casual—reliable, affordable, but not exceptional."</p>
+          </div>
+        </div>
+        
+        <div class="carousel-arrow carousel-next">
+          <i class="fas fa-chevron-right"></i>
+        </div>
+        
+        <div class="carousel-nav">
+          <div class="carousel-dot active"></div>
+          <div class="carousel-dot"></div>
+          <div class="carousel-dot"></div>
+        </div>
+      </div>
+      
+      <h2>Menu Highlights</h2>
+      
+      <p>While the customization options are nearly endless, these are some of the most popular combinations at CoCo Ichibanya:</p>
+      
+      <ul>
+        <li><strong>Pork Cutlet (Katsu) Curry (¥990)</strong> - The quintessential Japanese curry experience, featuring a crispy panko-breaded pork cutlet</li>
+        <li><strong>Hamburger Curry (¥890)</strong> - A juicy beef patty atop curry rice, often ordered with cheese as an add-on</li>
+        <li><strong>Chicken Cutlet Curry (¥990)</strong> - Similar to the pork version but with chicken breast</li>
+        <li><strong>Vegetable Curry (¥790)</strong> - A medley of seasonal vegetables, popular with vegetarians (though note that the standard curry roux contains meat stock)</li>
+        <li><strong>Ebi Fry Curry (¥1,090)</strong> - Featuring large breaded and fried shrimp</li>
+        <li><strong>Cheese Curry (¥890)</strong> - The standard curry topped with melted cheese</li>
+        <li><strong>Spinach Curry (¥890)</strong> - Curry with a generous portion of spinach mixed in, adding nutrition and a different texture</li>
+        <li><strong>Half & Half (¥990+)</strong> - Can't decide? Get two different curry varieties in one plate</li>
+        <li><strong>Omu-curry (¥1,090)</strong> - Curry wrapped in a fluffy omelet</li>
+        <li><strong>Kids Set (¥490)</strong> - Smaller portion with mild curry, popular with children and those wanting a lighter meal</li>
+      </ul>
+      
+      <p>Side dishes include options like fried chicken, salads, and additional rice. Beverage options typically include soft drinks, beer, and free water.</p>
+      
+      <div class="review-section">
+        <h2>Eastworld's Review</h2>
+        
+        <h3>Food Quality: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>CoCo Ichibanya serves consistently good Japanese curry that hits all the right comfort food notes. While it won't compete with specialty curry restaurants for depth of flavor, the quality is impressively reliable across all locations. The ingredients are fresh, portions are generous, and the customization options ensure everyone finds something to enjoy.</p>
+        
+        <h3>Value: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>Few restaurants in Japan offer this combination of portion size, quality, and affordability. Most meals cost between ¥800-1,500, with the option to adjust rice quantity to suit your appetite. The ability to create a filling, satisfying meal at this price point in expensive urban areas like Tokyo makes CoCo Ichibanya an excellent value proposition.</p>
+        
+        <h3>Customization: <span style="color: #FFD700;">★★★★★</span></h3>
+        <p>This is where CoCo Ichibanya truly excels. The ability to customize spice levels, portion sizes, toppings, and curry types creates a personalized dining experience that few restaurant chains can match. This flexibility makes it equally suitable for spice enthusiasts, conservative eaters, and those with specific dietary preferences.</p>
+        
+        <h3>Atmosphere: <span style="color: #FFD700;">★★★</span></h3>
+        <p>The restaurants are clean, efficient, and functional, though not particularly memorable in terms of ambiance. The setting is casual and comfortable but designed for relatively quick turnover rather than lingering meals. Some newer locations have more modern interiors, while older branches can feel a bit dated.</p>
+        
+        <h3>Accessibility: <span style="color: #FFD700;">★★★★½</span></h3>
+        <p>With English menus, picture-based ordering systems, and ubiquitous locations near major tourist areas, CoCo Ichibanya is exceptionally accessible to international visitors. The straightforward ordering process and familiar comfort food concept make it an easy entry point to Japanese dining for travelers experiencing language barriers or food anxiety.</p>
+        
+        <h3>Overall: <span style="color: #FFD700;">★★★★</span></h3>
+        <p>CoCo Ichibanya won't be the most memorable culinary experience of your Japan trip, but it fills an important niche in the country's dining landscape. When you need a reliable, affordable, and satisfying meal between more adventurous dining experiences, CoCo Ichibanya delivers consistently good Japanese curry with unmatched customization options. It's a genuine local favorite that offers insight into everyday Japanese dining habits.</p>
+      </div>
+      
+      <h2>Tips for Visitors</h2>
+      
+      <ul>
+        <li><strong>Spice Levels:</strong> Start conservative with the spice unless you're very heat-tolerant. Level 3 is medium spicy by Japanese standards, while levels 7-10 can be challenging even for spice enthusiasts</li>
+        <li><strong>Ordering Process:</strong> At most locations, you order and pay at your table. Some branches use ticket vending machines at the entrance</li>
+        <li><strong>Rice Portions:</strong> The standard 300g serving is quite large. Consider the 200g option if you're a light eater or want to save room for other foods</li>
+        <li><strong>Vegetarian Options:</strong> While vegetable curry is available, the standard curry roux contains meat stock. Some larger locations in tourist areas offer a plant-based curry option</li>
+        <li><strong>Popular Add-ons:</strong> Cheese, boiled egg, and spinach are popular and inexpensive additions that enhance the curry experience</li>
+        <li><strong>Lunch Specials:</strong> Many locations offer discounted sets during lunch hours (typically until 3:00 PM)</li>
+        <li><strong>Free Toppings:</strong> Fukujinzuke (pickled vegetables) and rakkyo (pickled scallions) are available at no charge - look for them at the condiment station</li>
+        <li><strong>Busy Times:</strong> City center locations can get crowded during peak lunch (12:00-1:00 PM) and dinner (7:00-8:00 PM) times</li>
+      </ul>
+      
+      <!-- Visitor Information -->
+      <div id="visitor-info" class="review-section">
+        <h2>Visitor Information</h2>
+        <p>Here's what you need to know when planning a visit to CoCo Ichibanya:</p>
+        
+        <h3>Finding Locations:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Look for the distinctive yellow and brown logo featuring a stylized plate of curry</li>
+          <li>Most major train stations and shopping districts have at least one branch nearby</li>
+          <li>Google Maps reliably shows all locations with accurate operating hours</li>
+          <li>Most tourist apps like Japan Travel by Navitime include CoCo Ichibanya locations</li>
+        </ul>
+        
+        <h3>Ordering Guide:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Most locations offer English menus—just ask the staff</li>
+          <li>Picture menus make selections clear even without language skills</li>
+          <li>Spice levels are clearly marked with numbers (1-10)</li>
+          <li>Customization options are typically displayed on the menu with corresponding prices</li>
+          <li>Some branches use vending machine ordering, while others take orders at the table</li>
+        </ul>
+        
+        <h3>Seating & Wait Times:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Smaller branches may have counter-only seating</li>
+          <li>Larger locations offer tables and sometimes private booths</li>
+          <li>During peak hours, expect 5-15 minute waits at popular branches</li>
+          <li>Food typically arrives within 5-10 minutes after ordering</li>
+          <li>Solo diners are common and easily accommodated</li>
+        </ul>
+        
+        <h3>Payment Information:</h3>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+          <li>Cash is accepted at all locations</li>
+          <li>Most branches accept major credit cards (Visa, Mastercard, JCB)</li>
+          <li>Some locations accept electronic payments like Suica/Pasmo transit cards</li>
+          <li>Prices include tax</li>
+          <li>No tipping is necessary, as is standard in Japan</li>
+        </ul>
+        
+        <p>As a casual dining establishment, CoCo Ichibanya doesn't require reservations and operates on a first-come, first-served basis. The dining experience is designed to be efficient but not rushed, with most meals taking 30-45 minutes from entry to exit.</p>
+      </div>
+      
+      <a href="../food.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Food Guide</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ABOUT EASTWORLD</h3>
+        <p>Your premier destination for Asian culture, style, and trends.</p>
+      </div>
+      <div class="footer-section">
+        <h3>FOLLOW US</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Review carousel functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const slides = document.querySelector('.review-slides');
+      const dots = document.querySelectorAll('.carousel-dot');
+      const prevBtn = document.querySelector('.carousel-prev');
+      const nextBtn = document.querySelector('.carousel-next');
+      let currentSlide = 0;
+      const totalSlides = document.querySelectorAll('.review-slide').length;
+      
+      // Function to update slide position
+      function showSlide(index) {
+        if (index < 0) index = totalSlides - 1;
+        if (index >= totalSlides) index = 0;
+        
+        currentSlide = index;
+        slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+        
+        // Update active dot
+        dots.forEach((dot, i) => {
+          dot.classList.toggle('active', i === currentSlide);
+        });
+      }
+      
+      // Set up event listeners for dots
+      dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => showSlide(i));
+      });
+      
+      // Set up event listeners for arrows
+      prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
+      nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
+      
+      // Auto-rotate slides every 5 seconds
+      setInterval(() => {
+        showSlide(currentSlide + 1);
+      }, 5000);
+    });
+  </script>
+  
+  <script src="../script.js"></script>
+</body>
+</html> 

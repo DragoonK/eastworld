@@ -1,0 +1,3876 @@
+/* Reset and Base Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+body {
+  margin: 0;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 18px; /* Increased base font size from default 16px */
+  line-height: 1.6;
+  color: #333;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+  padding: 1.5rem 1rem 1rem 1rem; /* Increased padding significantly */
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0; /* Remove bottom margin */
+  overflow: visible; /* Allow page to grow; avoid clipping bottoms */
+}
+
+/* Navigation (white theme, matches homepage) */
+.main-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 30px;
+  height: 64px;
+  background-color: #fff;
+  color: #111;
+  border-bottom: 1px solid #e5e5e5;
+  position: relative;
+}
+
+.nav-left, .nav-right {
+  display: flex;
+  gap: 1.2rem;
+  flex: 1;
+  align-items: center;
+}
+
+.nav-left {
+  justify-content: flex-start;
+  margin-right: auto;
+  z-index: 2;
+}
+
+.nav-right {
+  justify-content: flex-end;
+  margin-left: auto;
+  z-index: 2;
+}
+
+.logo {
+  flex: 0 0 auto;
+  text-align: center;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+}
+
+.logo h1 {
+  font-size: 1.6rem;
+  letter-spacing: 4px;
+  margin: 0;
+  white-space: nowrap;
+  text-align: center;
+  color: #111;
+  font-weight: 800;
+}
+
+.logo a {
+  display: block;
+  text-decoration: none;
+  color: #111;
+  cursor: pointer;
+  position: relative;
+  z-index: 3;
+}
+
+.nav-item {
+  text-decoration: none;
+  color: inherit;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  padding: 0.6rem 1rem;
+  font-weight: 600;
+  transition: opacity 0.3s ease;
+  text-transform: uppercase;
+}
+
+.main-nav .nav-item {
+  color: #333;
+}
+
+.nav-item:hover {
+  opacity: 0.7;
+}
+
+/* Navigation divider styling */
+.nav-divider {
+  display: inline-block;
+  width: 1px;
+  height: 16px;
+  background-color: #999;
+  margin: 0 8px 0 15px;
+  opacity: 0.4;
+  vertical-align: middle;
+}
+
+/* Login/Register styling */
+.login-register-stack {
+  display: flex;
+  align-items: center;
+}
+
+.login-register-stack .nav-item {
+  padding: 0.5rem 0.6rem;
+  text-align: center;
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.login-register-stack .nav-item:first-child {
+  margin-right: 0.1rem;
+}
+
+/* Hide search icon */
+.search-icon {
+  display: none !important;
+}
+
+/* Media query adjustments for smaller screens */
+@media (max-width: 1200px) {
+  .logo h1 {
+    font-size: 1.6rem;
+    letter-spacing: 3px;
+  }
+  
+  .nav-item {
+    margin: 0 0.5rem;
+  }
+}
+
+@media (max-width: 992px) {
+  .logo h1 {
+    font-size: 1.4rem;
+    letter-spacing: 2px;
+  }
+  
+  .nav-item {
+    margin: 0 0.4rem;
+    font-size: 0.8rem;
+  }
+  
+  .nav-left, .nav-right {
+    flex: 0 0 auto;
+  }
+  
+  .logo {
+    flex: 1;
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-nav {
+    flex-wrap: wrap;
+    padding: 0.5rem 1rem;
+    height: auto;
+    justify-content: center;
+  }
+  
+  .nav-left, .nav-right {
+    width: 100%;
+    justify-content: center;
+    margin: 0.3rem 0;
+    flex-wrap: wrap;
+  }
+  
+  .logo {
+    width: 100%;
+    order: -1;
+    margin-bottom: 0.5rem;
+  }
+  
+  .logo h1 {
+    font-size: 1.8rem;
+    letter-spacing: 4px;
+  }
+  
+  .nav-item {
+    margin: 0.2rem 0.6rem;
+    font-size: 0.85rem;
+  }
+}
+
+/* Hero Section */
+#hero {
+  position: relative;
+  height: 50vh;
+  overflow: hidden;
+  margin-bottom: 3rem;
+}
+
+#hero img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: white;
+  z-index: 2;
+  width: 80%;
+  max-width: 800px;
+}
+
+.hero-content .category {
+  background: rgba(0, 0, 0, 0.7);
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+}
+
+.hero-content h1 {
+  font-size: 3.5rem;
+  margin: 0.5rem 0;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.hero-content p {
+  font-size: 1.1rem;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Grid Sections */
+.section-title {
+  font-size: 1.3rem;
+  margin: 1.5rem 0;
+  padding: 0 2rem;
+}
+
+.news-grid, .culture-grid, .style-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 0 2rem;
+}
+
+/* Footer */
+footer {
+  background: #000;
+  color: #fff;
+  padding: 0.3rem 1rem;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  margin-top: 0.4rem; /* Reduced to minimize space */
+  flex-shrink: 0; /* Prevent footer from shrinking */
+  position: relative; /* Ensure it's on top and visible */
+  z-index: 10;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.footer-section h3 {
+  font-size: 0.8rem;
+  letter-spacing: 1.5px;
+}
+
+.footer-section p {
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+.social-links {
+  display: flex;
+  gap: 1rem;
+}
+
+.social-links a {
+  color: #fff;
+  font-size: 1.2rem;
+}
+
+.footer-bottom {
+  display: block;
+  text-align: center;
+  font-size: 0.7rem;
+  opacity: 0.7;
+}
+
+/* Main Grid Layout - Three equal columns filling available space */
+.main-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr !important; /* Equal width columns */
+  /* Visual order: LEFT = sections, CENTER = feed, RIGHT = center-column (hero/spotlights) */
+  grid-template-areas: "sections feed center";
+  gap: 1.5rem !important; /* Consistent gap between columns */
+  height: auto;
+  align-items: start !important; /* Align columns at the top */
+  overflow: visible;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important; /* Remove centering gaps; grid spans full width */
+  padding: 1rem 1.5rem !important; /* Reduced horizontal padding to give more space */
+}
+
+/* Category Sections */
+.category-sections {
+  grid-column: 1 / 2;
+  grid-area: sections;
+  overflow: visible;
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem; /* Increased from 0.8rem */
+  padding-right: 1rem; /* Increased from 0.5rem */
+  height: 100%; /* Fill available height */
+  align-self: stretch; /* Stretch to match other columns */
+}
+
+/* Prevent left-column section from stretching to the bottom when content is short */
+.category-sections .content-section {
+  flex: 0 0 auto;
+}
+
+.content-section {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-radius: 12px; /* Increased from 8px */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Increased shadow */
+  overflow: hidden;
+  flex: 1;
+  margin-top: 0.5rem; /* Increased from 0.2rem */
+  height: auto; /* Let content define height */
+  padding: 0.5rem 0; /* Add some vertical padding */
+}
+
+/* Tabs */
+.section-tabs {
+  display: flex;
+  border-bottom: 2px solid #ddd; /* Increased from 1px */
+  padding: 0 1.5rem; /* Increased from 1rem */
+  justify-content: center;
+}
+
+.tab-button {
+  padding: 0.8rem 1.5rem; /* Increased padding */
+  border: none;
+  background: none;
+  font-weight: 600;
+  cursor: pointer;
+  letter-spacing: 1px;
+  font-size: 1rem; /* Increased from 0.85rem */
+}
+
+.tab-button:hover {
+  color: #888;
+}
+
+.tab-button.active {
+  color: #000;
+  border-bottom: 2px solid #000;
+}
+
+/* Tab Content */
+.tab-content {
+  display: none;
+  padding: 2rem 2rem 1.2rem 2rem; /* Increased padding further */
+  flex: 1;
+  overflow-y: auto; /* allow scrolling so more than 3 items are visible */
+  overflow-x: hidden;
+  height: calc(100% - 50px); /* Increased from 40px */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.tab-content.active {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  width: 100%;
+}
+
+/* Section Grid */
+.section-grid {
+  flex: 1;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  transition: transform 0.3s ease;
+  padding: 0;
+  margin: 0;
+  gap: 20px;
+  width: 100%;
+  transition: transform 0.5s ease;
+}
+
+.section-grid::-webkit-scrollbar {
+  width: 4px;
+}
+
+.section-grid::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.section-grid::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 2px;
+}
+
+.section-grid > article:nth-child(n+4) {
+  display: block;
+}
+
+.section-grid .section-item {
+  min-width: calc(33.333% - 20px);
+  flex: 0 0 calc(33.333% - 20px);
+  margin-right: 0;
+}
+
+/* Feed Grid - optimize for horizontal layout */
+.feed-grid {
+  display: grid !important;
+  grid-template-rows: repeat(4, 200px) !important; /* Reduced to 4 items at 200px each */
+  gap: 1rem !important; /* Reduced gap */
+  padding: 0 !important; /* Remove all padding */
+  width: 100% !important;
+  min-width: 0 !important; /* Allow grid item to shrink */
+  box-sizing: border-box !important;
+  max-height: calc(4 * 200px + 3 * 1rem) !important; /* Limit total height */
+  overflow-y: auto !important; /* Allow scrolling if needed */
+}
+
+.feed-grid::-webkit-scrollbar {
+  width: 4px;
+}
+
+.feed-grid::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.feed-grid::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 2px;
+}
+
+/* Feed Item - Fixing layout with proper image container */
+.feed-item {
+  display: flex !important;
+  flex-direction: row !important;
+  background: white !important;
+  border-radius: 16px !important;
+  overflow: hidden !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2) !important;
+  width: 100% !important;
+  height: 200px !important; /* Reduced to 200px to match column heights */
+  min-height: 200px !important; /* Ensure minimum height */
+  max-height: 200px !important; /* Ensure maximum height */
+  position: relative !important;
+  margin-bottom: 0 !important; /* Remove any bottom margin */
+}
+
+.feed-item a {
+  display: flex !important;
+  width: 100% !important;
+  height: 100% !important;
+  text-decoration: none !important;
+  color: inherit !important;
+}
+
+.feed-item .image-container {
+  position: relative !important;
+  width: 40% !important; /* Reduced from 45% to give more space to content */
+  min-width: 180px !important; /* Reduced to allow more content space */
+  max-width: none !important; /* Remove max-width constraint */
+  height: 100%;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: 16px 0 0 16px;
+}
+
+.feed-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+/* More compact content area */
+.feed-content {
+  padding: 2rem 2.2rem !important; /* Increased from 1.2rem 1.4rem */
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  gap: 1rem !important; /* Increased from 0.6rem */
+  flex: 1 !important;
+  overflow: hidden !important;
+}
+
+.feed-content .category {
+  display: inline-block;
+  font-size: 1.1rem; /* Increased from 0.8rem */
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #777;
+  margin-bottom: 0.6rem; /* Increased from 0.3rem */
+  text-transform: uppercase;
+}
+
+.feed-content h3 {
+  font-size: 1.8rem !important; /* Increased from 1.25rem */
+  line-height: 1.5;
+  margin-bottom: 0.8rem !important; /* Increased from 0.5rem */
+  color: #333;
+  font-weight: 600;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.feed-content p {
+  font-size: 1.3rem !important; /* Increased from 1rem */
+  line-height: 1.6;
+  color: #555;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Carousel Container */
+.carousel-container {
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+  padding: 0 2rem;
+}
+
+.carousel-track {
+  display: flex;
+  gap: 1rem;
+  transition: transform 0.3s ease-in-out;
+}
+
+.carousel-item {
+  flex: 0 0 calc((100% - 2rem) / 3);
+  min-width: 0;
+  position: relative;
+}
+
+.carousel-item img {
+  width: 100%;
+  height: 80px;
+  object-fit: cover;
+}
+
+.carousel-content {
+  padding: 0.4rem;
+}
+
+.carousel-content h3 {
+  font-size: 0.75rem;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.carousel-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.carousel-button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.carousel-button.prev {
+  left: 0.5rem;
+}
+
+.carousel-button.next {
+  right: 0.5rem;
+}
+
+/* Center Column block (hero carousel + artist spotlights) — now visually placed RIGHT */
+.center-column {
+  grid-area: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  width: 100%;
+  overflow: visible;
+  max-width: 100%;
+  height: 100%; /* Fill available height */
+  align-self: stretch; /* Stretch to match other columns */
+  min-height: 0; /* Allow flex children to shrink if needed */
+}
+
+/* Hero Carousel - Simplified and fixed */
+.hero-carousel {
+  position: relative;
+  width: 100%;
+  height: 500px !important; /* Increased to fill more space */
+  min-height: 500px !important;
+  overflow: hidden;
+  margin: 0;
+  border-radius: 8px;
+  background: #000;
+}
+
+/* Reset all previous carousel item styling */
+.hero-carousel .carousel-track,
+.hero-carousel .carousel-item {
+  position: static;
+  width: 100%;
+  height: 100%;
+}
+
+.hero-carousel .carousel-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.hero-carousel .carousel-item.active {
+  opacity: 1;
+  z-index: 1;
+}
+
+.hero-carousel .carousel-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* More aggressive centering for hero content */
+.hero-carousel .hero-content,
+.hero-carousel .carousel-item .hero-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 2rem;
+  background: linear-gradient(0deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 70%, rgba(0,0,0,0) 100%);
+  color: white;
+  z-index: 5; /* Increase z-index to ensure it's above other elements */
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+  text-align: center !important; /* Force center alignment */
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important; /* Force center alignment of children */
+  justify-content: center !important; /* Center vertically too */
+  left: 50% !important; /* Position in center of container */
+  transform: translateX(-50%) !important; /* Ensure perfect centering */
+  max-width: 100% !important; /* Ensure it doesn't exceed container width */
+}
+
+/* Target all text elements inside hero content */
+.hero-carousel .hero-content *,
+.hero-carousel .carousel-item .hero-content * {
+  text-align: center !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  max-width: 80% !important; /* Control width of all text elements */
+}
+
+/* Specific fixes for the main title and description */
+.hero-carousel .hero-content h1,
+.hero-carousel .carousel-item .hero-content h1 {
+  font-size: 1.8rem;
+  margin: 0.3rem auto !important; 
+  font-weight: 600;
+  letter-spacing: 1px;
+  width: auto !important;
+  text-align: center !important;
+}
+
+.hero-carousel .hero-content p,
+.hero-carousel .carousel-item .hero-content p {
+  font-size: 0.9rem;
+  margin: 0.2rem auto 0 !important;
+  line-height: 1.3;
+  text-align: center !important;
+}
+
+/* Fix for specific layout in the image */
+.hero-carousel .hero-content h1:first-child,
+.hero-carousel .carousel-item .hero-content h1:first-child {
+  text-align: center !important;
+  align-self: center !important;
+}
+
+/* Navigation buttons */
+.hero-carousel .carousel-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255,255,255,0.3);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  z-index: 3;
+}
+
+.hero-carousel .carousel-button.prev {
+  left: 1rem;
+}
+
+.hero-carousel .carousel-button.next {
+  right: 1rem;
+}
+
+/* Update mobile styles */
+@media (max-width: 768px) {
+  .hero-carousel {
+    height: 420px;
+  }
+  
+  .hero-carousel .hero-content h1 {
+    font-size: 1.5rem;
+  }
+  
+  .hero-carousel .hero-content p {
+    font-size: 0.8rem;
+  }
+}
+
+/* Artist Spotlight sections */
+#artist-spotlight,
+#top-artist-spotlight {
+  position: relative;
+  height: 320px !important; /* Increased to fill more space */
+  max-height: 320px !important;
+  min-height: 320px !important;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  margin: 0;
+  border-radius: 8px;
+  background-color: #000;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  flex-shrink: 0;
+  width: 100%;
+}
+
+/* Match spotlight grid height with artist spotlight */
+.spotlight-grid {
+  display: block;
+  height: 320px !important; /* Match the updated artist spotlight height */
+  max-height: 320px !important;
+  margin: 0;
+  overflow: hidden;
+  width: 100%;
+}
+
+.spotlight-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.spotlight-item.active {
+  opacity: 1;
+  visibility: visible;
+  z-index: 1;
+}
+
+.spotlight-item img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  transition: transform 0.5s ease;
+  display: block;
+}
+
+/* Ensure all spotlight items including Osaka Expo display properly */
+.spotlight-item[href*="expo2025"] img {
+  object-position: center;
+}
+
+/* Spotlight track styling for slideshow */
+.spotlight-track {
+  position: relative;
+  height: 100%;
+}
+
+/* Spotlight indicators */
+.spotlight-indicators {
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 5;
+}
+
+.spotlight-indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.spotlight-indicator.active {
+  background: white;
+}
+
+/* Fix for the duplicate CSS selector - proper values */
+#top-artist-spotlight {
+  position: relative;
+  height: 320px !important;
+  max-height: 320px !important;
+  min-height: 320px !important;
+  margin: 0;
+}
+
+#top-artist-spotlight:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Fade animation for slideshow */
+@keyframes spotlightFade {
+  from {opacity: 0.4} 
+  to {opacity: 1}
+}
+
+.spotlight-fade {
+  animation-name: spotlightFade;
+  animation-duration: 0.3s;
+}
+
+/* Adjust footer to minimize bottom space */
+footer {
+  background: #000;
+  color: #fff;
+  padding: 0.3rem 1rem;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  margin-top: 0.4rem; /* Reduced to minimize space */
+  flex-shrink: 0; /* Prevent footer from shrinking */
+  position: relative; /* Ensure it's on top and visible */
+  z-index: 10;
+}
+
+/* Fix the media query to match updated heights */
+@media (max-width: 768px) {
+  main {
+    padding-top: 0.4rem; /* Smaller padding on mobile */
+  }
+
+  #top-artist-spotlight, 
+  #artist-spotlight, 
+  .spotlight-grid, 
+  .spotlight-item {
+    height: 320px !important; /* Increased to fill more space */
+    max-height: 320px !important;
+    min-height: 320px !important;
+  }
+  
+  .hero-carousel {
+    height: 500px !important; /* Increased to fill more space */
+    min-height: 500px !important;
+  }
+  
+  .center-column {
+    gap: 0.3rem;
+  }
+  
+  /* Ensure footer is visible on mobile */
+  footer {
+    margin-top: 0.4rem;
+  }
+  
+  .main-grid {
+    height: calc(100vh - 100px); /* Adjusted for mobile */
+    gap: 0.5rem; /* Even smaller gap on mobile */
+  }
+}
+
+#artist-spotlight:hover,
+#top-artist-spotlight:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.artist-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 1.5rem;
+  background: linear-gradient(0deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 70%, rgba(0,0,0,0) 100%);
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  z-index: 2;
+  min-height: 30%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.artist-content .category {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-bottom: 0.2rem;
+  opacity: 0.9;
+}
+
+.artist-content h2 {
+  font-size: 1.5rem;
+  margin-bottom: 0.2rem;
+  letter-spacing: 1px;
+}
+
+.artist-content p {
+  font-size: 0.8rem;
+  line-height: 1.2;
+  margin-top: 0.1rem;
+  opacity: 0.9;
+  display: block;
+}
+
+/* Section Navigation */
+.section-navigation, .feed-navigation {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.2rem;
+  margin-bottom: 0.2rem;
+  padding: 0 0.5rem;
+  height: 26px; /* Restored original height */
+  align-items: center;
+  position: relative;
+}
+
+.nav-button {
+  background: none;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.75rem;
+  transition: all 0.2s ease;
+  height: 26px; /* Restored original height */
+  display: flex;
+  align-items: center;
+}
+
+.nav-button:hover:not(:disabled) {
+  background: #f5f5f5;
+}
+
+.nav-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Culture Feed — now visually placed in the CENTER column */
+#culture-feed {
+  grid-area: feed;
+  display: flex;
+  flex-direction: column;
+  height: 100% !important; /* Fill available height to match other columns */
+  max-height: calc(60px + 4 * 200px + 3 * 1rem) !important; /* Limit to header + 4 items */
+  padding: 0 !important; /* Remove all padding */
+  overflow-y: auto !important; /* Allow scrolling if needed */
+  overflow-x: hidden;
+  width: 100% !important;
+  min-width: 0 !important; /* Allow grid item to shrink below content size */
+  position: relative;
+  align-self: stretch; /* Stretch to match other columns */
+}
+
+/* Compact header while preserving navigation */
+.feed-header {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  position: relative;
+  margin-top: 0.8rem !important; /* Increased from 0.5rem */
+  margin-bottom: 1rem !important; /* Increased from 0.5rem */
+  padding-top: 0.6rem !important; /* Increased from 0.3rem */
+  padding-bottom: 0.8rem !important; /* Increased from 0.4rem */
+  border-bottom: 2px solid #000; /* Increased from 1px */
+  height: auto !important; /* Changed from fixed height to auto */
+  min-height: 60px !important; /* Increased from 40px */
+  flex-shrink: 0;
+}
+
+/* Center FEED title with more room */
+#culture-feed h2 {
+  font-size: 1.6rem; /* Increased from 1.3rem */
+  letter-spacing: 2px;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin: 0.4rem 0 !important; /* Increased from 0.2rem */
+  padding: 0.4rem 0 !important; /* Increased from 0.2rem */
+  text-align: center;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  right: 0;
+}
+
+/* Feed navigation buttons */
+.feed-navigation {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  position: relative;
+  z-index: 10;
+  padding: 0;
+}
+
+/* Fix navigation button positioning */
+.feed-navigation .nav-button {
+  background: white;
+  border: 1px solid #000;
+  border-radius: 50%;
+  width: 22px !important;
+  height: 22px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+  font-size: 0.65rem;
+  color: #000;
+  margin: 0 0.5rem;
+  pointer-events: auto !important; /* Ensure clicks register */
+}
+
+/* Make disabled state more obvious */
+.feed-navigation .nav-button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  background-color: #f0f0f0;
+}
+
+/* Improve hover effect */
+.feed-navigation .nav-button:not(:disabled):hover {
+  background: #000;
+  color: white;
+  transform: translateY(-1px);
+}
+
+/* CRITICAL FEED GRID FIX - reduce to match other columns */
+.feed-grid {
+  display: grid !important;
+  grid-template-rows: repeat(4, 200px) !important; /* Reduced to 4 items at 200px each */
+  gap: 1rem !important; /* Reduced gap */
+  padding: 0 !important; /* Remove all padding */
+  width: 100% !important;
+  min-width: 0 !important; /* Allow grid item to shrink */
+  box-sizing: border-box !important;
+  max-height: calc(4 * 200px + 3 * 1rem) !important; /* Limit total height */
+  overflow-y: auto !important; /* Allow scrolling if needed */
+}
+
+/* Removed duplicate main-grid definition - using the one at line 331 */
+
+/* Ensure feed items have proper height - reduced to match column alignment */
+.feed-item {
+  display: flex !important;
+  flex-direction: row !important;
+  background: white !important;
+  border-radius: 16px !important;
+  overflow: hidden !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2) !important;
+  width: 100% !important;
+  height: 200px !important; /* Reduced to 200px to match column heights */
+  min-height: 200px !important; /* Ensure minimum height */
+  max-height: 200px !important; /* Ensure maximum height */
+  position: relative !important;
+  margin-bottom: 0 !important; /* Remove any bottom margin */
+}
+
+.feed-item a {
+  display: flex !important;
+  width: 100% !important;
+  height: 100% !important;
+  text-decoration: none !important;
+  color: inherit !important;
+}
+
+.feed-item .image-container {
+  position: relative !important;
+  width: 40% !important; /* Reduced from 45% to give more space to content */
+  min-width: 180px !important; /* Reduced to allow more content space */
+  max-width: none !important; /* Remove max-width constraint */
+  height: 100% !important;
+  flex-shrink: 0 !important;
+  overflow: hidden !important;
+  border-radius: 16px 0 0 16px !important;
+}
+
+/* Content styling to match item height */
+.feed-content {
+  padding: 2rem 2.2rem !important; /* Increased from 0.5rem 0.6rem */
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  gap: 1rem !important; /* Increased from 0.2rem */
+  flex: 1 !important;
+  overflow: hidden !important;
+}
+
+/* Remove any hidden elements or style that might affect layout */
+.feed-grid:empty {
+  display: grid !important;
+  height: calc(4 * 200px + 3 * 1rem) !important; /* Updated for 4 items at 200px each */
+}
+
+/* Fix for potential stacking issues - show only 4 items */
+.feed-grid > *:nth-child(n+5) {
+  display: none !important; /* Hide any items beyond 4 */
+}
+
+/* Ensure 4th item is visible */
+.feed-grid > *:nth-child(4) {
+  display: flex !important;
+}
+
+/* Feed Loader - Remove since we don't need it anymore */
+.feed-loader {
+  display: none;
+}
+
+.loader-spinner {
+  display: none;
+}
+
+/* Media Queries */
+@media (max-width: 1600px) {
+  .main-grid {
+    grid-template-columns: 1fr 1fr 1fr !important; /* Equal width columns */
+  }
+}
+
+@media (max-width: 1200px) {
+  .main-grid {
+    grid-template-columns: 1fr 1fr 1fr !important; /* Equal width columns */
+  }
+}
+
+@media (max-width: 768px) {
+  html, body {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+  
+  .main-grid {
+    grid-template-columns: 1fr !important; /* Stack columns vertically on mobile */
+    grid-template-areas: 
+      "sections"
+      "center"
+      "feed";
+    height: auto;
+    overflow: visible;
+  }
+  
+  .category-sections,
+  .center-column,
+  #culture-feed {
+    padding: 0;
+    max-width: 100%;
+    overflow: visible;
+  }
+  
+  .section-grid, 
+  .feed-grid {
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-width: 100%;
+  }
+  
+  body {
+    overflow: hidden;
+  }
+  
+  html.content-page body {
+    overflow-y: auto;
+  }
+
+  .section-item img {
+    width: 100px;
+    height: 100px;
+  }
+
+  .main-nav {
+    padding: 0 1rem;
+  }
+
+  .nav-left, .nav-right {
+    gap: 1rem;
+  }
+
+  .footer-content {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .footer-section {
+    font-size: 0.7rem;
+  }
+  
+  .footer-section h3 {
+    font-size: 0.7rem;
+  }
+
+  .hero-carousel,
+  #artist-spotlight,
+  #top-artist-spotlight {
+    height: 320px !important;
+    min-height: 320px !important;
+  }
+  
+  .hero-carousel {
+    height: 500px !important;
+    min-height: 500px !important;
+  }
+
+  .artist-content {
+    padding: 0.75rem;
+  }
+  
+  .artist-content h2 {
+    font-size: 1.2rem;
+    margin-bottom: 0.1rem;
+  }
+  
+  .artist-content p {
+    font-size: 0.7rem;
+  }
+  
+  #top-artist-spotlight::after {
+    bottom: 7px;
+    right: 7px;
+    padding: 4px 8px;
+    font-size: 0.6rem;
+  }
+
+  main {
+    overflow: hidden;
+  }
+
+  .weather-section {
+    min-height: 150px;
+    overflow: visible;
+  }
+  
+  .content-section {
+    height: calc(100% - 160px);
+  }
+}
+
+@media (max-width: 480px) {
+  .section-item img {
+    width: 90px;
+    height: 90px;
+  }
+  
+  .section-content h3 {
+    font-size: 0.8rem;
+  }
+  
+  .section-content p {
+    font-size: 0.7rem;
+  }
+}
+
+#artist-spotlight a, #top-artist-spotlight a {
+  display: block;
+  position: relative;
+  text-decoration: none;
+  color: inherit;
+  height: 100%;
+}
+
+/* Section Items */
+.section-item {
+  display: flex;
+  gap: 0.75rem;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.3rem;
+  width: 100%;
+  min-width: 0;
+  height: auto;
+  max-height: 110px; /* Increased from 90px */
+  overflow: hidden; /* Prevent content overflow */
+}
+
+.section-item a {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  text-decoration: none;
+  color: inherit;
+  min-width: 0;
+}
+
+.section-item img {
+  width: 85px;
+  height: 85px;
+  object-fit: cover;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.section-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  width: 100%; /* Ensure full width */
+}
+
+.section-content .category {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-bottom: 0.1rem;
+  white-space: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.section-content h3 {
+  font-size: 0.85rem;
+  margin: 0.15rem 0;
+  line-height: 1.2;
+  white-space: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.section-content p {
+  font-size: 0.75rem;
+  color: #666;
+  margin: 0;
+  white-space: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.hero-container {
+  aspect-ratio: 4/3;
+  border-radius: 6px;
+  min-height: 150px; /* Even smaller for very small screens */
+}
+
+.content-hero {
+  border-radius: 6px;
+}
+
+.content-title {
+  font-size: 1.5rem;
+}
+
+/* Weather Section - Completely restyled */
+.weather-section {
+  background-color: #fff;
+  border-radius: 10px;
+  color: #333;
+  padding: 0.75rem;
+  margin-bottom: 0.75rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  min-height: 100px;
+  height: auto;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.weather-section h2 {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: 1px;
+  margin-bottom: 0.5rem;
+  position: relative;
+  color: #333;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 0.4rem;
+}
+
+.weather-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.weather-icon {
+  font-size: 1.9rem;
+  margin-bottom: 0.2rem;
+  color: #ff4d4d; /* Match site accent color */
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.weather-info {
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.weather-location {
+  font-size: 0.7rem;
+  color: #777;
+  margin-bottom: 0.1rem;
+  font-weight: 600;
+}
+
+.weather-temp {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 0.1rem;
+  color: #333;
+  line-height: 1.1;
+}
+
+.weather-desc {
+  font-size: 0.75rem;
+  color: #555;
+}
+
+.weather-details {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  background: #f8f8f8;
+  border-radius: 6px;
+  padding: 0.4rem 0.5rem;
+  margin-top: 0.3rem;
+}
+
+.weather-detail {
+  flex: 1;
+  text-align: center;
+  padding: 0 0.1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid #eee;
+}
+
+.weather-detail:last-child {
+  border-right: none;
+}
+
+.detail-label {
+  font-size: 0.65rem;
+  display: block;
+  margin-bottom: 0.15rem;
+  white-space: nowrap;
+  color: #777;
+  font-weight: 500;
+}
+
+.detail-value {
+  font-weight: 700;
+  color: #333;
+  display: block;
+  font-size: 0.78rem;
+}
+
+/* Carousel Indicators */
+.carousel-indicators {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 3;
+}
+
+.carousel-indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.5);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.carousel-indicator.active {
+  background: white;
+}
+
+/* Content Pages */
+html {
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+html.content-page {
+  height: auto;
+  overflow-y: auto;
+  margin: 0;
+  padding: 0;
+}
+
+html.content-page body {
+  min-height: 100vh;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+}
+
+.content-container {
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 2rem;
+  flex: 1;
+}
+
+.content-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.content-category {
+  background: #000;
+  color: white;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  display: inline-block;
+  margin-bottom: 1rem;
+}
+
+.content-title {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.hero-container {
+  width: 100%;
+  height: 60vh;
+  min-height: 500px;
+  overflow: hidden;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.content-hero {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+  display: block;
+}
+
+.content-text {
+  line-height: 1.8;
+  color: #333;
+}
+
+.content-text p {
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+}
+
+.content-text img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 2rem 0;
+}
+
+.content-quote {
+  font-size: 1.5rem;
+  font-style: italic;
+  border-left: 4px solid #000;
+  padding-left: 1.5rem;
+  margin: 2rem 0;
+  color: #555;
+  line-height: 1.6;
+}
+
+.back-link {
+  display: inline-block;
+  margin-top: 3rem;
+  color: #000;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.back-link i {
+  margin-right: 0.5rem;
+}
+
+/* Mobile styles for content pages */
+@media (max-width: 768px) {
+  .content-container {
+    padding: 1.5rem;
+    max-width: 100%;
+  }
+  
+  .content-title {
+    font-size: 1.8rem;
+  }
+  
+  .content-text p {
+    font-size: 1rem;
+  }
+  
+  .content-quote {
+    font-size: 1.2rem;
+    padding-left: 1rem;
+  }
+
+  .hero-container {
+    height: 50vh;
+    min-height: 350px;
+  }
+}
+
+/* Restaurant review specific styles */
+.restaurant-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 768px) {
+  .restaurant-info {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+.restaurant-details {
+  background: #f9f9f9;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.detail-row {
+  display: flex;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.5rem;
+}
+
+.detail-label {
+  font-weight: 600;
+  min-width: 120px;
+  color: #333;
+}
+
+.detail-value {
+  flex: 1;
+  color: #555;
+}
+
+.rating {
+  margin-bottom: 1rem;
+}
+
+.star {
+  color: #ddd;
+  font-size: 1.5rem;
+}
+
+.star.filled {
+  color: #FFD700;
+}
+
+.half-star {
+  position: relative;
+}
+
+.half-star .fas.fa-star-half {
+  color: #FFD700;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.score-label {
+  margin-left: 0.5rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.map-container {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.map-container iframe {
+  width: 100%;
+  height: 300px;
+  border: none;
+}
+
+.photos-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.photo-item {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.photo-item img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+
+.photo-item:hover img {
+  transform: scale(1.05);
+}
+
+/* Artist profile specific styles */
+.artist-profile {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.artist-bio {
+  flex: 2;
+  min-width: 300px;
+}
+
+.artist-stats {
+  flex: 1;
+  background: #f9f9f9;
+  padding: 1.5rem;
+  border-radius: 8px;
+  min-width: 250px;
+}
+
+.stat-item {
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.5rem;
+}
+
+.stat-label {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.25rem;
+  display: block;
+}
+
+.stat-value {
+  color: #555;
+}
+
+.artist-albums {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.album {
+  text-align: center;
+}
+
+.album-cover {
+  width: 100%;
+  aspect-ratio: 1/1;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 0.75rem;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+}
+
+.album-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+
+.album:hover .album-cover img {
+  transform: scale(1.05);
+}
+
+.album-title {
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 0.25rem;
+}
+
+.album-year {
+  font-size: 0.8rem;
+  color: #777;
+}
+
+/* Category pages specific styles */
+html.content-page .container,
+html.content-page .content-container {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 2rem;
+  flex: 1;
+  overflow-y: auto;
+}
+
+@media (max-width: 768px) {
+  html.content-page .container,
+  html.content-page .content-container {
+    padding: 1.5rem;
+    max-width: 100%;
+  }
+}
+
+/* Plan Your Trip AI Styles */
+.trip-planner-section {
+  padding: 4rem 0;
+  background-color: #f9f9f9;
+  margin-top: 3rem;
+}
+
+.planner-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+@media (max-width: 992px) {
+  .planner-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+.planner-form-container {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  padding: 2rem;
+}
+
+.form-step {
+  display: none;
+}
+
+.form-step.active {
+  display: block;
+}
+
+.form-step h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.destination-selector,
+.date-budget-selector {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 768px) {
+  .destination-selector,
+  .date-budget-selector {
+    grid-template-columns: 1fr;
+  }
+}
+
+.region-select,
+.city-select,
+.date-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.region-select label,
+.city-select label,
+.date-field label,
+.budget-slider label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+select,
+input[type="date"] {
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  appearance: none;
+  background-color: white;
+}
+
+select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23333' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 16px;
+  padding-right: 2.5rem;
+}
+
+.budget-slider {
+  margin-bottom: 1.5rem;
+}
+
+.budget-range-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+input[type="range"] {
+  flex: 1;
+  height: 5px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: #ddd;
+  border-radius: 5px;
+  outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #000;
+  cursor: pointer;
+}
+
+.budget-value {
+  font-weight: 600;
+  font-size: 1.1rem;
+  min-width: 80px;
+}
+
+.budget-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.interests-selector {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 768px) {
+  .interests-selector {
+    grid-template-columns: 1fr;
+  }
+}
+
+.interest-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.interest-option:hover {
+  background-color: #f5f5f5;
+}
+
+.interest-option input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.interest-option label {
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+.nav-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+.prev-step-btn,
+.next-step-btn,
+#generate-plan-btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: all 0.2s ease;
+}
+
+.prev-step-btn {
+  background-color: #eee;
+  color: #333;
+}
+
+.prev-step-btn:hover {
+  background-color: #ddd;
+}
+
+.next-step-btn,
+#generate-plan-btn {
+  background-color: #000;
+  color: white;
+}
+
+.next-step-btn:hover,
+#generate-plan-btn:hover {
+  background-color: #333;
+}
+
+#generate-plan-btn {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1rem;
+  margin-top: 1rem;
+}
+
+.planner-results {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  padding: 2rem;
+  height: 100%;
+  overflow-y: auto;
+  max-height: 800px;
+}
+
+.results-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 300px;
+  text-align: center;
+  color: #666;
+}
+
+.planning-animation {
+  max-width: 200px;
+  margin-bottom: 1.5rem;
+}
+
+.trip-plan {
+  color: #333;
+}
+
+.plan-header {
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 1.5rem;
+}
+
+.plan-header h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.plan-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.meta-item i {
+  color: #000;
+  font-size: 1rem;
+}
+
+.plan-summary {
+  margin-bottom: 2rem;
+  background-color: #f9f9f9;
+  padding: 1.5rem;
+  border-radius: 6px;
+}
+
+.plan-summary h3 {
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.plan-summary p {
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.budget-breakdown {
+  margin-top: 1.5rem;
+}
+
+.budget-breakdown h4 {
+  font-size: 1.1rem;
+  margin-bottom: 0.8rem;
+  font-weight: 500;
+}
+
+.budget-categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.budget-category-item {
+  background-color: white;
+  padding: 0.6rem 1rem;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  font-size: 0.9rem;
+}
+
+.budget-budget {
+  color: #28a745;
+}
+
+.budget-moderate {
+  color: #fd7e14;
+}
+
+.budget-premium {
+  color: #dc3545;
+}
+
+.day-by-day {
+  margin-bottom: 2rem;
+}
+
+.day-by-day h3 {
+  font-size: 1.3rem;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+.day-plan {
+  background-color: white;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.day-plan h4 {
+  background-color: #000;
+  color: white;
+  padding: 0.8rem 1.5rem;
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.day-activities {
+  padding: 1.5rem;
+}
+
+.activity {
+  display: flex;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #eee;
+}
+
+.activity:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.activity-time {
+  min-width: 100px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.activity-details {
+  flex: 1;
+}
+
+.activity-details h5 {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.activity-details p {
+  line-height: 1.5;
+  color: #555;
+  margin-bottom: 1rem;
+}
+
+.activity-details p:last-child {
+  margin-bottom: 0;
+}
+
+.accommodation {
+  background-color: #f9f9f9;
+  padding: 1rem;
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+}
+
+.additional-recommendations {
+  margin-top: 2rem;
+}
+
+.additional-recommendations h3 {
+  font-size: 1.3rem;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+.recommendations-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .recommendations-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.recommendation-card {
+  display: flex;
+  gap: 1rem;
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  border: 1px solid #eee;
+}
+
+.recommendation-icon {
+  font-size: 1.8rem;
+  color: #000;
+  min-width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.recommendation-content h4 {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.recommendation-content p {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #555;
+}
+
+/* Animation for result sections */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInDown {
+  from { 
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Budget and mobile styles */
+@media (max-width: 768px) {
+  .plan-meta {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+  
+  .activity {
+    flex-direction: column;
+  }
+  
+  .activity-time {
+    margin-bottom: 0.8rem;
+  }
+}
+
+/* Video Section - New styles for the featured video */
+.video-section {
+  background-color: #fff;
+  margin-bottom: 0.3rem; /* Reduced from 0.6rem to match middle column gaps */
+  padding: 0.75rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.video-section h2 {
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+  font-weight: 700;
+  color: #333;
+  text-align: center;
+}
+
+.video-container {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  height: auto;
+  aspect-ratio: 16 / 9;
+}
+
+.video-container iframe {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: none;
+  border-radius: 8px;
+  display: block;
+  object-fit: fill;
+  min-width: 100%;
+  min-height: 100%;
+}
+
+/* Advertisement Styles */
+.ad-banner {
+  background-color: #f9f9f9;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.ad-content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.ad-label {
+  background-color: #eee;
+  color: #999;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.6rem;
+  letter-spacing: 0.5px;
+  text-align: center;
+}
+
+.ad-details {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0.5rem;
+}
+
+.ad-details img {
+  width: 130px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-right: 0.75rem;
+}
+
+.ad-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.ad-text h3 {
+  font-size: 0.85rem;
+  margin-bottom: 0.3rem;
+  color: #333;
+}
+
+.ad-text p {
+  font-size: 0.7rem;
+  color: #666;
+  margin-bottom: 0.5rem;
+}
+
+.ad-button {
+  background-color: #000;
+  color: white;
+  border: none;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.65rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 2px;
+  align-self: flex-start;
+  transition: background-color 0.2s;
+}
+
+.ad-button:hover {
+  background-color: #333;
+}
+
+#top-artist-spotlight::after {
+  content: "READ MORE";
+  position: absolute;
+  bottom: 7px;
+  right: 7px;
+  padding: 4px 8px;
+  background-color: #000;
+  color: white;
+  border-radius: 4px;
+  font-size: 0.6rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+#top-artist-spotlight:hover::after {
+  opacity: 1;
+}
+
+/* Updated navigation styling */
+.feed-navigation {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.feed-navigation .nav-button {
+  background: white;
+  border: 1px solid #eee;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+  font-size: 0.65rem;
+  color: #555;
+}
+
+.feed-navigation .nav-button:hover:not(:disabled) {
+  background: #f0f0f0;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.feed-navigation .nav-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Google Ads Container */
+.google-ads-container {
+  margin-top: 1rem;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.google-ad-placeholder {
+  width: 100%;
+  height: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f0f0f0;
+  border: 1px solid #e0e0e0;
+}
+
+.ad-placeholder-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  text-align: center;
+}
+
+.ad-placeholder-content p {
+  margin: 0.25rem 0;
+  font-size: 0.9rem;
+}
+
+.ad-placeholder-text {
+  font-size: 1.5rem !important;
+  font-weight: 300;
+  color: #bbb;
+}
+
+/* Reset Plan Your Trip button styling */
+.pyt-ai-btn {
+  background-color: transparent;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 0;
+  white-space: nowrap;
+  min-width: auto;
+  text-align: center;
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+
+/* Multi-level filter system */
+.filter-container {
+  margin: 2rem 0;
+}
+
+.filter-section {
+  margin-bottom: 1.5rem;
+}
+
+.filter-section-title {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.filter-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.filter-button, .filter-btn {
+  background: transparent;
+  border: 1px solid #ddd;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  border-radius: 3px;
+}
+
+.filter-button:hover, .filter-btn:hover, 
+.filter-button.active, .filter-btn.active {
+  background: #000;
+  color: white;
+  border-color: #000;
+}
+
+.filter-section.cities,
+.filter-section.price-categories {
+  display: none;
+}
+
+.filter-section.active {
+  display: block;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Style for active filter path */
+.active-filter-path {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.active-filter-path span {
+  margin: 0 0.5rem;
+}
+
+.active-filter-path strong {
+  color: #000;
+}
+
+.clear-filter {
+  margin-left: 0.5rem;
+  color: #999;
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: 0.8rem;
+}
+
+.clear-filter:hover {
+  color: #000;
+}
+
+/* Section container styling for index page balanced layout */
+.section-container {
+  margin: 2rem 0;
+  padding: 2rem;
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.top-section, .bottom-section {
+  height: 320px; /* Fixed exact height instead of min-height */
+  max-height: 320px; /* Ensuring maximum height is enforced */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.middle-section {
+  min-height: 480px; /* Make middle section even taller */
+  padding-bottom: 3rem; /* Add more padding at bottom */
+}
+
+/* Ensure equal height on mobile too */
+@media (max-width: 768px) {
+  .section-container {
+    padding: 1.5rem;
+  }
+  
+  .top-section, .bottom-section {
+    height: 280px;
+    max-height: 280px;
+  }
+  
+ .middle-section {
+    min-height: 420px;
+  }
+}
+
+/* Bottom Container - Slideshow styling */
+.bottom-container {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  margin-top: 0.90rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.slideshow-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.mySlides {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 1s ease, visibility 1s ease;
+  z-index: 1;
+}
+
+.mySlides.active {
+  opacity: 1;
+  visibility: visible;
+  z-index: 2;
+}
+
+/* Ensure all slides start with proper base z-index */
+#image-slideshow .mySlides {
+  z-index: 1;
+}
+
+/* Remove all existing fade animations */
+.fade {
+  animation: none !important;
+}
+
+/* Media queries for responsive layout */
+@media (max-width: 768px) {
+  .bottom-container {
+    height: 180px;
+  }
+}
+
+/* Bottom Spotlight Styles */
+.bottom-spotlight {
+  position: relative;
+  height: 320px !important; /* Increased to match top spotlight */
+  min-height: 320px !important;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #000;
+  margin-top: 0.9rem;
+}
+
+.spotlight-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.spotlight-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.spotlight-slide.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.spotlight-slide a {
+  display: block;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+  color: white;
+}
+
+.spotlight-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.spotlight-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 2rem;
+  background: linear-gradient(transparent, rgba(0,0,0,0.8));
+  color: white;
+}
+
+.spotlight-content .category {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-bottom: 0.5rem;
+}
+
+.spotlight-content h2 {
+  font-size: 1.5rem;
+  margin: 0.3rem 0;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.spotlight-content p {
+  font-size: 0.9rem;
+  margin: 0;
+  opacity: 0.9;
+}
+
+.spotlight-dots {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.5rem;
+  z-index: 10;
+}
+
+.spotlight-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.5);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.spotlight-dot.active {
+  background: white;
+}
+
+/* Essential CSS fixes for feed item visibility */
+.feed-grid .feed-item {
+  display: flex !important; /* Default state */
+}
+
+.feed-grid .feed-item.feed-hidden {
+  display: none !important; /* Will override any other display setting */
+}
+
+/* Fix spacing between feed items - reduced */
+.feed-grid {
+  gap: 1rem !important;
+  padding-bottom: 0 !important;
+}
+
+/* Dark Mode Content Section */
+.content-section.dark-mode {
+  background-color: #fff;
+  color: #777; /* Lighter text color for minimal look */
+  padding: 0.5rem;
+  border-radius: 8px;
+  margin-top: 0.3rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08); /* Lighter shadow */
+  height: 530px;
+  overflow: hidden;
+}
+
+/* Fix tab content display */
+.dark-mode .tab-content {
+  display: none; /* Hide by default */
+  height: calc(100% - 30px); /* Subtract tab buttons height */
+  overflow: hidden; /* No scrolling at this level */
+}
+
+.dark-mode .tab-content.active {
+  display: block; /* Show only active tab */
+}
+
+/* Fix section grid scrolling - single scrollable container */
+.dark-mode .section-grid {
+  height: calc(100% - 30px); /* Subtract navigation buttons height */
+  overflow-y: auto; /* Only this container should scroll */
+  gap: 0.3rem; /* Small gap between items */
+  padding-right: 3px; /* Space for scrollbar */
+}
+
+/* Simpler tab buttons with less height */
+.dark-mode .section-tabs {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.4rem;
+  padding-bottom: 0.2rem;
+  border-bottom: 1px solid #eee; /* Lighter border */
+}
+
+.dark-mode .tab-button {
+  padding: 0.2rem 0.4rem;
+  font-size: 0.7rem;
+  background: transparent;
+  color: #999; /* Light gray for inactive */
+  border: none;
+  cursor: pointer;
+  font-weight: 400; /* Less bold */
+}
+
+.dark-mode .tab-button.active {
+  color: #333; /* Darker for active */
+  position: relative;
+  font-weight: 500; /* Slightly bolder for active */
+}
+
+.dark-mode .tab-button.active:after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 100%;
+  height: 1px; /* Thinner line */
+  background-color: #333; /* Dark underline */
+}
+
+/* Clear any flexbox settings that might interfere */
+.dark-mode .section-navigation {
+  margin-top: 0.4rem;
+  padding-top: 0.2rem;
+  border-top: 1px solid #eee;
+  text-align: right; /* Match FEED navigation alignment */
+}
+
+/* Ultra compact country sections */
+.country-section {
+  margin-bottom: 0.4rem;
+  padding: 0.3rem;
+  background-color: #fafafa; /* Very light gray */
+  border-radius: 6px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03); /* Subtle shadow */
+}
+
+/* Tiny but visible item images */
+.dark-mode .section-grid .image-with-overlay {
+  height: 45px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+/* Ensure parent container fills height properly */
+.category-sections {
+  display: block; /* Clear flex properties */
+}
+
+/* Thinner scrollbar for cleaner look */
+.dark-mode .section-grid::-webkit-scrollbar {
+  width: 3px;
+}
+
+.dark-mode .section-grid::-webkit-scrollbar-thumb {
+  background-color: #666;
+  border-radius: 3px;
+}
+
+/* Reset any existing max-height constraints */
+.dark-mode .food-grid,
+.dark-mode .stays-grid,
+.dark-mode .wonders-grid,
+.dark-mode .products-grid {
+  max-height: none;
+}
+
+/* Ensure the hub section isn't too large */
+.hub-section {
+  margin: 0.5rem 0; /* Increased from 0.3rem */
+  padding: 1rem; /* Increased from 0.5rem */
+  max-height: 220px; /* Increased from 180px */
+}
+
+/* EASTWORLD HUB Section - Restore styling */
+.hub-section {
+  background-color: #fff;
+  color: #333;
+  padding: 1.2rem; /* Increased from 0.6rem */
+  border-radius: 10px; /* Increased from 8px */
+  margin: 0.5rem 0; /* Increased from 0.3rem */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  height: auto;
+  min-height: 180px;
+  margin-bottom: 0.5rem;
+}
+
+.hub-section h2 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-align: center;
+  margin-bottom: 0.6rem;
+  color: #333;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.3rem;
+}
+
+.hub-content {
+  text-align: center;
+}
+
+.hub-content p {
+  font-size: 0.7rem;
+  line-height: 1.3;
+  margin-bottom: 0.6rem;
+  color: #666;
+}
+
+/* Hub links grid layout */
+.hub-links {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.3rem;
+  margin-bottom: 0.6rem;
+}
+
+.hub-link {
+  font-size: 0.65rem;
+  color: #333;
+  text-decoration: none;
+  padding: 0.3rem;
+  background-color: #f8f8f8;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.hub-link:hover {
+  background-color: #ff4081;
+  color: white;
+}
+
+.hub-button {
+  display: inline-block;
+  background-color: #ff4081;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.3rem 1rem;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  margin-top: 0.4rem;
+}
+
+.hub-button:hover {
+  background-color: #f50057;
+  transform: translateY(-1px);
+}
+
+/* Bottom Container (Tabs section) styling */
+.content-section.dark-mode {
+  background-color: #121212;
+  color: #fff;
+  padding: 0.5rem;
+  border-radius: 8px;
+  margin-top: 0.3rem;
+  margin-bottom: 0.3rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  height: 600px;
+  overflow: hidden;
+}
+
+/* More compact country sections */
+.country-section {
+  margin-bottom: 0.2rem;
+  padding-bottom: 0.15rem;
+  border-bottom: 1px solid #333;
+}
+
+.country-header {
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: #ff4081;
+  margin: 0 0 0.1rem 0;
+  letter-spacing: 0.8px;
+}
+
+/* Super tiny items to fit more */
+.dark-mode .section-grid .image-with-overlay {
+  height: 45px;
+  position: relative;
+  overflow: hidden;
+}
+
+.dark-mode .section-grid .image-with-overlay img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.dark-mode .section-content {
+  padding: 0.2rem 0.25rem;
+}
+
+.dark-mode .section-content h3 {
+  font-size: 0.65rem;
+  margin: 0.1rem 0;
+  line-height: 1.1;
+  color: #555; /* Darker but not black */
+  font-weight: 500; /* Less bold for elegance */
+}
+
+/* Tiny category tags */
+.cuisine-tag, .property-type, .region-badge, .product-type {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  padding: 1px 2px;
+  border-radius: 2px;
+  font-size: 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* EASTWORLD HUB Section - Remove JOIN THE HUB button */
+.hub-button {
+  display: none; /* Hide the button */
+}
+
+/* More padding at bottom of hub content to compensate for removed button */
+.hub-content {
+  padding-bottom: 0.3rem;
+}
+
+/* Make bottom container shorter and ensure rounded borders are visible */
+.content-section.dark-mode {
+  height: 500px; /* Reduced from 600px */
+  margin-bottom: 1rem; /* Increased to ensure bottom border radius is visible */
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Ensure tab content doesn't overflow the container */
+.dark-mode .tab-content {
+  height: calc(100% - 25px); /* Account for tab buttons height */
+  overflow: hidden;
+}
+
+/* Make section grid shorter to stay within container boundaries */
+.dark-mode .section-grid {
+  height: calc(100% - 30px); /* Account for navigation buttons */
+  padding-bottom: 0.5rem; /* Add padding at bottom for visibility */
+}
+
+/* Add rounded containers for individual country items */
+.country-section {
+  margin-bottom: 0.3rem;
+  padding: 0.3rem;
+  background-color: #1a1a1a; /* Slightly lighter than container background */
+  border-radius: 6px;
+  border: 1px solid #333;
+}
+
+/* Adjust country headers to work with new container */
+.country-header {
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: #ff4081;
+  margin: 0 0 0.2rem 0;
+  letter-spacing: 0.8px;
+  padding-left: 0.2rem;
+}
+
+/* Make section item more compact within their new containers */
+.dark-mode .section-item {
+  background-color: #121212; /* Match container background */
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+/* Keep images small but with rounded corners */
+.dark-mode .section-grid .image-with-overlay {
+  height: 45px;
+  border-radius: 4px 4px 0 0;
+}
+
+/* Ensure vertical spacing works with new nested container structure */
+.dark-mode .section-navigation {
+  margin-top: 0.4rem;
+  padding-top: 0.2rem;
+}
+
+/* Ensure scroll behavior works with nested containers */
+.dark-mode .section-grid::-webkit-scrollbar {
+  width: 4px;
+}
+
+/* Increase bottom container height */
+.content-section.dark-mode {
+  height: 530px; /* Increased from 500px to make taller */
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Fix country sections - remove white line and adjust styling */
+.country-section {
+  margin-bottom: 0.3rem;
+  padding: 0.3rem;
+  background-color: #1a1a1a; /* Slightly lighter than container background */
+  border-radius: 6px;
+  border: none; /* Remove the border that was creating the white line */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Add subtle shadow instead */
+}
+
+/* Ensure images display properly */
+.dark-mode .section-grid .image-with-overlay {
+  height: 45px;
+  border-radius: 4px 4px 0 0;
+  background-color: #252525; /* Add background color for images that fail to load */
+  position: relative;
+}
+
+/* Always ensure images fill their container properly */
+.dark-mode .section-grid .image-with-overlay img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+/* Add a fallback for images that might not load */
+.dark-mode .section-grid .image-with-overlay::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2); /* Slight overlay for better text visibility */
+  z-index: 1;
+}
+
+/* More distinct country header */
+.country-header {
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: #ff4081;
+  margin: 0 0 0.3rem 0; /* Increased bottom margin */
+  letter-spacing: 0.8px;
+  padding-left: 0.2rem;
+  text-transform: uppercase; /* Make country names all caps */
+}
+
+/* Improve section grid scrolling smoothness */
+.dark-mode .section-grid {
+  scrollbar-width: thin;
+  scrollbar-color: #444 #222;
+  padding-right: 4px;
+  padding-bottom: 1rem; /* Extra padding at bottom to ensure all content is visible */
+}
+
+/* Ensure hub and content sections have better spacing */
+.hub-section {
+  margin: 0.3rem 0;
+  padding: 0.5rem;
+  max-height: none; /* Remove height restriction */
+  margin-bottom: 0.5rem; /* Add more space between sections */
+}
+
+/* Keep bottom container in light mode */
+.content-section.dark-mode {
+  background-color: #fff;
+  color: #333;
+  padding: 0.5rem;
+  border-radius: 8px;
+  margin-top: 0.3rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  height: 530px;
+  overflow: hidden;
+}
+
+/* Make nav buttons more visible with bright pink styling */
+.dark-mode .nav-button {
+  background-color: #ff4081;
+  color: white;
+  border: none;
+  padding: 0.3rem 0.6rem;
+  border-radius: 50px;
+  font-size: 0.7rem;
+  transition: all 0.3s ease;
+}
+
+.dark-mode .nav-button:hover:not(:disabled) {
+  background-color: #e0356d;
+  transform: translateY(-1px);
+}
+
+.dark-mode .nav-button:disabled {
+  background-color: #ffc0d5;
+  color: white;
+  opacity: 0.5;
+}
+
+/* Restore dark mode for the HUB section only */
+.hub-section {
+  background-color: #121212;
+  color: #fff;
+  padding: 0.6rem;
+  border-radius: 8px;
+  margin: 0.3rem 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  height: auto;
+  min-height: 180px;
+  margin-bottom: 0.5rem;
+}
+
+.hub-section h2 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-align: center;
+  margin-bottom: 0.6rem;
+  color: #fff;
+  border-bottom: 1px solid #333;
+  padding-bottom: 0.3rem;
+}
+
+.hub-content p {
+  font-size: 0.7rem;
+  line-height: 1.3;
+  margin-bottom: 0.6rem;
+  color: #ccc;
+}
+
+/* Hub links dark theme */
+.hub-links {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.3rem;
+  margin-bottom: 0.6rem;
+}
+
+.hub-link {
+  font-size: 0.65rem;
+  color: #fff;
+  text-decoration: none;
+  padding: 0.3rem;
+  background-color: #333;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.hub-link:hover {
+  background-color: #ff4081;
+  color: white;
+}
+
+/* Remove the hub button as requested earlier */
+.hub-button {
+  display: none;
+}
+
+/* Make item text grey instead of black in bottom container */
+.dark-mode .section-content h3 {
+  font-size: 0.65rem;
+  margin: 0.1rem 0;
+  line-height: 1.1;
+  color: #777; /* Changed from #333/black to grey */
+  font-weight: 500;
+}
+
+/* Lighter grey for location, product, visitor info */
+.location-price, .product-info, .visitor-info {
+  font-size: 0.55rem;
+  margin-top: 0.05rem;
+  color: #999; /* Light grey */
+}
+
+/* Set country headers to grey (not pink) */
+.country-header {
+  font-size: 0.6rem;
+  font-weight: 600;
+  color: #777; /* Changed from accent color to grey */
+  margin: 0 0 0.3rem 0;
+  letter-spacing: 0.8px;
+  padding-left: 0.2rem;
+  text-transform: uppercase;
+}
+
+/* Make navigation buttons black to match FEED section */
+.dark-mode .nav-button {
+  background-color: transparent;
+  color: #000; /* Changed to black */
+  border: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  padding: 0;
+  margin-left: 0.3rem;
+  transition: all 0.2s ease;
+}
+
+.dark-mode .nav-button:hover:not(:disabled) {
+  background-color: #f0f0f0;
+  transform: translateY(-1px);
+}
+
+.dark-mode .nav-button:disabled {
+  color: #ccc; /* Light grey when disabled */
+  background-color: transparent;
+  cursor: not-allowed;
+}
+
+/* Ensure tabs styling matches the clean design */
+.dark-mode .tab-button {
+  color: #777; /* Grey for inactive */
+}
+
+.dark-mode .tab-button.active {
+  color: #000; /* Black for active */
+}
+
+.dark-mode .tab-button.active:after {
+  background-color: #000; /* Black underline */
+}
+
+/* Ultra-compact container with no scrolling */
+.content-section.dark-mode {
+  background-color: #fff;
+  color: #777;
+  padding: 0.4rem 0.4rem 0.2rem 0.4rem;
+  border-radius: 8px;
+  margin-top: 0.3rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  height: auto; /* Let content determine height instead of fixed height */
+  overflow: visible; /* No scrolling */
+}
+
+/* Make section grid display without scrolling */
+.dark-mode .section-grid {
+  display: grid;
+  gap: 0.2rem;
+  height: auto;
+  overflow: visible; /* No scrolling */
+  padding-right: 0;
+}
+
+/* Ultra-compact country sections */
+.country-section {
+  margin-bottom: 0.15rem;
+  padding: 0.15rem;
+  background-color: #fafafa;
+  border-radius: 4px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+/* Tiny country headers */
+.country-header {
+  font-size: 0.55rem;
+  font-weight: 600;
+  color: #777;
+  margin: 0 0 0.1rem 0;
+  letter-spacing: 0.5px;
+  padding-left: 0.1rem;
+  text-transform: uppercase;
+}
+
+/* Smaller images */
+.dark-mode .section-grid .image-with-overlay {
+  height: 35px; /* Reduced from 45px */
+  border-radius: 3px;
+}
+
+/* Tighter content spacing */
+.dark-mode .section-content {
+  padding: 0.1rem 0.15rem;
+}
+
+/* Smaller text */
+.dark-mode .section-content h3 {
+  font-size: 0.6rem;
+  margin: 0.05rem 0;
+  line-height: 1;
+  color: #777;
+  font-weight: 500;
+}
+
+/* Micro location info */
+.location-price, .product-info, .visitor-info {
+  font-size: 0.5rem;
+  margin-top: 0.05rem;
+  color: #999;
+}
+
+/* Smaller section tabs */
+.dark-mode .section-tabs {
+  margin-bottom: 0.2rem;
+  padding-bottom: 0.1rem;
+}
+
+/* Smaller tab buttons */
+.dark-mode .tab-button {
+  padding: 0.1rem 0.2rem;
+  font-size: 0.65rem;
+}
+
+/* Reduced space for navigation */
+.dark-mode .section-navigation {
+  margin-top: 0.2rem;
+  padding-top: 0.1rem;
+  height: 20px;
+}
+
+/* More compact nav buttons */
+.dark-mode .nav-button {
+  width: 20px;
+  height: 20px;
+  font-size: 0.7rem;
+}
+
+/* Tiny category tags */
+.cuisine-tag, .property-type, .region-badge, .product-type {
+  font-size: 0.45rem;
+  padding: 0 1px;
+  top: 1px;
+  right: 1px;
+}
+
+/* Ensure tab content isn't hidden */
+.dark-mode .tab-content {
+  height: auto;
+  overflow: visible;
+}
+
+.dark-mode .tab-content.active {
+  display: block;
+}
+
+/* Expand container to better use available space */
+.content-section.dark-mode {
+  background-color: #fff;
+  color: #777;
+  padding: 0.6rem;
+  border-radius: 8px;
+  margin-top: 0.3rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  height: 500px; /* Balanced height to use space effectively */
+  overflow: hidden;
+}
+
+/* Fix grid layout to use space better */
+.dark-mode .section-grid {
+  display: grid;
+  gap: 0.5rem; /* More breathing room between items */
+  height: calc(100% - 60px); /* Account for tabs and navigation */
+  overflow-y: auto; /* Allow scrolling if needed */
+  padding-right: 4px;
+}
+
+/* Ensure tabs fit nicely */
+.dark-mode .section-tabs {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.6rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid #eee;
+  background-color: #fff; /* Ensure white background */
+}
+
+/* Make country sections more spacious */
+.country-section {
+  margin-bottom: 0.6rem;
+  padding: 0.5rem;
+  background-color: #f8f8f8; /* Light gray background */
+  border-radius: 6px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+/* More readable country headers */
+.country-header {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #777;
+  margin: 0 0 0.4rem 0;
+  letter-spacing: 0.8px;
+  padding-left: 0.2rem;
+  text-transform: uppercase;
+}
+
+/* Make items more visually appealing */
+.dark-mode .section-grid .image-with-overlay {
+  height: 60px; /* Larger images */
+  border-radius: 4px;
+  background-color: #f8f8f8; /* Ensure background isn't black */
+}
+
+/* Better text styles */
+.dark-mode .section-content {
+  padding: 0.3rem 0.4rem;
+  background-color: #fff; /* Ensure white background */
+}
+
+.dark-mode .section-content h3 {
+  font-size: 0.75rem;
+  margin: 0.15rem 0;
+  line-height: 1.2;
+  color: #777; /* Grey text as requested */
+  font-weight: 500;
+}
+
+/* Location info styling */
+.location-price, .product-info, .visitor-info {
+  font-size: 0.65rem;
+  margin-top: 0.15rem;
+  color: #999;
+}
+
+/* Clean navigation buttons matching FEED section */
+.dark-mode .section-navigation {
+  margin-top: 0.5rem;
+  padding-top: 0.3rem;
+  border-top: 1px solid #eee;
+  text-align: right;
+  background-color: #fff; /* Ensure white background */
+}
+
+.dark-mode .nav-button {
+  background-color: transparent;
+  color: #000; /* Black arrows as requested */
+  border: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  padding: 0;
+  margin-left: 0.3rem;
+}
+
+/* Fix any remaining dark backgrounds */
+.dark-mode .tab-content {
+  height: auto;
+  background-color: #fff;
+}
+
+.dark-mode .tab-content.active {
+  display: block;
+  background-color: #fff;
+}
+
+/* Make section items cleaner */
+.dark-mode .section-item {
+  background-color: transparent;
+  transition: transform 0.2s ease;
+}
+
+.dark-mode .section-item:hover {
+  transform: translateY(-2px);
+}
+
+/* Optimize container to fit content without scrolling */
+.content-section.dark-mode {
+  background-color: #fff;
+  color: #777;
+  padding: 0.5rem 0.6rem 0.4rem 0.6rem;
+  border-radius: 8px;
+  margin-top: 0.3rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  height: auto; /* Let content determine height */
+  overflow: visible; /* No scrolling */
+}
+
+/* Remove scroll from section grid */
+.dark-mode .section-grid {
+  display: grid;
+  gap: 0.3rem; /* Reduced spacing between country sections */
+  height: auto;
+  overflow: visible; /* No scrolling */
+  padding-right: 0;
+}
+
+/* Make country sections more compact */
+.country-section {
+  margin-bottom: 0.2rem; /* Minimal bottom margin */
+  padding: 0.25rem; /* Reduced internal padding */
+  background-color: #f8f8f8;
+  border-radius: 6px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+/* Tighter country headers */
+.country-header {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: #777;
+  margin: 0 0 0.15rem 0; /* Reduced bottom margin */
+  letter-spacing: 0.5px;
+  padding-left: 0.1rem;
+  text-transform: uppercase;
+}
+
+/* Smaller images */
+.dark-mode .section-grid .image-with-overlay {
+  height: 40px; /* Reduced height */
+  border-radius: 4px;
+}
+
+/* Tighter content padding */
+.dark-mode .section-content {
+  padding: 0.15rem 0.2rem; /* Reduced padding */
+}
+
+/* Smaller text with less margin */
+.dark-mode .section-content h3 {
+  font-size: 0.65rem;
+  margin: 0.05rem 0; /* Minimal margin */
+  line-height: 1.1;
+  color: #777;
+  font-weight: 500;
+}
+
+/* More compact location info */
+.location-price, .product-info, .visitor-info {
+  font-size: 0.55rem;
+  margin-top: 0.05rem;
+  color: #999;
+}
+
+/* Compact tab buttons */
+.dark-mode .section-tabs {
+  margin-bottom: 0.3rem;
+  padding-bottom: 0.15rem;
+}
+
+/* Compact navigation area */
+.dark-mode .section-navigation {
+  margin-top: 0.3rem;
+  padding-top: 0.15rem;
+}
+
+/* Keep tabs from wrapping by ensuring active tab content is visible */
+.dark-mode .tab-content {
+  display: none;
+  height: auto;
+  overflow: visible;
+}
+
+.dark-mode .tab-content.active {
+  display: block;
+}
+
+/* Ensure all country sections in a tab are displayed in a compact form */
+.dark-mode .section-grid .country-section:last-child {
+  margin-bottom: 0; /* Remove margin from last item */
+}
+
+/* Hide CITIES navigation link across all pages */
+.nav-item[href="cities.html"],
+.nav-item[href="../cities.html"] {
+  display: none !important;
+}
