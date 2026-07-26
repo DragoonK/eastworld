@@ -31,6 +31,7 @@ function showDashboard() {
   loadVideos();
   loadEvents();
   loadSlides();
+  loadUsers();
 }
 
 $('#login-form').addEventListener('submit', async (e) => {
@@ -733,3 +734,38 @@ $('#slide-form').addEventListener('submit', async (e) => {
     msg.textContent = 'Error: ' + result.error;
   }
 });
+
+// ============================================================
+// USERS (read-only list of registered accounts)
+// ============================================================
+
+async function loadUsers() {
+  const res = await fetch('/api/admin/users', { headers: authHeaders() });
+  if (!res.ok) {
+    $('#users-table').innerHTML = '<p class="posts-status">Could not load users.</p>';
+    return;
+  }
+  const users = await res.json();
+
+  if (users.length === 0) {
+    $('#users-table').innerHTML =
+      '<p class="posts-status">No registered users yet.</p>';
+    return;
+  }
+
+  $('#users-table').innerHTML = `
+    <p class="table-count">${users.length} user${users.length === 1 ? '' : 's'}</p>
+    <table class="admin-table">
+      <thead><tr><th>Username</th><th>Email</th><th>Type</th><th>Home city</th><th>Joined</th></tr></thead>
+      <tbody>
+        ${users.map(u => `
+          <tr>
+            <td>${u.username}</td>
+            <td>${u.email}</td>
+            <td>${u.user_type || ''}</td>
+            <td>${u.home_city || '—'}</td>
+            <td>${(u.created_at || '').slice(0, 10)}</td>
+          </tr>`).join('')}
+      </tbody>
+    </table>`;
+}

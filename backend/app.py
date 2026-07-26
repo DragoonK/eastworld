@@ -473,6 +473,23 @@ def admin_check():
     return jsonify({"ok": True})
 
 
+@app.route("/api/admin/users")
+def list_users():
+    """All registered users, for the admin dashboard. Never
+    returns password_hash — no reason that value should ever
+    travel over the network, even to you."""
+    if not is_authorized():
+        return jsonify({"error": "Wrong password"}), 401
+
+    conn = get_db()
+    rows = conn.execute(
+        "SELECT id, username, email, user_type, home_city, created_at"
+        " FROM users ORDER BY created_at DESC"
+    ).fetchall()
+    conn.close()
+    return jsonify([dict(row) for row in rows])
+
+
 # ---------------------------- Auth ----------------------------
 
 VALID_USER_TYPES = {"local", "expat", "visitor"}
