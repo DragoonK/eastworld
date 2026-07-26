@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- SEO_TAGS -->
   <link rel="stylesheet" href="home.css">
+  <link rel="stylesheet" href="reviews.css">
 </head>
 <body>
 
@@ -21,8 +22,8 @@
       <div class="nav-links">
         <a href="ew-events.html">EW EVENTS</a>
         <a href="community.html">EW HUB</a>
-        <a href="login.html">LOGIN</a>
-        <a href="register.html">REGISTER</a>
+        <a href="login.html" class="auth-link">LOGIN</a>
+        <a href="register.html" class="auth-link">REGISTER</a>
       </div>
     </nav>
   </header>
@@ -31,6 +32,8 @@
     <article id="listing-container">
       <p class="posts-status">Loading&hellip;</p>
     </article>
+
+    <section id="reviews-mount"></section>
 
     <section id="related-section" hidden>
       <h2 id="related-title" class="related-title"></h2>
@@ -129,5 +132,7 @@
 
     loadListing();
   </script>
+  <script src="auth.js"></script>
+  <script src="reviews.js"></script>
 </body>
 </html>
