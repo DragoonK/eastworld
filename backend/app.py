@@ -325,6 +325,32 @@ def ensure_users_table():
     conn.close()
 
 
+def ensure_reviews_table():
+    """Create the reviews table if needed.
+
+    One review per user per listing — a UNIQUE constraint enforces
+    it, so re-submitting is an update, not a duplicate. user_type
+    isn't stored here: it's read live from the users table via JOIN,
+    so the local/expat split always reflects a reviewer's CURRENT
+    tag, not whatever it was when they posted.
+    """
+    conn = get_db()
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS reviews (
+            id          INTEGER PRIMARY KEY AUTOINCREMENT,
+            listing_id  INTEGER NOT NULL REFERENCES listings(id),
+            user_id     INTEGER NOT NULL REFERENCES users(id),
+            rating      INTEGER NOT NULL CHECK (rating BETWEEN 1 AND 5),
+            body        TEXT DEFAULT '',
+            created_at  TEXT NOT NULL DEFAULT (datetime('now')),
+            updated_at  TEXT NOT NULL DEFAULT (datetime('now')),
+            UNIQUE(listing_id, user_id)
+        )
+    """)
+    conn.commit()
+    conn.close()
+
+
 # Accepts full YouTube URLs in any common shape (watch, shorts,
 # youtu.be, embed, live) or a bare 11-character video id.
 YOUTUBE_URL_RE = re.compile(
@@ -498,10 +524,15 @@ USER_PUBLIC_COLS = (
 
 def user_public(row):
     """Safe user payload — never includes password_hash."""
-    return {k: row[k] for k in (
+    data = {k: row[k] for k in (
         "id", "username", "email", "user_type", "home_city",
         "profile_image_url", "country", "bio", "role", "created_at",
     )}
+    # Optional: present on /api/auth/me after the reviews table exists
+    keys = row.keys() if hasattr(row, "keys") else []
+    if "review_count" in keys:
+        data["review_count"] = row["review_count"]
+    return data
 
 
 @app.route("/api/admin/users")
@@ -629,10 +660,12 @@ def me():
         return jsonify({"error": "Not logged in"}), 401
 
     conn = get_db()
-    user = conn.execute(
-        f"SELECT {USER_PUBLIC_COLS} FROM users WHERE id = ?",
-        (user_id,),
-    ).fetchone()
+    user = conn.execute("""
+        SELECT u.id, u.username, u.email, u.user_type, u.home_city,
+               u.profile_image_url, u.country, u.bio, u.role, u.created_at,
+               (SELECT COUNT(*) FROM reviews WHERE user_id = u.id) AS review_count
+        FROM users u WHERE u.id = ?
+    """, (user_id,)).fetchone()
     conn.close()
 
     if user is None:
@@ -909,6 +942,159 @@ def get_listing(listing_id):
     if row is None:
         return jsonify({"error": "Listing not found"}), 404
     return jsonify(dict(row))
+
+
+# --------------------------- Reviews ---------------------------
+
+@app.route("/api/listings/<int:listing_id>/reviews")
+def list_reviews(listing_id):
+    """All reviews for a listing, plus the local/expat/visitor split.
+
+    Three separate averages — not one blended score. 'overall' is
+    everyone combined for anyone who just wants a single number.
+    """
+    conn = get_db()
+    listing = conn.execute(
+        "SELECT id FROM listings WHERE id = ?", (listing_id,)
+    ).fetchone()
+    if listing is None:
+        conn.close()
+        return jsonify({"error": "Listing not found"}), 404
+
+    rows = conn.execute("""
+        SELECT r.id, r.rating, r.body, r.created_at, r.updated_at,
+               u.id AS user_id, u.username, u.profile_image_url,
+               u.user_type, u.country
+        FROM reviews r JOIN users u ON u.id = r.user_id
+        WHERE r.listing_id = ?
+        ORDER BY r.created_at DESC
+    """, (listing_id,)).fetchall()
+    conn.close()
+
+    reviews = [dict(row) for row in rows]
+
+    summary = {}
+    for key in ("local", "expat", "visitor"):
+        ratings = [r["rating"] for r in reviews if r["user_type"] == key]
+        summary[key] = {
+            "average": round(sum(ratings) / len(ratings), 1) if ratings else None,
+            "count": len(ratings),
+        }
+    all_ratings = [r["rating"] for r in reviews]
+    summary["overall"] = {
+        "average": round(sum(all_ratings) / len(all_ratings), 1) if all_ratings else None,
+        "count": len(all_ratings),
+    }
+
+    return jsonify({"summary": summary, "reviews": reviews})
+
+
+@app.route("/api/listings/<int:listing_id>/reviews", methods=["POST"])
+def submit_review(listing_id):
+    """Create or update the logged-in user's review for this listing.
+
+    Submitting again updates the existing review (UNIQUE constraint)
+    — one honest opinion per person per place.
+    """
+    user_id = session.get("user_id")
+    if not user_id:
+        return jsonify({"error": "You must be logged in to leave a review"}), 401
+
+    conn = get_db()
+    listing = conn.execute(
+        "SELECT id FROM listings WHERE id = ?", (listing_id,)
+    ).fetchone()
+    if listing is None:
+        conn.close()
+        return jsonify({"error": "Listing not found"}), 404
+
+    data = request.get_json(silent=True) or {}
+    try:
+        rating = int(data.get("rating"))
+    except (TypeError, ValueError):
+        conn.close()
+        return jsonify({"error": "Rating must be a whole number from 1 to 5"}), 400
+    body = (data.get("body") or "").strip()
+
+    if rating < 1 or rating > 5:
+        conn.close()
+        return jsonify({"error": "Rating must be a whole number from 1 to 5"}), 400
+
+    existing = conn.execute(
+        "SELECT id FROM reviews WHERE listing_id = ? AND user_id = ?",
+        (listing_id, user_id),
+    ).fetchone()
+
+    if existing:
+        conn.execute(
+            "UPDATE reviews SET rating = ?, body = ?, updated_at = datetime('now')"
+            " WHERE id = ?",
+            (rating, body, existing["id"]),
+        )
+        review_id, message = existing["id"], "Review updated"
+        status = 200
+    else:
+        cursor = conn.execute(
+            "INSERT INTO reviews (listing_id, user_id, rating, body) VALUES (?, ?, ?, ?)",
+            (listing_id, user_id, rating, body),
+        )
+        review_id, message = cursor.lastrowid, "Review submitted"
+        status = 201
+
+    conn.commit()
+    conn.close()
+    return jsonify({"id": review_id, "message": message}), status
+
+
+@app.route("/api/reviews/<int:review_id>", methods=["DELETE"])
+def delete_review(review_id):
+    """Delete a review — the author, or an admin, can do this."""
+    user_id = session.get("user_id")
+    if not user_id:
+        return jsonify({"error": "You must be logged in"}), 401
+
+    conn = get_db()
+    review = conn.execute(
+        "SELECT * FROM reviews WHERE id = ?", (review_id,)
+    ).fetchone()
+    if review is None:
+        conn.close()
+        return jsonify({"error": "Review not found"}), 404
+
+    user = conn.execute(
+        "SELECT role FROM users WHERE id = ?", (user_id,)
+    ).fetchone()
+    is_owner = review["user_id"] == user_id
+    is_admin = (user and user["role"] == "admin") or is_authorized()
+
+    if not (is_owner or is_admin):
+        conn.close()
+        return jsonify({"error": "You can only delete your own reviews"}), 403
+
+    conn.execute("DELETE FROM reviews WHERE id = ?", (review_id,))
+    conn.commit()
+    conn.close()
+    return jsonify({"id": review_id, "message": "Review deleted"})
+
+
+@app.route("/api/users/me/reviews")
+def my_reviews():
+    """The logged-in user's review history — profile count + list."""
+    user_id = session.get("user_id")
+    if not user_id:
+        return jsonify({"error": "Not logged in"}), 401
+
+    conn = get_db()
+    rows = conn.execute("""
+        SELECT r.id, r.rating, r.body, r.created_at,
+               l.id AS listing_id, l.name AS listing_name,
+               l.type, l.city, l.country
+        FROM reviews r JOIN listings l ON l.id = r.listing_id
+        WHERE r.user_id = ?
+        ORDER BY r.created_at DESC
+    """, (user_id,)).fetchall()
+    conn.close()
+    return jsonify([dict(row) for row in rows])
 
 
 @app.route("/api/listings", methods=["POST"])
@@ -1592,6 +1778,7 @@ ensure_videos_table()
 ensure_events_table()
 ensure_slides_table()
 ensure_users_table()
+ensure_reviews_table()
 normalize_cities_once()
 backfill_listing_media()
 run_once("purge_thailand_2026_07", purge_thailand)
