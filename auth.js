@@ -101,10 +101,25 @@ function fillIdCard(user, opts = {}) {
   else if (city) placeEl.textContent = city;
   else placeEl.textContent = opts.emptyPlace || 'Pick a country to begin';
 
+  // Role drives card tier; elevated roles own the badge slot.
+  // Members keep Local / Expat / Visitor in a muted badge.
+  const role = (user.role || 'member').toLowerCase();
   const type = (user.user_type || 'visitor').toLowerCase();
+  card.dataset.role = ['admin', 'creator', 'member'].includes(role) ? role : 'member';
+
   if (badgeEl) {
-    badgeEl.textContent = type;
-    badgeEl.dataset.type = type;
+    delete badgeEl.dataset.type;
+    delete badgeEl.dataset.role;
+    if (role === 'admin') {
+      badgeEl.textContent = 'Founder';
+      badgeEl.dataset.role = 'admin';
+    } else if (role === 'creator') {
+      badgeEl.textContent = 'Creator';
+      badgeEl.dataset.role = 'creator';
+    } else {
+      badgeEl.textContent = type;
+      badgeEl.dataset.type = type;
+    }
   }
 
   const initials = initialsFrom(username);
