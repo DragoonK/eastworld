@@ -520,37 +520,189 @@ async function loadProfilePage() {
 
 loadProfilePage();
 
-// ---------- Nav auth state ----------
+// ---------- Nav auth state (pass chip + dropdown card) ----------
 
-async function checkAuthState() {
+function ensurePassNavStyles() {
+  if (document.getElementById('pass-nav-css')) return;
+  const link = document.createElement('link');
+  link.id = 'pass-nav-css';
+  link.rel = 'stylesheet';
+  // auth.js is always loaded from the site root on main pages
+  link.href = 'pass-nav.css';
+  document.head.appendChild(link);
+}
+
+function fillNavPassCard(user, root) {
+  const role = (user.role || 'member').toLowerCase();
+  const type = (user.user_type || 'visitor').toLowerCase();
+  const username = user.username || 'Member';
+  const card = root.querySelector('.nav-pass-id');
+  const badge = root.querySelector('.id-badge');
+  const nameEl = root.querySelector('.id-meta h3');
+  const placeEl = root.querySelector('.id-meta p');
+  const initialsEl = root.querySelector('.id-avatar span');
+  const photoEl = root.querySelector('.id-avatar img');
+  const sinceEl = root.querySelector('[data-nav-since]');
+  const reviewsEl = root.querySelector('[data-nav-reviews]');
+
+  if (card) {
+    card.dataset.role = ['admin', 'creator', 'member'].includes(role) ? role : 'member';
+  }
+  if (nameEl) nameEl.textContent = username;
+  const country = titleCaseSlug(user.country);
+  const city = titleCaseSlug(user.home_city);
+  if (placeEl) {
+    if (country && city) placeEl.textContent = `${country} · ${city}`;
+    else if (country) placeEl.textContent = country;
+    else if (city) placeEl.textContent = city;
+    else placeEl.textContent = 'Eastworld member';
+  }
+  if (badge) {
+    delete badge.dataset.type;
+    delete badge.dataset.role;
+    if (role === 'admin') {
+      badge.textContent = 'Founder';
+      badge.dataset.role = 'admin';
+    } else if (role === 'creator') {
+      badge.textContent = 'Creator';
+      badge.dataset.role = 'creator';
+    } else {
+      badge.textContent = type;
+      badge.dataset.type = type;
+    }
+  }
+  if (initialsEl) initialsEl.textContent = initialsFrom(username);
+  if (photoEl) {
+    if (user.profile_image_url) {
+      photoEl.src = user.profile_image_url;
+      photoEl.alt = username;
+      photoEl.hidden = false;
+      if (initialsEl) initialsEl.hidden = true;
+    } else {
+      photoEl.removeAttribute('src');
+      photoEl.hidden = true;
+      if (initialsEl) initialsEl.hidden = false;
+    }
+  }
+  if (sinceEl) sinceEl.textContent = formatMemberSince(user.created_at);
+  if (reviewsEl) reviewsEl.textContent = String(user.review_count ?? 0);
+}
+
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function mountNavPass(user) {
+  // Skip on auth/profile shells — those pages already show the full pass
+  if (document.querySelector('.auth-shell')) return;
+
   const loginLink = document.querySelector('a[href="login.html"], a[href$="/login.html"]');
   const registerLink = document.querySelector('a[href="register.html"], a[href$="/register.html"]');
+  if (!loginLink && !registerLink) return;
+
+  ensurePassNavStyles();
+
+  const role = (user.role || 'member').toLowerCase();
+  const safeRole = ['admin', 'creator', 'member'].includes(role) ? role : 'member';
+  const name = escapeHtml((user.username || 'Member').toUpperCase());
+  const initials = escapeHtml(initialsFrom(user.username));
+  const photo = user.profile_image_url
+    ? `<img src="${escapeHtml(user.profile_image_url)}" alt="">`
+    : initials;
+
+  const wrap = document.createElement('div');
+  wrap.className = 'nav-pass auth-link';
+  wrap.innerHTML = `
+    <button type="button" class="nav-pass-chip" data-role="${safeRole}" aria-expanded="false" aria-haspopup="true">
+      <span class="nav-pass-avatar">${photo}</span>
+      <span class="nav-pass-name">${name}</span>
+    </button>
+    <div class="nav-pass-menu" hidden>
+      <article class="nav-pass-id" data-role="${safeRole}">
+        <div class="id-card-top">
+          <div class="id-card-mark">Eastworld<small>Member pass</small></div>
+          <span class="id-badge">Member</span>
+        </div>
+        <div class="id-card-body">
+          <div class="id-avatar">
+            <span></span>
+            <img alt="" hidden>
+          </div>
+          <div class="id-meta">
+            <h3></h3>
+            <p></p>
+          </div>
+        </div>
+        <div class="id-card-foot">
+          <div>Reviews<strong data-nav-reviews>0</strong></div>
+          <div>Member since<strong data-nav-since>—</strong></div>
+        </div>
+      </article>
+      <div class="nav-pass-menu-actions">
+        <a href="profile.html">Open pass</a>
+        <button type="button" data-nav-logout>Log out</button>
+      </div>
+    </div>
+  `;
+
+  fillNavPassCard(user, wrap);
+
+  const chip = wrap.querySelector('.nav-pass-chip');
+  const menu = wrap.querySelector('.nav-pass-menu');
+  chip.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const open = menu.hidden;
+    menu.hidden = !open;
+    wrap.classList.toggle('is-open', open);
+    chip.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  document.addEventListener('click', () => {
+    menu.hidden = true;
+    wrap.classList.remove('is-open');
+    chip.setAttribute('aria-expanded', 'false');
+  });
+  menu.addEventListener('click', (e) => e.stopPropagation());
+
+  wrap.querySelector('[data-nav-logout]')?.addEventListener('click', async () => {
+    await fetch('/api/auth/logout', { method: 'POST' });
+    window.location.reload();
+  });
+
+  const stack = registerLink?.closest('.login-register-stack')
+    || loginLink?.closest('.login-register-stack');
+  if (stack) {
+    stack.replaceWith(wrap);
+  } else if (registerLink) {
+    registerLink.replaceWith(wrap);
+    loginLink?.remove();
+  } else if (loginLink) {
+    loginLink.replaceWith(wrap);
+  }
+}
+
+async function checkAuthState() {
+  // Don't hide auth links forever on login/register/profile pages
+  const onAuthShell = !!document.querySelector('.auth-shell');
 
   try {
     const res = await fetch('/api/auth/me');
     if (!res.ok) return;
 
     const user = await res.json();
-
-    if (loginLink) {
-      loginLink.textContent = 'LOG OUT';
-      loginLink.href = '#';
-      loginLink.addEventListener('click', async (e) => {
-        e.preventDefault();
-        await fetch('/api/auth/logout', { method: 'POST' });
-        window.location.reload();
-      });
-    }
-    if (registerLink) {
-      registerLink.textContent = user.username.toUpperCase();
-      registerLink.href = 'profile.html';
-    }
+    mountNavPass(user);
   } catch (err) {
     // silent fail — links stay as LOGIN/REGISTER
   } finally {
-    document.querySelectorAll('.auth-link').forEach((el) => {
-      el.style.visibility = 'visible';
-    });
+    if (!onAuthShell) {
+      document.querySelectorAll('.auth-link').forEach((el) => {
+        el.style.visibility = 'visible';
+      });
+    }
   }
 }
 
