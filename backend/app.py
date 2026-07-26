@@ -18,7 +18,8 @@ import sqlite3
 import time
 from pathlib import Path
 
-from flask import Flask, jsonify, request, send_from_directory
+from flask import Flask, jsonify, request, send_from_directory, session
+from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
 
 BASE_DIR = Path(__file__).resolve().parent          # .../backend
@@ -40,6 +41,7 @@ ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif", "webp"}
 ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "eastworld")
 
 app = Flask(__name__)
+app.secret_key = os.environ.get("SECRET_KEY", "dev-secret-change-in-production")
 app.config["MAX_CONTENT_LENGTH"] = 8 * 1024 * 1024  # reject uploads over 8 MB
 
 
@@ -283,6 +285,29 @@ def ensure_slides_table():
     conn.close()
 
 
+def ensure_users_table():
+    """Create the users table if needed.
+
+    user_type is the local/expat/visitor tag that can power split
+    reviews later. Passwords are never stored in plain text —
+    only a salted hash via werkzeug's generate_password_hash.
+    """
+    conn = get_db()
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS users (
+            id            INTEGER PRIMARY KEY AUTOINCREMENT,
+            username      TEXT NOT NULL UNIQUE,
+            email         TEXT NOT NULL UNIQUE,
+            password_hash TEXT NOT NULL,
+            user_type     TEXT NOT NULL DEFAULT 'visitor',
+            home_city     TEXT DEFAULT '',
+            created_at    TEXT NOT NULL DEFAULT (datetime('now'))
+        )
+    """)
+    conn.commit()
+    conn.close()
+
+
 # Accepts full YouTube URLs in any common shape (watch, shorts,
 # youtu.be, embed, live) or a bare 11-character video id.
 YOUTUBE_URL_RE = re.compile(
@@ -446,6 +471,101 @@ def admin_check():
     if not is_authorized():
         return jsonify({"error": "Wrong password"}), 401
     return jsonify({"ok": True})
+
+
+# ---------------------------- Auth ----------------------------
+
+VALID_USER_TYPES = {"local", "expat", "visitor"}
+
+
+@app.route("/api/auth/register", methods=["POST"])
+def register():
+    """Create a new user account and log them in."""
+    data = request.get_json(silent=True) or {}
+    username = (data.get("username") or "").strip()
+    email = (data.get("email") or "").strip().lower()
+    password = data.get("password") or ""
+    user_type = (data.get("user_type") or "").strip().lower()
+    home_city = normalize_city(data.get("home_city") or "") if data.get("home_city") else ""
+
+    if not username or not email or not password:
+        return jsonify({"error": "Username, email and password are required"}), 400
+    if len(password) < 6:
+        return jsonify({"error": "Password must be at least 6 characters"}), 400
+    if user_type not in VALID_USER_TYPES:
+        return jsonify({"error": "user_type must be local, expat or visitor"}), 400
+
+    conn = get_db()
+    existing = conn.execute(
+        "SELECT 1 FROM users WHERE email = ? OR username = ?",
+        (email, username),
+    ).fetchone()
+    if existing:
+        conn.close()
+        return jsonify({"error": "That username or email is already taken"}), 409
+
+    # pbkdf2:sha256 works on macOS system Python; default scrypt may not.
+    password_hash = generate_password_hash(password, method="pbkdf2:sha256")
+    cursor = conn.execute(
+        "INSERT INTO users (username, email, password_hash, user_type, home_city)"
+        " VALUES (?, ?, ?, ?, ?)",
+        (username, email, password_hash, user_type, home_city),
+    )
+    conn.commit()
+    new_id = cursor.lastrowid
+    conn.close()
+
+    session["user_id"] = new_id
+    return jsonify({"id": new_id, "username": username, "message": "Account created"}), 201
+
+
+@app.route("/api/auth/login", methods=["POST"])
+def login():
+    """Log in with email + password; stores user_id in the session."""
+    data = request.get_json(silent=True) or {}
+    email = (data.get("email") or "").strip().lower()
+    password = data.get("password") or ""
+
+    if not email or not password:
+        return jsonify({"error": "Email and password are required"}), 400
+
+    conn = get_db()
+    user = conn.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()
+    conn.close()
+
+    if user is None or not check_password_hash(user["password_hash"], password):
+        return jsonify({"error": "Invalid email or password"}), 401
+
+    session["user_id"] = user["id"]
+    return jsonify({"id": user["id"], "username": user["username"], "message": "Logged in"})
+
+
+@app.route("/api/auth/logout", methods=["POST"])
+def logout():
+    """Clear the logged-in user from the session."""
+    session.pop("user_id", None)
+    return jsonify({"message": "Logged out"})
+
+
+@app.route("/api/auth/me")
+def me():
+    """Return the currently logged-in user, or 401 if none."""
+    user_id = session.get("user_id")
+    if not user_id:
+        return jsonify({"error": "Not logged in"}), 401
+
+    conn = get_db()
+    user = conn.execute(
+        "SELECT id, username, email, user_type, home_city FROM users WHERE id = ?",
+        (user_id,),
+    ).fetchone()
+    conn.close()
+
+    if user is None:
+        session.pop("user_id", None)
+        return jsonify({"error": "Not logged in"}), 401
+    return jsonify(dict(user))
+
 
 @app.route("/api/posts")
 def list_posts():
@@ -1330,6 +1450,7 @@ ensure_trending_table()
 ensure_videos_table()
 ensure_events_table()
 ensure_slides_table()
+ensure_users_table()
 normalize_cities_once()
 backfill_listing_media()
 run_once("purge_thailand_2026_07", purge_thailand)
