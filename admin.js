@@ -756,14 +756,20 @@ async function loadUsers() {
   $('#users-table').innerHTML = `
     <p class="table-count">${users.length} user${users.length === 1 ? '' : 's'}</p>
     <table class="admin-table">
-      <thead><tr><th>Username</th><th>Email</th><th>Type</th><th>Home city</th><th>Joined</th></tr></thead>
+      <thead><tr><th></th><th>Username</th><th>Email</th><th>Type</th><th>Country</th><th>City</th><th>Role</th><th>Joined</th></tr></thead>
       <tbody>
         ${users.map(u => `
           <tr>
+            <td>${u.profile_image_url
+              ? `<img src="${u.profile_image_url}" alt="" style="width:36px;height:36px;border-radius:50%;object-fit:cover;display:block">`
+              : `<span style="display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:#eee;font-size:0.7rem;font-weight:700">${(u.username || '?').slice(0, 2).toUpperCase()}</span>`
+            }</td>
             <td>${u.username}</td>
             <td>${u.email}</td>
             <td>${u.user_type || ''}</td>
+            <td>${u.country || '—'}</td>
             <td>${u.home_city || '—'}</td>
+            <td>${u.role || 'member'}</td>
             <td>${(u.created_at || '').slice(0, 10)}</td>
           </tr>`).join('')}
       </tbody>

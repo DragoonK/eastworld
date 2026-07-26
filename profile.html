@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your pass — Eastworld</title>
+  <link rel="stylesheet" href="auth.css">
+</head>
+<body class="auth-page">
+  <a href="index.html" class="auth-brand">EASTWORLD<span>Member pass</span></a>
+
+  <div class="auth-shell auth-shell--profile">
+    <div class="profile-wrap">
+      <p class="profile-status" id="profile-status">Loading your pass…</p>
+
+      <article class="id-card" id="id-card" hidden>
+        <div class="id-card-top">
+          <div class="id-card-mark">Eastworld<small>Member pass</small></div>
+          <span class="id-badge" id="card-badge" data-type="visitor">Visitor</span>
+        </div>
+        <div class="id-card-body">
+          <div class="id-avatar" id="card-avatar">
+            <span id="card-initials">EW</span>
+            <img id="card-photo" alt="">
+          </div>
+          <div class="id-meta">
+            <h3 id="card-name">—</h3>
+            <p id="card-place">—</p>
+          </div>
+        </div>
+        <div class="id-card-foot">
+          <div>Reviews<strong id="card-reviews">0</strong></div>
+          <div>Member since<strong id="card-since">—</strong></div>
+        </div>
+      </article>
+
+      <div class="profile-actions" id="profile-actions" hidden>
+        <a href="index.html">Explore Eastworld</a>
+        <button type="button" id="profile-logout">Log out</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="auth.js"></script>
+</body>
+</html>

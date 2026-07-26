@@ -3,69 +3,73 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - Eastworld</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Sign in — Eastworld</title>
+  <link rel="stylesheet" href="auth.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body class="auth-page">
-  <div class="auth-container">
-    <div class="auth-left">
-      <div class="auth-overlay"></div>
-      <img src="https://images.unsplash.com/photo-1492571350019-22de08371fd3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1953&q=80" alt="Asian Street">
-    </div>
-    <div class="auth-right">
-      <div class="auth-header">
-        <a href="index.html" class="auth-logo">EASTWORLD</a>
-      </div>
-      <div class="auth-form-container">
-        <h2>Welcome Back</h2>
-        <p class="auth-subtitle">Sign in to continue to Eastworld</p>
-        
-        <form id="login-form" class="auth-form">
-          <p class="auth-error" style="display:none"></p>
-          <div class="form-group">
-            <i class="fas fa-envelope"></i>
-            <input type="email" id="email" placeholder="Email" required>
-          </div>
-          <div class="form-group">
-            <i class="fas fa-lock"></i>
-            <input type="password" id="password" placeholder="Password" required>
-            <i class="fas fa-eye-slash toggle-password"></i>
-          </div>
-          
-          <div class="form-options">
-            <label class="remember-me">
-              <input type="checkbox">
-              <span>Remember me</span>
-            </label>
-            <a href="#" class="forgot-password">Forgot Password?</a>
-          </div>
+  <a href="index.html" class="auth-brand">EASTWORLD<span>Member pass</span></a>
 
-          <button type="submit" class="auth-button">
-            <span>Sign In</span>
-            <i class="fas fa-arrow-right"></i>
-          </button>
-        </form>
+  <div class="auth-shell auth-shell--login">
+    <section class="auth-panel">
+      <p class="auth-kicker">Welcome back</p>
+      <h1 class="auth-title">Sign in to your pass</h1>
+      <p class="auth-lead">
+        Pick up where you left off — your card, your cities, your voice on the guides.
+      </p>
 
-        <div class="social-auth">
-          <p>Or continue with</p>
-          <div class="social-buttons">
-            <button class="social-button google">
-              <i class="fab fa-google"></i>
-              <span>Google</span>
-            </button>
-            <button class="social-button apple">
-              <i class="fab fa-apple"></i>
-              <span>Apple</span>
-            </button>
-          </div>
+      <form id="login-form" class="auth-form">
+        <p class="auth-error" style="display:none"></p>
+
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required autocomplete="email" placeholder="you@email.com">
         </div>
 
-        <p class="auth-redirect">
-          Don't have an account? <a href="register.html">Sign up</a>
-        </p>
-      </div>
-    </div>
+        <div class="form-group has-toggle">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" required autocomplete="current-password" placeholder="Your password">
+          <i class="fas fa-eye-slash toggle-password"></i>
+        </div>
+
+        <div class="form-options">
+          <label class="remember-me">
+            <input type="checkbox">
+            <span>Remember me</span>
+          </label>
+        </div>
+
+        <button type="submit" class="auth-submit">
+          <span>Sign in</span>
+          <i class="fas fa-arrow-right"></i>
+        </button>
+      </form>
+
+      <p class="auth-redirect">
+        New here? <a href="register.html">Create your pass</a>
+      </p>
+    </section>
+
+    <aside class="auth-stage">
+      <p class="auth-lead">One card. Every city on the map.</p>
+      <article class="id-card" aria-hidden="true">
+        <div class="id-card-top">
+          <div class="id-card-mark">Eastworld<small>Member pass</small></div>
+          <span class="id-badge" data-type="expat">Expat</span>
+        </div>
+        <div class="id-card-body">
+          <div class="id-avatar">EW</div>
+          <div class="id-meta">
+            <h3>Your pass awaits</h3>
+            <p>Sign in to unlock it</p>
+          </div>
+        </div>
+        <div class="id-card-foot">
+          <div>Reviews<strong>0</strong></div>
+          <div>Member since<strong>—</strong></div>
+        </div>
+      </article>
+    </aside>
   </div>
 
   <script src="auth.js"></script>

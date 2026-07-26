@@ -3,77 +3,147 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Register - Eastworld</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Join Eastworld — Create your pass</title>
+  <link rel="stylesheet" href="auth.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body class="auth-page">
-  <div class="auth-container">
-    <div class="auth-left">
-      <div class="auth-overlay"></div>
-      <img src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?ixlib=rb-1.2.1&auto=format&fit=crop&w=1971&q=80" alt="Tokyo Street">
-    </div>
-    <div class="auth-right">
-      <div class="auth-header">
-        <a href="index.html" class="auth-logo">EASTWORLD</a>
-      </div>
-      <div class="auth-form-container">
-        <h2>Create Account</h2>
-        <p class="auth-subtitle">Join the Eastworld community</p>
-        
-        <form id="register-form" class="auth-form">
-          <p class="auth-error" style="display:none"></p>
-          <div class="form-group">
-            <input type="text" id="username" name="username" required placeholder="Username">
-          </div>
-          <div class="form-group">
-            <input type="email" id="email" name="email" required placeholder="Email">
-          </div>
-          <div class="form-group">
-            <input type="password" id="password" name="password" required placeholder="Password">
-            <i class="fas fa-eye toggle-password"></i>
-          </div>
-          <div class="form-group">
-            <input type="password" id="confirm-password" placeholder="Confirm Password" required>
-            <i class="fas fa-eye-slash toggle-password"></i>
-          </div>
-          <div class="form-group">
-            <select id="user-type" name="user_type" required>
-              <option value="" disabled selected>I am a...</option>
-              <option value="local">Local</option>
-              <option value="expat">Expat</option>
-              <option value="visitor">Visitor</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <input type="text" id="home-city" name="home_city" placeholder="Home city (optional)">
-          </div>
+  <a href="index.html" class="auth-brand">EASTWORLD<span>Member pass</span></a>
 
-          <button type="submit">
-            <span>Create Account</span>
-            <i class="fas fa-arrow-right"></i>
-          </button>
-        </form>
+  <div class="auth-shell">
+    <section class="auth-panel">
+      <p class="auth-kicker">Step into the network</p>
+      <h1 class="auth-title">Create your Eastworld pass</h1>
+      <p class="auth-lead">
+        Locals, expats and visitors — one card that carries your perspective into every city guide and review.
+      </p>
 
-        <div class="social-auth">
-          <p>Or sign up with</p>
-          <div class="social-buttons">
-            <button class="social-button google">
-              <i class="fab fa-google"></i>
-              <span>Google</span>
-            </button>
-            <button class="social-button apple">
-              <i class="fab fa-apple"></i>
-              <span>Apple</span>
-            </button>
+      <form id="register-form" class="auth-form" enctype="multipart/form-data">
+        <p class="auth-error" style="display:none"></p>
+
+        <label class="photo-drop" id="photo-drop" for="profile-image">
+          <input type="file" id="profile-image" name="image" accept="image/png,image/jpeg,image/jpg,image/gif,image/webp">
+          <div class="photo-drop-thumb" id="drop-thumb">
+            <span id="drop-initials">EW</span>
+            <img id="drop-preview" alt="">
+          </div>
+          <div class="photo-drop-copy">
+            <strong>Add a profile photo</strong>
+            <span>Drag &amp; drop, or tap to browse. Shows on your pass instantly.</span>
+          </div>
+        </label>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required maxlength="40" autocomplete="username" placeholder="Your name on the pass">
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required autocomplete="email" placeholder="you@email.com">
           </div>
         </div>
 
-        <p class="auth-redirect">
-          Already have an account? <a href="login.html">Sign in</a>
-        </p>
-      </div>
-    </div>
+        <div class="form-row">
+          <div class="form-group has-toggle">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required minlength="6" autocomplete="new-password" placeholder="At least 6 characters">
+            <i class="fas fa-eye-slash toggle-password"></i>
+          </div>
+          <div class="form-group has-toggle">
+            <label for="confirm-password">Confirm</label>
+            <input type="password" id="confirm-password" required minlength="6" autocomplete="new-password" placeholder="Repeat password">
+            <i class="fas fa-eye-slash toggle-password"></i>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="country">Country of origin</label>
+            <select id="country" name="country" required>
+              <option value="" disabled selected>Select country</option>
+              <option value="japan">Japan</option>
+              <option value="china">China</option>
+              <option value="australia">Australia</option>
+              <option value="cambodia">Cambodia</option>
+              <option value="vietnam">Vietnam</option>
+              <option value="usa">United States</option>
+              <option value="uk">United Kingdom</option>
+              <option value="singapore">Singapore</option>
+              <option value="korea">South Korea</option>
+              <option value="thailand">Thailand</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="home-city">Based in</label>
+            <select id="home-city" name="home_city">
+              <option value="">Optional</option>
+              <option value="osaka">Osaka</option>
+              <option value="tokyo">Tokyo</option>
+              <option value="melbourne">Melbourne</option>
+              <option value="guangzhou">Guangzhou</option>
+              <option value="shanghai">Shanghai</option>
+              <option value="phnom-penh">Phnom Penh</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group hidden-field" id="home-city-other-wrap">
+          <label for="home-city-other">Your city</label>
+          <input type="text" id="home-city-other" name="home_city_other" placeholder="City name" maxlength="60">
+        </div>
+
+        <div class="form-group">
+          <label for="user-type">I am a…</label>
+          <select id="user-type" name="user_type" required>
+            <option value="" disabled selected>Choose one</option>
+            <option value="local">Local</option>
+            <option value="expat">Expat</option>
+            <option value="visitor">Visitor</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="bio">One-line bio (optional)</label>
+          <textarea id="bio" name="bio" maxlength="160" placeholder="What you chase in a city…"></textarea>
+        </div>
+
+        <button type="submit" class="auth-submit">
+          <span>Create my pass</span>
+          <i class="fas fa-arrow-right"></i>
+        </button>
+      </form>
+
+      <p class="auth-redirect">
+        Already have a pass? <a href="login.html">Sign in</a>
+      </p>
+    </section>
+
+    <aside class="auth-stage" aria-label="Live membership pass preview">
+      <p class="auth-lead">Your pass updates as you type</p>
+      <article class="id-card" id="id-card" aria-live="polite">
+        <div class="id-card-top">
+          <div class="id-card-mark">Eastworld<small>Member pass</small></div>
+          <span class="id-badge" id="card-badge" data-type="visitor">Visitor</span>
+        </div>
+        <div class="id-card-body">
+          <div class="id-avatar" id="card-avatar">
+            <span id="card-initials">EW</span>
+            <img id="card-photo" alt="">
+          </div>
+          <div class="id-meta">
+            <h3 id="card-name">Your name</h3>
+            <p id="card-place">Pick a country to begin</p>
+          </div>
+        </div>
+        <div class="id-card-foot">
+          <div>Reviews<strong id="card-reviews">0</strong></div>
+          <div>Member since<strong id="card-since">—</strong></div>
+        </div>
+      </article>
+    </aside>
   </div>
 
   <script src="auth.js"></script>

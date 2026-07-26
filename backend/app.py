@@ -286,24 +286,41 @@ def ensure_slides_table():
 
 
 def ensure_users_table():
-    """Create the users table if needed.
+    """Create the users table if needed, then add newer columns.
 
     user_type is the local/expat/visitor tag that can power split
-    reviews later. Passwords are never stored in plain text —
-    only a salted hash via werkzeug's generate_password_hash.
+    reviews later. role is member|creator|admin (creators are
+    admin-promoted, never self-selected on register). Passwords
+    are never stored in plain text — only a salted hash.
     """
     conn = get_db()
     conn.execute("""
         CREATE TABLE IF NOT EXISTS users (
-            id            INTEGER PRIMARY KEY AUTOINCREMENT,
-            username      TEXT NOT NULL UNIQUE,
-            email         TEXT NOT NULL UNIQUE,
-            password_hash TEXT NOT NULL,
-            user_type     TEXT NOT NULL DEFAULT 'visitor',
-            home_city     TEXT DEFAULT '',
-            created_at    TEXT NOT NULL DEFAULT (datetime('now'))
+            id                 INTEGER PRIMARY KEY AUTOINCREMENT,
+            username           TEXT NOT NULL UNIQUE,
+            email              TEXT NOT NULL UNIQUE,
+            password_hash      TEXT NOT NULL,
+            user_type          TEXT NOT NULL DEFAULT 'visitor',
+            home_city          TEXT DEFAULT '',
+            profile_image_url  TEXT DEFAULT '',
+            country            TEXT DEFAULT '',
+            bio                TEXT DEFAULT '',
+            role               TEXT NOT NULL DEFAULT 'member',
+            created_at         TEXT NOT NULL DEFAULT (datetime('now'))
         )
     """)
+    # Existing DBs created before these columns need ALTER.
+    existing = {
+        row[1] for row in conn.execute("PRAGMA table_info(users)").fetchall()
+    }
+    for col, decl in (
+        ("profile_image_url", "TEXT DEFAULT ''"),
+        ("country", "TEXT DEFAULT ''"),
+        ("bio", "TEXT DEFAULT ''"),
+        ("role", "TEXT NOT NULL DEFAULT 'member'"),
+    ):
+        if col not in existing:
+            conn.execute(f"ALTER TABLE users ADD COLUMN {col} {decl}")
     conn.commit()
     conn.close()
 
@@ -473,6 +490,20 @@ def admin_check():
     return jsonify({"ok": True})
 
 
+USER_PUBLIC_COLS = (
+    "id, username, email, user_type, home_city, profile_image_url,"
+    " country, bio, role, created_at"
+)
+
+
+def user_public(row):
+    """Safe user payload — never includes password_hash."""
+    return {k: row[k] for k in (
+        "id", "username", "email", "user_type", "home_city",
+        "profile_image_url", "country", "bio", "role", "created_at",
+    )}
+
+
 @app.route("/api/admin/users")
 def list_users():
     """All registered users, for the admin dashboard. Never
@@ -483,27 +514,40 @@ def list_users():
 
     conn = get_db()
     rows = conn.execute(
-        "SELECT id, username, email, user_type, home_city, created_at"
-        " FROM users ORDER BY created_at DESC"
+        f"SELECT {USER_PUBLIC_COLS} FROM users ORDER BY created_at DESC"
     ).fetchall()
     conn.close()
-    return jsonify([dict(row) for row in rows])
+    return jsonify([user_public(row) for row in rows])
 
 
 # ---------------------------- Auth ----------------------------
 
 VALID_USER_TYPES = {"local", "expat", "visitor"}
+VALID_COUNTRIES = {
+    "japan", "china", "australia", "cambodia", "vietnam",
+    "usa", "uk", "singapore", "korea", "thailand", "other",
+}
 
 
 @app.route("/api/auth/register", methods=["POST"])
 def register():
-    """Create a new user account and log them in."""
-    data = request.get_json(silent=True) or {}
+    """Create a member account (multipart so a photo can upload).
+
+    Public signup always sets role=member. Creators are promoted
+    later from the admin dashboard.
+    """
+    # Prefer form fields (multipart); fall back to JSON for tests/tools.
+    data = request.form if request.form else (request.get_json(silent=True) or {})
     username = (data.get("username") or "").strip()
     email = (data.get("email") or "").strip().lower()
     password = data.get("password") or ""
     user_type = (data.get("user_type") or "").strip().lower()
-    home_city = normalize_city(data.get("home_city") or "") if data.get("home_city") else ""
+    country = (data.get("country") or "").strip().lower()
+    home_city_raw = (data.get("home_city") or "").strip()
+    if home_city_raw.lower() == "other":
+        home_city_raw = (data.get("home_city_other") or "").strip()
+    home_city = normalize_city(home_city_raw) if home_city_raw else ""
+    bio = (data.get("bio") or "").strip()[:160]
 
     if not username or not email or not password:
         return jsonify({"error": "Username, email and password are required"}), 400
@@ -511,6 +555,12 @@ def register():
         return jsonify({"error": "Password must be at least 6 characters"}), 400
     if user_type not in VALID_USER_TYPES:
         return jsonify({"error": "user_type must be local, expat or visitor"}), 400
+    if country not in VALID_COUNTRIES:
+        return jsonify({"error": "Please select a valid country"}), 400
+
+    profile_image_url, img_error = save_image_if_present()
+    if img_error:
+        return jsonify({"error": img_error}), 400
 
     conn = get_db()
     existing = conn.execute(
@@ -524,16 +574,23 @@ def register():
     # pbkdf2:sha256 works on macOS system Python; default scrypt may not.
     password_hash = generate_password_hash(password, method="pbkdf2:sha256")
     cursor = conn.execute(
-        "INSERT INTO users (username, email, password_hash, user_type, home_city)"
-        " VALUES (?, ?, ?, ?, ?)",
-        (username, email, password_hash, user_type, home_city),
+        "INSERT INTO users (username, email, password_hash, user_type,"
+        " home_city, profile_image_url, country, bio, role)"
+        " VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'member')",
+        (
+            username, email, password_hash, user_type, home_city,
+            profile_image_url or "", country, bio,
+        ),
     )
     conn.commit()
     new_id = cursor.lastrowid
+    row = conn.execute(
+        f"SELECT {USER_PUBLIC_COLS} FROM users WHERE id = ?", (new_id,)
+    ).fetchone()
     conn.close()
 
     session["user_id"] = new_id
-    return jsonify({"id": new_id, "username": username, "message": "Account created"}), 201
+    return jsonify({"user": user_public(row), "message": "Account created"}), 201
 
 
 @app.route("/api/auth/login", methods=["POST"])
@@ -554,7 +611,7 @@ def login():
         return jsonify({"error": "Invalid email or password"}), 401
 
     session["user_id"] = user["id"]
-    return jsonify({"id": user["id"], "username": user["username"], "message": "Logged in"})
+    return jsonify({"user": user_public(user), "message": "Logged in"})
 
 
 @app.route("/api/auth/logout", methods=["POST"])
@@ -573,7 +630,7 @@ def me():
 
     conn = get_db()
     user = conn.execute(
-        "SELECT id, username, email, user_type, home_city FROM users WHERE id = ?",
+        f"SELECT {USER_PUBLIC_COLS} FROM users WHERE id = ?",
         (user_id,),
     ).fetchone()
     conn.close()
@@ -581,7 +638,7 @@ def me():
     if user is None:
         session.pop("user_id", None)
         return jsonify({"error": "Not logged in"}), 401
-    return jsonify(dict(user))
+    return jsonify(user_public(user))
 
 
 @app.route("/api/posts")
