@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Your pass — Eastworld</title>
   <link rel="stylesheet" href="auth.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body class="auth-page">
   <a href="index.html" class="auth-brand">EASTWORLD<span>Member pass</span></a>
@@ -35,9 +36,85 @@
       </article>
 
       <div class="profile-actions" id="profile-actions" hidden>
+        <button type="button" id="profile-edit-toggle">Edit pass</button>
         <a href="index.html">Explore Eastworld</a>
         <button type="button" id="profile-logout">Log out</button>
       </div>
+
+      <form id="profile-edit-form" class="profile-edit" hidden enctype="multipart/form-data">
+        <p class="auth-error" style="display:none"></p>
+        <h2>Update your pass</h2>
+        <p class="profile-edit-lead">Add a photo and fill country / city — older accounts can catch up here.</p>
+
+        <label class="photo-drop" id="photo-drop" for="profile-image">
+          <input type="file" id="profile-image" name="image" accept="image/png,image/jpeg,image/jpg,image/gif,image/webp">
+          <div class="photo-drop-thumb" id="drop-thumb">
+            <span id="drop-initials">EW</span>
+            <img id="drop-preview" alt="">
+          </div>
+          <div class="photo-drop-copy">
+            <strong>Change profile photo</strong>
+            <span>Drag &amp; drop, or tap to browse.</span>
+          </div>
+        </label>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="country">Country of origin</label>
+            <select id="country" name="country" required>
+              <option value="" disabled>Select country</option>
+              <option value="japan">Japan</option>
+              <option value="china">China</option>
+              <option value="australia">Australia</option>
+              <option value="cambodia">Cambodia</option>
+              <option value="vietnam">Vietnam</option>
+              <option value="usa">United States</option>
+              <option value="uk">United Kingdom</option>
+              <option value="singapore">Singapore</option>
+              <option value="korea">South Korea</option>
+              <option value="thailand">Thailand</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="home-city">Based in</label>
+            <select id="home-city" name="home_city">
+              <option value="">Optional</option>
+              <option value="osaka">Osaka</option>
+              <option value="tokyo">Tokyo</option>
+              <option value="melbourne">Melbourne</option>
+              <option value="guangzhou">Guangzhou</option>
+              <option value="shanghai">Shanghai</option>
+              <option value="phnom-penh">Phnom Penh</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group hidden-field" id="home-city-other-wrap">
+          <label for="home-city-other">Your city</label>
+          <input type="text" id="home-city-other" name="home_city_other" placeholder="City name" maxlength="60">
+        </div>
+
+        <div class="form-group">
+          <label for="user-type">I am a…</label>
+          <select id="user-type" name="user_type" required>
+            <option value="local">Local</option>
+            <option value="expat">Expat</option>
+            <option value="visitor">Visitor</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="bio">One-line bio</label>
+          <textarea id="bio" name="bio" maxlength="160" placeholder="What you chase in a city…"></textarea>
+        </div>
+
+        <div class="profile-edit-actions">
+          <button type="submit" class="auth-submit">Save changes</button>
+          <button type="button" class="profile-cancel" id="profile-edit-cancel">Cancel</button>
+        </div>
+      </form>
     </div>
   </div>
 

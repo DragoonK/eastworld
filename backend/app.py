@@ -641,6 +641,73 @@ def me():
     return jsonify(user_public(user))
 
 
+@app.route("/api/auth/profile", methods=["POST"])
+def update_profile():
+    """Update the logged-in member's pass (photo, country, city, type, bio).
+
+    Multipart form — same image field name as register. Role cannot be
+    changed here (admin promotes creators separately).
+    """
+    user_id = session.get("user_id")
+    if not user_id:
+        return jsonify({"error": "Not logged in"}), 401
+
+    data = request.form if request.form else (request.get_json(silent=True) or {})
+    user_type = (data.get("user_type") or "").strip().lower()
+    country = (data.get("country") or "").strip().lower()
+    home_city_raw = (data.get("home_city") or "").strip()
+    if home_city_raw.lower() == "other":
+        home_city_raw = (data.get("home_city_other") or "").strip()
+    home_city = normalize_city(home_city_raw) if home_city_raw else ""
+    bio = (data.get("bio") or "").strip()[:160]
+
+    if user_type and user_type not in VALID_USER_TYPES:
+        return jsonify({"error": "user_type must be local, expat or visitor"}), 400
+    if country and country not in VALID_COUNTRIES:
+        return jsonify({"error": "Please select a valid country"}), 400
+
+    uploaded_url, img_error = save_image_if_present()
+    if img_error:
+        return jsonify({"error": img_error}), 400
+
+    conn = get_db()
+    row = conn.execute(
+        f"SELECT {USER_PUBLIC_COLS} FROM users WHERE id = ?", (user_id,)
+    ).fetchone()
+    if row is None:
+        conn.close()
+        session.pop("user_id", None)
+        return jsonify({"error": "Not logged in"}), 401
+
+    new_image = uploaded_url or row["profile_image_url"] or ""
+    new_type = user_type or row["user_type"]
+    new_country = country or row["country"] or ""
+    # Allow clearing city by sending empty home_city explicitly in form.
+    if "home_city" in data or "home_city_other" in data:
+        new_city = home_city
+    else:
+        new_city = row["home_city"] or ""
+    if "bio" in data:
+        new_bio = bio
+    else:
+        new_bio = row["bio"] or ""
+
+    if uploaded_url and row["profile_image_url"]:
+        delete_uploaded_image(row["profile_image_url"])
+
+    conn.execute(
+        "UPDATE users SET profile_image_url = ?, user_type = ?, country = ?,"
+        " home_city = ?, bio = ? WHERE id = ?",
+        (new_image, new_type, new_country, new_city, new_bio, user_id),
+    )
+    conn.commit()
+    updated = conn.execute(
+        f"SELECT {USER_PUBLIC_COLS} FROM users WHERE id = ?", (user_id,)
+    ).fetchone()
+    conn.close()
+    return jsonify({"user": user_public(updated), "message": "Profile updated"})
+
+
 @app.route("/api/posts")
 def list_posts():
     """Return a page of posts, newest first, WITHOUT the full content.

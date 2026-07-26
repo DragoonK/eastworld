@@ -328,6 +328,167 @@ document.getElementById('register-form')?.addEventListener('submit', async (e) =
 
 // ---------- Profile page ----------
 
+function populateProfileForm(user) {
+  const country = document.getElementById('country');
+  const homeCity = document.getElementById('home-city');
+  const homeCityOther = document.getElementById('home-city-other');
+  const homeCityOtherWrap = document.getElementById('home-city-other-wrap');
+  const userType = document.getElementById('user-type');
+  const bio = document.getElementById('bio');
+  const dropPreview = document.getElementById('drop-preview');
+  const dropInitials = document.getElementById('drop-initials');
+
+  if (country) country.value = user.country || '';
+  if (userType) userType.value = user.user_type || 'visitor';
+  if (bio) bio.value = user.bio || '';
+
+  const knownCities = new Set(['osaka', 'tokyo', 'melbourne', 'guangzhou', 'shanghai', 'phnom-penh']);
+  const city = user.home_city || '';
+  if (homeCity) {
+    if (!city) {
+      homeCity.value = '';
+      homeCityOtherWrap?.classList.remove('is-open');
+    } else if (knownCities.has(city)) {
+      homeCity.value = city;
+      homeCityOtherWrap?.classList.remove('is-open');
+    } else {
+      homeCity.value = 'other';
+      homeCityOtherWrap?.classList.add('is-open');
+      if (homeCityOther) homeCityOther.value = titleCaseSlug(city);
+    }
+  }
+
+  if (dropInitials) dropInitials.textContent = initialsFrom(user.username);
+  if (dropPreview) {
+    if (user.profile_image_url) {
+      dropPreview.src = user.profile_image_url;
+      dropPreview.classList.add('is-ready');
+      if (dropInitials) dropInitials.style.display = 'none';
+    } else {
+      dropPreview.removeAttribute('src');
+      dropPreview.classList.remove('is-ready');
+      if (dropInitials) dropInitials.style.display = '';
+    }
+  }
+}
+
+function setupProfileEdit(user) {
+  const form = document.getElementById('profile-edit-form');
+  const toggle = document.getElementById('profile-edit-toggle');
+  const cancel = document.getElementById('profile-edit-cancel');
+  const homeCity = document.getElementById('home-city');
+  const homeCityOtherWrap = document.getElementById('home-city-other-wrap');
+  const imageInput = document.getElementById('profile-image');
+  const drop = document.getElementById('photo-drop');
+  const dropPreview = document.getElementById('drop-preview');
+  const dropInitials = document.getElementById('drop-initials');
+  if (!form || !toggle) return;
+
+  let currentUser = user;
+  let previewUrl = '';
+
+  const openForm = () => {
+    populateProfileForm(currentUser);
+    form.hidden = false;
+    form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  };
+  const closeForm = () => {
+    form.hidden = true;
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+      previewUrl = '';
+    }
+  };
+
+  toggle.addEventListener('click', openForm);
+  cancel?.addEventListener('click', closeForm);
+
+  homeCity?.addEventListener('change', () => {
+    homeCityOtherWrap?.classList.toggle('is-open', homeCity.value === 'other');
+  });
+
+  const setPreviewFile = (file) => {
+    if (!file || !file.type.startsWith('image/')) return;
+    if (previewUrl) URL.revokeObjectURL(previewUrl);
+    previewUrl = URL.createObjectURL(file);
+    if (dropPreview) {
+      dropPreview.src = previewUrl;
+      dropPreview.classList.add('is-ready');
+    }
+    if (dropInitials) dropInitials.style.display = 'none';
+    fillIdCard({ ...currentUser, _previewUrl: previewUrl }, { emptyPlace: 'Eastworld member' });
+  };
+
+  imageInput?.addEventListener('change', () => setPreviewFile(imageInput.files?.[0]));
+  ['dragenter', 'dragover'].forEach((evt) => {
+    drop?.addEventListener(evt, (e) => {
+      e.preventDefault();
+      drop.classList.add('is-dragover');
+    });
+  });
+  ['dragleave', 'drop'].forEach((evt) => {
+    drop?.addEventListener(evt, (e) => {
+      e.preventDefault();
+      drop.classList.remove('is-dragover');
+    });
+  });
+  drop?.addEventListener('drop', (e) => {
+    const file = e.dataTransfer?.files?.[0];
+    if (!file || !imageInput) return;
+    const dt = new DataTransfer();
+    dt.items.add(file);
+    imageInput.files = dt.files;
+    setPreviewFile(file);
+  });
+
+  ['country', 'home-city', 'home-city-other', 'user-type', 'bio'].forEach((id) => {
+    document.getElementById(id)?.addEventListener('input', () => {
+      let city = document.getElementById('home-city')?.value || '';
+      if (city === 'other') city = (document.getElementById('home-city-other')?.value || '').trim();
+      fillIdCard({
+        ...currentUser,
+        country: document.getElementById('country')?.value || currentUser.country,
+        home_city: city,
+        user_type: document.getElementById('user-type')?.value || currentUser.user_type,
+        bio: document.getElementById('bio')?.value || '',
+        _previewUrl: previewUrl || currentUser.profile_image_url,
+      }, { emptyPlace: 'Eastworld member' });
+    });
+    document.getElementById(id)?.addEventListener('change', () => {
+      document.getElementById(id)?.dispatchEvent(new Event('input'));
+    });
+  });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const button = form.querySelector('button[type="submit"]');
+    const originalHtml = button.innerHTML;
+    button.disabled = true;
+    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+    try {
+      const body = new FormData(form);
+      const res = await fetch('/api/auth/profile', { method: 'POST', body });
+      const result = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        showError(result.error || 'Could not update profile');
+        button.disabled = false;
+        button.innerHTML = originalHtml;
+        return;
+      }
+      currentUser = result.user;
+      fillIdCard(currentUser, { emptyPlace: 'Eastworld member' });
+      populateProfileForm(currentUser);
+      closeForm();
+      showMessage('Pass updated', 'info');
+    } catch (err) {
+      showError('Could not reach the server');
+    }
+    button.disabled = false;
+    button.innerHTML = originalHtml;
+  });
+}
+
 async function loadProfilePage() {
   const status = document.getElementById('profile-status');
   const actions = document.getElementById('profile-actions');
@@ -346,6 +507,7 @@ async function loadProfilePage() {
     status.hidden = true;
     fillIdCard(user, { emptyPlace: 'Eastworld member' });
     if (actions) actions.hidden = false;
+    setupProfileEdit(user);
   } catch (err) {
     status.textContent = 'Could not load your pass.';
   }
