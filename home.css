@@ -63,6 +63,11 @@ a {
   opacity: 0.7;
 }
 
+/* Hide until checkAuthState() knows LOGIN/REGISTER vs LOG OUT/username */
+.auth-link {
+  visibility: hidden;
+}
+
 /* ---------- Page column + ad gutters ---------- */
 
 /* Fluid column: grows with the browser, capped at 1600px.

@@ -64,6 +64,11 @@ main {
   z-index: 2;
 }
 
+/* Hide until checkAuthState() knows LOGIN/REGISTER vs LOG OUT/username */
+.auth-link {
+  visibility: hidden;
+}
+
 .logo {
   flex: 0 0 auto;
   text-align: center;
@@ -3910,3 +3915,8 @@ input[type="range"]::-webkit-slider-thumb {
   min-width: 2.5rem;
   text-align: center;
 }
+
+.auth-link {
+  visibility: hidden;
+}
+

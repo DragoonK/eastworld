@@ -128,3 +128,40 @@ function showMessage(message, type = 'error') {
   messageEl.style.display = 'block';
   setTimeout(() => { messageEl.style.display = 'none'; }, 5000);
 }
+
+// --- Reflect login state in the nav ---
+async function checkAuthState() {
+  const loginLink = document.querySelector('a[href="login.html"], a[href$="/login.html"]');
+  const registerLink = document.querySelector('a[href="register.html"], a[href$="/register.html"]');
+
+  try {
+    const res = await fetch('/api/auth/me');
+    if (!res.ok) return; // not logged in — links stay as LOGIN/REGISTER
+
+    const user = await res.json();
+
+    if (loginLink) {
+      loginLink.textContent = 'LOG OUT';
+      loginLink.href = '#';
+      loginLink.addEventListener('click', async (e) => {
+        e.preventDefault();
+        await fetch('/api/auth/logout', { method: 'POST' });
+        window.location.reload();
+      });
+    }
+    if (registerLink) {
+      registerLink.textContent = user.username.toUpperCase();
+      registerLink.href = '#';
+    }
+  } catch (err) {
+    // silent fail — links stay as LOGIN/REGISTER
+  } finally {
+    // Reveal now that we know the correct state, whatever it is
+    document.querySelectorAll('.auth-link').forEach((el) => {
+      el.style.visibility = 'visible';
+    });
+  }
+}
+
+checkAuthState();
+
