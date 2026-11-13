@@ -290,29 +290,176 @@ a {
   border-color: var(--ink);
 }
 
+/* ---------- Country toggle + interactive map ---------- */
+
+.explore {
+  margin-bottom: 2.4rem;
+}
+
+.country-toggle {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 1.2rem;
+}
+
+.country-btn {
+  font-family: var(--font);
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  padding: 0.95rem 1.8rem;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease;
+}
+
+.country-btn:hover {
+  transform: translateY(-2px);
+}
+
+.country-btn.active {
+  background: var(--ink);
+  color: #fff;
+}
+
+.map-box {
+  position: relative;
+  height: 460px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  overflow: hidden;
+  background: #f4f4f4;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.06);
+}
+
+#map {
+  position: absolute;
+  inset: 0;
+}
+
+.map-fallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--gray);
+  font-size: 0.9rem;
+  line-height: 1.8;
+}
+
+.map-legend {
+  position: absolute;
+  left: 1rem;
+  bottom: 1rem;
+  display: flex;
+  gap: 1rem;
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 999px;
+  padding: 0.55rem 1.1rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.map-legend span {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.map-legend .dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.map-legend .dot.food  { background: #0a0a0a; }
+.map-legend .dot.stay  { background: #8c8c8c; }
+.map-legend .dot.place { background: #fff; border: 2px solid #0a0a0a; }
+
+/* Monochrome map popups */
+.mapboxgl-popup-content {
+  font-family: var(--font);
+  border-radius: 12px;
+  padding: 0.9rem 1.1rem;
+}
+
+.map-popup img {
+  width: 100%;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 8px;
+  display: block;
+  margin-bottom: 0.6rem;
+}
+
+.map-popup .map-popup-type {
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: var(--gray);
+  text-transform: uppercase;
+}
+
+.map-popup strong {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 800;
+  margin: 0.2rem 0;
+}
+
+.map-popup small {
+  color: var(--gray);
+  text-transform: capitalize;
+}
+
+.map-popup a {
+  display: inline-block;
+  margin-top: 0.5rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  border-bottom: 1px solid var(--ink);
+}
+
 /* ---------- Header: single carousel + top five spotlights ---------- */
 
 .hero {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 400px;
-  gap: 2rem;
+  grid-template-columns: minmax(0, 1fr) 420px;
+  gap: 1.6rem;
   align-items: stretch;
   margin-bottom: 3.4rem;
 }
 
 .hero-carousel {
   height: 100%;
-  min-height: 520px;
+  min-height: 540px;
+  border-radius: 18px;
 }
 
 .hero.no-carousel {
   grid-template-columns: 1fr;
 }
 
-/* The spotlights panel fills the carousel's height exactly */
+/* Spotlights: prominent rounded panel, same height as the carousel */
 .hero .trending {
   display: flex;
   flex-direction: column;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 1.6rem 1.6rem 0.8rem;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
 }
 
 .hero .trending-list {
@@ -341,6 +488,7 @@ a {
   width: 100%;
   aspect-ratio: 9 / 16;
   border: none;
+  border-radius: 12px;
   background: var(--ink);
 }
 
@@ -390,22 +538,33 @@ a {
   min-height: 1px;
 }
 
-/* First post: large split feature, no card chrome */
-.story-feature {
+/* All posts: large uniform rounded cards */
+.story-card {
   display: grid;
-  grid-template-columns: minmax(0, 11fr) minmax(0, 9fr);
-  gap: 2.4rem;
-  margin-bottom: 2rem;
-  padding-bottom: 2rem;
-  border-bottom: 1px solid var(--line);
+  grid-template-columns: 380px minmax(0, 1fr);
+  gap: 2rem;
+  align-items: center;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 1.4rem;
+  margin-bottom: 1.4rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
 }
 
-.story-feature-img {
+.story-card:hover {
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.story-card-img {
   overflow: hidden;
-  min-height: 340px;
+  border-radius: 12px;
+  height: 260px;
 }
 
-.story-feature-img img {
+.story-card-img img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -413,40 +572,48 @@ a {
   transition: transform 0.7s ease;
 }
 
-.story-feature:hover .story-feature-img img {
+.story-card:hover .story-card-img img {
   transform: scale(1.04);
 }
 
-.story-feature-body {
+.story-card-body {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap: 1rem;
+  gap: 0.8rem;
   min-width: 0;
+  padding-right: 1rem;
 }
 
-.story-feature-body .category {
+.story-card-body .category {
   align-self: flex-start;
   background: var(--ink);
   color: #fff;
 }
 
-.story-feature-body h3 {
-  font-size: clamp(1.6rem, 2.3vw, 2.3rem);
+.story-card-body h3 {
+  font-size: clamp(1.5rem, 2vw, 2rem);
   font-weight: 900;
   letter-spacing: -0.015em;
   line-height: 1.15;
   text-wrap: balance;
 }
 
-.story-feature-body p {
-  font-size: 0.95rem;
-  line-height: 1.7;
+.story-card-body p {
+  font-size: 1rem;
+  line-height: 1.65;
   color: var(--gray);
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+.story-meta {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gray);
 }
 
 .read-more {
@@ -463,82 +630,8 @@ a {
   transition: transform 0.2s;
 }
 
-.story-feature:hover .read-more::after {
+.story-card:hover .read-more::after {
   transform: translate(3px, -3px);
-}
-
-/* Remaining stories: large numbered rows */
-.story-row {
-  display: grid;
-  grid-template-columns: 76px 340px minmax(0, 1fr);
-  align-items: center;
-  gap: 2rem;
-  padding: 1.8rem 0.8rem;
-  border-bottom: 1px solid var(--line);
-  transition: background 0.2s ease;
-}
-
-.story-row:hover {
-  background: #f7f7f7;
-}
-
-.story-num {
-  font-size: 2.2rem;
-  font-weight: 900;
-  letter-spacing: -0.03em;
-  text-align: center;
-  color: var(--gray-light);
-  transition: color 0.25s ease;
-}
-
-.story-row:hover .story-num {
-  color: var(--ink);
-}
-
-.story-thumb {
-  overflow: hidden;
-  height: 210px;
-}
-
-.story-thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  transition: transform 0.6s ease;
-}
-
-.story-row:hover .story-thumb img {
-  transform: scale(1.06);
-}
-
-.story-body {
-  min-width: 0;
-}
-
-.story-body .category {
-  background: transparent;
-  color: var(--gray);
-  padding: 0;
-  font-size: 0.65rem;
-}
-
-.story-body h3 {
-  font-size: clamp(1.4rem, 1.9vw, 1.9rem);
-  font-weight: 800;
-  letter-spacing: -0.01em;
-  line-height: 1.2;
-  margin: 0.5rem 0 0.5rem;
-}
-
-.story-body p {
-  font-size: 1rem;
-  line-height: 1.65;
-  color: var(--gray);
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
 }
 
 /* ---------- Scroll reveal ---------- */
@@ -679,11 +772,7 @@ a {
   color: var(--gray);
 }
 
-/* ---------- City guides band (bottom carousel) ---------- */
-
-.guides-band {
-  margin-bottom: 3.4rem;
-}
+/* ---------- Carousel ---------- */
 
 .carousel {
   position: relative;
@@ -869,27 +958,23 @@ footer {
     flex: 0 0 62%;
   }
 
-  .story-feature {
+  .story-card {
     grid-template-columns: 1fr;
-    gap: 1.4rem;
+    gap: 1.2rem;
+    padding: 1rem;
   }
 
-  .story-feature-img {
-    min-height: 220px;
+  .story-card-img {
+    height: 220px;
   }
 
-  .story-row {
-    grid-template-columns: 40px minmax(0, 1fr);
-    gap: 1rem;
-    padding: 1.4rem 0.4rem;
+  .map-box {
+    height: 360px;
   }
 
-  .story-thumb {
-    display: none;
-  }
-
-  .story-num {
-    font-size: 1.4rem;
+  .country-btn {
+    padding: 0.75rem 1.2rem;
+    font-size: 0.72rem;
   }
 }
 

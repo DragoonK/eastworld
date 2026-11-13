@@ -13,6 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://api.mapbox.com/mapbox-gl-js/v3.8.0/mapbox-gl.css" rel="stylesheet">
   <link rel="stylesheet" href="index.css">
 </head>
 <body>
@@ -49,6 +50,33 @@
   <aside class="ad-rail right">AD</aside>
 
   <main class="page">
+
+    <!-- Country toggle + interactive tourist map.
+         WORLD shows everything; picking a country filters the whole
+         homepage (carousel, spotlights, stories, videos) and zooms
+         the map to that country's food / stay / place pins. -->
+    <section class="explore">
+      <div class="country-toggle" id="country-toggle" role="group" aria-label="Filter by country">
+        <button class="country-btn active" data-country="world">WORLD</button>
+        <button class="country-btn" data-country="cambodia">CAMBODIA</button>
+        <button class="country-btn" data-country="vietnam">VIETNAM</button>
+        <button class="country-btn" data-country="japan">JAPAN</button>
+        <button class="country-btn" data-country="australia">AUSTRALIA</button>
+        <button class="country-btn" data-country="china">CHINA</button>
+      </div>
+      <div class="map-box">
+        <div id="map"></div>
+        <div class="map-fallback" id="map-fallback" hidden>
+          <p>The interactive map needs a Mapbox public token.<br>
+          Add it to <code>map-config.js</code> to go live.</p>
+        </div>
+        <div class="map-legend" id="map-legend" hidden>
+          <span><i class="dot food"></i>FOOD</span>
+          <span><i class="dot stay"></i>STAYS</span>
+          <span><i class="dot place"></i>PLACES</span>
+        </div>
+      </div>
+    </section>
 
     <!-- Header: single auto-rotating carousel + top five spotlights.
          Carousel slides come from the admin's CAROUSELS tab (top). -->
@@ -116,24 +144,6 @@
       <div class="videos-strip" id="videos-strip"></div>
     </section>
 
-    <!-- City guides: slides managed in the admin's CAROUSELS tab -->
-    <section class="guides-band">
-      <div class="sec-head">
-        <div class="sec-head-text">
-          <h2>City Guides</h2>
-          <span class="kicker">Where to go next</span>
-        </div>
-        <div class="sec-rule"></div>
-        <a class="sec-link" href="cities.html">All cities ↗</a>
-      </div>
-      <div class="carousel" data-slides="bottom" aria-label="City guides">
-        <div class="carousel-track"></div>
-        <button class="carousel-button prev" aria-label="Previous slide">&#8249;</button>
-        <button class="carousel-button next" aria-label="Next slide">&#8250;</button>
-        <div class="carousel-indicators"></div>
-      </div>
-    </section>
-
   </main>
 
   <footer>
@@ -152,6 +162,9 @@
     </div>
   </footer>
 
+  <script src="https://api.mapbox.com/mapbox-gl-js/v3.8.0/mapbox-gl.js"></script>
+  <script src="map-config.js"></script>
+  <script src="map.js"></script>
   <script src="script.js"></script>
   <script src="auth.js"></script>
   <script src="trending.js"></script>

@@ -79,12 +79,13 @@ async function loadPosts() {
 
   $('#posts-table').innerHTML = `
     <table class="admin-table">
-      <thead><tr><th>Title</th><th>Category</th><th>Created</th><th></th></tr></thead>
+      <thead><tr><th>Title</th><th>Category</th><th>Country</th><th>Created</th><th></th></tr></thead>
       <tbody>
         ${posts.map(p => `
           <tr>
             <td><a href="post.html?id=${p.id}" target="_blank">${p.title}</a></td>
             <td>${p.category}</td>
+            <td>${p.country || '—'}</td>
             <td>${(p.created_at || '').slice(0, 10)}</td>
             <td class="row-actions">
               <button data-edit-post="${p.id}">Edit</button>
@@ -115,6 +116,8 @@ $('#posts-table').addEventListener('click', async (e) => {
     form.category.value = post.category;
     form.excerpt.value = post.excerpt;
     form.content.value = post.content;
+    form.country.value = post.country || '';
+    form.city.value = post.city || '';
     // image inputs stay empty = keep the current image
     editingPostId = post.id;
     $('#post-form-title').textContent = `Editing: ${post.title}`;
@@ -426,7 +429,7 @@ function renderVideos() {
 
   $('#videos-table').innerHTML = `
     <table class="admin-table">
-      <thead><tr><th></th><th></th><th>Title</th><th>Video</th><th></th></tr></thead>
+      <thead><tr><th></th><th></th><th>Title</th><th>Country</th><th>Video</th><th></th></tr></thead>
       <tbody>
         ${videosList.map((v, i) => `
           <tr>
@@ -436,6 +439,7 @@ function renderVideos() {
             </td>
             <td><img src="${v.thumbnail}" alt="" style="width:90px;aspect-ratio:16/9;object-fit:cover;border-radius:6px;display:block"></td>
             <td>${v.title}${i === 0 ? ' <small style="color:#b0342c;font-weight:700">MAIN</small>' : ''}</td>
+            <td>${v.country || '—'}</td>
             <td><a href="${v.watch_url}" target="_blank">${v.youtube_id}</a></td>
             <td class="row-actions">
               <button data-edit-video="${v.id}">Edit</button>
@@ -477,6 +481,7 @@ $('#videos-table').addEventListener('click', async (e) => {
     form.reset();
     form.title.value = video.title;
     form.url.value = video.watch_url;
+    form.country.value = video.country || '';
     editingVideoId = video.id;
     $('#video-form-title').textContent = `Editing: ${video.title}`;
     form.hidden = false;
@@ -501,7 +506,7 @@ $('#video-form').addEventListener('submit', async (e) => {
   const res = await fetch(url, {
     method: editingVideoId ? 'PUT' : 'POST',
     headers: { ...authHeaders(), 'Content-Type': 'application/json' },
-    body: JSON.stringify({ title: form.title.value, url: form.url.value }),
+    body: JSON.stringify({ title: form.title.value, url: form.url.value, country: form.country.value }),
   });
   const result = await res.json();
 
@@ -637,7 +642,7 @@ function renderSlides() {
 
   $('#slides-table').innerHTML = `
     <table class="admin-table">
-      <thead><tr><th></th><th></th><th>Title</th><th>Label</th><th>Link</th><th></th></tr></thead>
+      <thead><tr><th></th><th></th><th>Title</th><th>Label</th><th>Country</th><th>Link</th><th></th></tr></thead>
       <tbody>
         ${slides.map((s, i) => `
           <tr>
@@ -648,6 +653,7 @@ function renderSlides() {
             <td><img src="${s.image_url}" alt="" style="width:90px;height:50px;object-fit:cover;border-radius:6px;display:block"></td>
             <td>${s.title}${i === 0 ? ' <small style="color:#b0342c;font-weight:700">FIRST</small>' : ''}</td>
             <td>${s.category || '—'}</td>
+            <td>${s.country || '—'}</td>
             <td>${s.link ? `<a href="${s.link}" target="_blank">link</a>` : '—'}</td>
             <td class="row-actions">
               <button data-edit-slide="${s.id}">Edit</button>
@@ -694,6 +700,7 @@ $('#slides-table').addEventListener('click', async (e) => {
     form.category.value = slide.category || '';
     form.description.value = slide.description || '';
     form.link.value = slide.link || '';
+    form.country.value = slide.country || '';
     editingSlideId = slide.id;
     $('#slide-form-title').textContent = `Editing: ${slide.title}`;
     form.hidden = false;

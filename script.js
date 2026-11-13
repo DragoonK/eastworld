@@ -2,7 +2,9 @@
 // Eastworld homepage scripts
 //  1. Carousel: powers every element with class "carousel"
 //  2. Blog posts: fetches posts from the backend API
-// Both are no-ops on pages that don't have the elements.
+//  3. Country filter: WORLD or a single country; re-filters the
+//     carousel, spotlights, stories, videos, ticker and map
+// All features are no-ops on pages that don't have the elements.
 // ============================================================
 
 class Carousel {
@@ -67,15 +69,23 @@ class Carousel {
 }
 
 // ------------------------------------------------------------
-// Blog posts with infinite scroll.
-//
-// The backend is paginated: /api/posts?limit=5&offset=10 returns
-// posts 11-15. We load 5 at a time. An invisible "sentinel" div
-// sits below the post list; an IntersectionObserver watches it,
-// and whenever it comes into view we fetch the next 5 posts.
-// When the API returns fewer than 5, we've reached the end and
-// stop observing.
+// Country filter state. 'world' = no filtering. Every homepage
+// data fetch goes through withCountry() so switching the toggle
+// re-scopes the whole page.
 // ------------------------------------------------------------
+
+let currentCountry = 'world';
+
+function withCountry(url) {
+  if (currentCountry === 'world') return url;
+  return `${url}${url.includes('?') ? '&' : '?'}country=${currentCountry}`;
+}
+
+// "phnom-penh" + "cambodia" -> "PHNOM PENH, CAMBODIA"
+function placeTag(item) {
+  const pretty = s => s.replace(/-/g, ' ').toUpperCase();
+  return [item.city, item.country].filter(Boolean).map(pretty).join(', ');
+}
 
 // ------------------------------------------------------------
 // Scroll reveal: elements with .reveal fade/slide in when they
@@ -99,6 +109,18 @@ function observeReveals(container, stagger = 90) {
   });
 }
 
+// ------------------------------------------------------------
+// Blog posts with infinite scroll.
+//
+// The backend is paginated: /api/posts?limit=5&offset=10 returns
+// posts 11-15. We load 5 at a time. An invisible "sentinel" div
+// sits below the post list; an IntersectionObserver watches it,
+// and whenever it comes into view we fetch the next 5 posts.
+// reloadStories() resets everything when the country changes.
+// ------------------------------------------------------------
+
+let reloadStories = null;
+
 function initInfinitePosts() {
   const grid = document.getElementById('posts-grid');
   const sentinel = document.getElementById('posts-sentinel');
@@ -109,43 +131,28 @@ function initInfinitePosts() {
   let isLoading = false;   // prevents parallel fetches of the same page
   let reachedEnd = false;
 
-  // The very first post of the feed becomes a large feature card;
-  // everything after is a numbered editorial row.
   function renderCards(posts) {
-    return posts.map((post, i) => {
-      const num = String(offset + i + 1).padStart(2, '0');
-      if (offset === 0 && i === 0) {
-        return `
-      <a class="story-feature reveal" href="post.html?id=${post.id}">
-        <div class="story-feature-img"><img src="${post.image_url}" alt="${post.title}"></div>
-        <div class="story-feature-body">
+    return posts.map(post => `
+      <a class="story-card reveal" href="post.html?id=${post.id}">
+        <div class="story-card-img"><img src="${post.image_url}" alt="${post.title}" loading="lazy"></div>
+        <div class="story-card-body">
           <span class="category">${post.category}</span>
           <h3>${post.title}</h3>
           <p>${post.excerpt}</p>
+          ${placeTag(post) ? `<span class="story-meta">${placeTag(post)}</span>` : ''}
           <span class="read-more">READ MORE</span>
         </div>
-      </a>`;
-      }
-      return `
-      <a class="story-row reveal" href="post.html?id=${post.id}">
-        <span class="story-num">${num}</span>
-        <div class="story-thumb"><img src="${post.image_url}" alt="${post.title}" loading="lazy"></div>
-        <div class="story-body">
-          <span class="category">${post.category}</span>
-          <h3>${post.title}</h3>
-          <p>${post.excerpt}</p>
-        </div>
-      </a>`;
-    }).join('');
+      </a>
+    `).join('');
   }
 
   async function loadMore() {
     if (isLoading || reachedEnd) return;
     isLoading = true;
-    sentinel.textContent = 'Loading more stories\u2026';
+    sentinel.textContent = 'Loading more stories…';
 
     try {
-      const response = await fetch(`/api/posts?limit=${PAGE_SIZE}&offset=${offset}`);
+      const response = await fetch(withCountry(`/api/posts?limit=${PAGE_SIZE}&offset=${offset}`));
       if (!response.ok) throw new Error(`API returned ${response.status}`);
       const posts = await response.json();
 
@@ -159,7 +166,7 @@ function initInfinitePosts() {
       if (posts.length < PAGE_SIZE) {
         reachedEnd = true;
         observer.disconnect();
-        sentinel.textContent = offset === 0 ? 'No stories yet.' : "You're all caught up.";
+        sentinel.textContent = offset === 0 ? 'No stories here yet.' : "You're all caught up.";
       } else {
         sentinel.textContent = '';
       }
@@ -185,23 +192,24 @@ function initInfinitePosts() {
     }
   }
 
-  // No prefetch margin: the next page loads only when the reader
-  // actually reaches the bottom, so the loading step is visible.
   const observer = new IntersectionObserver(entries => {
     if (entries[0].isIntersecting) loadMore();
   });
 
+  reloadStories = () => {
+    offset = 0;
+    isLoading = false;
+    reachedEnd = false;
+    observer.disconnect();
+    grid.innerHTML = '<p class="posts-status">Loading stories…</p>';
+    sentinel.textContent = '';
+    observer.observe(sentinel);
+    loadMore();
+  };
+
   observer.observe(sentinel);
   loadMore(); // first page, immediately
 }
-
-// ------------------------------------------------------------
-// Video rail (homepage sidebar, above trending).
-//
-// Shows the #1 video from the admin's VIDEOS tab, auto-playing.
-// Browsers only allow autoplay when muted, so it starts silent
-// and viewers unmute with one click on the player.
-// ------------------------------------------------------------
 
 // ------------------------------------------------------------
 // Vertical videos strip (homepage, below the stories).
@@ -218,13 +226,16 @@ async function initVideosStrip() {
 
   let videos;
   try {
-    const res = await fetch('/api/videos?limit=5');
+    const res = await fetch(withCountry('/api/videos?limit=5'));
     if (!res.ok) throw new Error(`API returned ${res.status}`);
     videos = await res.json();
   } catch {
-    return; // no backend or no data: the band just stays hidden
+    return; // no backend: the band just stays hidden
   }
-  if (videos.length === 0) return;
+  if (videos.length === 0) {
+    band.hidden = true;
+    return;
+  }
 
   strip.innerHTML = videos.map(video => `
     <div class="video-card">
@@ -251,13 +262,16 @@ async function initTicker() {
 
   let posts;
   try {
-    const res = await fetch('/api/posts?limit=8');
+    const res = await fetch(withCountry('/api/posts?limit=8'));
     if (!res.ok) throw new Error(`API returned ${res.status}`);
     posts = await res.json();
   } catch {
     return; // no backend: the bar just stays hidden
   }
-  if (posts.length === 0) return;
+  if (posts.length === 0) {
+    ticker.hidden = true;
+    return;
+  }
 
   const sequence = posts
     .map(p => `<a href="post.html?id=${p.id}">${p.title}</a><span class="ticker-dot">◆</span>`)
@@ -273,11 +287,22 @@ async function initTicker() {
 // ------------------------------------------------------------
 // Dynamic carousels (homepage).
 //
-// Carousels marked with data-slides="top|bottom" get their
-// slides from /api/slides — curated in the admin's CAROUSELS
-// tab. Carousels without the attribute (on older pages) keep
-// their hardcoded slides and initialize immediately.
+// Carousels marked with data-slides="top" get their slides from
+// /api/slides — curated in the admin's CAROUSELS tab. Carousels
+// without the attribute (on older pages) keep their hardcoded
+// slides and initialize immediately.
 // ------------------------------------------------------------
+
+// Live instances, so a country switch can stop the old autoplay
+// timers before the slides are rebuilt.
+const activeCarousels = new Map();
+
+function hideCarousel(el) {
+  el.style.display = 'none';
+  // In the header, the spotlights panel then takes the full width
+  const hero = el.closest('.hero');
+  if (hero) hero.classList.add('no-carousel');
+}
 
 function slideHTML(slide, isFirst) {
   const caption = `
@@ -294,19 +319,10 @@ function slideHTML(slide, isFirst) {
     : `<div class="${cls}">${img}${caption}</div>`;
 }
 
-function hideCarousel(el) {
-  // Hide the whole band (header included) when there's nothing to show
-  const band = el.closest('.guides-band');
-  (band || el).style.display = 'none';
-  // In the header, the spotlights panel then takes the full width
-  const hero = el.closest('.hero');
-  if (hero) hero.classList.add('no-carousel');
-}
-
 async function initDynamicCarousels(carousels) {
   let slides;
   try {
-    const res = await fetch('/api/slides');
+    const res = await fetch(withCountry('/api/slides'));
     if (!res.ok) throw new Error(`API returned ${res.status}`);
     slides = await res.json();
   } catch {
@@ -320,13 +336,62 @@ async function initDynamicCarousels(carousels) {
       hideCarousel(el);   // an empty carousel shows nothing
       return;
     }
+    el.style.display = '';
+    el.closest('.hero')?.classList.remove('no-carousel');
+
+    if (activeCarousels.has(el)) {
+      activeCarousels.get(el).stopAutoplay();
+      activeCarousels.delete(el);
+    }
     el.querySelector('.carousel-track').innerHTML =
       items.map((s, i) => slideHTML(s, i === 0)).join('');
-    new Carousel(el);
+    el.querySelector('.carousel-indicators').innerHTML = '';
+    activeCarousels.set(el, new Carousel(el));
+  });
+}
+
+// ------------------------------------------------------------
+// Country toggle (homepage, above the map). One click re-scopes
+// every section and flies the map to the selected country.
+// ------------------------------------------------------------
+
+function applyCountryFilter() {
+  // The trending sidebar has its own country dropdown; drive it
+  const select = document.getElementById('trending-country');
+  if (select) {
+    select.value = currentCountry === 'world' ? 'all' : currentCountry;
+    select.dispatchEvent(new Event('change'));
+  }
+
+  if (reloadStories) reloadStories();
+
+  const dynamic = [...document.querySelectorAll('.carousel[data-slides]')];
+  if (dynamic.length) initDynamicCarousels(dynamic);
+
+  initTicker();
+  initVideosStrip();
+
+  if (window.EastworldMap) window.EastworldMap.setCountry(currentCountry);
+}
+
+function initCountryFilter() {
+  const toggle = document.getElementById('country-toggle');
+  if (!toggle) return;
+
+  toggle.querySelectorAll('.country-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (btn.dataset.country === currentCountry) return;
+      currentCountry = btn.dataset.country;
+      toggle.querySelectorAll('.country-btn')
+        .forEach(b => b.classList.toggle('active', b === btn));
+      applyCountryFilter();
+    });
   });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  initCountryFilter();
+
   const dynamic = [];
   document.querySelectorAll('.carousel').forEach(el => {
     if (el.dataset.slides) dynamic.push(el);

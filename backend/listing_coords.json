@@ -1,0 +1,1826 @@
+[
+  {
+    "name": "Ichiran Ramen",
+    "city": "tokyo",
+    "lat": 35.667922,
+    "lng": 139.705209
+  },
+  {
+    "name": "Genki Sushi",
+    "city": "tokyo",
+    "lat": 35.589995,
+    "lng": 139.727918
+  },
+  {
+    "name": "CoCo Ichibanya",
+    "city": "tokyo",
+    "lat": 35.62489,
+    "lng": 139.393703
+  },
+  {
+    "name": "Afuri Ramen",
+    "city": "tokyo",
+    "lat": 35.700082,
+    "lng": 139.661947
+  },
+  {
+    "name": "Maisen Tonkatsu",
+    "city": "tokyo",
+    "lat": 35.659221,
+    "lng": 139.703709
+  },
+  {
+    "name": "Gonpachi Nishi-Azabu",
+    "city": "tokyo",
+    "lat": 35.660165,
+    "lng": 139.723594
+  },
+  {
+    "name": "Sushi Saito",
+    "city": "tokyo",
+    "lat": 35.657259,
+    "lng": 139.641241
+  },
+  {
+    "name": "Narisawa",
+    "city": "tokyo",
+    "lat": 35.67184,
+    "lng": 139.721998
+  },
+  {
+    "name": "Nihonryori RyuGin",
+    "city": "tokyo",
+    "lat": 35.672082,
+    "lng": 139.6643
+  },
+  {
+    "name": "Bonzo",
+    "city": "osaka",
+    "lat": 34.708901,
+    "lng": 135.524559
+  },
+  {
+    "name": "Takoyaki Juhachiban",
+    "city": "osaka",
+    "lat": 34.66866,
+    "lng": 135.502193
+  },
+  {
+    "name": "Kinryu Ramen",
+    "city": "osaka",
+    "lat": 34.668648,
+    "lng": 135.503038
+  },
+  {
+    "name": "Takiman Kitahorie Yakiniku",
+    "city": "osaka",
+    "lat": 34.686288,
+    "lng": 135.518418
+  },
+  {
+    "name": "Kani Doraku",
+    "city": "osaka",
+    "lat": 34.668784,
+    "lng": 135.503152
+  },
+  {
+    "name": "Mizuno",
+    "city": "osaka",
+    "lat": 34.668372,
+    "lng": 135.50322
+  },
+  {
+    "name": "Jonetsu Horumon",
+    "city": "osaka",
+    "lat": 34.696171,
+    "lng": 135.477476
+  },
+  {
+    "name": "Hajime",
+    "city": "osaka",
+    "lat": 34.730106,
+    "lng": 135.636815
+  },
+  {
+    "name": "La Cime",
+    "city": "osaka",
+    "lat": 34.685112,
+    "lng": 135.499359
+  },
+  {
+    "name": "Fujiya 1935",
+    "city": "osaka",
+    "lat": 34.400099,
+    "lng": 135.298183
+  },
+  {
+    "name": "Musashi Sushi",
+    "city": "kyoto",
+    "lat": 35.008923,
+    "lng": 135.76877
+  },
+  {
+    "name": "Omen",
+    "city": "kyoto",
+    "lat": 34.999178,
+    "lng": 135.779987
+  },
+  {
+    "name": "Gyoza ChaoChao Sanjo Kiyamachi",
+    "city": "kyoto",
+    "lat": 34.984894,
+    "lng": 135.761629
+  },
+  {
+    "name": "Kichi Kichi Omurice",
+    "city": "kyoto",
+    "lat": 35.007272,
+    "lng": 135.770819
+  },
+  {
+    "name": "Pontocho Misoguigawa",
+    "city": "kyoto",
+    "lat": 35.013129,
+    "lng": 135.755041
+  },
+  {
+    "name": "Gion Karyo",
+    "city": "kyoto",
+    "lat": 35.001767,
+    "lng": 135.774578
+  },
+  {
+    "name": "Kikunoi",
+    "city": "kyoto",
+    "lat": 35.001375,
+    "lng": 135.782263
+  },
+  {
+    "name": "Hyotei",
+    "city": "kyoto",
+    "lat": 35.011415,
+    "lng": 135.786734
+  },
+  {
+    "name": "Gion Sasaki",
+    "city": "kyoto",
+    "lat": 35.0016,
+    "lng": 135.771747
+  },
+  {
+    "name": "Kobe Beef Steakhouse",
+    "city": "kobe",
+    "lat": 34.703394,
+    "lng": 135.195618
+  },
+  {
+    "name": "Kobe Gyoza Garden",
+    "city": "kobe",
+    "lat": 34.665512,
+    "lng": 135.214676
+  },
+  {
+    "name": "Oyster House Kobe",
+    "city": "kobe",
+    "lat": 34.685982,
+    "lng": 135.1975
+  },
+  {
+    "name": "Kitano Cafe",
+    "city": "kobe",
+    "lat": 34.677041,
+    "lng": 135.181735
+  },
+  {
+    "name": "The Bake Kobe",
+    "city": "kobe",
+    "lat": 34.713041,
+    "lng": 135.224088
+  },
+  {
+    "name": "Yang's Dumplings",
+    "city": "shanghai",
+    "lat": 31.222025,
+    "lng": 121.428601
+  },
+  {
+    "name": "Jia Jia Tang Bao",
+    "city": "shanghai",
+    "lat": 31.237007,
+    "lng": 121.466048
+  },
+  {
+    "name": "A Niang Mian",
+    "city": "shanghai",
+    "lat": 31.219711,
+    "lng": 121.461937
+  },
+  {
+    "name": "Din Tai Fung",
+    "city": "shanghai",
+    "lat": 31.235743,
+    "lng": 121.503106
+  },
+  {
+    "name": "Lost Heaven",
+    "city": "shanghai",
+    "lat": 31.21174,
+    "lng": 121.433258
+  },
+  {
+    "name": "Old Jesse",
+    "city": "shanghai",
+    "lat": 31.204689,
+    "lng": 121.433318
+  },
+  {
+    "name": "Ultraviolet by Paul Pairet",
+    "city": "shanghai",
+    "lat": 31.238988,
+    "lng": 121.450524
+  },
+  {
+    "name": "Fu 1088",
+    "city": "shanghai",
+    "lat": 31.241812,
+    "lng": 121.466053
+  },
+  {
+    "name": "8 1/2 Otto e Mezzo Bombana",
+    "city": "shanghai",
+    "lat": 31.226753,
+    "lng": 121.4557
+  },
+  {
+    "name": "Baoyuan Dumplings",
+    "city": "beijing",
+    "lat": 39.898671,
+    "lng": 116.4374
+  },
+  {
+    "name": "Mr. Shi's Dumplings",
+    "city": "beijing",
+    "lat": 39.940086,
+    "lng": 116.393694
+  },
+  {
+    "name": "Jing-A Brewing Co.",
+    "city": "beijing",
+    "lat": 39.925878,
+    "lng": 116.407319
+  },
+  {
+    "name": "Duck de Chine",
+    "city": "beijing",
+    "lat": 39.93043,
+    "lng": 116.452408
+  },
+  {
+    "name": "Haidilao Hot Pot",
+    "city": "beijing",
+    "lat": 40.045109,
+    "lng": 116.426478
+  },
+  {
+    "name": "TRB Hutong",
+    "city": "beijing",
+    "lat": 39.938242,
+    "lng": 116.413285
+  },
+  {
+    "name": "King's Joy",
+    "city": "beijing",
+    "lat": 39.94683,
+    "lng": 116.409884
+  },
+  {
+    "name": "Xin Rong Ji",
+    "city": "beijing",
+    "lat": 39.886488,
+    "lng": 116.370616
+  },
+  {
+    "name": "Cai Yi Xuan",
+    "city": "beijing",
+    "lat": 25.068083,
+    "lng": 102.721437
+  },
+  {
+    "name": "Saizeriya",
+    "city": "shenzhen",
+    "lat": 22.705829,
+    "lng": 114.334214
+  },
+  {
+    "name": "Baia Burger Concept",
+    "city": "shenzhen",
+    "lat": 22.536934,
+    "lng": 114.049419
+  },
+  {
+    "name": "Laurel Restaurant",
+    "city": "shenzhen",
+    "lat": 22.648376,
+    "lng": 114.062304
+  },
+  {
+    "name": "Tian Gong",
+    "city": "shenzhen",
+    "lat": 22.631165,
+    "lng": 113.841846
+  },
+  {
+    "name": "Shang Garden",
+    "city": "shenzhen",
+    "lat": 22.505442,
+    "lng": 113.931253
+  },
+  {
+    "name": "Ensue",
+    "city": "shenzhen",
+    "lat": 22.539037,
+    "lng": 114.05191
+  },
+  {
+    "name": "Chuanchuanxiang",
+    "city": "chongqing",
+    "lat": 29.579824,
+    "lng": 106.545365
+  },
+  {
+    "name": "Zao Gao Li",
+    "city": "chongqing",
+    "lat": 29.535793,
+    "lng": 106.373774
+  },
+  {
+    "name": "Qin Ma Hotpot",
+    "city": "chongqing",
+    "lat": 29.547353,
+    "lng": 106.551247
+  },
+  {
+    "name": "Cai Xiang Yuan",
+    "city": "chongqing",
+    "lat": 29.324069,
+    "lng": 106.306119
+  },
+  {
+    "name": "De Zhuang",
+    "city": "chongqing",
+    "lat": 29.642913,
+    "lng": 106.47868
+  },
+  {
+    "name": "Laurel Restaurant (Chongqing)",
+    "city": "chongqing",
+    "lat": 29.586647,
+    "lng": 106.538306
+  },
+  {
+    "name": "Spice Temple Chongqing",
+    "city": "chongqing",
+    "lat": 29.585471,
+    "lng": 106.5576
+  },
+  {
+    "name": "Yu's Family Kitchen",
+    "city": "chongqing",
+    "lat": 29.547824,
+    "lng": 106.534306
+  },
+  {
+    "name": "Jade Garden",
+    "city": "chongqing",
+    "lat": 29.538647,
+    "lng": 106.539482
+  },
+  {
+    "name": "Guangzhou Restaurant",
+    "city": "guangzhou",
+    "lat": 23.116497,
+    "lng": 113.240604
+  },
+  {
+    "name": "Liwan Snack Street",
+    "city": "guangzhou",
+    "lat": 23.1351,
+    "lng": 113.262635
+  },
+  {
+    "name": "Tongqing Noodle Restaurant",
+    "city": "guangzhou",
+    "lat": 23.121453,
+    "lng": 113.285224
+  },
+  {
+    "name": "Bingsheng Pinwei",
+    "city": "guangzhou",
+    "lat": 23.136688,
+    "lng": 113.328512
+  },
+  {
+    "name": "Panxi Restaurant",
+    "city": "guangzhou",
+    "lat": 23.123999,
+    "lng": 113.230721
+  },
+  {
+    "name": "Tian Tian Seafood Restaurant",
+    "city": "guangzhou",
+    "lat": 23.137218,
+    "lng": 113.247576
+  },
+  {
+    "name": "Jade River",
+    "city": "guangzhou",
+    "lat": 23.114159,
+    "lng": 113.268282
+  },
+  {
+    "name": "Jiang by Chef Fei",
+    "city": "guangzhou",
+    "lat": 23.137234,
+    "lng": 113.327788
+  },
+  {
+    "name": "Imperial Treasure Fine Chinese Cuisine",
+    "city": "guangzhou",
+    "lat": 23.140512,
+    "lng": 113.240518
+  },
+  {
+    "name": "Lentil As Anything",
+    "city": "melbourne",
+    "lat": -37.799642,
+    "lng": 144.896654
+  },
+  {
+    "name": "Don Don",
+    "city": "melbourne",
+    "lat": -37.831875,
+    "lng": 144.969507
+  },
+  {
+    "name": "Shanghai Street Dumplings",
+    "city": "melbourne",
+    "lat": -37.842659,
+    "lng": 144.947453
+  },
+  {
+    "name": "Chin Chin",
+    "city": "melbourne",
+    "lat": -37.815584,
+    "lng": 144.970342
+  },
+  {
+    "name": "Tipo 00",
+    "city": "melbourne",
+    "lat": -37.813546,
+    "lng": 144.961987
+  },
+  {
+    "name": "Supernormal",
+    "city": "melbourne",
+    "lat": -37.815959,
+    "lng": 144.968326
+  },
+  {
+    "name": "Attica",
+    "city": "melbourne",
+    "lat": -37.877032,
+    "lng": 144.997312
+  },
+  {
+    "name": "Vue de Monde",
+    "city": "melbourne",
+    "lat": -37.818445,
+    "lng": 144.957358
+  },
+  {
+    "name": "Flower Drum",
+    "city": "melbourne",
+    "lat": -37.811867,
+    "lng": 144.969217
+  },
+  {
+    "name": "Spice Alley",
+    "city": "sydney",
+    "lat": -33.885166,
+    "lng": 151.201947
+  },
+  {
+    "name": "Chat Thai",
+    "city": "sydney",
+    "lat": -33.795101,
+    "lng": 151.188061
+  },
+  {
+    "name": "Mr. Wong",
+    "city": "sydney",
+    "lat": -33.864114,
+    "lng": 151.208299
+  },
+  {
+    "name": "Quay",
+    "city": "sydney",
+    "lat": -33.861359,
+    "lng": 151.210719
+  },
+  {
+    "name": "Tetsuya's",
+    "city": "sydney",
+    "lat": -33.877388,
+    "lng": 151.188006
+  },
+  {
+    "name": "Icebergs Dining Room",
+    "city": "sydney",
+    "lat": -33.839741,
+    "lng": 151.196006
+  },
+  {
+    "name": "Sixpenny",
+    "city": "sydney",
+    "lat": -33.892556,
+    "lng": 151.16475
+  },
+  {
+    "name": "Sepia",
+    "city": "sydney",
+    "lat": -33.825459,
+    "lng": 150.79949
+  },
+  {
+    "name": "Bennelong",
+    "city": "sydney",
+    "lat": -33.857495,
+    "lng": 151.214683
+  },
+  {
+    "name": "Romdeng",
+    "city": "phnom-penh",
+    "lat": 11.558995,
+    "lng": 104.92387
+  },
+  {
+    "name": "Phsar Kapko Restaurant",
+    "city": "phnom-penh",
+    "lat": 11.573694,
+    "lng": 104.932082
+  },
+  {
+    "name": "Eleven One Kitchen",
+    "city": "phnom-penh",
+    "lat": 11.550168,
+    "lng": 104.926368
+  },
+  {
+    "name": "Malis",
+    "city": "phnom-penh",
+    "lat": 11.553222,
+    "lng": 104.929049
+  },
+  {
+    "name": "Khéma",
+    "city": "phnom-penh",
+    "lat": 11.559412,
+    "lng": 104.925012
+  },
+  {
+    "name": "Topaz",
+    "city": "phnom-penh",
+    "lat": 11.546726,
+    "lng": 104.902034
+  },
+  {
+    "name": "Chinese House",
+    "city": "phnom-penh",
+    "lat": 11.582016,
+    "lng": 104.921326
+  },
+  {
+    "name": "Palais de la Poste",
+    "city": "phnom-penh",
+    "lat": 11.574682,
+    "lng": 104.92605
+  },
+  {
+    "name": "Brasserie Louis",
+    "city": "phnom-penh",
+    "lat": 11.573613,
+    "lng": 104.91895
+  },
+  {
+    "name": "Chanrey Tree",
+    "city": "siem-reap",
+    "lat": 13.356066,
+    "lng": 103.857543
+  },
+  {
+    "name": "Marum",
+    "city": "siem-reap",
+    "lat": 13.364656,
+    "lng": 103.862639
+  },
+  {
+    "name": "Cuisine Wat Damnak",
+    "city": "siem-reap",
+    "lat": 13.349645,
+    "lng": 103.860169
+  },
+  {
+    "name": "Khmer Kitchen",
+    "city": "siem-reap",
+    "lat": 13.354391,
+    "lng": 103.855212
+  },
+  {
+    "name": "Mie Cafe",
+    "city": "siem-reap",
+    "lat": 13.374344,
+    "lng": 103.86255
+  },
+  {
+    "name": "Pub Street Food Stands",
+    "city": "siem-reap",
+    "lat": 13.352865,
+    "lng": 103.869624
+  },
+  {
+    "name": "Malis Siem Reap",
+    "city": "siem-reap",
+    "lat": 13.356275,
+    "lng": 103.857658
+  },
+  {
+    "name": "The Sugar Palm",
+    "city": "siem-reap",
+    "lat": 13.352429,
+    "lng": 103.860252
+  },
+  {
+    "name": "Spoons",
+    "city": "siem-reap",
+    "lat": 13.349302,
+    "lng": 103.85699
+  },
+  {
+    "name": "Sakura Hostel Asakusa",
+    "city": "tokyo",
+    "lat": 35.715998,
+    "lng": 139.794835
+  },
+  {
+    "name": "Wise Owl Hostels Shibuya",
+    "city": "tokyo",
+    "lat": 35.653707,
+    "lng": 139.689786
+  },
+  {
+    "name": "UNPLAN Kagurazaka",
+    "city": "tokyo",
+    "lat": 35.665494,
+    "lng": 139.651124
+  },
+  {
+    "name": "Hotel Gracery Shinjuku",
+    "city": "tokyo",
+    "lat": 35.695563,
+    "lng": 139.702277
+  },
+  {
+    "name": "Mitsui Garden Hotel Ginza Premier",
+    "city": "tokyo",
+    "lat": 35.704788,
+    "lng": 139.625947
+  },
+  {
+    "name": "Shibuya Stream Excel Hotel Tokyu",
+    "city": "tokyo",
+    "lat": 35.704553,
+    "lng": 139.634888
+  },
+  {
+    "name": "Park Hyatt Tokyo",
+    "city": "tokyo",
+    "lat": 35.685136,
+    "lng": 139.690961
+  },
+  {
+    "name": "The Ritz-Carlton Tokyo",
+    "city": "tokyo",
+    "lat": 35.666329,
+    "lng": 139.731362
+  },
+  {
+    "name": "Aman Tokyo",
+    "city": "tokyo",
+    "lat": 35.685595,
+    "lng": 139.765387
+  },
+  {
+    "name": "J-Hoppers Osaka Guesthouse",
+    "city": "osaka",
+    "lat": 34.69741,
+    "lng": 135.48482
+  },
+  {
+    "name": "Osaka Guesthouse HIVE",
+    "city": "osaka",
+    "lat": 34.6757,
+    "lng": 135.477241
+  },
+  {
+    "name": "Hotel Toyo",
+    "city": "osaka",
+    "lat": 34.648353,
+    "lng": 135.504108
+  },
+  {
+    "name": "Hotel Granvia Osaka",
+    "city": "osaka",
+    "lat": 34.701614,
+    "lng": 135.495925
+  },
+  {
+    "name": "Cross Hotel Osaka",
+    "city": "osaka",
+    "lat": 34.669705,
+    "lng": 135.500819
+  },
+  {
+    "name": "Osaka Marriott Miyako Hotel",
+    "city": "osaka",
+    "lat": 34.646111,
+    "lng": 135.513244
+  },
+  {
+    "name": "Conrad Osaka",
+    "city": "osaka",
+    "lat": 34.693593,
+    "lng": 135.495468
+  },
+  {
+    "name": "The St. Regis Osaka",
+    "city": "osaka",
+    "lat": 34.714759,
+    "lng": 135.501712
+  },
+  {
+    "name": "W Osaka",
+    "city": "osaka",
+    "lat": 34.67789,
+    "lng": 135.499883
+  },
+  {
+    "name": "Guest House Oumi",
+    "city": "kyoto",
+    "lat": 35.011967,
+    "lng": 135.738897
+  },
+  {
+    "name": "Len Kyoto Kawaramachi",
+    "city": "kyoto",
+    "lat": 34.998696,
+    "lng": 135.767324
+  },
+  {
+    "name": "Piece Hostel Kyoto",
+    "city": "kyoto",
+    "lat": 34.983678,
+    "lng": 135.762082
+  },
+  {
+    "name": "Hotel Kanra Kyoto",
+    "city": "kyoto",
+    "lat": 35.026306,
+    "lng": 135.753159
+  },
+  {
+    "name": "Kyoto Yura Hotel MGallery",
+    "city": "kyoto",
+    "lat": 35.008935,
+    "lng": 135.773999
+  },
+  {
+    "name": "The Thousand Kyoto",
+    "city": "kyoto",
+    "lat": 34.986749,
+    "lng": 135.761792
+  },
+  {
+    "name": "The Ritz-Carlton Kyoto",
+    "city": "kyoto",
+    "lat": 35.013779,
+    "lng": 135.770852
+  },
+  {
+    "name": "Aman Kyoto",
+    "city": "kyoto",
+    "lat": 35.050347,
+    "lng": 135.73123
+  },
+  {
+    "name": "Four Seasons Hotel Kyoto",
+    "city": "kyoto",
+    "lat": 34.990842,
+    "lng": 135.776438
+  },
+  {
+    "name": "Kobe Kua House",
+    "city": "kobe",
+    "lat": 34.671629,
+    "lng": 135.183853
+  },
+  {
+    "name": "Hostel Nakamura Kobe",
+    "city": "kobe",
+    "lat": 34.682218,
+    "lng": 135.203147
+  },
+  {
+    "name": "Kobe Sannomiya R2 Hostel",
+    "city": "kobe",
+    "lat": 34.709276,
+    "lng": 135.170912
+  },
+  {
+    "name": "Oriental Hotel",
+    "city": "kobe",
+    "lat": 34.687763,
+    "lng": 135.192956
+  },
+  {
+    "name": "La Suite Kobe Harborland",
+    "city": "kobe",
+    "lat": 34.698688,
+    "lng": 135.220559
+  },
+  {
+    "name": "Hotel Okura Kobe",
+    "city": "kobe",
+    "lat": 34.68372,
+    "lng": 135.188001
+  },
+  {
+    "name": "Kobe Kitano Hotel",
+    "city": "kobe",
+    "lat": 34.671394,
+    "lng": 135.1735
+  },
+  {
+    "name": "Arima Grand Hotel",
+    "city": "kobe",
+    "lat": 34.798504,
+    "lng": 135.2441
+  },
+  {
+    "name": "Ginsuiso Bekkan Choraku",
+    "city": "kobe",
+    "lat": 34.693982,
+    "lng": 135.193265
+  },
+  {
+    "name": "Blue Mountain Bund Youth Hostel",
+    "city": "shanghai",
+    "lat": 31.241522,
+    "lng": 121.477071
+  },
+  {
+    "name": "Captain Hostel",
+    "city": "shanghai",
+    "lat": 31.237267,
+    "lng": 121.484856
+  },
+  {
+    "name": "Fish Inn East Nanjing Road",
+    "city": "shanghai",
+    "lat": 31.217341,
+    "lng": 121.458288
+  },
+  {
+    "name": "Hotel Indigo Shanghai on the Bund",
+    "city": "shanghai",
+    "lat": 31.228112,
+    "lng": 121.495674
+  },
+  {
+    "name": "The Yangtze Boutique Shanghai",
+    "city": "shanghai",
+    "lat": 31.260165,
+    "lng": 121.486053
+  },
+  {
+    "name": "Jin Jiang Tower",
+    "city": "shanghai",
+    "lat": 31.222507,
+    "lng": 121.458169
+  },
+  {
+    "name": "The Peninsula Shanghai",
+    "city": "shanghai",
+    "lat": 31.243257,
+    "lng": 121.484758
+  },
+  {
+    "name": "Park Hyatt Shanghai",
+    "city": "shanghai",
+    "lat": 31.23633,
+    "lng": 121.502974
+  },
+  {
+    "name": "Bulgari Hotel Shanghai",
+    "city": "shanghai",
+    "lat": 31.217022,
+    "lng": 121.453586
+  },
+  {
+    "name": "Beijing Downtown Backpackers",
+    "city": "beijing",
+    "lat": 39.936089,
+    "lng": 116.396816
+  },
+  {
+    "name": "Leo Hostel",
+    "city": "beijing",
+    "lat": 39.891243,
+    "lng": 116.383809
+  },
+  {
+    "name": "Peking Station Hostel",
+    "city": "beijing",
+    "lat": 39.904733,
+    "lng": 116.4136
+  },
+  {
+    "name": "Hotel Jen Beijing",
+    "city": "beijing",
+    "lat": 40.35443,
+    "lng": 116.004136
+  },
+  {
+    "name": "The Emperor Tiananmen",
+    "city": "beijing",
+    "lat": 39.877729,
+    "lng": 116.416459
+  },
+  {
+    "name": "Regent Beijing",
+    "city": "beijing",
+    "lat": 39.914608,
+    "lng": 116.412736
+  },
+  {
+    "name": "The Peninsula Beijing",
+    "city": "beijing",
+    "lat": 39.925024,
+    "lng": 116.395282
+  },
+  {
+    "name": "Waldorf Astoria Beijing",
+    "city": "beijing",
+    "lat": 39.914599,
+    "lng": 116.407783
+  },
+  {
+    "name": "Mandarin Oriental Wangfujing",
+    "city": "beijing",
+    "lat": 39.926906,
+    "lng": 116.393871
+  },
+  {
+    "name": "Shenzhen Loft Youth Hostel",
+    "city": "shenzhen",
+    "lat": 22.541094,
+    "lng": 113.988033
+  },
+  {
+    "name": "The Langham, Shenzhen",
+    "city": "shenzhen",
+    "lat": 22.539089,
+    "lng": 114.015563
+  },
+  {
+    "name": "Shangri-La Shenzhen",
+    "city": "shenzhen",
+    "lat": 22.53892,
+    "lng": 114.052389
+  },
+  {
+    "name": "Muji Hotel Shenzhen",
+    "city": "shenzhen",
+    "lat": 22.559816,
+    "lng": 114.063123
+  },
+  {
+    "name": "Raffles Shenzhen",
+    "city": "shenzhen",
+    "lat": 22.514823,
+    "lng": 113.920724
+  },
+  {
+    "name": "The St. Regis Shenzhen",
+    "city": "shenzhen",
+    "lat": 22.545529,
+    "lng": 114.101576
+  },
+  {
+    "name": "Yangtze River Youth Hostel",
+    "city": "chongqing",
+    "lat": 29.547353,
+    "lng": 106.567718
+  },
+  {
+    "name": "Chongqing Travelling With Hostel",
+    "city": "chongqing",
+    "lat": 29.535824,
+    "lng": 106.576424
+  },
+  {
+    "name": "Chongqing Jiangbei Hotel",
+    "city": "chongqing",
+    "lat": 29.535353,
+    "lng": 106.5296
+  },
+  {
+    "name": "Somerset Jiefangbei Chongqing",
+    "city": "chongqing",
+    "lat": 29.585941,
+    "lng": 106.571012
+  },
+  {
+    "name": "Radisson Blu Hotel Chongqing Shapingba",
+    "city": "chongqing",
+    "lat": 29.54512,
+    "lng": 106.437097
+  },
+  {
+    "name": "InterContinental Chongqing Raffles City",
+    "city": "chongqing",
+    "lat": 29.540294,
+    "lng": 106.556894
+  },
+  {
+    "name": "JW Marriott Hotel Chongqing",
+    "city": "chongqing",
+    "lat": 29.560018,
+    "lng": 106.567346
+  },
+  {
+    "name": "The Westin Chongqing Liberation Square",
+    "city": "chongqing",
+    "lat": 29.559896,
+    "lng": 106.57635
+  },
+  {
+    "name": "Banyan Tree Chongqing Beibei",
+    "city": "chongqing",
+    "lat": 29.858762,
+    "lng": 106.376649
+  },
+  {
+    "name": "Lazy Gaga Hostel",
+    "city": "guangzhou",
+    "lat": 23.1258,
+    "lng": 113.251632
+  },
+  {
+    "name": "Guangzhou Yuexiu Youth Hostel",
+    "city": "guangzhou",
+    "lat": 23.127571,
+    "lng": 113.284518
+  },
+  {
+    "name": "City Inn Plus Taojin Metro Station",
+    "city": "guangzhou",
+    "lat": 23.144982,
+    "lng": 113.258871
+  },
+  {
+    "name": "LN Garden Hotel",
+    "city": "guangzhou",
+    "lat": 23.145924,
+    "lng": 113.290871
+  },
+  {
+    "name": "Mandarin Oriental Guangzhou",
+    "city": "guangzhou",
+    "lat": 23.137186,
+    "lng": 113.327714
+  },
+  {
+    "name": "Conrad Guangzhou",
+    "city": "guangzhou",
+    "lat": 23.100041,
+    "lng": 113.279576
+  },
+  {
+    "name": "Four Seasons Hotel Guangzhou",
+    "city": "guangzhou",
+    "lat": 23.120429,
+    "lng": 113.31797
+  },
+  {
+    "name": "The Ritz-Carlton, Guangzhou",
+    "city": "guangzhou",
+    "lat": 23.142159,
+    "lng": 113.278165
+  },
+  {
+    "name": "Park Hyatt Guangzhou",
+    "city": "guangzhou",
+    "lat": 23.138159,
+    "lng": 113.285459
+  },
+  {
+    "name": "Envoy Hostel Phnom Penh",
+    "city": "phnom-penh",
+    "lat": 11.5584,
+    "lng": 104.901259
+  },
+  {
+    "name": "Feliz Hostel & Cafe",
+    "city": "phnom-penh",
+    "lat": 11.558871,
+    "lng": 104.929259
+  },
+  {
+    "name": "The Artist Guesthouse",
+    "city": "phnom-penh",
+    "lat": 11.565753,
+    "lng": 104.927525
+  },
+  {
+    "name": "Plantation Urban Resort",
+    "city": "phnom-penh",
+    "lat": 11.563425,
+    "lng": 104.927001
+  },
+  {
+    "name": "Palace Gate Hotel",
+    "city": "phnom-penh",
+    "lat": 11.558444,
+    "lng": 104.931541
+  },
+  {
+    "name": "Penh House & Jungle Addition",
+    "city": "phnom-penh",
+    "lat": 11.539576,
+    "lng": 104.922906
+  },
+  {
+    "name": "Raffles Hotel Le Royal",
+    "city": "phnom-penh",
+    "lat": 11.576268,
+    "lng": 104.918362
+  },
+  {
+    "name": "Rosewood Phnom Penh",
+    "city": "phnom-penh",
+    "lat": 11.573367,
+    "lng": 104.919231
+  },
+  {
+    "name": "Sofitel Phnom Penh Phokeethra",
+    "city": "phnom-penh",
+    "lat": 11.546213,
+    "lng": 104.933465
+  },
+  {
+    "name": "Onederz Hostel Siem Reap",
+    "city": "siem-reap",
+    "lat": 13.356297,
+    "lng": 103.852397
+  },
+  {
+    "name": "Baby Elephant Boutique Hotel",
+    "city": "siem-reap",
+    "lat": 13.350091,
+    "lng": 103.848492
+  },
+  {
+    "name": "Lub d Cambodia Siem Reap",
+    "city": "siem-reap",
+    "lat": 13.3891,
+    "lng": 103.823271
+  },
+  {
+    "name": "Shinta Mani Angkor",
+    "city": "siem-reap",
+    "lat": 13.390747,
+    "lng": 103.8548
+  },
+  {
+    "name": "Viroth's Hotel",
+    "city": "siem-reap",
+    "lat": 13.354897,
+    "lng": 103.859814
+  },
+  {
+    "name": "Jaya House River Park",
+    "city": "siem-reap",
+    "lat": 13.370168,
+    "lng": 103.864653
+  },
+  {
+    "name": "Amansara",
+    "city": "siem-reap",
+    "lat": 13.365009,
+    "lng": 103.861014
+  },
+  {
+    "name": "Phum Baitang",
+    "city": "siem-reap",
+    "lat": 13.357228,
+    "lng": 103.827838
+  },
+  {
+    "name": "Raffles Grand Hotel d'Angkor",
+    "city": "siem-reap",
+    "lat": 13.364362,
+    "lng": 103.859801
+  },
+  {
+    "name": "Space Hotel",
+    "city": "melbourne",
+    "lat": -37.807607,
+    "lng": 144.966017
+  },
+  {
+    "name": "The Nunnery",
+    "city": "melbourne",
+    "lat": -37.802225,
+    "lng": 144.974461
+  },
+  {
+    "name": "Melbourne Central YHA",
+    "city": "melbourne",
+    "lat": -37.820655,
+    "lng": 144.95566
+  },
+  {
+    "name": "QT Melbourne",
+    "city": "melbourne",
+    "lat": -37.813331,
+    "lng": 144.968146
+  },
+  {
+    "name": "The Savoy Hotel on Little Collins",
+    "city": "melbourne",
+    "lat": -37.831129,
+    "lng": 144.955218
+  },
+  {
+    "name": "Ovolo Laneways",
+    "city": "melbourne",
+    "lat": -37.823365,
+    "lng": 144.988629
+  },
+  {
+    "name": "Park Hyatt Melbourne",
+    "city": "melbourne",
+    "lat": -37.811447,
+    "lng": 144.97665
+  },
+  {
+    "name": "The Langham Melbourne",
+    "city": "melbourne",
+    "lat": -37.820578,
+    "lng": 144.96574
+  },
+  {
+    "name": "Jackalope Hotel",
+    "city": "melbourne",
+    "lat": -38.345013,
+    "lng": 145.097066
+  },
+  {
+    "name": "Sydney Harbour YHA",
+    "city": "sydney",
+    "lat": -33.860079,
+    "lng": 151.207101
+  },
+  {
+    "name": "Wake Up! Sydney",
+    "city": "sydney",
+    "lat": -33.882369,
+    "lng": 151.20466
+  },
+  {
+    "name": "The Pod Sydney",
+    "city": "sydney",
+    "lat": -33.876682,
+    "lng": 151.208947
+  },
+  {
+    "name": "QT Sydney",
+    "city": "sydney",
+    "lat": -33.870937,
+    "lng": 151.20766
+  },
+  {
+    "name": "The Old Clare Hotel",
+    "city": "sydney",
+    "lat": -33.848682,
+    "lng": 151.201653
+  },
+  {
+    "name": "Paramount House Hotel",
+    "city": "sydney",
+    "lat": -33.890565,
+    "lng": 151.209418
+  },
+  {
+    "name": "Park Hyatt Sydney",
+    "city": "sydney",
+    "lat": -33.855994,
+    "lng": 151.208897
+  },
+  {
+    "name": "The Langham Sydney",
+    "city": "sydney",
+    "lat": -33.860475,
+    "lng": 151.203454
+  },
+  {
+    "name": "Four Seasons Hotel Sydney",
+    "city": "sydney",
+    "lat": -33.86167,
+    "lng": 151.207601
+  },
+  {
+    "name": "Tokyo Skytree",
+    "city": "tokyo",
+    "lat": 35.710054,
+    "lng": 139.810714
+  },
+  {
+    "name": "Meiji Shrine",
+    "city": "tokyo",
+    "lat": 35.674842,
+    "lng": 139.699627
+  },
+  {
+    "name": "Senso-ji Temple",
+    "city": "tokyo",
+    "lat": 35.713403,
+    "lng": 139.795526
+  },
+  {
+    "name": "Shibuya Crossing",
+    "city": "tokyo",
+    "lat": 35.659495,
+    "lng": 139.700498
+  },
+  {
+    "name": "Tokyo Imperial Palace",
+    "city": "tokyo",
+    "lat": 35.679671,
+    "lng": 139.755526
+  },
+  {
+    "name": "TeamLab Borderless",
+    "city": "tokyo",
+    "lat": 35.662002,
+    "lng": 139.743418
+  },
+  {
+    "name": "Osaka Castle",
+    "city": "osaka",
+    "lat": 34.687183,
+    "lng": 135.525396
+  },
+  {
+    "name": "Dotonbori",
+    "city": "osaka",
+    "lat": 34.669031,
+    "lng": 135.501572
+  },
+  {
+    "name": "Universal Studios Japan",
+    "city": "osaka",
+    "lat": 34.665639,
+    "lng": 135.432453
+  },
+  {
+    "name": "Shitennoji Temple",
+    "city": "osaka",
+    "lat": 34.6537,
+    "lng": 135.513744
+  },
+  {
+    "name": "Osaka Aquarium Kaiyukan",
+    "city": "osaka",
+    "lat": 34.723229,
+    "lng": 135.495124
+  },
+  {
+    "name": "Fushimi Inari Taisha",
+    "city": "kyoto",
+    "lat": 34.967519,
+    "lng": 135.77971
+  },
+  {
+    "name": "Kinkaku-ji (Golden Pavilion)",
+    "city": "kyoto",
+    "lat": 35.023718,
+    "lng": 135.746806
+  },
+  {
+    "name": "Arashiyama Bamboo Grove",
+    "city": "kyoto",
+    "lat": 35.016742,
+    "lng": 135.671148
+  },
+  {
+    "name": "Kiyomizu-dera Temple",
+    "city": "kyoto",
+    "lat": 34.997841,
+    "lng": 135.777106
+  },
+  {
+    "name": "Gion District",
+    "city": "kyoto",
+    "lat": 35.027953,
+    "lng": 135.792453
+  },
+  {
+    "name": "Mount Rokko",
+    "city": "kobe",
+    "lat": 34.710254,
+    "lng": 135.191823
+  },
+  {
+    "name": "Kobe Harborland",
+    "city": "kobe",
+    "lat": 34.678512,
+    "lng": 135.180311
+  },
+  {
+    "name": "Kobe Port Tower",
+    "city": "kobe",
+    "lat": 34.682628,
+    "lng": 135.186724
+  },
+  {
+    "name": "Arima Onsen",
+    "city": "kobe",
+    "lat": 34.799256,
+    "lng": 135.246275
+  },
+  {
+    "name": "Ikuta Shrine",
+    "city": "kobe",
+    "lat": 34.69461,
+    "lng": 135.190617
+  },
+  {
+    "name": "The Bund",
+    "city": "shanghai",
+    "lat": 31.235336,
+    "lng": 121.487632
+  },
+  {
+    "name": "Yu Garden",
+    "city": "shanghai",
+    "lat": 31.228927,
+    "lng": 121.487975
+  },
+  {
+    "name": "Shanghai Tower",
+    "city": "shanghai",
+    "lat": 31.23565,
+    "lng": 121.501254
+  },
+  {
+    "name": "Nanjing Road",
+    "city": "shanghai",
+    "lat": 31.230467,
+    "lng": 121.457953
+  },
+  {
+    "name": "Jade Buddha Temple",
+    "city": "shanghai",
+    "lat": 31.243687,
+    "lng": 121.439784
+  },
+  {
+    "name": "Great Wall of China",
+    "city": "beijing",
+    "lat": 40.495631,
+    "lng": 116.241904
+  },
+  {
+    "name": "Forbidden City",
+    "city": "beijing",
+    "lat": 39.917276,
+    "lng": 116.390769
+  },
+  {
+    "name": "Temple of Heaven",
+    "city": "beijing",
+    "lat": 39.879907,
+    "lng": 116.402872
+  },
+  {
+    "name": "Summer Palace",
+    "city": "beijing",
+    "lat": 39.990098,
+    "lng": 116.26474
+  },
+  {
+    "name": "Tiananmen Square",
+    "city": "beijing",
+    "lat": 39.902722,
+    "lng": 116.391441
+  },
+  {
+    "name": "Terracotta Warriors",
+    "city": "beijing",
+    "lat": 39.923376,
+    "lng": 116.407282
+  },
+  {
+    "name": "Window of the World",
+    "city": "shenzhen",
+    "lat": 22.537506,
+    "lng": 113.968611
+  },
+  {
+    "name": "OCT Loft",
+    "city": "shenzhen",
+    "lat": 22.541221,
+    "lng": 113.988621
+  },
+  {
+    "name": "Shenzhen Bay Park",
+    "city": "shenzhen",
+    "lat": 22.524592,
+    "lng": 113.987959
+  },
+  {
+    "name": "Dafen Oil Painting Village",
+    "city": "shenzhen",
+    "lat": 22.612635,
+    "lng": 114.131268
+  },
+  {
+    "name": "Splendid China Folk Village",
+    "city": "shenzhen",
+    "lat": 22.533376,
+    "lng": 113.98362
+  },
+  {
+    "name": "Three Gorges Museum",
+    "city": "chongqing",
+    "lat": 29.564894,
+    "lng": 106.546558
+  },
+  {
+    "name": "Hongya Cave",
+    "city": "chongqing",
+    "lat": 29.565074,
+    "lng": 106.575343
+  },
+  {
+    "name": "Wulong Karst National Geology Park",
+    "city": "chongqing",
+    "lat": 29.552765,
+    "lng": 106.548188
+  },
+  {
+    "name": "Ciqikou Ancient Town",
+    "city": "chongqing",
+    "lat": 29.58334,
+    "lng": 106.446649
+  },
+  {
+    "name": "Liziba Monorail Station",
+    "city": "chongqing",
+    "lat": 29.579588,
+    "lng": 106.524424
+  },
+  {
+    "name": "Canton Tower",
+    "city": "guangzhou",
+    "lat": 23.109015,
+    "lng": 113.319148
+  },
+  {
+    "name": "Chen Clan Ancestral Hall",
+    "city": "guangzhou",
+    "lat": 23.129828,
+    "lng": 113.240133
+  },
+  {
+    "name": "Shamian Island",
+    "city": "guangzhou",
+    "lat": 23.108982,
+    "lng": 113.259576
+  },
+  {
+    "name": "Yuexiu Park",
+    "city": "guangzhou",
+    "lat": 23.142514,
+    "lng": 113.260408
+  },
+  {
+    "name": "Baiyun Mountain",
+    "city": "guangzhou",
+    "lat": 23.189633,
+    "lng": 113.293015
+  },
+  {
+    "name": "Royal Palace",
+    "city": "phnom-penh",
+    "lat": 11.563773,
+    "lng": 104.930147
+  },
+  {
+    "name": "Tuol Sleng Genocide Museum",
+    "city": "phnom-penh",
+    "lat": 11.549453,
+    "lng": 104.917625
+  },
+  {
+    "name": "National Museum of Cambodia",
+    "city": "phnom-penh",
+    "lat": 11.565459,
+    "lng": 104.929295
+  },
+  {
+    "name": "Central Market (Phsar Thmei)",
+    "city": "phnom-penh",
+    "lat": 11.568047,
+    "lng": 104.947376
+  },
+  {
+    "name": "Sisowath Quay",
+    "city": "phnom-penh",
+    "lat": 11.566755,
+    "lng": 104.931615
+  },
+  {
+    "name": "Angkor Wat",
+    "city": "siem-reap",
+    "lat": 13.412521,
+    "lng": 103.866592
+  },
+  {
+    "name": "Bayon Temple",
+    "city": "siem-reap",
+    "lat": 13.441298,
+    "lng": 103.860312
+  },
+  {
+    "name": "Ta Prohm",
+    "city": "siem-reap",
+    "lat": 13.434946,
+    "lng": 103.889558
+  },
+  {
+    "name": "Angkor Thom",
+    "city": "siem-reap",
+    "lat": 13.359063,
+    "lng": 103.861149
+  },
+  {
+    "name": "Pub Street",
+    "city": "siem-reap",
+    "lat": 13.354793,
+    "lng": 103.854714
+  },
+  {
+    "name": "Federation Square",
+    "city": "melbourne",
+    "lat": -37.81774,
+    "lng": 144.969156
+  },
+  {
+    "name": "Royal Botanic Gardens Victoria",
+    "city": "melbourne",
+    "lat": -37.829456,
+    "lng": 144.981315
+  },
+  {
+    "name": "National Gallery of Victoria",
+    "city": "melbourne",
+    "lat": -37.822912,
+    "lng": 144.968655
+  },
+  {
+    "name": "Great Ocean Road",
+    "city": "melbourne",
+    "lat": -37.7876,
+    "lng": 144.970276
+  },
+  {
+    "name": "Queen Victoria Market",
+    "city": "melbourne",
+    "lat": -37.807388,
+    "lng": 144.957392
+  },
+  {
+    "name": "Sydney Opera House",
+    "city": "sydney",
+    "lat": -33.857198,
+    "lng": 151.215123
+  },
+  {
+    "name": "Sydney Harbour Bridge",
+    "city": "sydney",
+    "lat": -33.852117,
+    "lng": 151.210781
+  },
+  {
+    "name": "Bondi Beach",
+    "city": "sydney",
+    "lat": -33.890698,
+    "lng": 151.272412
+  },
+  {
+    "name": "The Rocks",
+    "city": "sydney",
+    "lat": -33.859992,
+    "lng": 151.208322
+  },
+  {
+    "name": "Royal Botanic Garden",
+    "city": "sydney",
+    "lat": -33.862769,
+    "lng": 151.215711
+  },
+  {
+    "name": "Den",
+    "city": "tokyo",
+    "lat": 35.65577,
+    "lng": 139.527501
+  },
+  {
+    "name": "Takiman Kitahorie",
+    "city": "osaka",
+    "lat": 34.664876,
+    "lng": 135.530182
+  },
+  {
+    "name": "Ultraviolet",
+    "city": "shanghai",
+    "lat": 31.202988,
+    "lng": 121.4877
+  },
+  {
+    "name": "Bulgari Shanghai",
+    "city": "shanghai",
+    "lat": 31.217022,
+    "lng": 121.453586
+  },
+  {
+    "name": "The Yangtze Boutique",
+    "city": "shanghai",
+    "lat": 31.235694,
+    "lng": 121.469582
+  },
+  {
+    "name": "Raffles Le Royal",
+    "city": "phnom-penh",
+    "lat": 11.576268,
+    "lng": 104.918362
+  },
+  {
+    "name": "Raffles Grand d'Angkor",
+    "city": "siem-reap",
+    "lat": 13.364362,
+    "lng": 103.859801
+  },
+  {
+    "name": "Four Seasons Sydney",
+    "city": "sydney",
+    "lat": -33.86167,
+    "lng": 151.207601
+  },
+  {
+    "name": "Ta Prohm Temple",
+    "city": "siem-reap",
+    "lat": 13.434717,
+    "lng": 103.88552
+  },
+  {
+    "name": "Tuol Sleng Museum",
+    "city": "phnom-penh",
+    "lat": 11.549446,
+    "lng": 104.917602
+  },
+  {
+    "name": "Royal Botanic Gardens",
+    "city": "melbourne",
+    "lat": -37.829456,
+    "lng": 144.981315
+  },
+  {
+    "name": "Harbour Bridge",
+    "city": "sydney",
+    "lat": -33.852117,
+    "lng": 151.210781
+  }
+]

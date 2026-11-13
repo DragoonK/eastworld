@@ -58,6 +58,20 @@
         <h3 id="post-form-title">New Post</h3>
         <label>Title * <input type="text" name="title" required maxlength="120"></label>
         <label>Category * <input type="text" name="category" required maxlength="30" placeholder="FOOD, CULTURE, MUSIC..." style="text-transform:uppercase"></label>
+        <div class="form-grid">
+          <label>Country tag (for the homepage filter)
+            <select name="country">
+              <option value="">Worldwide / untagged</option>
+              <option value="cambodia">Cambodia</option>
+              <option value="vietnam">Vietnam</option>
+              <option value="japan">Japan</option>
+              <option value="australia">Australia</option>
+              <option value="china">China</option>
+              <option value="korea">South Korea</option>
+            </select>
+          </label>
+          <label>City tag (optional) <input type="text" name="city" maxlength="60" placeholder="tokyo, phnom-penh..."></label>
+        </div>
         <label>Excerpt (auto-generated if empty) <input type="text" name="excerpt" maxlength="200"></label>
         <label>Content * (blank line = new paragraph) <textarea name="content" required rows="12"></textarea></label>
         <label>Cover image (upload...) <input type="file" name="image" accept=".png,.jpg,.jpeg,.gif,.webp"></label>
@@ -194,6 +208,17 @@
         <h3 id="video-form-title">Add Video</h3>
         <label>Title * <input type="text" name="title" required maxlength="120"></label>
         <label>YouTube link * <input type="text" name="url" required placeholder="https://www.youtube.com/watch?v=..."></label>
+        <label>Country tag (shown only when the homepage filter matches; untagged = World only)
+          <select name="country">
+            <option value="">Worldwide / untagged</option>
+            <option value="cambodia">Cambodia</option>
+            <option value="vietnam">Vietnam</option>
+            <option value="japan">Japan</option>
+            <option value="australia">Australia</option>
+            <option value="china">China</option>
+            <option value="korea">South Korea</option>
+          </select>
+        </label>
         <div class="form-actions">
           <button type="submit" class="primary">SAVE</button>
           <button type="button" class="secondary" data-close="video">CANCEL</button>
@@ -275,6 +300,17 @@
         </div>
         <label>Description <input type="text" name="description" maxlength="200"></label>
         <label>Link (optional — makes the slide clickable) <input type="text" name="link" placeholder="guides/osaka-guide.html or https://..."></label>
+        <label>Country tag (shown only when the homepage filter matches; untagged = World only)
+          <select name="country">
+            <option value="">Worldwide / untagged</option>
+            <option value="cambodia">Cambodia</option>
+            <option value="vietnam">Vietnam</option>
+            <option value="japan">Japan</option>
+            <option value="australia">Australia</option>
+            <option value="china">China</option>
+            <option value="korea">South Korea</option>
+          </select>
+        </label>
         <label>Image (upload...) <input type="file" name="image" accept=".png,.jpg,.jpeg,.gif,.webp"></label>
         <label>...or image URL <input type="url" name="image_url" placeholder="https://... (leave empty to keep current image when editing)"></label>
         <div class="form-actions">
