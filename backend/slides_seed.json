@@ -38,15 +38,6 @@
   {
     "carousel": "bottom",
     "category": "",
-    "title": "KOBE",
-    "description": "Discover Japan's harbor city where premium beef meets modern culture.",
-    "image_url": "https://images.unsplash.com/photo-1590559899731-a382839e5549?auto=format&fit=crop&w=1600&q=80",
-    "link": "guides/kobe-guide.html",
-    "position": 1
-  },
-  {
-    "carousel": "bottom",
-    "category": "",
     "title": "GUANGZHOU",
     "description": "Experience the vibrant fusion of traditional Cantonese culture and modern innovation.",
     "image_url": "https://content.r9cdn.net/rimg/dimg/87/07/2a86d6b1-city-17708-17ea24f8693.jpg?width=1200&height=630&xhint=1566&yhint=937&crop=true",
