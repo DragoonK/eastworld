@@ -14,18 +14,19 @@
   const fallback = document.getElementById('map-fallback');
   const legend = document.getElementById('map-legend');
 
-  // Country camera targets: [sw, se] bounding boxes
+  // City-only focus: each country opens on its main city and shows
+  // just that city's pins. WORLD keeps the regional overview.
   const COUNTRY_VIEWS = {
     world:     { center: [112, 16], zoom: 2.3 },
-    cambodia:  { bounds: [[102.3, 9.9], [107.7, 14.8]] },
-    vietnam:   { bounds: [[102.1, 8.2], [109.7, 23.5]] },
-    japan:     { bounds: [[129.0, 30.3], [146.6, 45.7]] },
-    australia: { bounds: [[112.9, -43.8], [153.7, -9.2]] },
-    china:     { bounds: [[97.0, 17.8], [135.2, 53.7]] },
+    cambodia:  { city: 'phnom-penh', center: [104.9282, 11.5564], zoom: 12.3 },
+    vietnam:   { city: 'ho-chi-minh', center: [106.6297, 10.8231], zoom: 11.6 },
+    japan:     { city: 'osaka', center: [135.5023, 34.6937], zoom: 11.8 },
+    australia: { city: 'melbourne', center: [144.9631, -37.8136], zoom: 11.6 },
+    china:     { city: 'guangzhou', center: [113.2644, 23.1291], zoom: 11.4 },
   };
 
-  // Monochrome pin language: black = food, gray = stay, white = place
-  const MARKER_COLORS = { food: '#0a0a0a', stay: '#8c8c8c', place: '#ffffff' };
+  // Red = places, blue = food, green = stays
+  const MARKER_COLORS = { food: '#2563eb', stay: '#16a34a', place: '#e3342f' };
   const TYPE_LABELS = { food: 'Food', stay: 'Stay', place: 'Place' };
 
   let map = null;
@@ -34,16 +35,19 @@
   const listingsCache = {};
 
   async function listingsFor(c) {
-    if (!listingsCache[c]) {
-      const url = '/api/listings?limit=500' + (c === 'world' ? '' : `&country=${c}`);
+    const view = COUNTRY_VIEWS[c] || COUNTRY_VIEWS.world;
+    const key = `${c}:${view.city || 'all'}`;
+    if (!listingsCache[key]) {
+      let url = '/api/listings?limit=500';
+      if (c !== 'world') url += `&country=${c}&city=${view.city}`;
       const res = await fetch(url);
       if (!res.ok) throw new Error(`API returned ${res.status}`);
       // Only mappable types with real coordinates become pins
-      listingsCache[c] = (await res.json()).filter(
+      listingsCache[key] = (await res.json()).filter(
         l => ['food', 'stay', 'place'].includes(l.type) && l.lat != null && l.lng != null
       );
     }
-    return listingsCache[c];
+    return listingsCache[key];
   }
 
   function popupHTML(l) {
@@ -67,11 +71,7 @@
     if (!map) return;
 
     const view = COUNTRY_VIEWS[c] || COUNTRY_VIEWS.world;
-    if (view.bounds) {
-      map.fitBounds(view.bounds, { padding: 50, duration: 1400 });
-    } else {
-      map.flyTo({ center: view.center, zoom: view.zoom, duration: 1400 });
-    }
+    map.flyTo({ center: view.center, zoom: view.zoom, duration: 1400 });
 
     let listings;
     try {
