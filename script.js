@@ -203,35 +203,37 @@ function initInfinitePosts() {
 // and viewers unmute with one click on the player.
 // ------------------------------------------------------------
 
-async function initVideoRail() {
-  const rail = document.getElementById('video-rail');
-  const main = document.getElementById('video-main');
-  if (!rail || !main) return;
+// ------------------------------------------------------------
+// Vertical videos strip (homepage, below the stories).
+//
+// Up to five videos from the admin's VIDEOS tab, each in a
+// portrait 9:16 player, laid out in one horizontal row.
+// The whole band stays hidden if there are no videos.
+// ------------------------------------------------------------
 
-  const band = document.getElementById('watch-trending');
-  const collapse = () => band && band.classList.add('no-video');
+async function initVideosStrip() {
+  const band = document.getElementById('videos-band');
+  const strip = document.getElementById('videos-strip');
+  if (!band || !strip) return;
 
   let videos;
   try {
-    const res = await fetch('/api/videos?limit=1');
+    const res = await fetch('/api/videos?limit=5');
     if (!res.ok) throw new Error(`API returned ${res.status}`);
     videos = await res.json();
   } catch {
-    collapse();
-    return; // no backend or no data: the rail just stays hidden
+    return; // no backend or no data: the band just stays hidden
   }
-  if (videos.length === 0) {
-    collapse();
-    return;
-  }
+  if (videos.length === 0) return;
 
-  const video = videos[0];
-  main.innerHTML = `
-    <iframe src="${video.embed_url}?autoplay=1&mute=1&rel=0&playsinline=1" title="${video.title}"
-      allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-      allowfullscreen></iframe>
-    <p class="video-title">${video.title}</p>`;
-  rail.hidden = false;
+  strip.innerHTML = videos.map(video => `
+    <div class="video-card">
+      <iframe src="${video.embed_url}?rel=0&playsinline=1" title="${video.title}"
+        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen loading="lazy"></iframe>
+      <p class="video-title">${video.title}</p>
+    </div>`).join('');
+  band.hidden = false;
 }
 
 // ------------------------------------------------------------
@@ -269,95 +271,6 @@ async function initTicker() {
 }
 
 // ------------------------------------------------------------
-// Hero mosaic (homepage).
-//
-// The admin's "top" slides become a large rotating feature with
-// two static mini cards beside it. Hidden entirely when there
-// are no slides or the backend is unreachable.
-// ------------------------------------------------------------
-
-async function initHero() {
-  const hero = document.getElementById('hero');
-  const feature = document.getElementById('hero-feature');
-  if (!hero || !feature) return;
-
-  let slides;
-  try {
-    const res = await fetch('/api/slides');
-    if (!res.ok) throw new Error(`API returned ${res.status}`);
-    slides = (await res.json()).top || [];
-  } catch {
-    return;
-  }
-  if (slides.length === 0) return;
-
-  // Big rotating slot: all slides fade through, with dash indicators
-  const ROTATE_MS = 6500;
-  feature.innerHTML = slides.map((s, i) => {
-    const caption = `
-      <div class="hero-caption">
-        ${s.category ? `<span class="category">${s.category}</span>` : ''}
-        <h1>${s.title}</h1>
-        <p>${s.description}</p>
-      </div>`;
-    const cls = `hero-item${i === 0 ? ' active' : ''}`;
-    const img = `<img src="${s.image_url}" alt="${s.title}">`;
-    return s.link
-      ? `<a class="${cls}" href="${s.link}">${img}${caption}</a>`
-      : `<div class="${cls}">${img}${caption}</div>`;
-  }).join('') + '<div class="hero-dots"></div>';
-
-  const items = feature.querySelectorAll('.hero-item');
-  const dotsWrap = feature.querySelector('.hero-dots');
-  let current = 0;
-
-  if (slides.length > 1) {
-    dotsWrap.innerHTML = slides.map((_, i) =>
-      `<span class="hero-dot${i === 0 ? ' active' : ''}" data-i="${i}"></span>`).join('');
-    const dots = dotsWrap.querySelectorAll('.hero-dot');
-
-    const show = (index) => {
-      items[current].classList.remove('active');
-      dots[current].classList.remove('active');
-      items[index].classList.add('active');
-      dots[index].classList.add('active');
-      current = index;
-    };
-
-    let timer = setInterval(() => show((current + 1) % items.length), ROTATE_MS);
-    dots.forEach(dot => dot.addEventListener('click', () => {
-      clearInterval(timer);
-      show(Number(dot.dataset.i));
-      timer = setInterval(() => show((current + 1) % items.length), ROTATE_MS);
-    }));
-    feature.addEventListener('mouseenter', () => clearInterval(timer));
-    feature.addEventListener('mouseleave', () => {
-      clearInterval(timer);
-      timer = setInterval(() => show((current + 1) % items.length), ROTATE_MS);
-    });
-  } else {
-    dotsWrap.remove();
-  }
-
-  // Two static mini cards from the next slides (if any)
-  [1, 2].forEach(n => {
-    const slide = slides[n];
-    const slot = document.getElementById(`hero-mini-${n}`);
-    if (!slide || !slot) return;
-    slot.href = slide.link || '#';
-    slot.innerHTML = `
-      <img src="${slide.image_url}" alt="${slide.title}" loading="lazy">
-      <div class="hero-mini-caption">
-        ${slide.category ? `<span class="category">${slide.category}</span>` : ''}
-        <h3>${slide.title}</h3>
-      </div>`;
-    slot.hidden = false;
-  });
-
-  hero.hidden = false;
-}
-
-// ------------------------------------------------------------
 // Dynamic carousels (homepage).
 //
 // Carousels marked with data-slides="top|bottom" get their
@@ -385,6 +298,9 @@ function hideCarousel(el) {
   // Hide the whole band (header included) when there's nothing to show
   const band = el.closest('.guides-band');
   (band || el).style.display = 'none';
+  // In the header, the spotlights panel then takes the full width
+  const hero = el.closest('.hero');
+  if (hero) hero.classList.add('no-carousel');
 }
 
 async function initDynamicCarousels(carousels) {
@@ -418,8 +334,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   if (dynamic.length) initDynamicCarousels(dynamic);
 
-  initHero();
   initTicker();
   initInfinitePosts();
-  initVideoRail();
+  initVideosStrip();
 });
