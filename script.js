@@ -122,7 +122,7 @@ function initInfinitePosts() {
           <span class="category">${post.category}</span>
           <h3>${post.title}</h3>
           <p>${post.excerpt}</p>
-          <span class="read-more">READ THE STORY</span>
+          <span class="read-more">READ MORE</span>
         </div>
       </a>`;
       }

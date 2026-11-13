@@ -12,7 +12,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="index.css">
 </head>
 <body>
@@ -26,7 +26,7 @@
         <a href="products.html">PRODUCTS</a>
         <a href="cities.html">CITIES</a>
       </div>
-      <a href="index.html" class="logo"><span class="logo-seal">東</span>EASTWORLD</a>
+      <a href="index.html" class="logo"><img src="assets/eastworld-logo.png" alt="Eastworld"></a>
       <div class="nav-links">
         <a href="ew-events.html">EW EVENTS</a>
         <a href="community.html">EW HUB</a>
@@ -37,7 +37,7 @@
 
     <!-- Scrolling headlines, filled from the latest blog posts -->
     <div class="ticker" id="ticker" hidden>
-      <span class="ticker-label">最新 LATEST</span>
+      <span class="ticker-label">LATEST</span>
       <div class="ticker-viewport">
         <div class="ticker-track" id="ticker-track"></div>
       </div>
@@ -58,16 +58,14 @@
         <a class="hero-mini" id="hero-mini-1" hidden></a>
         <a class="hero-mini" id="hero-mini-2" hidden></a>
       </div>
-      <div class="hero-vertical" aria-hidden="true">東方の世界<span>THE EASTERN WORLD</span></div>
     </section>
 
     <!-- Blog posts, loaded from the backend API (infinite scroll) -->
     <section class="stories">
       <div class="sec-head">
-        <span class="seal">話題</span>
         <div class="sec-head-text">
           <h2>Latest Stories</h2>
-          <span class="kicker">最新の物語 — FROM THE BLOG</span>
+          <span class="kicker">From the blog</span>
         </div>
         <div class="sec-rule"></div>
       </div>
@@ -84,10 +82,9 @@
       <!-- Video rail: the first video from the admin's VIDEOS tab; hidden if empty -->
       <aside class="video-rail" id="video-rail" hidden>
         <div class="sec-head">
-          <span class="seal">映像</span>
           <div class="sec-head-text">
             <h2>Watch</h2>
-            <span class="kicker">映像 — NOW PLAYING</span>
+            <span class="kicker">Now playing</span>
           </div>
           <div class="sec-rule"></div>
         </div>
@@ -96,10 +93,9 @@
 
       <aside class="trending">
         <div class="sec-head">
-          <span class="seal">人気</span>
           <div class="sec-head-text">
             <h2>Trending</h2>
-            <span class="kicker">人気ランキング — TOP FIVE</span>
+            <span class="kicker">Top five picks</span>
           </div>
           <div class="sec-rule"></div>
         </div>
@@ -127,13 +123,12 @@
     <!-- City guides: slides managed in the admin's CAROUSELS tab -->
     <section class="guides-band">
       <div class="sec-head">
-        <span class="seal">都市</span>
         <div class="sec-head-text">
           <h2>City Guides</h2>
-          <span class="kicker">都市ガイド — WHERE TO GO NEXT</span>
+          <span class="kicker">Where to go next</span>
         </div>
         <div class="sec-rule"></div>
-        <a class="sec-link" href="cities.html">ALL CITIES →</a>
+        <a class="sec-link" href="cities.html">All cities ↗</a>
       </div>
       <div class="carousel" data-slides="bottom" aria-label="City guides">
         <div class="carousel-track"></div>
