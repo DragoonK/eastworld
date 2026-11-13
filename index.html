@@ -10,7 +10,10 @@
   <meta property="og:title" content="Eastworld - Latest in Asian Culture">
   <meta property="og:description" content="City guides, trending picks and stories from Japan, China, Vietnam, Cambodia and beyond.">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="stylesheet" href="home.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="index.css">
 </head>
 <body>
 
@@ -23,7 +26,7 @@
         <a href="products.html">PRODUCTS</a>
         <a href="cities.html">CITIES</a>
       </div>
-      <a href="index.html" class="logo">EASTWORLD</a>
+      <a href="index.html" class="logo"><span class="logo-seal">東</span>EASTWORLD</a>
       <div class="nav-links">
         <a href="ew-events.html">EW EVENTS</a>
         <a href="community.html">EW HUB</a>
@@ -31,6 +34,14 @@
         <a href="register.html" class="auth-link">REGISTER</a>
       </div>
     </nav>
+
+    <!-- Scrolling headlines, filled from the latest blog posts -->
+    <div class="ticker" id="ticker" hidden>
+      <span class="ticker-label">最新 LATEST</span>
+      <div class="ticker-viewport">
+        <div class="ticker-track" id="ticker-track"></div>
+      </div>
+    </div>
   </header>
 
   <!-- Reserved slots for Google ads; visible on screens wider than 1400px -->
@@ -38,74 +49,100 @@
   <aside class="ad-rail right">AD</aside>
 
   <main class="page">
-   <div class="layout">
 
-    <!-- LEFT COLUMN: top carousel, stories, bottom carousel -->
-    <div class="main-col">
-
-    <!-- Top carousel: slides managed in the admin's CAROUSELS tab -->
-    <section class="carousel" data-slides="top" aria-label="Spotlights">
-      <div class="carousel-track"></div>
-      <button class="carousel-button prev" aria-label="Previous slide">&#8249;</button>
-      <button class="carousel-button next" aria-label="Next slide">&#8250;</button>
-      <div class="carousel-indicators"></div>
+    <!-- Hero mosaic: big rotating feature + two static picks,
+         built from the admin's CAROUSELS tab (top slides) -->
+    <section class="hero" id="hero" hidden>
+      <div class="hero-feature" id="hero-feature"></div>
+      <div class="hero-side">
+        <a class="hero-mini" id="hero-mini-1" hidden></a>
+        <a class="hero-mini" id="hero-mini-2" hidden></a>
+      </div>
+      <div class="hero-vertical" aria-hidden="true">東方の世界<span>THE EASTERN WORLD</span></div>
     </section>
 
     <!-- Blog posts, loaded from the backend API (infinite scroll) -->
-    <section class="posts-section">
-      <h2>LATEST STORIES</h2>
-      <div id="posts-grid" class="posts-grid">
+    <section class="stories">
+      <div class="sec-head">
+        <span class="seal">話題</span>
+        <div class="sec-head-text">
+          <h2>Latest Stories</h2>
+          <span class="kicker">最新の物語 — FROM THE BLOG</span>
+        </div>
+        <div class="sec-rule"></div>
+      </div>
+      <div id="posts-grid" class="posts-list">
         <p class="posts-status">Loading stories&hellip;</p>
       </div>
       <!-- Invisible marker: when it scrolls into view, 5 more posts load -->
       <div id="posts-sentinel"></div>
     </section>
 
-    <!-- Bottom carousel: slides managed in the admin's CAROUSELS tab -->
-    <section class="carousel" data-slides="bottom" aria-label="City guides">
-      <div class="carousel-track"></div>
-      <button class="carousel-button prev" aria-label="Previous slide">&#8249;</button>
-      <button class="carousel-button next" aria-label="Next slide">&#8250;</button>
-      <div class="carousel-indicators"></div>
+    <!-- Watch + Trending side by side -->
+    <section class="watch-trending" id="watch-trending">
+
+      <!-- Video rail: the first video from the admin's VIDEOS tab; hidden if empty -->
+      <aside class="video-rail" id="video-rail" hidden>
+        <div class="sec-head">
+          <span class="seal">映像</span>
+          <div class="sec-head-text">
+            <h2>Watch</h2>
+            <span class="kicker">映像 — NOW PLAYING</span>
+          </div>
+          <div class="sec-rule"></div>
+        </div>
+        <div id="video-main" class="video-main"></div>
+      </aside>
+
+      <aside class="trending">
+        <div class="sec-head">
+          <span class="seal">人気</span>
+          <div class="sec-head-text">
+            <h2>Trending</h2>
+            <span class="kicker">人気ランキング — TOP FIVE</span>
+          </div>
+          <div class="sec-rule"></div>
+        </div>
+        <div class="trending-header">
+          <div class="trending-tabs">
+            <button class="trending-tab active" data-tab="food">FOOD</button>
+            <button class="trending-tab" data-tab="stays">STAYS</button>
+            <button class="trending-tab" data-tab="places">PLACES</button>
+            <button class="trending-tab" data-tab="products">PRODUCTS</button>
+          </div>
+          <select id="trending-country">
+            <option value="all">All Countries</option>
+            <option value="japan">Japan</option>
+            <option value="china">China</option>
+            <option value="vietnam">Vietnam</option>
+            <option value="australia">Australia</option>
+            <option value="cambodia">Cambodia</option>
+          </select>
+        </div>
+        <div id="trending-list" class="trending-list"></div>
+      </aside>
+
     </section>
 
-    </div><!-- /main-col -->
-
-    <!-- RIGHT COLUMN: video rail + trending top five -->
-    <div class="side-col">
-
-    <!-- Video rail: the first video from the admin's VIDEOS tab; hidden if empty -->
-    <aside class="video-rail" id="video-rail" hidden>
-      <div class="video-rail-header">
-        <h2>WATCH</h2>
+    <!-- City guides: slides managed in the admin's CAROUSELS tab -->
+    <section class="guides-band">
+      <div class="sec-head">
+        <span class="seal">都市</span>
+        <div class="sec-head-text">
+          <h2>City Guides</h2>
+          <span class="kicker">都市ガイド — WHERE TO GO NEXT</span>
+        </div>
+        <div class="sec-rule"></div>
+        <a class="sec-link" href="cities.html">ALL CITIES →</a>
       </div>
-      <div id="video-main" class="video-main"></div>
-    </aside>
-
-    <aside class="trending">
-      <div class="trending-header">
-        <h2>TRENDING</h2>
-        <select id="trending-country">
-          <option value="all">All Countries</option>
-          <option value="japan">Japan</option>
-          <option value="china">China</option>
-          <option value="vietnam">Vietnam</option>
-          <option value="australia">Australia</option>
-          <option value="cambodia">Cambodia</option>
-        </select>
+      <div class="carousel" data-slides="bottom" aria-label="City guides">
+        <div class="carousel-track"></div>
+        <button class="carousel-button prev" aria-label="Previous slide">&#8249;</button>
+        <button class="carousel-button next" aria-label="Next slide">&#8250;</button>
+        <div class="carousel-indicators"></div>
       </div>
-      <div class="trending-tabs">
-        <button class="trending-tab active" data-tab="food">FOOD</button>
-        <button class="trending-tab" data-tab="stays">STAYS</button>
-        <button class="trending-tab" data-tab="places">PLACES</button>
-        <button class="trending-tab" data-tab="products">PRODUCTS</button>
-      </div>
-      <div id="trending-list" class="trending-list"></div>
-    </aside>
+    </section>
 
-    </div><!-- /side-col -->
-
-   </div><!-- /layout -->
   </main>
 
   <footer>

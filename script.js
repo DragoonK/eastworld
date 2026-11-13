@@ -77,6 +77,28 @@ class Carousel {
 // stop observing.
 // ------------------------------------------------------------
 
+// ------------------------------------------------------------
+// Scroll reveal: elements with .reveal fade/slide in when they
+// enter the viewport. observeReveals() is called for every new
+// batch of dynamically added cards, with a stagger per batch.
+// ------------------------------------------------------------
+
+const revealObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('in');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { rootMargin: '0px 0px -40px 0px' });
+
+function observeReveals(container, stagger = 90) {
+  container.querySelectorAll('.reveal:not(.in)').forEach((el, i) => {
+    el.style.transitionDelay = `${(i % 6) * stagger}ms`;
+    revealObserver.observe(el);
+  });
+}
+
 function initInfinitePosts() {
   const grid = document.getElementById('posts-grid');
   const sentinel = document.getElementById('posts-sentinel');
@@ -87,17 +109,34 @@ function initInfinitePosts() {
   let isLoading = false;   // prevents parallel fetches of the same page
   let reachedEnd = false;
 
+  // The very first post of the feed becomes a large feature card;
+  // everything after is a numbered editorial row.
   function renderCards(posts) {
-    return posts.map(post => `
-      <a class="post-card" href="post.html?id=${post.id}">
-        <img src="${post.image_url}" alt="${post.title}" loading="lazy">
-        <div class="post-card-body">
+    return posts.map((post, i) => {
+      const num = String(offset + i + 1).padStart(2, '0');
+      if (offset === 0 && i === 0) {
+        return `
+      <a class="story-feature reveal" href="post.html?id=${post.id}">
+        <div class="story-feature-img"><img src="${post.image_url}" alt="${post.title}"></div>
+        <div class="story-feature-body">
+          <span class="category">${post.category}</span>
+          <h3>${post.title}</h3>
+          <p>${post.excerpt}</p>
+          <span class="read-more">READ THE STORY</span>
+        </div>
+      </a>`;
+      }
+      return `
+      <a class="story-row reveal" href="post.html?id=${post.id}">
+        <span class="story-num">${num}</span>
+        <div class="story-thumb"><img src="${post.image_url}" alt="${post.title}" loading="lazy"></div>
+        <div class="story-body">
           <span class="category">${post.category}</span>
           <h3>${post.title}</h3>
           <p>${post.excerpt}</p>
         </div>
-      </a>
-    `).join('');
+      </a>`;
+    }).join('');
   }
 
   async function loadMore() {
@@ -115,6 +154,7 @@ function initInfinitePosts() {
 
       grid.insertAdjacentHTML('beforeend', renderCards(posts));
       offset += posts.length;
+      observeReveals(grid);
 
       if (posts.length < PAGE_SIZE) {
         reachedEnd = true;
@@ -168,15 +208,22 @@ async function initVideoRail() {
   const main = document.getElementById('video-main');
   if (!rail || !main) return;
 
+  const band = document.getElementById('watch-trending');
+  const collapse = () => band && band.classList.add('no-video');
+
   let videos;
   try {
     const res = await fetch('/api/videos?limit=1');
     if (!res.ok) throw new Error(`API returned ${res.status}`);
     videos = await res.json();
   } catch {
+    collapse();
     return; // no backend or no data: the rail just stays hidden
   }
-  if (videos.length === 0) return;
+  if (videos.length === 0) {
+    collapse();
+    return;
+  }
 
   const video = videos[0];
   main.innerHTML = `
@@ -185,6 +232,129 @@ async function initVideoRail() {
       allowfullscreen></iframe>
     <p class="video-title">${video.title}</p>`;
   rail.hidden = false;
+}
+
+// ------------------------------------------------------------
+// Headline ticker (homepage, under the nav).
+//
+// Scrolls the latest post titles in an infinite marquee. The
+// track content is duplicated exactly once so the CSS animation
+// can loop seamlessly by translating -50%.
+// ------------------------------------------------------------
+
+async function initTicker() {
+  const ticker = document.getElementById('ticker');
+  const track = document.getElementById('ticker-track');
+  if (!ticker || !track) return;
+
+  let posts;
+  try {
+    const res = await fetch('/api/posts?limit=8');
+    if (!res.ok) throw new Error(`API returned ${res.status}`);
+    posts = await res.json();
+  } catch {
+    return; // no backend: the bar just stays hidden
+  }
+  if (posts.length === 0) return;
+
+  const sequence = posts
+    .map(p => `<a href="post.html?id=${p.id}">${p.title}</a><span class="ticker-dot">◆</span>`)
+    .join('');
+  track.innerHTML = sequence + sequence;
+
+  // Speed scales with content length so long lists don't race by
+  const seconds = Math.max(30, posts.length * 7);
+  track.style.animationDuration = `${seconds}s`;
+  ticker.hidden = false;
+}
+
+// ------------------------------------------------------------
+// Hero mosaic (homepage).
+//
+// The admin's "top" slides become a large rotating feature with
+// two static mini cards beside it. Hidden entirely when there
+// are no slides or the backend is unreachable.
+// ------------------------------------------------------------
+
+async function initHero() {
+  const hero = document.getElementById('hero');
+  const feature = document.getElementById('hero-feature');
+  if (!hero || !feature) return;
+
+  let slides;
+  try {
+    const res = await fetch('/api/slides');
+    if (!res.ok) throw new Error(`API returned ${res.status}`);
+    slides = (await res.json()).top || [];
+  } catch {
+    return;
+  }
+  if (slides.length === 0) return;
+
+  // Big rotating slot: all slides fade through, with dash indicators
+  const ROTATE_MS = 6500;
+  feature.innerHTML = slides.map((s, i) => {
+    const caption = `
+      <div class="hero-caption">
+        ${s.category ? `<span class="category">${s.category}</span>` : ''}
+        <h1>${s.title}</h1>
+        <p>${s.description}</p>
+      </div>`;
+    const cls = `hero-item${i === 0 ? ' active' : ''}`;
+    const img = `<img src="${s.image_url}" alt="${s.title}">`;
+    return s.link
+      ? `<a class="${cls}" href="${s.link}">${img}${caption}</a>`
+      : `<div class="${cls}">${img}${caption}</div>`;
+  }).join('') + '<div class="hero-dots"></div>';
+
+  const items = feature.querySelectorAll('.hero-item');
+  const dotsWrap = feature.querySelector('.hero-dots');
+  let current = 0;
+
+  if (slides.length > 1) {
+    dotsWrap.innerHTML = slides.map((_, i) =>
+      `<span class="hero-dot${i === 0 ? ' active' : ''}" data-i="${i}"></span>`).join('');
+    const dots = dotsWrap.querySelectorAll('.hero-dot');
+
+    const show = (index) => {
+      items[current].classList.remove('active');
+      dots[current].classList.remove('active');
+      items[index].classList.add('active');
+      dots[index].classList.add('active');
+      current = index;
+    };
+
+    let timer = setInterval(() => show((current + 1) % items.length), ROTATE_MS);
+    dots.forEach(dot => dot.addEventListener('click', () => {
+      clearInterval(timer);
+      show(Number(dot.dataset.i));
+      timer = setInterval(() => show((current + 1) % items.length), ROTATE_MS);
+    }));
+    feature.addEventListener('mouseenter', () => clearInterval(timer));
+    feature.addEventListener('mouseleave', () => {
+      clearInterval(timer);
+      timer = setInterval(() => show((current + 1) % items.length), ROTATE_MS);
+    });
+  } else {
+    dotsWrap.remove();
+  }
+
+  // Two static mini cards from the next slides (if any)
+  [1, 2].forEach(n => {
+    const slide = slides[n];
+    const slot = document.getElementById(`hero-mini-${n}`);
+    if (!slide || !slot) return;
+    slot.href = slide.link || '#';
+    slot.innerHTML = `
+      <img src="${slide.image_url}" alt="${slide.title}" loading="lazy">
+      <div class="hero-mini-caption">
+        ${slide.category ? `<span class="category">${slide.category}</span>` : ''}
+        <h3>${slide.title}</h3>
+      </div>`;
+    slot.hidden = false;
+  });
+
+  hero.hidden = false;
 }
 
 // ------------------------------------------------------------
@@ -211,6 +381,12 @@ function slideHTML(slide, isFirst) {
     : `<div class="${cls}">${img}${caption}</div>`;
 }
 
+function hideCarousel(el) {
+  // Hide the whole band (header included) when there's nothing to show
+  const band = el.closest('.guides-band');
+  (band || el).style.display = 'none';
+}
+
 async function initDynamicCarousels(carousels) {
   let slides;
   try {
@@ -218,14 +394,14 @@ async function initDynamicCarousels(carousels) {
     if (!res.ok) throw new Error(`API returned ${res.status}`);
     slides = await res.json();
   } catch {
-    carousels.forEach(el => el.style.display = 'none');
+    carousels.forEach(hideCarousel);
     return;
   }
 
   carousels.forEach(el => {
     const items = slides[el.dataset.slides] || [];
     if (items.length === 0) {
-      el.style.display = 'none';   // an empty carousel shows nothing
+      hideCarousel(el);   // an empty carousel shows nothing
       return;
     }
     el.querySelector('.carousel-track').innerHTML =
@@ -242,6 +418,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   if (dynamic.length) initDynamicCarousels(dynamic);
 
+  initHero();
+  initTicker();
   initInfinitePosts();
   initVideoRail();
 });
