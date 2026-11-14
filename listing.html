@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- SEO_TAGS -->
   <link rel="stylesheet" href="home.css">
+  <link rel="stylesheet" href="tours.css">
   <link rel="stylesheet" href="reviews.css">
 </head>
 <body>
@@ -12,18 +13,16 @@
   <header>
     <nav class="main-nav">
       <div class="nav-links">
+        <a href="tours.html">TOURS</a>
+        <a href="tour-builder.html">BUILD YOUR OWN</a>
         <a href="food.html">FOOD</a>
-        <a href="stays.html">STAYS</a>
         <a href="places.html">PLACES</a>
-        <a href="products.html">PRODUCTS</a>
-        <a href="cities.html">CITIES</a>
       </div>
-      <a href="index.html" class="logo">EASTWORLD</a>
+      <a href="index.html" class="logo"><img src="assets/eastworld-logo.png" alt="Eastworld"></a>
       <div class="nav-links">
-        <a href="ew-events.html">EW EVENTS</a>
-        <a href="community.html">EW HUB</a>
+        <a href="stays.html">STAYS</a>
+        <a href="cities.html">CITIES</a>
         <a href="login.html" class="auth-link">LOGIN</a>
-        <a href="register.html" class="auth-link">REGISTER</a>
       </div>
     </nav>
   </header>
@@ -32,6 +31,16 @@
     <article id="listing-container">
       <p class="posts-status">Loading&hellip;</p>
     </article>
+
+    <section id="tours-section" hidden>
+      <div class="tours-bespoke-inner" style="border-radius:10px;">
+        <div>
+          <h2 id="tours-heading">Visit this place on a tour</h2>
+          <p id="tours-sub">This spot is a stop on our local-led tours.</p>
+        </div>
+        <div id="tours-cta"></div>
+      </div>
+    </section>
 
     <section id="reviews-mount"></section>
 
@@ -97,6 +106,7 @@
         `;
 
         loadRelated(listing);
+        loadToursForListing(listing.id);
       } catch (err) {
         container.innerHTML = `
           <p class="posts-status">
@@ -128,6 +138,24 @@
           <span class="related-location">${titleCase(l.city || l.country)}</span>
         </a>`).join('');
       document.getElementById('related-section').hidden = false;
+    }
+
+    // "Visit this place on a tour" — the funnel from content to
+    // booking. Shows every live tour that stops at this listing.
+    async function loadToursForListing(listingId) {
+      try {
+        const res = await fetch(`/api/tours/by-listing/${listingId}`);
+        if (!res.ok) return;
+        const tours = await res.json();
+        if (tours.length === 0) return;
+
+        document.getElementById('tours-cta').innerHTML = tours.map(t => `
+          <a class="btn" href="tour.html?id=${t.id}" style="margin:0.3rem 0; display:block; text-align:center;">
+            ${t.title} — $${t.price_usd}<br>
+            <small style="font-weight:400;">${t.duration_label}</small>
+          </a>`).join('');
+        document.getElementById('tours-section').hidden = false;
+      } catch { /* tours are a bonus here, never break the page */ }
     }
 
     loadListing();

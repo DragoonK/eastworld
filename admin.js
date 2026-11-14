@@ -32,6 +32,7 @@ function showDashboard() {
   loadEvents();
   loadSlides();
   loadUsers();
+  loadBookings();
 }
 
 $('#login-form').addEventListener('submit', async (e) => {
@@ -781,4 +782,72 @@ async function loadUsers() {
           </tr>`).join('')}
       </tbody>
     </table>`;
+}
+
+// ============================================================
+// BOOKING REQUESTS
+// ============================================================
+
+const BOOKING_STATUSES = ['new', 'confirmed', 'completed', 'cancelled'];
+
+function bookingDetail(b) {
+  // Bespoke builds carry the builder's selections as JSON
+  if (b.bespoke_payload) {
+    try {
+      const p = JSON.parse(b.bespoke_payload);
+      if (p.type === 'waitlist') return `WAITLIST: ${p.country}`;
+      const stops = (p.stops || []).map(s => s.name).join(' → ');
+      return `BESPOKE · ${p.city || ''} · ~${p.days || '?'}d · est $${p.estimate_usd || '?'}pp` +
+        (p.pace ? ` · ${p.pace}` : '') + (stops ? `<br><small>${stops}</small>` : '');
+    } catch { /* fall through to message */ }
+  }
+  return b.message || '';
+}
+
+async function loadBookings() {
+  const res = await fetch('/api/booking-requests', { headers: authHeaders() });
+  if (!res.ok) {
+    $('#bookings-table').innerHTML = '<p class="posts-status">Could not load booking requests.</p>';
+    return;
+  }
+  const bookings = await res.json();
+
+  if (bookings.length === 0) {
+    $('#bookings-table').innerHTML = '<p class="posts-status">No booking requests yet.</p>';
+    return;
+  }
+
+  $('#bookings-table').innerHTML = `
+    <p class="table-count">${bookings.length} request${bookings.length === 1 ? '' : 's'}</p>
+    <table class="admin-table">
+      <thead><tr><th>When</th><th>Customer</th><th>Tour</th><th>Dates</th><th>Party</th><th>Details</th><th>Status</th></tr></thead>
+      <tbody>
+        ${bookings.map(b => `
+          <tr style="${b.status === 'new' ? 'background:#fff8e6' : ''}">
+            <td>${(b.created_at || '').slice(0, 16)}</td>
+            <td><strong>${b.name}</strong><br><small>${b.email}</small></td>
+            <td>${b.tour_title || (b.bespoke_payload ? 'Custom build' : '—')}</td>
+            <td>${b.dates || '—'}</td>
+            <td>${b.party_size || '—'}</td>
+            <td style="max-width:320px">${bookingDetail(b)}</td>
+            <td>
+              <select class="booking-status-select" data-id="${b.id}">
+                ${BOOKING_STATUSES.map(s =>
+                  `<option value="${s}" ${s === b.status ? 'selected' : ''}>${s}</option>`).join('')}
+              </select>
+            </td>
+          </tr>`).join('')}
+      </tbody>
+    </table>`;
+
+  document.querySelectorAll('.booking-status-select').forEach(sel => {
+    sel.addEventListener('change', async () => {
+      await fetch(`/api/booking-requests/${sel.dataset.id}`, {
+        method: 'PUT',
+        headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: sel.value }),
+      });
+      loadBookings();
+    });
+  });
 }

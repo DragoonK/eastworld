@@ -1295,6 +1295,397 @@ def delete_listing(listing_id):
 COUNTRY_ORDER = ["japan", "china", "vietnam", "cambodia", "australia"]
 
 
+# --------------------------- Tours ---------------------------
+
+def ensure_tours_tables():
+    """Create the tours, tour_stops and booking_requests tables and
+    seed the five launch tours once.
+
+    A tour is a product built FROM the listings table: every stop
+    references a real, visited listing, so tour pages and listing
+    pages cross-link automatically. Booking requests are a manual
+    pipeline (request -> confirm over chat -> deposit link), so no
+    payment processing lives here. Safe to run on every boot: the
+    seed only fires when the tours table is empty.
+    """
+    conn = get_db()
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS tours (
+            id             INTEGER PRIMARY KEY AUTOINCREMENT,
+            slug           TEXT NOT NULL UNIQUE,
+            title          TEXT NOT NULL,
+            country        TEXT NOT NULL,
+            city           TEXT DEFAULT '',   -- '' when it spans cities
+            kind           TEXT NOT NULL DEFAULT 'packaged',  -- packaged | bespoke
+            duration_label TEXT DEFAULT '',   -- e.g. "Full day, ~10 hours"
+            duration_days  INTEGER NOT NULL DEFAULT 1,
+            price_usd      INTEGER NOT NULL,
+            max_group      INTEGER NOT NULL DEFAULT 8,
+            themes         TEXT DEFAULT '',   -- comma list: food,temples,history,photo
+            tagline        TEXT DEFAULT '',
+            description    TEXT DEFAULT '',
+            includes       TEXT DEFAULT '',   -- one per line
+            excludes       TEXT DEFAULT '',
+            meeting_point  TEXT DEFAULT '',
+            image_url      TEXT DEFAULT '',
+            guide_name     TEXT DEFAULT '',
+            status         TEXT NOT NULL DEFAULT 'live',  -- live | coming_soon
+            created_at     TEXT NOT NULL DEFAULT (datetime('now'))
+        )
+    """)
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS tour_stops (
+            id           INTEGER PRIMARY KEY AUTOINCREMENT,
+            tour_id      INTEGER NOT NULL REFERENCES tours(id) ON DELETE CASCADE,
+            listing_id   INTEGER NOT NULL REFERENCES listings(id),
+            position     INTEGER NOT NULL,   -- 1-based stop order
+            time_label   TEXT DEFAULT '',    -- e.g. "05:00" or "Day 2 morning"
+            note         TEXT DEFAULT '',
+            duration_min INTEGER
+        )
+    """)
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS booking_requests (
+            id              INTEGER PRIMARY KEY AUTOINCREMENT,
+            tour_id         INTEGER REFERENCES tours(id),  -- NULL = bespoke build
+            name            TEXT NOT NULL,
+            email           TEXT NOT NULL,
+            dates           TEXT DEFAULT '',
+            party_size      INTEGER,
+            message         TEXT DEFAULT '',
+            bespoke_payload TEXT DEFAULT '',               -- JSON from the tour builder
+            status          TEXT NOT NULL DEFAULT 'new',   -- new|confirmed|completed|cancelled
+            created_at      TEXT NOT NULL DEFAULT (datetime('now'))
+        )
+    """)
+
+    count = conn.execute("SELECT COUNT(*) FROM tours").fetchone()[0]
+    if count == 0:
+        seed_tours(conn)
+
+    conn.commit()
+    conn.close()
+
+
+# The five launch tours. stops are listing ids (see listings table);
+# each tour's hero image is taken from its first stop's listing.
+TOURS_SEED = [
+    {
+        "slug": "angkor-sunrise-discovery",
+        "title": "Angkor Sunrise Discovery",
+        "country": "cambodia", "city": "siem-reap",
+        "duration_label": "Full day, ~10 hours", "duration_days": 1,
+        "price_usd": 75, "max_group": 8,
+        "themes": "temples,history,photo",
+        "tagline": "Sunrise at Angkor Wat, then the great temples before the crowds — with a local guide who grew up here.",
+        "description": (
+            "We start in the dark at 4:45 AM to catch sunrise over Angkor Wat's towers, "
+            "then explore the temple while the tour buses are still at breakfast. From there "
+            "it's Angkor Thom and the faces of Bayon, a local Khmer lunch, and Ta Prohm in "
+            "the afternoon light before heading back.\n\n"
+            "This is the classic Angkor day, done properly: unhurried, in the right order, "
+            "with the stories you don't get from a plaque."
+        ),
+        "includes": "Hotel pickup in Siem Reap\nEnglish & Khmer speaking local guide\nAir-conditioned transport\nCold water and towels\nKhmer lunch",
+        "excludes": "Angkor Archaeological Park pass ($37, bought at the gate)\nDinner",
+        "meeting_point": "Hotel pickup anywhere in Siem Reap town",
+        "guide_name": "Eastworld",
+        "stops": [
+            (284, "05:00", "Sunrise at the world's largest religious monument, then a full walkthrough.", 180),
+            (287, "09:00", "The walled royal city — South Gate, Terrace of the Elephants.", 60),
+            (285, "10:00", "The 216 smiling faces. Best light of the morning.", 75),
+            (109, "12:30", "Proper Khmer lunch at a local institution.", 75),
+            (286, "14:30", "The 'Tomb Raider' temple, swallowed by silk-cotton trees.", 90),
+        ],
+    },
+    {
+        "slug": "siem-reap-after-dark-food",
+        "title": "Siem Reap After Dark: Street Food Tour",
+        "country": "cambodia", "city": "siem-reap",
+        "duration_label": "Evening, ~4 hours", "duration_days": 1,
+        "price_usd": 39, "max_group": 8,
+        "themes": "food,nightlife",
+        "tagline": "The city wakes up when the temples close. Eat your way through it.",
+        "description": (
+            "Most visitors never see Siem Reap's second act. We start at the evening food "
+            "stalls where locals actually eat, work through Khmer classics you won't find "
+            "on tourist menus, and finish on Pub Street with a drink in hand.\n\n"
+            "Come hungry — this is five-plus stops of real eating, not tasting spoons."
+        ),
+        "includes": "Local English & Khmer speaking guide\nAll food at 5+ stops\nOne drink on Pub Street",
+        "excludes": "Extra drinks\nHotel pickup (central meeting point)",
+        "meeting_point": "Old Market (Phsar Chas) entrance, 5:45 PM",
+        "guide_name": "Eastworld",
+        "stops": [
+            (111, "18:00", "Grilled meats, noodle stalls and the night-market classics.", 60),
+            (109, "19:00", "Amok and Khmer curry done right.", 60),
+            (113, "20:00", "Family-recipe Khmer dishes in a wooden house.", 45),
+            (107, "20:45", "Vocational-training restaurant with serious food.", 45),
+            (288, "21:30", "Finish with a drink where the night ends up anyway.", 60),
+        ],
+    },
+    {
+        "slug": "phnom-penh-street-food-riverside",
+        "title": "Phnom Penh Street Food & Riverside Walk",
+        "country": "cambodia", "city": "phnom-penh",
+        "duration_label": "Half day, ~4 hours", "duration_days": 1,
+        "price_usd": 35, "max_group": 8,
+        "themes": "food,culture",
+        "tagline": "Markets, coffee, river air — the capital the way Phnom Penh people live it.",
+        "description": (
+            "We dive into Central Market's food halls in the morning rush, snack through "
+            "the stalls Phnom Penh grew up on, break for proper Khmer coffee, and walk it "
+            "off along the Sisowath Quay riverside as the city comes out for the evening.\n\n"
+            "Part food tour, part walking orientation — the best first day in the capital."
+        ),
+        "includes": "Local English & Khmer speaking guide\nAll tastings at 4+ stops\nKhmer coffee or fresh sugarcane juice",
+        "excludes": "Lunch (we can point you to the right place after)\nTransport",
+        "meeting_point": "Central Market (Phsar Thmei) main entrance, 8:30 AM",
+        "guide_name": "Eastworld",
+        "stops": [
+            (282, "08:30", "The art-deco market and its legendary food halls.", 75),
+            (98, "10:00", "Market-side Khmer dishes the locals queue for.", 45),
+            (97, "11:00", "Former-street-kid training restaurant, fearless menu.", 45),
+            (283, "11:45", "Riverside walk along the Tonlé Sap — snacks and river air.", 60),
+            (101, "12:45", "Finish with coffee or brunch by the river.", 45),
+        ],
+    },
+    {
+        "slug": "phnom-penh-history-remembrance",
+        "title": "Phnom Penh History & Remembrance",
+        "country": "cambodia", "city": "phnom-penh",
+        "duration_label": "Half day, ~5 hours", "duration_days": 1,
+        "price_usd": 45, "max_group": 8,
+        "themes": "history,culture",
+        "tagline": "The Royal Palace to Tuol Sleng — Cambodia's triumphs and its darkest years, told honestly.",
+        "description": (
+            "A morning that covers the full arc: the gilded Royal Palace and the treasures "
+            "of the National Museum, then Tuol Sleng (S-21), where the Khmer Rouge years "
+            "are confronted directly and respectfully.\n\n"
+            "This is heavy material handled with care — I grew up with these stories, and "
+            "the tour ends over lunch where you can ask anything."
+        ),
+        "includes": "Local English & Khmer speaking guide\nTransport between sites\nLunch\nCold water",
+        "excludes": "Entry fees (Royal Palace $10, Tuol Sleng $5, Museum $10)",
+        "meeting_point": "Hotel pickup anywhere in central Phnom Penh",
+        "guide_name": "Eastworld",
+        "stops": [
+            (279, "08:30", "The Silver Pagoda and the throne halls.", 90),
+            (281, "10:30", "The world's finest Khmer sculpture collection.", 60),
+            (280, "11:45", "S-21. Difficult, essential, handled with respect.", 90),
+            (99, "13:45", "Late lunch and open conversation at a calm garden café.", 60),
+        ],
+    },
+    {
+        "slug": "ultimate-cambodia-3-day",
+        "title": "Ultimate Cambodia: 3 Days, Phnom Penh to Angkor",
+        "country": "cambodia", "city": "",
+        "duration_label": "3 days, 2 nights", "duration_days": 3,
+        "price_usd": 390, "max_group": 6,
+        "themes": "temples,food,history,culture",
+        "tagline": "The whole country in one long weekend — capital, cuisine and the temples, all handled.",
+        "description": (
+            "Day one: Phnom Penh's Royal Palace, Tuol Sleng and dinner at the country's "
+            "flagship Khmer restaurant. Day two: we travel to Siem Reap and ease in with "
+            "the evening food scene. Day three: sunrise at Angkor Wat, Bayon and Ta Prohm, "
+            "and a farewell dinner.\n\n"
+            "Everything is arranged — transport, timing, reservations. You just show up. "
+            "This is the tour I would give a friend with three days and one chance."
+        ),
+        "includes": "Personal guide for all 3 days\nAll ground transport incl. Phnom Penh–Siem Reap\nTwo signature dinners + all tour food stops\nAirport/hotel pickup and drop-off",
+        "excludes": "Accommodation (we recommend and book for you)\nAngkor Park pass ($37)\nEntry fees",
+        "meeting_point": "Phnom Penh airport or your hotel, day 1, 9:00 AM",
+        "guide_name": "Eastworld",
+        "stops": [
+            (279, "Day 1 · 09:30", "Royal Palace and Silver Pagoda.", 90),
+            (280, "Day 1 · 13:00", "Tuol Sleng, with time and context.", 90),
+            (100, "Day 1 · 19:00", "Dinner at Cambodia's flagship Khmer table.", 120),
+            (284, "Day 3 · 05:00", "Sunrise at Angkor Wat.", 180),
+            (285, "Day 3 · 09:30", "Bayon and the faces of Angkor Thom.", 90),
+            (286, "Day 3 · 14:00", "Ta Prohm in the afternoon light.", 90),
+            (106, "Day 3 · 19:30", "Farewell dinner, refined Khmer cooking.", 120),
+        ],
+    },
+]
+
+
+def seed_tours(conn):
+    """Insert the launch tours and their stops. Stop listing ids are
+    validated against the listings table so a bad id fails loudly at
+    seed time rather than as a broken link on the site."""
+    for tour in TOURS_SEED:
+        stops = tour.pop("stops")
+        first_image = conn.execute(
+            "SELECT image_url FROM listings WHERE id = ?", (stops[0][0],)
+        ).fetchone()
+        tour["image_url"] = first_image["image_url"] if first_image else ""
+        cursor = conn.execute(
+            "INSERT INTO tours (slug, title, country, city, kind, duration_label,"
+            " duration_days, price_usd, max_group, themes, tagline, description,"
+            " includes, excludes, meeting_point, image_url, guide_name, status)"
+            " VALUES (:slug, :title, :country, :city, 'packaged', :duration_label,"
+            " :duration_days, :price_usd, :max_group, :themes, :tagline, :description,"
+            " :includes, :excludes, :meeting_point, :image_url, :guide_name, 'live')",
+            tour,
+        )
+        tour_id = cursor.lastrowid
+        for position, (listing_id, time_label, note, duration_min) in enumerate(stops, 1):
+            conn.execute(
+                "INSERT INTO tour_stops (tour_id, listing_id, position, time_label,"
+                " note, duration_min) VALUES (?, ?, ?, ?, ?, ?)",
+                (tour_id, listing_id, position, time_label, note, duration_min),
+            )
+        tour["stops"] = stops  # restore for idempotence of the constant
+    print(f"Seeded {len(TOURS_SEED)} tours.")
+
+
+@app.route("/api/tours")
+def list_tours():
+    """Tours for the catalog page. Filters: country, city, kind, status
+    (status defaults to live so coming-soon Japan tours stay hidden
+    until flipped). Includes stop_count so cards can say '5 stops'."""
+    where, params = [], []
+    status = request.args.get("status", "live")
+    if status != "all":
+        where.append("status = ?")
+        params.append(status)
+    for param in ("country", "city", "kind"):
+        value = request.args.get(param)
+        if value:
+            where.append(f"{param} = ?")
+            params.append(value.lower())
+
+    sql = ("SELECT t.*, (SELECT COUNT(*) FROM tour_stops s WHERE s.tour_id = t.id)"
+           " AS stop_count FROM tours t")
+    if where:
+        sql += " WHERE " + " AND ".join(where)
+    sql += " ORDER BY t.price_usd"
+
+    conn = get_db()
+    rows = conn.execute(sql, params).fetchall()
+    conn.close()
+    return jsonify([dict(row) for row in rows])
+
+
+@app.route("/api/tours/<int:tour_id>")
+def get_tour(tour_id):
+    """Full tour detail: the tour row plus its stops joined to the
+    listing each stop visits (name, image, coords, link) so the tour
+    page can cross-link and the builder can draw the route."""
+    conn = get_db()
+    tour = conn.execute("SELECT * FROM tours WHERE id = ?", (tour_id,)).fetchone()
+    if tour is None:
+        conn.close()
+        return jsonify({"error": "Tour not found"}), 404
+    stops = conn.execute(
+        "SELECT s.position, s.time_label, s.note, s.duration_min,"
+        " l.id AS listing_id, l.name, l.type, l.city, l.image_url, l.link, l.lat, l.lng"
+        " FROM tour_stops s JOIN listings l ON l.id = s.listing_id"
+        " WHERE s.tour_id = ? ORDER BY s.position",
+        (tour_id,),
+    ).fetchall()
+    conn.close()
+    result = dict(tour)
+    result["stops"] = [dict(s) for s in stops]
+    return jsonify(result)
+
+
+@app.route("/api/tours/by-listing/<int:listing_id>")
+def tours_for_listing(listing_id):
+    """The reverse lookup behind the 'Visit this on a tour' block on
+    listing pages: which live tours stop at this place."""
+    conn = get_db()
+    rows = conn.execute(
+        "SELECT t.id, t.slug, t.title, t.tagline, t.price_usd, t.duration_label,"
+        " t.image_url FROM tours t JOIN tour_stops s ON s.tour_id = t.id"
+        " WHERE s.listing_id = ? AND t.status = 'live' ORDER BY t.price_usd",
+        (listing_id,),
+    ).fetchall()
+    conn.close()
+    return jsonify([dict(row) for row in rows])
+
+
+@app.route("/api/booking-requests", methods=["POST"])
+def create_booking_request():
+    """Public booking request. Guest checkout by design — name + email
+    is all we insist on. tour_id NULL means a bespoke builder request,
+    whose selections arrive as JSON in bespoke_payload."""
+    data = request.get_json(silent=True) or {}
+    name = (data.get("name") or "").strip()
+    email = (data.get("email") or "").strip()
+    if not name or not email or "@" not in email:
+        return jsonify({"error": "A name and a valid email are required."}), 400
+
+    tour_id = data.get("tour_id")
+    if tour_id is not None:
+        conn = get_db()
+        tour = conn.execute(
+            "SELECT id FROM tours WHERE id = ? AND status = 'live'", (tour_id,)
+        ).fetchone()
+        conn.close()
+        if tour is None:
+            return jsonify({"error": "That tour isn't available."}), 400
+
+    party_size = data.get("party_size")
+    try:
+        party_size = int(party_size) if party_size not in (None, "") else None
+        if party_size is not None and not (1 <= party_size <= 30):
+            party_size = None
+    except (TypeError, ValueError):
+        party_size = None
+
+    bespoke = data.get("bespoke_payload")
+    conn = get_db()
+    cursor = conn.execute(
+        "INSERT INTO booking_requests (tour_id, name, email, dates, party_size,"
+        " message, bespoke_payload) VALUES (?, ?, ?, ?, ?, ?, ?)",
+        (tour_id, name, email,
+         (data.get("dates") or "").strip()[:200], party_size,
+         (data.get("message") or "").strip()[:2000],
+         json.dumps(bespoke) if bespoke else ""),
+    )
+    conn.commit()
+    new_id = cursor.lastrowid
+    conn.close()
+    return jsonify({"ok": True, "id": new_id}), 201
+
+
+@app.route("/api/booking-requests")
+def list_booking_requests():
+    """Admin: the booking pipeline, newest first."""
+    if not is_authorized():
+        return jsonify({"error": "Unauthorized"}), 401
+    conn = get_db()
+    rows = conn.execute(
+        "SELECT b.*, t.title AS tour_title FROM booking_requests b"
+        " LEFT JOIN tours t ON t.id = b.tour_id"
+        " ORDER BY b.created_at DESC LIMIT 500"
+    ).fetchall()
+    conn.close()
+    return jsonify([dict(row) for row in rows])
+
+
+@app.route("/api/booking-requests/<int:request_id>", methods=["PUT"])
+def update_booking_request(request_id):
+    """Admin: move a request through new -> confirmed -> completed
+    (or cancelled)."""
+    if not is_authorized():
+        return jsonify({"error": "Unauthorized"}), 401
+    data = request.get_json(silent=True) or {}
+    status = data.get("status")
+    if status not in ("new", "confirmed", "completed", "cancelled"):
+        return jsonify({"error": "Unknown status"}), 400
+    conn = get_db()
+    cursor = conn.execute(
+        "UPDATE booking_requests SET status = ? WHERE id = ?", (status, request_id)
+    )
+    conn.commit()
+    conn.close()
+    if cursor.rowcount == 0:
+        return jsonify({"error": "Request not found"}), 404
+    return jsonify({"ok": True})
+
+
 def trending_items(conn, tab, country):
     """Ranked picks for one tab+country, joined with listing details."""
     rows = conn.execute(
@@ -1822,14 +2213,34 @@ def listing_page():
                            description, image, f"/listing.html?id={listing_id}")
 
 
+@app.route("/tour.html")
+def tour_page():
+    tour_id = request.args.get("id", type=int)
+    conn = get_db()
+    row = conn.execute("SELECT * FROM tours WHERE id = ?", (tour_id,)).fetchone() if tour_id else None
+    conn.close()
+
+    if row is None:
+        return render_with_seo("tour.html", "Eastworld Tours",
+                               "Local-led tours in Cambodia, built from places we've actually been.",
+                               "", "/tour.html")
+    place = (row["city"] or row["country"]).replace("-", " ").title()
+    description = row["tagline"] or f"{row['title']} — a local-led tour in {place}."
+    image = row["image_url"]
+    if image.startswith("/"):
+        image = request.url_root.rstrip("/") + image
+    return render_with_seo("tour.html", f"{row['title']} - Eastworld Tours",
+                           description, image, f"/tour.html?id={tour_id}")
+
+
 @app.route("/sitemap.xml")
 def sitemap():
     """Every page on the site, for search engines."""
     base = request.url_root.rstrip("/")
     urls = [f"{base}/"] + [
         f"{base}/{page}" for page in
-        ["food.html", "stays.html", "places.html", "products.html", "cities.html",
-         "ew-events.html"]
+        ["tours.html", "tour-builder.html", "food.html", "stays.html", "places.html",
+         "cities.html"]
     ]
 
     conn = get_db()
@@ -1837,6 +2248,8 @@ def sitemap():
              for r in conn.execute("SELECT id FROM posts ORDER BY id")]
     urls += [f"{base}/listing.html?id={r['id']}"
              for r in conn.execute("SELECT id FROM listings ORDER BY id")]
+    urls += [f"{base}/tour.html?id={r['id']}"
+             for r in conn.execute("SELECT id FROM tours WHERE status = 'live' ORDER BY id")]
     conn.close()
 
     entries = "\n".join(f"  <url><loc>{html_lib.escape(u)}</loc></url>" for u in urls)
@@ -1878,6 +2291,7 @@ ensure_events_table()
 ensure_slides_table()
 ensure_users_table()
 ensure_reviews_table()
+ensure_tours_tables()
 normalize_cities_once()
 backfill_listing_media()
 ensure_geo_tagging()

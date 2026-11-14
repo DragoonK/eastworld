@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Build Your Own Cambodia Tour - Eastworld Tours</title>
+  <meta name="description" content="Pick your city, your themes and your stops from places we've actually been — we turn it into a private, guided itinerary.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://api.mapbox.com/mapbox-gl-js/v3.8.0/mapbox-gl.css" rel="stylesheet">
+  <link rel="stylesheet" href="home.css">
+  <link rel="stylesheet" href="tours.css">
+</head>
+<body>
+
+  <header>
+    <nav class="main-nav">
+      <div class="nav-links">
+        <a href="tours.html">TOURS</a>
+        <a href="tour-builder.html">BUILD YOUR OWN</a>
+        <a href="food.html">FOOD</a>
+        <a href="places.html">PLACES</a>
+      </div>
+      <a href="index.html" class="logo"><img src="assets/eastworld-logo.png" alt="Eastworld"></a>
+      <div class="nav-links">
+        <a href="stays.html">STAYS</a>
+        <a href="cities.html">CITIES</a>
+        <a href="login.html" class="auth-link">LOGIN</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="builder" id="builder-main">
+    <div>
+      <div class="builder-steps" id="builder-steps">
+        <span class="step-pill active" data-step="0">1 · City</span>
+        <span class="step-pill" data-step="1">2 · Themes</span>
+        <span class="step-pill" data-step="2">3 · Stops</span>
+        <span class="step-pill" data-step="3">4 · Details</span>
+      </div>
+
+      <!-- STEP 1: city -->
+      <section class="builder-step active" data-step="0">
+        <h2>Where in Cambodia?</h2>
+        <p class="step-sub">One city, or the full run between them.</p>
+        <div class="choice-grid" id="city-choices">
+          <div class="choice-card" data-value="phnom-penh">
+            <span class="emoji">🏙️</span>Phnom Penh
+            <div style="font-size:0.75rem;color:#999;font-weight:400;">The capital — food, riverside, history</div>
+          </div>
+          <div class="choice-card" data-value="siem-reap">
+            <span class="emoji">🛕</span>Siem Reap
+            <div style="font-size:0.75rem;color:#999;font-weight:400;">Angkor temples + the food town</div>
+          </div>
+          <div class="choice-card" data-value="both">
+            <span class="emoji">🗺️</span>Both cities
+            <div style="font-size:0.75rem;color:#999;font-weight:400;">2–3 days, we handle the transfer</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- STEP 2: themes -->
+      <section class="builder-step" data-step="1">
+        <h2>What's this trip about?</h2>
+        <p class="step-sub">Pick as many as you like — this shapes which stops we suggest.</p>
+        <div class="choice-grid" id="theme-choices">
+          <div class="choice-card" data-value="food"><span class="emoji">🍜</span>Food &amp; Markets</div>
+          <div class="choice-card" data-value="temples"><span class="emoji">🛕</span>Temples &amp; Culture</div>
+          <div class="choice-card" data-value="history"><span class="emoji">🏛️</span>History</div>
+          <div class="choice-card" data-value="photo"><span class="emoji">📷</span>Photography</div>
+          <div class="choice-card" data-value="nightlife"><span class="emoji">🍸</span>Evenings &amp; Nightlife</div>
+        </div>
+      </section>
+
+      <!-- STEP 3: stops -->
+      <section class="builder-step" data-step="2">
+        <h2>Pick your stops</h2>
+        <p class="step-sub">Every one of these is a real place in our database — click to add it
+          to your itinerary on the right. We suggest 3–6.</p>
+        <div class="stop-picker" id="stop-picker">
+          <p class="posts-status">Loading places&hellip;</p>
+        </div>
+      </section>
+
+      <!-- STEP 4: details -->
+      <section class="builder-step" data-step="3">
+        <h2>Nearly there</h2>
+        <p class="step-sub">Tell us when and who — we reply with a confirmed itinerary and price within 24 hours.</p>
+        <form class="booking-form" id="builder-form">
+          <label for="bf-pace">Pace</label>
+          <select id="bf-pace">
+            <option value="relaxed">Relaxed — slow mornings, long lunches</option>
+            <option value="standard" selected>Standard — full but unhurried</option>
+            <option value="packed">Packed — see everything, sleep later</option>
+          </select>
+          <label for="bf-dates">Preferred dates</label>
+          <input id="bf-dates" placeholder="e.g. 12–14 December" maxlength="200">
+          <label for="bf-party">Party size</label>
+          <select id="bf-party">
+            <option value="1">1 person</option>
+            <option value="2" selected>2 people</option>
+            <option value="3">3 people</option>
+            <option value="4">4 people</option>
+            <option value="5">5 people</option>
+            <option value="6">6 people</option>
+          </select>
+          <label for="bf-name">Your name</label>
+          <input id="bf-name" required maxlength="120">
+          <label for="bf-email">Email</label>
+          <input id="bf-email" type="email" required maxlength="200">
+          <label for="bf-msg">Anything else?</label>
+          <textarea id="bf-msg" rows="3" maxlength="2000"
+            placeholder="Dietary needs, mobility, a place you heard about that's not listed&hellip;"></textarea>
+        </form>
+      </section>
+
+      <div class="builder-nav">
+        <button class="btn btn-outline" id="builder-back" style="color:#000;border-color:#000;" hidden>&larr; Back</button>
+        <span style="flex:1"></span>
+        <button class="btn" id="builder-next">Next &rarr;</button>
+      </div>
+    </div>
+
+    <aside class="builder-side">
+      <div class="builder-map" id="builder-map"></div>
+      <div class="builder-itinerary">
+        <h3>Your itinerary</h3>
+        <div id="itin-list"><p class="itin-empty">Pick stops and watch your tour build itself here.</p></div>
+      </div>
+      <div class="builder-estimate">
+        <div>
+          <div class="est-price" id="est-price">$0</div>
+          <small>rough per-person estimate</small>
+        </div>
+        <div style="text-align:right">
+          <div id="est-days">—</div>
+          <small>duration</small>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <div class="builder-success" id="builder-success" hidden>
+    <h2>Your tour is with us.</h2>
+    <p>We've got your itinerary and we'll reply within 24 hours with a confirmed
+       schedule and final price. No payment until you're happy with it.</p>
+    <a class="btn" href="tours.html">Browse the packaged tours</a>
+  </div>
+
+  <footer>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="https://api.mapbox.com/mapbox-gl-js/v3.8.0/mapbox-gl.js"></script>
+  <script src="map-config.js"></script>
+  <script src="tour-builder.js"></script>
+  <script src="auth.js"></script>
+</body>
+</html>

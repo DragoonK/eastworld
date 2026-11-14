@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cambodia Tours with a Local Guide - Eastworld Tours</title>
+  <meta name="description" content="Small-group and private tours in Phnom Penh and Siem Reap, led by a local Khmer & English speaking guide. Every stop is a place we've actually been.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="home.css">
+  <link rel="stylesheet" href="tours.css">
+</head>
+<body>
+
+  <header>
+    <nav class="main-nav">
+      <div class="nav-links">
+        <a href="tours.html">TOURS</a>
+        <a href="tour-builder.html">BUILD YOUR OWN</a>
+        <a href="food.html">FOOD</a>
+        <a href="places.html">PLACES</a>
+      </div>
+      <a href="index.html" class="logo"><img src="assets/eastworld-logo.png" alt="Eastworld"></a>
+      <div class="nav-links">
+        <a href="stays.html">STAYS</a>
+        <a href="cities.html">CITIES</a>
+        <a href="login.html" class="auth-link">LOGIN</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="tours-hero">
+      <span class="kicker">Eastworld Tours · Cambodia</span>
+      <h1>Tours with someone who actually lives here.</h1>
+      <p>Small groups, real places, no scripts. Every stop on every tour is somewhere
+         we've eaten, walked and photographed ourselves — and it's on this site.
+         Guided in English and Khmer.</p>
+    </section>
+
+    <div class="tours-filter" id="tours-filter">
+      <button class="filter-btn active" data-city="all">All Tours</button>
+      <button class="filter-btn" data-city="phnom-penh">Phnom Penh</button>
+      <button class="filter-btn" data-city="siem-reap">Siem Reap</button>
+      <button class="filter-btn" data-city="multi">Multi-Day</button>
+    </div>
+
+    <section class="tours-grid" id="tours-grid">
+      <p class="posts-status" style="grid-column: 1 / -1; text-align: center;">Loading tours&hellip;</p>
+    </section>
+
+    <section class="tours-bespoke">
+      <div class="tours-bespoke-inner">
+        <div>
+          <h2>None of these quite right?</h2>
+          <p>Build your own tour from the real places in our database — pick your city,
+             your themes, your stops — and we'll turn it into a private itinerary with a price.</p>
+        </div>
+        <a class="btn" href="tour-builder.html">Build your own tour &rarr;</a>
+      </div>
+    </section>
+
+    <section class="tours-soon">
+      <div class="tours-soon-card">
+        <h3>Japan — coming soon</h3>
+        <p>Osaka, Kobe &amp; Kyoto with our on-the-ground guide. Get notified at launch.</p>
+        <form id="waitlist-japan">
+          <input type="email" required placeholder="Your email">
+          <button class="btn" type="submit">Notify me</button>
+        </form>
+        <p class="booking-status" id="waitlist-status"></p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    const titleCase = (s) => (s || '').replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    let allTours = [];
+
+    function tourCard(t) {
+      const city = t.city ? titleCase(t.city) : 'Multi-City';
+      return `
+        <a class="tour-card" href="tour.html?id=${t.id}">
+          <div class="tour-card-img">
+            <img src="${t.image_url}" alt="${t.title}" loading="lazy"
+                 onerror="this.style.visibility='hidden'">
+            <span class="tour-card-city">${city}</span>
+            <span class="tour-card-price">$${t.price_usd}</span>
+          </div>
+          <div class="tour-card-body">
+            <h3>${t.title}</h3>
+            <p class="tagline">${t.tagline}</p>
+            <div class="tour-card-meta">
+              <span>${t.duration_label}</span>
+              <span>${t.stop_count} stops</span>
+              <span>Max ${t.max_group} people</span>
+            </div>
+          </div>
+        </a>`;
+    }
+
+    function renderTours(city) {
+      const filtered = allTours.filter(t => {
+        if (city === 'all') return true;
+        if (city === 'multi') return t.duration_days > 1;
+        return t.city === city;
+      });
+      document.getElementById('tours-grid').innerHTML = filtered.length
+        ? filtered.map(tourCard).join('')
+        : '<p class="posts-status" style="grid-column: 1 / -1; text-align: center;">No tours here yet — try the builder below.</p>';
+    }
+
+    document.querySelectorAll('#tours-filter .filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#tours-filter .filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderTours(btn.dataset.city);
+      });
+    });
+
+    (async () => {
+      try {
+        const res = await fetch('/api/tours');
+        if (!res.ok) throw new Error(res.status);
+        allTours = await res.json();
+        renderTours('all');
+      } catch {
+        document.getElementById('tours-grid').innerHTML = `
+          <p class="posts-status" style="grid-column: 1 / -1; text-align: center;">
+            Couldn't load tours. Is the backend running?<br>
+            Start it with: <code>cd backend &amp;&amp; python3 app.py</code>
+          </p>`;
+      }
+    })();
+
+    // Japan launch waitlist — stored as a booking request with a
+    // waitlist payload so it lands in the same admin pipeline.
+    document.getElementById('waitlist-japan').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = e.target.querySelector('input').value;
+      const status = document.getElementById('waitlist-status');
+      try {
+        const res = await fetch('/api/booking-requests', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: 'Japan waitlist', email,
+            bespoke_payload: { type: 'waitlist', country: 'japan' },
+          }),
+        });
+        if (!res.ok) throw new Error(res.status);
+        status.textContent = "You're on the list — we'll email you at launch.";
+        status.className = 'booking-status ok';
+        e.target.reset();
+      } catch {
+        status.textContent = 'Something went wrong — try again.';
+        status.className = 'booking-status err';
+      }
+    });
+  </script>
+  <script src="auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- SEO_TAGS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="home.css">
+  <link rel="stylesheet" href="tours.css">
+</head>
+<body>
+
+  <header>
+    <nav class="main-nav">
+      <div class="nav-links">
+        <a href="tours.html">TOURS</a>
+        <a href="tour-builder.html">BUILD YOUR OWN</a>
+        <a href="food.html">FOOD</a>
+        <a href="places.html">PLACES</a>
+      </div>
+      <a href="index.html" class="logo"><img src="assets/eastworld-logo.png" alt="Eastworld"></a>
+      <div class="nav-links">
+        <a href="stays.html">STAYS</a>
+        <a href="cities.html">CITIES</a>
+        <a href="login.html" class="auth-link">LOGIN</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="tour-detail" id="tour-detail">
+    <p class="posts-status">Loading tour&hellip;</p>
+  </main>
+
+  <footer>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Eastworld. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    const titleCase = (s) => (s || '').replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+
+    function linesToList(text) {
+      return (text || '').split('\n').filter(l => l.trim())
+        .map(l => `<li>${l.trim()}</li>`).join('');
+    }
+
+    function listingHref(stop) {
+      return stop.link || `listing.html?id=${stop.listing_id}`;
+    }
+
+    async function loadTour() {
+      const root = document.getElementById('tour-detail');
+      const id = new URLSearchParams(window.location.search).get('id');
+
+      if (!id) {
+        root.innerHTML = '<p class="posts-status">No tour specified. <a href="tours.html">See all tours</a>.</p>';
+        return;
+      }
+
+      let tour;
+      try {
+        const res = await fetch(`/api/tours/${id}`);
+        if (res.status === 404) {
+          root.innerHTML = '<p class="posts-status">Tour not found. <a href="tours.html">See all tours</a>.</p>';
+          return;
+        }
+        if (!res.ok) throw new Error(res.status);
+        tour = await res.json();
+      } catch {
+        root.innerHTML = `
+          <p class="posts-status">Couldn't load this tour. Is the backend running?<br>
+          Start it with: <code>cd backend &amp;&amp; python3 app.py</code></p>`;
+        return;
+      }
+
+      document.title = `${tour.title} - Eastworld Tours`;
+      const city = tour.city ? titleCase(tour.city) : 'Multi-City';
+      const paragraphs = (tour.description || '').split(/\n\s*\n/)
+        .filter(p => p.trim()).map(p => `<p>${p.trim()}</p>`).join('');
+
+      const stops = tour.stops.map(s => `
+        <li class="tour-stop">
+          <span class="tour-stop-time">${s.time_label}</span>
+          <span class="tour-stop-dot"></span>
+          <div class="tour-stop-body">
+            <a href="${listingHref(s)}">${s.name}</a>
+            ${s.duration_min ? `<span class="tour-stop-len"> · ~${s.duration_min} min</span>` : ''}
+            <div class="tour-stop-note">${s.note}</div>
+          </div>
+        </li>`).join('');
+
+      root.innerHTML = `
+        <div class="tour-main">
+          <img class="tour-hero-img" src="${tour.image_url}" alt="${tour.title}"
+               onerror="this.style.display='none'">
+          <h1>${tour.title}</h1>
+          <p class="tour-tagline">${tour.tagline}</p>
+
+          <div class="tour-facts">
+            <div><strong>Where</strong>${city}, ${titleCase(tour.country)}</div>
+            <div><strong>Duration</strong>${tour.duration_label}</div>
+            <div><strong>Group</strong>Max ${tour.max_group} people</div>
+            <div><strong>Meeting point</strong>${tour.meeting_point}</div>
+          </div>
+
+          <div class="tour-body">${paragraphs}</div>
+
+          <h2>The itinerary</h2>
+          <ul class="tour-timeline">${stops}</ul>
+          <p class="tour-stop-note">Every stop links to its full write-up on Eastworld —
+             these are places we've actually been, not stock picks.</p>
+
+          <div class="tour-inclexcl">
+            <div>
+              <h3>Included</h3>
+              <ul>${linesToList(tour.includes)}</ul>
+            </div>
+            <div>
+              <h3>Not included</h3>
+              <ul>${linesToList(tour.excludes)}</ul>
+            </div>
+          </div>
+        </div>
+
+        <aside class="booking-panel">
+          <div class="price">$${tour.price_usd} <span>per person</span></div>
+          <div class="how">
+            <strong>How booking works:</strong> send a request — no payment now.
+            We confirm your date personally within 24 hours, then a small deposit
+            (Stripe or ABA) locks it in. Balance on the day.
+          </div>
+          <form class="booking-form" id="booking-form">
+            <label for="bk-name">Your name</label>
+            <input id="bk-name" required maxlength="120">
+            <label for="bk-email">Email</label>
+            <input id="bk-email" type="email" required maxlength="200">
+            <label for="bk-dates">Preferred dates</label>
+            <input id="bk-dates" placeholder="e.g. 12–14 December" maxlength="200">
+            <label for="bk-party">Party size</label>
+            <select id="bk-party">
+              ${[1,2,3,4,5,6,7,8].map(n => `<option value="${n}">${n} ${n === 1 ? 'person' : 'people'}</option>`).join('')}
+            </select>
+            <label for="bk-msg">Anything we should know?</label>
+            <textarea id="bk-msg" rows="3" maxlength="2000"
+              placeholder="Dietary needs, fitness, must-see requests&hellip;"></textarea>
+            <button class="btn" type="submit">Request this tour</button>
+            <p class="booking-status" id="booking-status"></p>
+          </form>
+        </aside>`;
+
+      document.getElementById('booking-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = e.target.querySelector('button');
+        const status = document.getElementById('booking-status');
+        btn.disabled = true;
+        try {
+          const res = await fetch('/api/booking-requests', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              tour_id: tour.id,
+              name: document.getElementById('bk-name').value,
+              email: document.getElementById('bk-email').value,
+              dates: document.getElementById('bk-dates').value,
+              party_size: document.getElementById('bk-party').value,
+              message: document.getElementById('bk-msg').value,
+            }),
+          });
+          const body = await res.json();
+          if (!res.ok) throw new Error(body.error || res.status);
+          status.textContent = "Request sent! We'll confirm your date within 24 hours.";
+          status.className = 'booking-status ok';
+          e.target.reset();
+        } catch (err) {
+          status.textContent = err.message || 'Something went wrong — try again.';
+          status.className = 'booking-status err';
+        } finally {
+          btn.disabled = false;
+        }
+      });
+    }
+
+    loadTour();
+  </script>
+  <script src="auth.js"></script>
+</body>
+</html>
