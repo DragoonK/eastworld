@@ -1,20 +1,23 @@
 // ============================================================
-// Bespoke tour builder: a stepped wizard (city -> themes ->
-// stops -> details) with a live itinerary preview, Mapbox pins
-// and a rolling price estimate. Submitting creates a booking
-// request with a bespoke_payload — the same admin pipeline as
-// packaged-tour requests.
+// Bespoke tour builder, guided by the Eastworld Dragon.
+// Steps: country -> city -> themes -> stops -> details, with a
+// live itinerary preview, Mapbox pins and a rolling estimate.
+// "Dragon's Pick" auto-builds a mixed itinerary from real
+// listings. Submitting creates a booking request with a
+// bespoke_payload — the same admin pipeline as packaged tours.
 // ============================================================
 
 const state = {
   step: 0,
-  city: null,            // phnom-penh | siem-reap | both
+  country: null,         // cambodia | japan | australia
+  city: null,            // city slug | 'multi'
   themes: new Set(),
   stops: [],             // ordered listing objects
   listings: [],
 };
 
-const STEP_COUNT = 4;
+const STEP_COUNT = 5;
+const LIVE_COUNTRIES = ['cambodia', 'japan', 'australia'];
 
 // Themes loosely shape which listing types we suggest first;
 // everything is always shown, suggestions just sort to the top.
@@ -24,9 +27,28 @@ const THEME_TYPE_HINTS = {
   history: ['place'],
   photo: ['place'],
   nightlife: ['food', 'place'],
+  nature: ['place'],
 };
 
 const titleCase = (s) => (s || '').replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+
+// ---------------- the Dragon ----------------
+
+const DRAGON_STOP_LINES = [
+  'Great pick — I ate there myself.',
+  'Solid choice. Trust the Dragon.',
+  'That one\'s a personal favourite.',
+  'Ooh, good one. Your taste is showing.',
+  'Yes! That place is in my top ten.',
+];
+
+function dragonSay(text) {
+  const bubble = document.getElementById('dragon-text');
+  bubble.style.animation = 'none';
+  void bubble.offsetWidth;            // restart the pop animation
+  bubble.style.animation = 'dragon-pop 0.35s ease';
+  bubble.textContent = text;
+}
 
 // ---------------- steps ----------------
 
@@ -43,13 +65,19 @@ function showStep(n) {
   document.getElementById('builder-next').textContent =
     n === STEP_COUNT - 1 ? 'Send my tour request' : 'Next →';
 
-  if (n === 2) renderStopPicker();
+  if (n === 3) {
+    renderStopPicker();
+    if (state.stops.length === 0) {
+      dragonSay('Pick a few stops... or hit Dragon\'s Pick and let me build it for you.');
+    }
+  }
 }
 
 function canAdvance() {
-  if (state.step === 0 && !state.city) return 'Pick a city first.';
-  if (state.step === 2 && state.stops.length < 2) return 'Add at least 2 stops.';
-  if (state.step === 3) {
+  if (state.step === 0 && !state.country) return 'Pick a country first.';
+  if (state.step === 1 && !state.city) return 'Pick a city first.';
+  if (state.step === 3 && state.stops.length < 2) return 'Add at least 2 stops.';
+  if (state.step === 4) {
     if (!document.getElementById('bf-name').value.trim()) return 'We need your name.';
     if (!document.getElementById('bf-email').value.includes('@')) return 'We need a valid email.';
   }
@@ -78,41 +106,92 @@ function flashError(msg) {
   }, 1600);
 }
 
-// ---------------- city + theme choices ----------------
+// ---------------- country + city + theme choices ----------------
 
-document.querySelectorAll('#city-choices .choice-card').forEach(card => {
+const DRAGON_COUNTRY_LINES = {
+  cambodia: 'Cambodia! My home turf. Temples, street food and the friendliest people on earth. Now pick a city.',
+  japan: 'Japan! My friends in Tokyo, Kyoto, Osaka and Kobe know all the good spots. Pick your city.',
+  australia: 'Australia! Coffee, coastlines and dumplings. Excellent taste. Where to?',
+};
+
+document.querySelectorAll('#country-choices .choice-card[data-value]').forEach(card => {
   card.addEventListener('click', () => {
-    document.querySelectorAll('#city-choices .choice-card')
+    document.querySelectorAll('#country-choices .choice-card')
       .forEach(c => c.classList.remove('selected'));
     card.classList.add('selected');
-    state.city = card.dataset.value;
-    state.stops = [];          // changing city invalidates picked stops
+    state.country = card.dataset.value;
+    state.city = null;
+    state.stops = [];
     renderItinerary();
-    setTimeout(() => showStep(1), 350);   // auto-advance feels alive
+    dragonSay(DRAGON_COUNTRY_LINES[state.country]);
+    setTimeout(() => showStep(1), 450);
   });
 });
+
+// City choices are generated from what's actually in the DB
+function renderCityChoices() {
+  const cities = [...new Set(state.listings
+    .filter(l => l.country === state.country && l.city)
+    .map(l => l.city))].sort();
+
+  const container = document.getElementById('city-choices');
+  container.innerHTML = cities.map(c => `
+    <div class="choice-card" data-value="${c}">
+      <span class="emoji">${c === 'siem-reap' ? '🛕' : '🏙️'}</span>${titleCase(c)}
+    </div>`).join('') + `
+    <div class="choice-card" data-value="multi">
+      <span class="emoji">🗺️</span>Multiple cities
+      <div style="font-size:0.75rem;color:#999;font-weight:400;">2–3 days, I handle the transfer</div>
+    </div>`;
+
+  container.querySelectorAll('.choice-card').forEach(card => {
+    card.addEventListener('click', () => {
+      container.querySelectorAll('.choice-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      state.city = card.dataset.value;
+      state.stops = [];
+      renderItinerary();
+      dragonSay(state.city === 'multi'
+        ? 'The full tour! Ambitious. I like it. What\'s the vibe?'
+        : `${titleCase(state.city)} — great call. What's the trip about?`);
+      setTimeout(() => showStep(2), 450);
+    });
+  });
+}
+
+// City choices must be (re)built each time we enter step 2
+const originalShowStep = showStep;
+showStep = function (n) {
+  if (n === 1) renderCityChoices();
+  if (n === 4) dragonSay('Last step! Tell me where to send your confirmed itinerary.');
+  originalShowStep(n);
+};
 
 document.querySelectorAll('#theme-choices .choice-card').forEach(card => {
   card.addEventListener('click', () => {
     card.classList.toggle('selected');
     const value = card.dataset.value;
-    if (state.themes.has(value)) state.themes.delete(value);
-    else state.themes.add(value);
+    if (state.themes.has(value)) {
+      state.themes.delete(value);
+    } else {
+      state.themes.add(value);
+      dragonSay('Ooh, good taste. I know just the places.');
+    }
   });
 });
 
 // ---------------- stop picker ----------------
 
 async function loadListings() {
-  const res = await fetch('/api/listings?country=cambodia&limit=500');
-  state.listings = await res.json();
+  const res = await fetch('/api/listings?limit=500');
+  const all = await res.json();
+  state.listings = all.filter(l =>
+    LIVE_COUNTRIES.includes(l.country) && (l.type === 'food' || l.type === 'place'));
 }
 
 function visibleListings() {
-  const cities = state.city === 'both'
-    ? ['phnom-penh', 'siem-reap'] : [state.city];
   const pool = state.listings.filter(l =>
-    (l.type === 'food' || l.type === 'place') && cities.includes(l.city));
+    l.country === state.country && (state.city === 'multi' || l.city === state.city));
 
   if (state.themes.size === 0) return pool;
   const hinted = new Set();
@@ -145,6 +224,7 @@ function renderStopPicker() {
         state.stops.splice(existing, 1);
       } else {
         state.stops.push(state.listings.find(l => l.id === id));
+        dragonSay(DRAGON_STOP_LINES[Math.floor(Math.random() * DRAGON_STOP_LINES.length)]);
       }
       renderItinerary();
       // update just this card's state rather than re-rendering the grid
@@ -155,10 +235,35 @@ function renderStopPicker() {
   });
 }
 
+// Dragon's Pick: a ready-made mixed day — two sights and two
+// food stops, preferring places with photos and the user's themes.
+document.getElementById('dragon-pick').addEventListener('click', () => {
+  const pool = visibleListings();
+  const scored = (l) => (l.image_url ? 2 : 0) + (l.rating ? l.rating / 5 : 0);
+  const places = pool.filter(l => l.type === 'place').sort((a, b) => scored(b) - scored(a));
+  const foods = pool.filter(l => l.type === 'food').sort((a, b) => scored(b) - scored(a));
+
+  state.stops = [];
+  const n = Math.min(2, places.length);
+  for (let i = 0; i < n; i++) {
+    state.stops.push(places[i]);
+    if (foods[i]) state.stops.push(foods[i]);
+  }
+  // tiny pools: top up to at least 2 stops from whatever exists
+  for (const extra of pool) {
+    if (state.stops.length >= 2) break;
+    if (!state.stops.includes(extra)) state.stops.push(extra);
+  }
+
+  renderItinerary();
+  renderStopPicker();
+  dragonSay(`Boom — my ideal ${state.city === 'multi' ? 'trip' : titleCase(state.city) + ' day'}. Swap anything you don't like.`);
+});
+
 // ---------------- live preview: itinerary + estimate + map ----------------
 
 function estimateDays() {
-  if (state.city === 'both') return Math.max(2, Math.ceil(state.stops.length / 4));
+  if (state.city === 'multi') return Math.max(2, Math.ceil(state.stops.length / 4));
   return state.stops.length > 4 ? 2 : 1;
 }
 
@@ -211,7 +316,7 @@ function initMap() {
   map = new mapboxgl.Map({
     container: 'builder-map',
     style: 'mapbox://styles/mapbox/light-v11',
-    center: [104.92, 12.55],   // Cambodia
+    center: [104.92, 12.55],   // Cambodia; refits as stops are picked
     zoom: 6.4,
   });
   map.on('load', () => updateMap());
@@ -269,6 +374,7 @@ async function submitBuild() {
 
   const payload = {
     type: 'bespoke-tour',
+    country: state.country,
     city: state.city,
     themes: [...state.themes],
     pace: document.getElementById('bf-pace').value,

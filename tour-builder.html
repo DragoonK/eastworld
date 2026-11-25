@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Build Your Own Cambodia Tour - Eastworld Tours</title>
-  <meta name="description" content="Pick your city, your themes and your stops from places we've actually been — we turn it into a private, guided itinerary.">
+  <title>Build Your Own Tour with the Eastworld Dragon - Eastworld Tours</title>
+  <meta name="description" content="Pick a country, your themes and your stops from places we've actually been — the Eastworld Dragon turns it into a private, guided itinerary.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -33,58 +33,85 @@
 
   <main class="builder" id="builder-main">
     <div>
-      <div class="builder-steps" id="builder-steps">
-        <span class="step-pill active" data-step="0">1 · City</span>
-        <span class="step-pill" data-step="1">2 · Themes</span>
-        <span class="step-pill" data-step="2">3 · Stops</span>
-        <span class="step-pill" data-step="3">4 · Details</span>
+      <!-- The Eastworld Dragon: the builder's guide and mascot.
+           Reacts to every choice and can build a whole itinerary
+           for you with Dragon's Pick. -->
+      <div class="dragon-widget">
+        <div class="dragon-avatar">🐉</div>
+        <div class="dragon-bubble">
+          <strong>Eastworld Dragon</strong>
+          <p id="dragon-text">Hey! I'm the Eastworld Dragon. Pick a country and I'll help you build something special.</p>
+        </div>
       </div>
 
-      <!-- STEP 1: city -->
+      <div class="builder-steps" id="builder-steps">
+        <span class="step-pill active" data-step="0">1 · Country</span>
+        <span class="step-pill" data-step="1">2 · City</span>
+        <span class="step-pill" data-step="2">3 · Themes</span>
+        <span class="step-pill" data-step="3">4 · Stops</span>
+        <span class="step-pill" data-step="4">5 · Details</span>
+      </div>
+
+      <!-- STEP 1: country -->
       <section class="builder-step active" data-step="0">
-        <h2>Where in Cambodia?</h2>
-        <p class="step-sub">One city, or the full run between them.</p>
-        <div class="choice-grid" id="city-choices">
-          <div class="choice-card" data-value="phnom-penh">
-            <span class="emoji">🏙️</span>Phnom Penh
-            <div style="font-size:0.75rem;color:#999;font-weight:400;">The capital — food, riverside, history</div>
+        <h2>Where are we going?</h2>
+        <p class="step-sub">Three countries are live right now — more are on the way.</p>
+        <div class="choice-grid" id="country-choices">
+          <div class="choice-card" data-value="cambodia">
+            <span class="emoji">🛕</span>Cambodia
+            <div style="font-size:0.75rem;color:#999;font-weight:400;">My home turf — temples, food, history</div>
           </div>
-          <div class="choice-card" data-value="siem-reap">
-            <span class="emoji">🛕</span>Siem Reap
-            <div style="font-size:0.75rem;color:#999;font-weight:400;">Angkor temples + the food town</div>
+          <div class="choice-card" data-value="japan">
+            <span class="emoji">⛩️</span>Japan
+            <div style="font-size:0.75rem;color:#999;font-weight:400;">Tokyo, Kyoto, Osaka &amp; Kobe</div>
           </div>
-          <div class="choice-card" data-value="both">
-            <span class="emoji">🗺️</span>Both cities
-            <div style="font-size:0.75rem;color:#999;font-weight:400;">2–3 days, we handle the transfer</div>
+          <div class="choice-card" data-value="australia">
+            <span class="emoji">🏖️</span>Australia
+            <div style="font-size:0.75rem;color:#999;font-weight:400;">Melbourne &amp; Sydney</div>
+          </div>
+          <div class="choice-card disabled">
+            <span class="emoji">🏮</span>China <span class="soon-badge">soon</span>
+          </div>
+          <div class="choice-card disabled">
+            <span class="emoji">🍜</span>Vietnam <span class="soon-badge">soon</span>
           </div>
         </div>
       </section>
 
-      <!-- STEP 2: themes -->
+      <!-- STEP 2: city (generated per country) -->
       <section class="builder-step" data-step="1">
+        <h2>Which city?</h2>
+        <p class="step-sub">One city, or a multi-city trip — I handle the logistics.</p>
+        <div class="choice-grid" id="city-choices"></div>
+      </section>
+
+      <!-- STEP 3: themes -->
+      <section class="builder-step" data-step="2">
         <h2>What's this trip about?</h2>
-        <p class="step-sub">Pick as many as you like — this shapes which stops we suggest.</p>
+        <p class="step-sub">Pick as many as you like — this shapes which stops I suggest.</p>
         <div class="choice-grid" id="theme-choices">
           <div class="choice-card" data-value="food"><span class="emoji">🍜</span>Food &amp; Markets</div>
           <div class="choice-card" data-value="temples"><span class="emoji">🛕</span>Temples &amp; Culture</div>
           <div class="choice-card" data-value="history"><span class="emoji">🏛️</span>History</div>
           <div class="choice-card" data-value="photo"><span class="emoji">📷</span>Photography</div>
           <div class="choice-card" data-value="nightlife"><span class="emoji">🍸</span>Evenings &amp; Nightlife</div>
+          <div class="choice-card" data-value="nature"><span class="emoji">🌿</span>Nature &amp; Coast</div>
         </div>
       </section>
 
-      <!-- STEP 3: stops -->
-      <section class="builder-step" data-step="2">
+      <!-- STEP 4: stops -->
+      <section class="builder-step" data-step="3">
         <h2>Pick your stops</h2>
-        <p class="step-sub">Every one of these is a real place in our database — click to add it
-          to your itinerary on the right. We suggest 3–6.</p>
-        <div class="stop-picker" id="stop-picker">
+        <p class="step-sub">Every one of these is a real place in our database. I suggest 3–6 —
+          or let me do the choosing.</p>
+        <button class="btn" id="dragon-pick" type="button">🐉 Dragon's Pick — build it for me</button>
+        <div class="stop-picker" id="stop-picker" style="margin-top:1.2rem;">
           <p class="posts-status">Loading places&hellip;</p>
         </div>
       </section>
 
-      <!-- STEP 4: details -->
-      <section class="builder-step" data-step="3">
+      <!-- STEP 5: details -->
+      <section class="builder-step" data-step="4">
         <h2>Nearly there</h2>
         <p class="step-sub">Tell us when and who — we reply with a confirmed itinerary and price within 24 hours.</p>
         <form class="booking-form" id="builder-form">
@@ -142,9 +169,10 @@
   </main>
 
   <div class="builder-success" id="builder-success" hidden>
+    <div class="dragon-avatar" style="margin:0 auto 1rem;">🐉</div>
     <h2>Your tour is with us.</h2>
-    <p>We've got your itinerary and we'll reply within 24 hours with a confirmed
-       schedule and final price. No payment until you're happy with it.</p>
+    <p>The Dragon has passed your itinerary to the humans. We'll reply within 24 hours
+       with a confirmed schedule and final price. No payment until you're happy with it.</p>
     <a class="btn" href="tours.html">Browse the packaged tours</a>
   </div>
 

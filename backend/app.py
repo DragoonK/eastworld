@@ -83,6 +83,11 @@ def ensure_listings_table():
             created_at  TEXT NOT NULL DEFAULT (datetime('now'))
         )
     """)
+    # Component-library fields: affiliate deep link (Klook/Viator/
+    # Booking, empty until deals exist) and the trust tag shown on
+    # listing pages (local-verified / expat-verified).
+    add_column_if_missing(conn, "listings", "affiliate_url", "TEXT DEFAULT ''")
+    add_column_if_missing(conn, "listings", "trust_tag", "TEXT DEFAULT ''")
 
     count = conn.execute("SELECT COUNT(*) FROM listings").fetchone()[0]
     seed_file = BASE_DIR / "listings_seed.json"
@@ -1305,8 +1310,8 @@ def ensure_tours_tables():
     references a real, visited listing, so tour pages and listing
     pages cross-link automatically. Booking requests are a manual
     pipeline (request -> confirm over chat -> deposit link), so no
-    payment processing lives here. Safe to run on every boot: the
-    seed only fires when the tours table is empty.
+    payment processing lives here. Seeding is additive per slug, so
+    every boot picks up newly added tours without touching existing ones.
     """
     conn = get_db()
     conn.execute("""
@@ -1359,12 +1364,27 @@ def ensure_tours_tables():
         )
     """)
 
-    count = conn.execute("SELECT COUNT(*) FROM tours").fetchone()[0]
-    if count == 0:
-        seed_tours(conn)
+    seed_tours(conn)
+    tag_verified_listings(conn)
 
     conn.commit()
     conn.close()
+
+
+def tag_verified_listings(conn):
+    """Auto-tag tour stops with the trust layer: every place on a
+    Cambodia tour is somewhere the founder has actually been (local-
+    verified), every Japan stop is somewhere they've lived (expat-
+    verified). Only fills empty tags, so manual edits always win."""
+    for tour in TOURS_SEED:
+        tag = {"cambodia": "local", "japan": "expat"}.get(tour["country"])
+        if not tag:
+            continue
+        for stop in tour["stops"]:
+            conn.execute(
+                "UPDATE listings SET trust_tag = ? WHERE id = ? AND trust_tag = ''",
+                (tag, stop[0]),
+            )
 
 
 # The five launch tours. stops are listing ids (see listings table);
@@ -1506,14 +1526,345 @@ TOURS_SEED = [
             (106, "Day 3 · 19:30", "Farewell dinner, refined Khmer cooking.", 120),
         ],
     },
+    {
+        "slug": "phnom-penh-progressive-dinner",
+        "title": "Phnom Penh After Dark: A Progressive Khmer Dinner",
+        "country": "cambodia", "city": "phnom-penh",
+        "duration_label": "Evening, ~4 hours", "duration_days": 1,
+        "price_usd": 110, "max_group": 6,
+        "themes": "food,nightlife",
+        "tagline": "Cocktails in a colonial mansion, dinner at Cambodia's flagship table, dessert by the river.",
+        "description": (
+            "Phnom Penh's evenings are its best-kept secret. We start with a cocktail in "
+            "the courtyard of a restored colonial mansion, move to dinner at the restaurant "
+            "that put modern Khmer cooking on the map, walk the lamplit riverside, and "
+            "finish with dessert and coffee by the water.\n\n"
+            "One evening, three venues, all the bookings handled. Dress smart-casual."
+        ),
+        "includes": "Local English & Khmer speaking guide\nWelcome cocktail\nFull dinner at Malis\nDessert and coffee\nTuk-tuk transport between venues",
+        "excludes": "Extra alcoholic drinks\nHotel pickup (central meeting point)",
+        "meeting_point": "Chinese House, Sisowath Quay, 6:00 PM",
+        "guide_name": "Eastworld",
+        "stops": [
+            (103, "18:00", "Welcome cocktail in the colonial courtyard.", 60),
+            (100, "19:15", "Dinner at Cambodia's flagship Khmer table.", 105),
+            (283, "21:15", "Lamplit riverside walk to digest.", 30),
+            (101, "21:45", "Dessert and coffee by the river.", 45),
+        ],
+    },
+    {
+        "slug": "tokyo-essentials",
+        "title": "Tokyo Essentials: Shrines, Shibuya & Skytree",
+        "country": "japan", "city": "tokyo",
+        "duration_label": "Full day, ~9 hours", "duration_days": 1,
+        "price_usd": 95, "max_group": 8,
+        "themes": "culture,photo,history",
+        "tagline": "The greatest hits, in the right order, with someone who has lived here.",
+        "description": (
+            "Forest silence at Meiji Shrine, the controlled chaos of Shibuya Crossing, "
+            "the Imperial Palace grounds, old Tokyo at Senso-ji, and the city spread out "
+            "below you from the Skytree at golden hour.\n\n"
+            "Tokyo is overwhelming alone. With a guide who lived here, it clicks into place."
+        ),
+        "includes": "Local English & Japanese speaking guide\nAll rail and metro fares during the tour\nRamen lunch stop",
+        "excludes": "Skytree observation deck (~$25)\nLunch (budget ~$10)\nDinner",
+        "meeting_point": "Harajuku Station, Takeshita exit, 9:00 AM",
+        "guide_name": "Eastworld Japan",
+        "stops": [
+            (233, "09:00", "The great forest shrine of the Emperor Meiji.", 75),
+            (235, "10:45", "The scramble, the crossing, the coffee above it.", 60),
+            (236, "12:00", "East Gardens of the Imperial Palace.", 45),
+            (234, "14:00", "Senso-ji and the Nakamise shopping street.", 90),
+            (232, "16:30", "Golden hour from 350 metres up.", 90),
+        ],
+    },
+    {
+        "slug": "tokyo-ramen-izakaya-night",
+        "title": "Tokyo Ramen & Izakaya Night",
+        "country": "japan", "city": "tokyo",
+        "duration_label": "Evening, ~4 hours", "duration_days": 1,
+        "price_usd": 70, "max_group": 8,
+        "themes": "food,nightlife",
+        "tagline": "Slurp your way through three styles of ramen, finish with highballs and skewers.",
+        "description": (
+            "Tokyo's ramen scene is a religion and tonight you're converting. Three bowls "
+            "in three styles — rich tonkotsu, yuzu-scented shio, and a local wildcard — "
+            "then an izakaya for highballs and yakitori where the night properly starts.\n\n"
+            "Small bowls at each stop, so pace yourself is not required."
+        ),
+        "includes": "Local English & Japanese speaking guide\nThree ramen tastings\nFirst drink at the izakaya",
+        "excludes": "Extra drinks and dishes\nTransport home",
+        "meeting_point": "Shibuya Station, Hachiko exit, 5:30 PM",
+        "guide_name": "Eastworld Japan",
+        "stops": [
+            (1, "17:30", "The tonkotsu classic — solo booths, total focus.", 60),
+            (4, "19:00", "Yuzu shio: the lighter, brighter Tokyo style.", 60),
+            (3, "20:00", "The wildcard stop — Japan's beloved curry chain, tried properly.", 45),
+            (6, "21:00", "Izakaya finish: highballs and yakitori.", 60),
+        ],
+    },
+    {
+        "slug": "osaka-street-food-dotonbori",
+        "title": "Osaka Street Food: Dotonbori & Beyond",
+        "country": "japan", "city": "osaka",
+        "duration_label": "Evening, ~4 hours", "duration_days": 1,
+        "price_usd": 65, "max_group": 8,
+        "themes": "food,nightlife",
+        "tagline": "Japan's kitchen, eaten properly: takoyaki, ramen, crab and the neon canals.",
+        "description": (
+            "Osaka's motto is 'eat until you drop' and we take it literally. Takoyaki hot "
+            "off the grill, the crab signs of Dotonbori, late-night ramen, and the yakiniku "
+            "joint the locals keep to themselves.\n\n"
+            "This is the food tour Osaka deserves — no tourist-menu versions of anything."
+        ),
+        "includes": "Local English & Japanese speaking guide\nAll food at 4 stops\nOne drink",
+        "excludes": "Extra drinks\nTransport to/from the meeting point",
+        "meeting_point": "Namba Station, exit 14, 5:00 PM",
+        "guide_name": "Eastworld Japan",
+        "stops": [
+            (11, "17:00", "Takoyaki the way Osakans actually eat them.", 45),
+            (239, "18:00", "The neon canal strip — Glico man and all.", 45),
+            (14, "19:00", "Kani Doraku: the crab institution.", 60),
+            (12, "20:15", "Kinryu ramen under the dragon sign.", 45),
+            (16, "21:00", "The locals' late-night yakiniku.", 45),
+        ],
+    },
+    {
+        "slug": "kyoto-icons",
+        "title": "Kyoto Icons: Fushimi Inari to Gion",
+        "country": "japan", "city": "kyoto",
+        "duration_label": "Full day, ~9 hours", "duration_days": 1,
+        "price_usd": 110, "max_group": 8,
+        "themes": "temples,culture,photo",
+        "tagline": "10,000 red gates, the Golden Pavilion, the bamboo grove — Kyoto's essentials in one day.",
+        "description": (
+            "We beat the crowds to Fushimi Inari's thousand torii gates, take in the Golden "
+            "Pavilion's reflection, walk the Arashiyama bamboo grove, and finish among the "
+            "lanterns of Gion as the geiko head to their evening appointments.\n\n"
+            "Kyoto's classics, sequenced to avoid the worst of the crowds."
+        ),
+        "includes": "Local English & Japanese speaking guide\nAll rail and bus fares during the tour\nTraditional udon lunch stop",
+        "excludes": "Temple entry fees (~$10 total)\nLunch (budget ~$12)\nDinner",
+        "meeting_point": "Kyoto Station, central exit, 8:00 AM",
+        "guide_name": "Eastworld Japan",
+        "stops": [
+            (243, "08:30", "The thousand gates, early enough to hear the birds.", 120),
+            (244, "11:00", "The Golden Pavilion and its mirror pond.", 60),
+            (245, "12:30", "Bamboo grove and the riverside at Arashiyama.", 90),
+            (246, "15:00", "Kiyomizu's wooden stage above the city.", 75),
+            (247, "17:00", "Gion at lantern-light, geisha district stories.", 60),
+        ],
+    },
+    {
+        "slug": "kyoto-kaiseki-hidden-lanes",
+        "title": "Kyoto After Dark: Pontocho & Hidden Lanes",
+        "country": "japan", "city": "kyoto",
+        "duration_label": "Evening, ~4 hours", "duration_days": 1,
+        "price_usd": 140, "max_group": 6,
+        "themes": "food,nightlife,culture",
+        "tagline": "The lantern-lit alley of Pontocho, dinner on the river, and Kyoto's late-night gyoza.",
+        "description": (
+            "By day Kyoto belongs to the temples; by night it belongs to the lanes. We walk "
+            "Gion's back streets, settle into dinner on the Kamo river in Pontocho alley, "
+            "and finish standing at a counter with the best late-night gyoza in the city.\n\n"
+            "Small groups only — these lanes don't suit a crowd."
+        ),
+        "includes": "Local English & Japanese speaking guide\nRiverside dinner in Pontocho\nLate-night gyoza\nOne drink",
+        "excludes": "Extra drinks\nTransport home",
+        "meeting_point": "Gion-Shijo Station, 5:30 PM",
+        "guide_name": "Eastworld Japan",
+        "stops": [
+            (247, "17:30", "Gion's back lanes as the lanterns come on.", 60),
+            (24, "18:45", "Dinner on the river in Pontocho alley.", 105),
+            (22, "21:00", "Counter-seat gyoza, the local nightcap.", 45),
+        ],
+    },
+    {
+        "slug": "kobe-beef-harbor-lights",
+        "title": "Kobe Beef & Harbor Lights",
+        "country": "japan", "city": "kobe",
+        "duration_label": "Half day + evening, ~5 hours", "duration_days": 1,
+        "price_usd": 170, "max_group": 6,
+        "themes": "food,culture",
+        "tagline": "The shrine, the harbor, and the most famous beef on earth — Kobe, where we used to live.",
+        "description": (
+            "Kobe is the city we know best, and this is its perfect evening: the vermillion "
+            "Ikuta Shrine, a proper Kobe beef dinner at a steakhouse we actually eat at, "
+            "then the glittering harbor and Port Tower after dark.\n\n"
+            "The beef is the real thing — certified, marbled, and worth every yen."
+        ),
+        "includes": "Local guide who lived in Kobe\nFull Kobe beef dinner\nOne drink\nHarbor walk",
+        "excludes": "Extra drinks\nPort Tower observation deck (~$7, optional)",
+        "meeting_point": "Sannomiya Station, central exit, 3:30 PM",
+        "guide_name": "Eastworld Japan",
+        "stops": [
+            (252, "15:30", "The city's vermillion guardian shrine.", 45),
+            (29, "17:00", "The main event: certified Kobe beef, teppanyaki-style.", 120),
+            (249, "19:30", "Harborland's lights on the water.", 45),
+            (250, "20:15", "Port Tower lit up against the night sky.", 30),
+        ],
+    },
+    {
+        "slug": "melbourne-icons-laneways",
+        "title": "Melbourne Icons & Laneways",
+        "country": "australia", "city": "melbourne",
+        "duration_label": "Full day, ~8 hours", "duration_days": 1,
+        "price_usd": 90, "max_group": 8,
+        "themes": "culture,food,photo",
+        "tagline": "Fed Square to the Queen Vic Market — the world's most liveable city, explained.",
+        "description": (
+            "Federation Square's angles, the National Gallery, the Queen Victoria Market's "
+            "food halls, a modern-Australian lunch, and an afternoon among the lawns and "
+            "lakes of the Botanic Gardens.\n\n"
+            "The Melbourne of coffee snobs and gallery kids, with lunch done properly."
+        ),
+        "includes": "Local English speaking guide\nTram fares during the tour\nCoffee at a laneway café",
+        "excludes": "Lunch (budget ~$20)\nNGV special exhibition tickets",
+        "meeting_point": "Federation Square, main steps, 9:00 AM",
+        "guide_name": "Eastworld",
+        "stops": [
+            (289, "09:00", "The city's living room and its wild architecture.", 45),
+            (293, "10:00", "Queen Vic Market — the doughnut van is non-negotiable.", 90),
+            (84, "12:30", "Lunch: modern Australian with an Asian accent.", 75),
+            (291, "14:15", "The NGV's Australian and international halls.", 75),
+            (290, "16:00", "Botanic Gardens lawns and the lake.", 60),
+        ],
+    },
+    {
+        "slug": "melbourne-food-crawl",
+        "title": "Melbourne Food Crawl: Dumplings to Pasta",
+        "country": "australia", "city": "melbourne",
+        "duration_label": "Evening, ~4 hours", "duration_days": 1,
+        "price_usd": 85, "max_group": 8,
+        "themes": "food,nightlife",
+        "tagline": "The city's four essential tables in one evening — book nothing, we did.",
+        "description": (
+            "Melbourne eats better than almost anywhere on earth, and this crawl proves it: "
+            "dumplings to start, the always-packed Chin Chin, handmade pasta at Tipo 00, "
+            "and a late-night donburi closer.\n\n"
+            "Four venues, four cuisines, zero queuing on your part."
+        ),
+        "includes": "Local English speaking guide\nDishes at all 4 venues\nOne glass of wine or beer",
+        "excludes": "Extra drinks\nTransport home",
+        "meeting_point": "Little Bourke Street, meeting details on booking, 5:30 PM",
+        "guide_name": "Eastworld",
+        "stops": [
+            (81, "17:30", "Dumplings and chilli oil to open.", 45),
+            (82, "18:30", "Chin Chin — the Melbourne institution.", 60),
+            (83, "20:00", "Handmade pasta at the city's best Italian.", 60),
+            (80, "21:30", "The late-night donburi closer.", 30),
+        ],
+    },
+    {
+        "slug": "great-ocean-road-day-trip",
+        "title": "Great Ocean Road Day Trip",
+        "country": "australia", "city": "melbourne",
+        "duration_label": "Full day, ~11 hours", "duration_days": 1,
+        "price_usd": 190, "max_group": 6,
+        "themes": "nature,photo",
+        "tagline": "The Twelve Apostles, surf beaches and rainforest — Australia's greatest drive, done in a day.",
+        "description": (
+            "An early start at the market for coffee and supplies, then down the coast: "
+            "surf towns, rainforest walks, and the Twelve Apostles themselves, timed for "
+            "the best afternoon light.\n\n"
+            "It's a long day and a big drive — we do the driving, you watch the ocean."
+        ),
+        "includes": "Local English speaking guide/driver\nComfortable vehicle for the full day\nMorning coffee and market snacks\nNational park stops",
+        "excludes": "Lunch in Apollo Bay (budget ~$25)\nDinner back in Melbourne",
+        "meeting_point": "Queen Victoria Market, 7:00 AM sharp",
+        "guide_name": "Eastworld",
+        "stops": [
+            (293, "07:00", "Coffee and supplies before the road.", 30),
+            (289, "07:45", "Pickup point two, then we're off.", 15),
+            (292, "09:30", "The whole coast: Apostles, Loch Ard Gorge, rainforest.", 600),
+        ],
+    },
+    {
+        "slug": "sydney-harbour-icons",
+        "title": "Sydney Harbour Icons",
+        "country": "australia", "city": "sydney",
+        "duration_label": "Half day, ~5 hours", "duration_days": 1,
+        "price_usd": 85, "max_group": 8,
+        "themes": "culture,photo,history",
+        "tagline": "Opera House, the Bridge, The Rocks — the harbour, with a drink at the end.",
+        "description": (
+            "The Opera House up close, the old convict lanes of The Rocks, the Botanic "
+            "Garden's harbour-edge path, and the Bridge itself — finishing with a drink "
+            "inside the Opera House as the ferries cross.\n\n"
+            "The Sydney postcards, plus the stories behind them."
+        ),
+        "includes": "Local English speaking guide\nOne drink at the Opera House bar\nFerry or train fares during the tour",
+        "excludes": "Opera House interior tour (~$30, optional)\nBridgeClimb (~$200, optional — book ahead)",
+        "meeting_point": "Circular Quay, wharf 4 entrance, 1:00 PM",
+        "guide_name": "Eastworld",
+        "stops": [
+            (294, "13:00", "The sails up close and the story of the build.", 60),
+            (298, "14:00", "Harbour-edge gardens and Mrs Macquarie's Chair.", 45),
+            (295, "15:00", "The Coathanger — walk the pedestrian path.", 60),
+            (297, "16:00", "Convict lanes and old pubs of The Rocks.", 45),
+            (96, "16:45", "A drink inside the Opera House to finish.", 45),
+        ],
+    },
+    {
+        "slug": "sydney-bondi-sunset-dining",
+        "title": "Bondi Beach Day & Sunset Dining",
+        "country": "australia", "city": "sydney",
+        "duration_label": "Half day + evening, ~6 hours", "duration_days": 1,
+        "price_usd": 120, "max_group": 8,
+        "themes": "nature,food,photo",
+        "tagline": "Swim at Bondi, coastal walk to Icebergs, then sunset drinks over the harbour.",
+        "description": (
+            "The Australian cliché is real and it's glorious: an afternoon at Bondi with "
+            "time for a swim, the famous coastal walk, a drink at Icebergs as the light "
+            "goes golden, then back to the harbour for sunset at Quay's bar.\n\n"
+            "Bring swimmers and sunscreen. We bring the bookings."
+        ),
+        "includes": "Local English speaking guide\nOne drink at Icebergs\nOne drink at Quay\nAll transport during the tour",
+        "excludes": "Food (order what you like, budget ~$30)\nTowel and swim gear",
+        "meeting_point": "Bondi Junction Station, 1:30 PM",
+        "guide_name": "Eastworld",
+        "stops": [
+            (296, "14:00", "Bondi: swim, people-watch, coastal walk.", 150),
+            (93, "16:45", "Icebergs — the pool, the cliffs, the golden hour.", 60),
+            (91, "18:30", "Sunset drinks over the harbour at Quay.", 60),
+        ],
+    },
+    {
+        "slug": "sydney-asian-food-safari",
+        "title": "Sydney Asian Food Safari",
+        "country": "australia", "city": "sydney",
+        "duration_label": "Evening, ~4 hours", "duration_days": 1,
+        "price_usd": 75, "max_group": 8,
+        "themes": "food,nightlife",
+        "tagline": "Spice Alley to Mr. Wong — Sydney's Asian food scene is Australia's best-kept secret.",
+        "description": (
+            "Sydney's Asian food scene rivals anything in Asia itself. We eat through the "
+            "laneways of Spice Alley, the city's best Thai, and finish at Mr. Wong's "
+            "magnificent two-level Cantonese dining hall.\n\n"
+            "Come hungry. This is a serious amount of excellent food."
+        ),
+        "includes": "Local English speaking guide\nDishes at all 3 restaurants\nOne drink",
+        "excludes": "Extra drinks\nTransport home",
+        "meeting_point": "Central Station, Eddy Avenue exit, 5:30 PM",
+        "guide_name": "Eastworld",
+        "stops": [
+            (88, "17:30", "The hawker-style laneway — grazers' paradise.", 60),
+            (89, "18:45", "Chat Thai: the city's Thai benchmark.", 60),
+            (90, "20:15", "Mr. Wong: Cantonese grandeur to finish.", 75),
+        ],
+    },
 ]
 
 
 def seed_tours(conn):
-    """Insert the launch tours and their stops. Stop listing ids are
-    validated against the listings table so a bad id fails loudly at
-    seed time rather than as a broken link on the site."""
+    """Additively seed tours: any TOURS_SEED slug not yet in the table
+    is inserted with its stops, so new tours reach existing production
+    DBs on deploy without touching ones already there. Each tour's hero
+    image comes from its first stop's listing."""
+    created = 0
     for tour in TOURS_SEED:
+        if conn.execute("SELECT 1 FROM tours WHERE slug = ?", (tour["slug"],)).fetchone():
+            continue
         stops = tour.pop("stops")
         first_image = conn.execute(
             "SELECT image_url FROM listings WHERE id = ?", (stops[0][0],)
@@ -1536,7 +1887,9 @@ def seed_tours(conn):
                 (tour_id, listing_id, position, time_label, note, duration_min),
             )
         tour["stops"] = stops  # restore for idempotence of the constant
-    print(f"Seeded {len(TOURS_SEED)} tours.")
+        created += 1
+    if created:
+        print(f"Seeded {created} new tours.")
 
 
 @app.route("/api/tours")

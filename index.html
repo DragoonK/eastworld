@@ -113,8 +113,8 @@
     <section class="tours-home" id="tours-home">
       <div class="sec-head">
         <div class="sec-head-text">
-          <h2>Tours in Cambodia</h2>
-          <span class="kicker">Led by a local — every stop is a place we've actually been</span>
+          <h2>Tours: Cambodia, Japan &amp; Australia</h2>
+          <span class="kicker">Led by locals — every stop is a place we've actually been</span>
         </div>
         <div class="sec-rule"></div>
       </div>
@@ -182,7 +182,7 @@
         if (!res.ok) throw new Error(res.status);
         const tours = await res.json();
         const titleCase = (s) => (s || '').replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-        grid.innerHTML = tours.map(t => `
+        grid.innerHTML = tours.slice(0, 6).map(t => `
           <a class="tour-card" href="tour.html?id=${t.id}">
             <div class="tour-card-img">
               <img src="${t.image_url}" alt="${t.title}" loading="lazy"

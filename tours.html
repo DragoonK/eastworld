@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cambodia Tours with a Local Guide - Eastworld Tours</title>
-  <meta name="description" content="Small-group and private tours in Phnom Penh and Siem Reap, led by a local Khmer & English speaking guide. Every stop is a place we've actually been.">
+  <title>Local-Led Tours in Cambodia, Japan &amp; Australia - Eastworld Tours</title>
+  <meta name="description" content="Small-group and private tours in Cambodia, Japan and Australia, led by local guides. Every stop is a place we've actually been — or build your own with the Eastworld Dragon.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -32,19 +32,23 @@
 
   <main>
     <section class="tours-hero">
-      <span class="kicker">Eastworld Tours · Cambodia</span>
-      <h1>Tours with someone who actually lives here.</h1>
+      <span class="kicker">Eastworld Tours · Cambodia · Japan · Australia</span>
+      <h1>Tours with someone who actually lives there.</h1>
       <p>Small groups, real places, no scripts. Every stop on every tour is somewhere
          we've eaten, walked and photographed ourselves — and it's on this site.
-         Guided in English and Khmer.</p>
+         Led by local guides in Cambodia and Japan, with partner guides in Australia.</p>
     </section>
 
-    <div class="tours-filter" id="tours-filter">
-      <button class="filter-btn active" data-city="all">All Tours</button>
-      <button class="filter-btn" data-city="phnom-penh">Phnom Penh</button>
-      <button class="filter-btn" data-city="siem-reap">Siem Reap</button>
-      <button class="filter-btn" data-city="multi">Multi-Day</button>
+    <div class="tours-filter" id="country-filter">
+      <button class="filter-btn active" data-country="all">All Countries</button>
+      <button class="filter-btn" data-country="cambodia">Cambodia</button>
+      <button class="filter-btn" data-country="japan">Japan</button>
+      <button class="filter-btn" data-country="australia">Australia</button>
+      <button class="filter-btn" disabled>China <span class="soon-badge">soon</span></button>
+      <button class="filter-btn" disabled>Vietnam <span class="soon-badge">soon</span></button>
     </div>
+
+    <div class="tours-filter" id="city-filter"></div>
 
     <section class="tours-grid" id="tours-grid">
       <p class="posts-status" style="grid-column: 1 / -1; text-align: center;">Loading tours&hellip;</p>
@@ -63,8 +67,8 @@
 
     <section class="tours-soon">
       <div class="tours-soon-card">
-        <h3>Japan — coming soon</h3>
-        <p>Osaka, Kobe &amp; Kyoto with our on-the-ground guide. Get notified at launch.</p>
+        <h3>China &amp; Vietnam — coming soon</h3>
+        <p>Beijing, Shanghai, Saigon and beyond. Get notified when tours launch.</p>
         <form id="waitlist-japan">
           <input type="email" required placeholder="Your email">
           <button class="btn" type="submit">Notify me</button>
@@ -83,6 +87,8 @@
   <script>
     const titleCase = (s) => (s || '').replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
     let allTours = [];
+    let activeCountry = 'all';
+    let activeCity = 'all';
 
     function tourCard(t) {
       const city = t.city ? titleCase(t.city) : 'Multi-City';
@@ -106,22 +112,46 @@
         </a>`;
     }
 
-    function renderTours(city) {
+    function renderTours() {
       const filtered = allTours.filter(t => {
-        if (city === 'all') return true;
-        if (city === 'multi') return t.duration_days > 1;
-        return t.city === city;
+        if (activeCountry !== 'all' && t.country !== activeCountry) return false;
+        if (activeCity === 'multi') return t.duration_days > 1;
+        if (activeCity !== 'all') return t.city === activeCity;
+        return true;
       });
       document.getElementById('tours-grid').innerHTML = filtered.length
         ? filtered.map(tourCard).join('')
         : '<p class="posts-status" style="grid-column: 1 / -1; text-align: center;">No tours here yet — try the builder below.</p>';
     }
 
-    document.querySelectorAll('#tours-filter .filter-btn').forEach(btn => {
+    // City buttons rebuild from whatever the selected country has
+    function renderCityFilter() {
+      const cities = [...new Set(allTours
+        .filter(t => (activeCountry === 'all' || t.country === activeCountry) && t.city)
+        .map(t => t.city))].sort();
+      const row = document.getElementById('city-filter');
+      row.innerHTML = `
+        <button class="filter-btn active" data-city="all">All Cities</button>
+        ${cities.map(c => `<button class="filter-btn" data-city="${c}">${titleCase(c)}</button>`).join('')}
+        <button class="filter-btn" data-city="multi">Multi-Day</button>`;
+      row.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          row.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          activeCity = btn.dataset.city;
+          renderTours();
+        });
+      });
+    }
+
+    document.querySelectorAll('#country-filter .filter-btn[data-country]').forEach(btn => {
       btn.addEventListener('click', () => {
-        document.querySelectorAll('#tours-filter .filter-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('#country-filter .filter-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        renderTours(btn.dataset.city);
+        activeCountry = btn.dataset.country;
+        activeCity = 'all';
+        renderCityFilter();
+        renderTours();
       });
     });
 
@@ -130,7 +160,8 @@
         const res = await fetch('/api/tours');
         if (!res.ok) throw new Error(res.status);
         allTours = await res.json();
-        renderTours('all');
+        renderCityFilter();
+        renderTours();
       } catch {
         document.getElementById('tours-grid').innerHTML = `
           <p class="posts-status" style="grid-column: 1 / -1; text-align: center;">
@@ -140,8 +171,8 @@
       }
     })();
 
-    // Japan launch waitlist — stored as a booking request with a
-    // waitlist payload so it lands in the same admin pipeline.
+    // China/Vietnam launch waitlist — stored as a booking request with
+    // a waitlist payload so it lands in the same admin pipeline.
     document.getElementById('waitlist-japan').addEventListener('submit', async (e) => {
       e.preventDefault();
       const email = e.target.querySelector('input').value;
@@ -151,8 +182,8 @@
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            name: 'Japan waitlist', email,
-            bespoke_payload: { type: 'waitlist', country: 'japan' },
+            name: 'China/Vietnam waitlist', email,
+            bespoke_payload: { type: 'waitlist', country: 'china-vietnam' },
           }),
         });
         if (!res.ok) throw new Error(res.status);

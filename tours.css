@@ -63,6 +63,29 @@
   border-color: #000;
 }
 
+.tours-filter .filter-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.tours-filter .filter-btn:disabled:hover {
+  background: transparent;
+  color: inherit;
+  border-color: #ddd;
+}
+
+.soon-badge {
+  display: inline-block;
+  background: #ff4d4d;
+  color: #fff;
+  font-size: 0.6rem;
+  letter-spacing: 1px;
+  padding: 0.1rem 0.4rem;
+  border-radius: 3px;
+  margin-left: 0.3rem;
+  vertical-align: middle;
+}
+
 .tours-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -499,6 +522,76 @@
 .choice-card:hover { border-color: #bbb; transform: translateY(-2px); }
 .choice-card.selected { border-color: #ff4d4d; background: #fff5f5; }
 .choice-card .emoji { font-size: 1.6rem; display: block; margin-bottom: 0.4rem; }
+
+.choice-card.disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.choice-card.disabled:hover { border-color: #eee; transform: none; }
+
+/* The Eastworld Dragon */
+
+.dragon-widget {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.6rem;
+}
+
+.dragon-avatar {
+  flex: 0 0 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #000, #3a0d0d);
+  border: 2px solid #ff4d4d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.9rem;
+  box-shadow: 0 4px 14px rgba(255,77,77,0.25);
+}
+
+.dragon-bubble {
+  position: relative;
+  background: #f7f7f7;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  padding: 0.7rem 1.1rem;
+  flex: 1;
+}
+
+.dragon-bubble::before {
+  content: '';
+  position: absolute;
+  left: -7px;
+  top: 22px;
+  width: 12px;
+  height: 12px;
+  background: #f7f7f7;
+  border-left: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  transform: rotate(45deg);
+}
+
+.dragon-bubble strong {
+  font-size: 0.68rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #ff4d4d;
+}
+
+.dragon-bubble p {
+  margin: 0.2rem 0 0;
+  font-size: 0.92rem;
+  color: #444;
+  line-height: 1.45;
+}
+
+@keyframes dragon-pop {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: none; }
+}
 
 .stop-picker {
   display: grid;

@@ -89,6 +89,7 @@
         if (listing.price_range) facts.push(listing.price_range);
         if (listing.budget_tier) facts.push(titleCase(listing.budget_tier));
         if (listing.rating != null) facts.push(`&#9733; ${listing.rating}`);
+        if (listing.trust_tag) facts.push(`&#10003; ${listing.trust_tag === 'local' ? 'Local-verified' : 'Expat-verified'}`);
 
         const paragraphs = (listing.content || '')
           .split(/\n\s*\n/)
