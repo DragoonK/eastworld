@@ -435,7 +435,7 @@ a {
 
 .hero {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 420px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 1.6rem;
   align-items: stretch;
   margin-bottom: 3.4rem;
@@ -936,7 +936,7 @@ footer {
 
 @media (max-width: 1100px) {
   .hero {
-    grid-template-columns: minmax(0, 1fr) 320px;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   }
 
   .videos-strip {
