@@ -442,8 +442,7 @@ a {
 }
 
 .hero-carousel {
-  height: 100%;
-  min-height: 540px;
+  height: 620px;
   border-radius: 18px;
 }
 
@@ -455,6 +454,8 @@ a {
 .hero .trending {
   display: flex;
   flex-direction: column;
+  height: 620px;
+  overflow: hidden;
   background: #fff;
   border: 2px solid var(--ink);
   border-radius: 18px;
@@ -779,6 +780,26 @@ a {
   color: var(--gray);
 }
 
+.trending-text .desc {
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: var(--gray);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.trending-item .score {
+  margin-left: auto;
+  flex-shrink: 0;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #e6a700;
+  align-self: flex-start;
+  padding-top: 0.3rem;
+}
+
 /* ---------- Carousel ---------- */
 
 .carousel {
@@ -950,7 +971,11 @@ footer {
   }
 
   .hero-carousel {
-    min-height: 340px;
+    height: 340px;
+  }
+
+  .hero .trending {
+    height: auto;
   }
 
   /* Vertical videos become a swipeable horizontal strip on small screens */
@@ -1027,4 +1052,19 @@ footer {
     opacity: 1;
     transform: none;
   }
+}
+
+/* Nav grouping: flexible gap before TOURS, vertical line before auth */
+.main-nav .nav-spacer {
+  display: inline-block;
+  width: 1.8rem;
+}
+
+.main-nav .nav-divider {
+  display: inline-block;
+  width: 1px;
+  height: 16px;
+  background: #ccc;
+  align-self: center;
+  margin: 0 0.5rem;
 }

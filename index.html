@@ -21,36 +21,24 @@
   <header>
     <nav class="main-nav">
       <div class="nav-links">
-        <a href="tours.html">TOURS</a>
-        <a href="tour-builder.html">BUILD YOUR OWN</a>
         <a href="food.html">FOOD</a>
+        <a href="stays.html">STAYS</a>
         <a href="places.html">PLACES</a>
+        <span class="nav-spacer"></span>
+        <a href="tours.html">TOURS</a>
       </div>
       <a href="index.html" class="logo"><img src="assets/eastworld-logo.png" alt="Eastworld"></a>
       <div class="nav-links">
-        <a href="stays.html">STAYS</a>
-        <a href="cities.html">CITIES</a>
+        <a href="tour-builder.html">BUILD YOUR OWN</a>
+        <span class="nav-divider"></span>
         <a href="login.html" class="auth-link">LOGIN</a>
+        <a href="register.html" class="auth-link">REGISTER</a>
       </div>
     </nav>
 
   </header>
 
   <main class="page">
-
-    <!-- Country toggle: WORLD shows everything; picking a country
-         filters the whole homepage (carousel, spotlights, stories,
-         videos). -->
-    <section class="explore">
-      <div class="country-toggle" id="country-toggle" role="group" aria-label="Filter by country">
-        <button class="country-btn active" data-country="world">WORLD</button>
-        <button class="country-btn" data-country="cambodia">CAMBODIA</button>
-        <button class="country-btn" data-country="vietnam">VIETNAM</button>
-        <button class="country-btn" data-country="japan">JAPAN</button>
-        <button class="country-btn" data-country="australia">AUSTRALIA</button>
-        <button class="country-btn" data-country="china">CHINA</button>
-      </div>
-    </section>
 
     <!-- Header: single auto-rotating carousel + top five spotlights.
          Carousel slides come from the admin's CAROUSELS tab (top). -->
@@ -75,14 +63,7 @@
             <button class="trending-tab" data-tab="stays">STAYS</button>
             <button class="trending-tab" data-tab="places">PLACES</button>
           </div>
-          <select id="trending-country">
-            <option value="all">All Countries</option>
-            <option value="japan">Japan</option>
-            <option value="china">China</option>
-            <option value="vietnam">Vietnam</option>
-            <option value="australia">Australia</option>
-            <option value="cambodia">Cambodia</option>
-          </select>
+
         </div>
         <div id="trending-list" class="trending-list"></div>
       </aside>

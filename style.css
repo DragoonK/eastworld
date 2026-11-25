@@ -3920,3 +3920,18 @@ input[type="range"]::-webkit-slider-thumb {
   visibility: hidden;
 }
 
+
+/* Nav grouping: flexible gap before TOURS, vertical line before auth */
+.main-nav .nav-spacer {
+  display: inline-block;
+  width: 1.8rem;
+}
+
+.main-nav .nav-divider {
+  display: inline-block;
+  width: 1px;
+  height: 16px;
+  background: #ccc;
+  align-self: center;
+  margin: 0 0.5rem;
+}

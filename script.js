@@ -351,60 +351,7 @@ async function initDynamicCarousels(carousels) {
 }
 
 // ------------------------------------------------------------
-// Country toggle (homepage, above the map). One click re-scopes
-// every section and flies the map to the selected country.
-// ------------------------------------------------------------
-
-function applyCountryFilter() {
-  // The trending sidebar has its own country dropdown; drive it
-  const select = document.getElementById('trending-country');
-  if (select) {
-    select.value = currentCountry === 'world' ? 'all' : currentCountry;
-    select.dispatchEvent(new Event('change'));
-  }
-
-  if (reloadStories) reloadStories();
-
-  const dynamic = [...document.querySelectorAll('.carousel[data-slides]')];
-  if (dynamic.length) initDynamicCarousels(dynamic);
-
-  initTicker();
-  initVideosStrip();
-
-  if (window.EastworldMap) window.EastworldMap.setCountry(currentCountry);
-}
-
-function initCountryFilter() {
-  const toggle = document.getElementById('country-toggle');
-  if (!toggle) return;
-
-  // Allow shareable filtered links, e.g. index.html?country=cambodia
-  const requested = new URLSearchParams(location.search).get('country');
-  const valid = [...toggle.querySelectorAll('.country-btn')].map(b => b.dataset.country);
-  if (requested && valid.includes(requested)) {
-    currentCountry = requested;
-    toggle.querySelectorAll('.country-btn')
-      .forEach(b => b.classList.toggle('active', b.dataset.country === requested));
-    if (window.EastworldMap) window.EastworldMap.setCountry(requested);
-    // trending.js reads this select's value on its initial render
-    const select = document.getElementById('trending-country');
-    if (select) select.value = requested;
-  }
-
-  toggle.querySelectorAll('.country-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      if (btn.dataset.country === currentCountry) return;
-      currentCountry = btn.dataset.country;
-      toggle.querySelectorAll('.country-btn')
-        .forEach(b => b.classList.toggle('active', b === btn));
-      applyCountryFilter();
-    });
-  });
-}
-
 document.addEventListener('DOMContentLoaded', () => {
-  initCountryFilter();
-
   const dynamic = [];
   document.querySelectorAll('.carousel').forEach(el => {
     if (el.dataset.slides) dynamic.push(el);

@@ -1,35 +1,29 @@
 // ============================================================
-// Trending sidebar: top five per category, filterable by country.
-// The picks now come from the backend (/api/trending), where they
-// are curated from the admin dashboard's Trending tab. Responses
-// are cached per country so switching tabs is instant.
+// Trending sidebar: top five per category, across all countries.
+// The picks come from the backend (/api/trending), curated in the
+// admin dashboard's Trending tab. The response is cached so
+// switching tabs is instant.
 // ============================================================
 
 document.addEventListener('DOMContentLoaded', () => {
   const list = document.getElementById('trending-list');
-  const countrySelect = document.getElementById('trending-country');
   const tabs = document.querySelectorAll('.trending-tab');
-  if (!list || !countrySelect || tabs.length === 0) return;
+  if (!list || tabs.length === 0) return;
 
   let activeTab = 'food';
-  const cache = {};   // country -> {food: [...], stays: [...], ...}
+  let cache = null;   // {food: [...], stays: [...], ...}
 
   // listings store places lowercase ("siem reap") -> "Siem Reap"
   const titleCase = (s) => s.replace(/\b\w/g, c => c.toUpperCase());
 
-  async function dataFor(country) {
-    if (!cache[country]) {
-      const res = await fetch(`/api/trending?country=${country}`);
-      cache[country] = await res.json();
-    }
-    return cache[country];
-  }
-
   async function render() {
-    const country = countrySelect.value;
     let data;
     try {
-      data = await dataFor(country);
+      if (!cache) {
+        const res = await fetch('/api/trending?country=all');
+        cache = await res.json();
+      }
+      data = cache;
     } catch {
       list.innerHTML = '<p class="posts-status">Could not load trending.</p>';
       return;
@@ -37,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const items = data[activeTab] || [];
     if (items.length === 0) {
-      list.innerHTML = '<p class="posts-status">No picks for this country yet.</p>';
+      list.innerHTML = '<p class="posts-status">No picks yet.</p>';
       return;
     }
     list.innerHTML = items.map((item, i) => `
@@ -47,8 +41,10 @@ document.addEventListener('DOMContentLoaded', () => {
              onerror="this.style.visibility='hidden'">
         <span class="trending-text">
           <span class="name">${item.name}</span>
-          <span class="location">${titleCase(item.city || item.country)}</span>
+          <span class="location">${titleCase(item.city || item.country)}${item.price_range ? ` · ${item.price_range}` : ''}</span>
+          ${item.description ? `<span class="desc">${item.description}</span>` : ''}
         </span>
+        ${item.rating ? `<span class="score">★ ${item.rating}</span>` : ''}
       </a>
     `).join('');
   }
@@ -61,8 +57,6 @@ document.addEventListener('DOMContentLoaded', () => {
       render();
     });
   });
-
-  countrySelect.addEventListener('change', render);
 
   render();
 });

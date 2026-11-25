@@ -2043,7 +2043,7 @@ def trending_items(conn, tab, country):
     """Ranked picks for one tab+country, joined with listing details."""
     rows = conn.execute(
         "SELECT t.rank, l.id, l.name, l.city, l.country, l.type,"
-        "       l.image_url, l.link, l.rating"
+        "       l.image_url, l.link, l.rating, l.description, l.price_range"
         " FROM trending t JOIN listings l ON l.id = t.listing_id"
         " WHERE t.tab = ? AND t.country = ? ORDER BY t.rank",
         (tab, country),
